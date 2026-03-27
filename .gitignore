@@ -31,3 +31,15 @@ migrate_working_dir/
 .pub/
 /build/
 pubspec.lock
+
+
+# devenv
+/.devenv*
+ /local.properties
+ /.template-sync
+
+/.claude/*
+!/.claude/commands/
+!/.claude/skills/
+
+
