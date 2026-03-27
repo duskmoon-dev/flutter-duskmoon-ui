@@ -1,5 +1,3 @@
-library duskmoon_theme;
-
 // Theme factories
 export 'src/theme_data.dart' show DmThemeData, DmThemeEntry;
 export 'src/color_scheme.dart' show DmColorScheme;
