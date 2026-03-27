@@ -1,0 +1,14 @@
+name: flutter_duskmoon_ui_workspace
+publish_to: none
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+workspace:
+  - packages/duskmoon_theme
+  - packages/duskmoon_theme_bloc
+  - packages/duskmoon_widgets
+  - packages/duskmoon_settings
+  - packages/duskmoon_feedback
+  - packages/duskmoon_ui
+  - example

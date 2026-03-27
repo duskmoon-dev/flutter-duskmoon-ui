@@ -1,0 +1,19 @@
+name: duskmoon_feedback
+description: Adaptive feedback widgets — dialogs, snackbars, toasts, bottom sheets
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  duskmoon_theme:
+    path: ../duskmoon_theme
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0

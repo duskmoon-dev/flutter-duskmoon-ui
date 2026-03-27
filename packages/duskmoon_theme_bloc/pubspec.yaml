@@ -1,0 +1,23 @@
+name: duskmoon_theme_bloc
+description: BLoC for DuskMoon theme persistence (theme name + mode)
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  duskmoon_theme:
+    path: ../duskmoon_theme
+  bloc: ^9.0.0
+  flutter_bloc: ^9.0.0
+  equatable: ^2.0.7
+  shared_preferences: ^2.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
