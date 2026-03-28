@@ -57,13 +57,25 @@ Three-tier resolution: **widget override → `DmPlatformOverride` InheritedWidge
 - `AdaptiveWidget` mixin on `StatelessWidget` for platform-aware rendering
 - `DmPlatformOverride` InheritedWidget for app-level style override
 
+### Settings UI (`duskmoon_settings` — fully implemented)
+
+**Compositor pattern with 3 platform renderers** (Material, Cupertino, Fluent).
+
+- `DevicePlatform` enum with `fromContext(BuildContext)` — resolves via `Theme.of(context).platform` + `kIsWeb`
+- `SettingsList` → routes to `MaterialSettingsList` / `CupertinoSettingsList` / `FluentSettingsList`
+- `SettingsSection` → platform-specific section rendering with title/margin
+- `SettingsTile` — 10 tile types: simple, navigation, switch, check, input, slider, select, textarea, radioGroup, checkboxGroup
+- `CustomSettingsTile` — wraps arbitrary widgets with platform-aware styling
+- `SettingsTheme` / `SettingsThemeData` — InheritedWidget + 11-color theme data with platform factories
+- Integrates with `DmColorExtension` semantic colors when available (base100/200/300, baseContent)
+
 ### Implementation Status
 
 | Phase | Package | Status |
 |-------|---------|--------|
 | 1 | `duskmoon_theme` | Done |
-| 2 | `duskmoon_theme_bloc` | Stub |
-| 3 | `duskmoon_settings` | Not started |
+| 2 | `duskmoon_theme_bloc` | Done |
+| 3 | `duskmoon_settings` | Done |
 | 4 | `duskmoon_feedback` | Stubs |
 | 5 | `duskmoon_widgets` | Platform layer only |
 
