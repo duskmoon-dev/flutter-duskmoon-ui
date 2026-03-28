@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import '../adaptive/adaptive_widget.dart';
 import '../adaptive/platform_resolver.dart';
 
+/// An adaptive bottom navigation bar (Material NavigationBar / Cupertino tab bar).
 class DmBottomNav extends StatelessWidget with AdaptiveWidget {
+  /// Creates an adaptive bottom navigation bar.
   const DmBottomNav({
     super.key,
     required this.destinations,
@@ -13,9 +15,15 @@ class DmBottomNav extends StatelessWidget with AdaptiveWidget {
     this.platformOverride,
   });
 
+  /// The navigation destinations to display.
   final List<DmNavDestination> destinations;
+
+  /// Index of the currently selected destination.
   final int selectedIndex;
+
+  /// Called when a destination is tapped.
   final ValueChanged<int> onDestinationSelected;
+
   @override
   final DmPlatformStyle? platformOverride;
 
@@ -44,14 +52,21 @@ class DmBottomNav extends StatelessWidget with AdaptiveWidget {
   }
 }
 
+/// A single destination entry used by [DmBottomNav].
 class DmNavDestination {
+  /// Creates a navigation destination with an [icon] and [label].
   const DmNavDestination({
     required this.icon,
     required this.label,
     this.selectedIcon,
   });
 
+  /// Icon displayed for this destination.
   final Widget icon;
+
+  /// Text label for this destination.
   final String label;
+
+  /// Alternative icon shown when this destination is selected.
   final Widget? selectedIcon;
 }

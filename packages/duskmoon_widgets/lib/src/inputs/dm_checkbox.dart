@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import '../adaptive/adaptive_widget.dart';
 import '../adaptive/platform_resolver.dart';
 
+/// An adaptive checkbox that renders Material or Cupertino styles.
 class DmCheckbox extends StatelessWidget with AdaptiveWidget {
+  /// Creates an adaptive checkbox.
   const DmCheckbox({
     super.key,
     required this.value,
@@ -12,7 +14,10 @@ class DmCheckbox extends StatelessWidget with AdaptiveWidget {
     this.platformOverride,
   });
 
+  /// Whether the checkbox is checked.
   final bool value;
+
+  /// Called when the checkbox value changes; `null` disables interaction.
   final ValueChanged<bool?>? onChanged;
 
   @override

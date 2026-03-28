@@ -16,6 +16,7 @@ import 'package:duskmoon_settings/src/utils/settings_theme.dart';
 /// - [CupertinoSettingsTile] for iOS, macOS
 /// - [FluentSettingsTile] for Windows
 class SettingsTile extends StatelessWidget {
+  /// Creates a simple settings tile with a title and optional extras.
   SettingsTile({
     this.leading,
     this.trailing,
@@ -58,6 +59,7 @@ class SettingsTile extends StatelessWidget {
     onCheckboxChanged = null;
   }
 
+  /// Creates a navigation tile with a trailing chevron indicator.
   SettingsTile.navigation({
     this.leading,
     this.trailing,
@@ -100,6 +102,7 @@ class SettingsTile extends StatelessWidget {
     onCheckboxChanged = null;
   }
 
+  /// Creates a tile with an integrated toggle switch.
   SettingsTile.switchTile({
     required this.initialValue,
     required this.onToggle,
@@ -142,6 +145,7 @@ class SettingsTile extends StatelessWidget {
     onCheckboxChanged = null;
   }
 
+  /// Creates a tile with a checkmark indicator for selection state.
   SettingsTile.checkTile({
     this.leading,
     this.trailing,
@@ -471,43 +475,97 @@ class SettingsTile extends StatelessWidget {
   /// A function that is called by tap on a tile
   final void Function(BuildContext context)? onPressed;
 
+  /// Color for the active state of the switch toggle.
   late final Color? activeSwitchColor;
+
+  /// Secondary value widget displayed below or beside the title.
   late final Widget? value;
+
+  /// Callback when the switch is toggled.
   late final Function(bool value)? onToggle;
+
+  /// The visual type of this tile.
   late final SettingsTileType tileType;
+
+  /// Initial on/off value for switch tiles.
   late final bool? initialValue;
+
+  /// Whether this tile is interactive.
   late final bool enabled;
+
+  /// Whether this tile displays a checkmark.
   late final bool? checked;
 
-  // New tile properties
+  /// Current text for input tiles.
   late final String? inputValue;
+
+  /// Callback when input text changes.
   late final void Function(String)? onInputChanged;
+
+  /// Placeholder hint for input tiles.
   late final String? inputHint;
+
+  /// Keyboard type for input tiles.
   late final TextInputType? inputKeyboardType;
+
+  /// Maximum character length for input tiles.
   late final int? inputMaxLength;
 
+  /// Current value for slider tiles.
   late final double? sliderValue;
+
+  /// Callback when the slider value changes.
   late final void Function(double)? onSliderChanged;
+
+  /// Minimum slider value.
   late final double sliderMin;
+
+  /// Maximum slider value.
   late final double sliderMax;
+
+  /// Number of discrete slider divisions.
   late final int? sliderDivisions;
 
+  /// Available options for select tiles.
   late final List<SettingsOption>? selectOptions;
+
+  /// Currently selected value for select tiles.
   late final String? selectValue;
+
+  /// Callback when the selected option changes.
   late final void Function(String?)? onSelectChanged;
 
+  /// Current text for textarea tiles.
   late final String? textareaValue;
+
+  /// Callback when textarea text changes.
   late final void Function(String)? onTextareaChanged;
+
+  /// Placeholder hint for textarea tiles.
   late final String? textareaHint;
+
+  /// Number of visible text lines for textarea tiles.
   late final int textareaMaxLines;
+
+  /// Maximum character length for textarea tiles.
   late final int? textareaMaxLength;
 
+  /// Available options for radio group tiles.
   late final List<SettingsOption>? radioOptions;
+
+  /// Currently selected radio value.
   late final String? radioValue;
+
+  /// Callback when the radio selection changes.
   late final void Function(String?)? onRadioChanged;
 
+  /// Available options for checkbox group tiles.
   late final List<SettingsOption>? checkboxOptions;
+
+  /// Currently selected checkbox values.
   late final Set<String>? checkboxValues;
+
+  /// Callback when checkbox selections change.
   late final void Function(Set<String>)? onCheckboxChanged;
 
   Widget? addCheckedTrailing(BuildContext context) {

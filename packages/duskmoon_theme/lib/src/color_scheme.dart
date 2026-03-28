@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'generated/moonlight_tokens.g.dart';
 import 'generated/sunshine_tokens.g.dart';
 
+/// Factory for building DuskMoon [ColorScheme] instances from generated tokens.
 abstract final class DmColorScheme {
+  /// Returns a light [ColorScheme] using the Sunshine design tokens.
   static ColorScheme sunshine() {
     return const ColorScheme(
       brightness: Brightness.light,
@@ -43,6 +45,7 @@ abstract final class DmColorScheme {
     );
   }
 
+  /// Returns a dark [ColorScheme] using the Moonlight design tokens.
   static ColorScheme moonlight() {
     return const ColorScheme(
       brightness: Brightness.dark,

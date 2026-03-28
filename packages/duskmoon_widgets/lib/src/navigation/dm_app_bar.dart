@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import '../adaptive/adaptive_widget.dart';
 import '../adaptive/platform_resolver.dart';
 
+/// An adaptive app bar that renders Material [AppBar] or Cupertino navigation bar.
 class DmAppBar extends StatelessWidget
     with AdaptiveWidget
     implements PreferredSizeWidget {
+  /// Creates an adaptive app bar.
   const DmAppBar({
     super.key,
     this.title,
@@ -16,10 +18,18 @@ class DmAppBar extends StatelessWidget
     this.platformOverride,
   });
 
+  /// The primary title widget displayed in the app bar.
   final Widget? title;
+
+  /// Widget placed before the [title], typically a back button.
   final Widget? leading;
+
+  /// Trailing action widgets shown after the [title].
   final List<Widget>? actions;
+
+  /// Whether to automatically show a back/close button when applicable.
   final bool automaticallyImplyLeading;
+
   @override
   final DmPlatformStyle? platformOverride;
 

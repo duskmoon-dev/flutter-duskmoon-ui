@@ -2,6 +2,7 @@ name: example
 description: DuskMoon UI showcase app
 version: 0.1.0
 publish_to: none
+resolution: workspace
 
 environment:
   sdk: ">=3.5.0 <4.0.0"

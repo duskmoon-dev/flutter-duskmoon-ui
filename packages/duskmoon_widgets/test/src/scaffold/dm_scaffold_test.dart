@@ -7,7 +7,8 @@ void main() {
   group('DmScaffold', () {
     final destinations = [
       const NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-      const NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
+      const NavigationDestination(
+          icon: Icon(Icons.settings), label: 'Settings'),
     ];
 
     testWidgets('renders with destinations without throwing', (tester) async {

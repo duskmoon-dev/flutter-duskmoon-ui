@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import '../adaptive/adaptive_widget.dart';
 import '../adaptive/platform_resolver.dart';
 
+/// An adaptive tab bar (Material TabBar / Cupertino segmented control).
 class DmTabBar extends StatelessWidget with AdaptiveWidget {
+  /// Creates an adaptive tab bar.
   const DmTabBar({
     super.key,
     required this.tabs,
@@ -13,9 +15,15 @@ class DmTabBar extends StatelessWidget with AdaptiveWidget {
     this.platformOverride,
   });
 
+  /// The tabs to display.
   final List<DmTab> tabs;
+
+  /// Index of the currently selected tab.
   final int selectedIndex;
+
+  /// Called when the selected tab changes.
   final ValueChanged<int>? onChanged;
+
   @override
   final DmPlatformStyle? platformOverride;
 
@@ -27,8 +35,7 @@ class DmTabBar extends StatelessWidget with AdaptiveWidget {
           initialIndex: selectedIndex,
           child: TabBar(
             onTap: onChanged,
-            tabs:
-                tabs.map((t) => Tab(text: t.label, icon: t.icon)).toList(),
+            tabs: tabs.map((t) => Tab(text: t.label, icon: t.icon)).toList(),
           ),
         ),
       DmPlatformStyle.cupertino => CupertinoSlidingSegmentedControl<int>(
@@ -48,9 +55,14 @@ class DmTabBar extends StatelessWidget with AdaptiveWidget {
   }
 }
 
+/// A single tab entry used by [DmTabBar].
 class DmTab {
+  /// Creates a tab with a [label] and optional [icon].
   const DmTab({required this.label, this.icon});
 
+  /// Text label for this tab.
   final String label;
+
+  /// Optional icon displayed alongside the label.
   final Widget? icon;
 }

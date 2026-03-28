@@ -1,3 +1,9 @@
+/// Adaptive widget library for the DuskMoon Design System.
+///
+/// Provides platform-aware widgets that render Material or Cupertino
+/// variants based on the current platform or an explicit override.
+library;
+
 // Adaptive infrastructure
 export 'src/adaptive/adaptive_widget.dart';
 export 'src/adaptive/platform_override.dart';

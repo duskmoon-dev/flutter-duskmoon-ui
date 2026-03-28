@@ -52,16 +52,15 @@ class CupertinoSelectTile extends StatelessWidget {
     );
 
     final selectedOption = selectOptions?.cast<SettingsOption?>().firstWhere(
-      (o) => o?.value == selectValue,
-      orElse: () => null,
-    );
+          (o) => o?.value == selectValue,
+          orElse: () => null,
+        );
 
     Widget content = GestureDetector(
       onTap: enabled ? () => _showCupertinoSelectPicker(context) : null,
       child: Container(
         constraints: BoxConstraints(minHeight: textScaler.scale(_minRowHeight)),
-        color:
-            theme.themeData.settingsSectionBackground ??
+        color: theme.themeData.settingsSectionBackground ??
             CupertinoColors.secondarySystemGroupedBackground.resolveFrom(
               context,
             ),
@@ -81,7 +80,7 @@ class CupertinoSelectTile extends StatelessWidget {
                     color: enabled
                         ? theme.themeData.leadingIconsColor
                         : theme.themeData.inactiveTitleColor ??
-                              secondaryLabelColor,
+                            secondaryLabelColor,
                   ),
                   child: Center(child: leading!),
                 ),
@@ -94,7 +93,7 @@ class CupertinoSelectTile extends StatelessWidget {
                   color: enabled
                       ? theme.themeData.settingsTileTextColor ?? labelColor
                       : theme.themeData.inactiveTitleColor ??
-                            secondaryLabelColor,
+                          secondaryLabelColor,
                   fontSize: _titleFontSize,
                   letterSpacing: -0.4,
                 ),
@@ -162,8 +161,7 @@ class CupertinoSelectTile extends StatelessWidget {
       decoration: BoxDecoration(color: theme.themeData.settingsListBackground),
       child: DefaultTextStyle(
         style: TextStyle(
-          color:
-              theme.themeData.titleTextColor ??
+          color: theme.themeData.titleTextColor ??
               CupertinoColors.secondaryLabel.resolveFrom(context),
           fontSize: _descriptionFontSize,
         ),
@@ -176,8 +174,7 @@ class CupertinoSelectTile extends StatelessWidget {
     showCupertinoModalPopup<void>(
       context: context,
       builder: (context) => CupertinoActionSheet(
-        actions:
-            selectOptions?.map((option) {
+        actions: selectOptions?.map((option) {
               final isSelected = option.value == selectValue;
               return CupertinoActionSheetAction(
                 onPressed: () {

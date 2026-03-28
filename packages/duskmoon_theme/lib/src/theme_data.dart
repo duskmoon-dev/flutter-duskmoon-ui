@@ -4,30 +4,44 @@ import 'color_scheme.dart';
 import 'extensions.dart';
 import 'text_theme.dart';
 
+/// Bundles a named theme with its light and dark [ThemeData] variants.
 @immutable
 class DmThemeEntry {
+  /// Creates a theme entry with the given [name], [light], and [dark] variants.
   const DmThemeEntry({
     required this.name,
     required this.light,
     required this.dark,
   });
 
+  /// Display name for this theme entry.
   final String name;
+
+  /// Light mode [ThemeData] for this theme.
   final ThemeData light;
+
+  /// Dark mode [ThemeData] for this theme.
   final ThemeData dark;
 }
 
+/// Factory for building complete DuskMoon [ThemeData] instances.
+///
+/// Each static method returns a fully configured Material 3 [ThemeData]
+/// with color scheme, text theme, and component theme overrides.
 abstract final class DmThemeData {
+  /// Returns a light [ThemeData] using the Sunshine color palette.
   static ThemeData sunshine() => _buildThemeData(
         colorScheme: DmColorScheme.sunshine(),
         colorExtension: DmColorExtension.sunshine(),
       );
 
+  /// Returns a dark [ThemeData] using the Moonlight color palette.
   static ThemeData moonlight() => _buildThemeData(
         colorScheme: DmColorScheme.moonlight(),
         colorExtension: DmColorExtension.moonlight(),
       );
 
+  /// Returns all available [DmThemeEntry] instances.
   static List<DmThemeEntry> get themes => [
         DmThemeEntry(
           name: 'sunshine',

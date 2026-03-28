@@ -1,4 +1,8 @@
-export 'src/bottom_sheet.dart' show DmBottomSheetAction, showDmBottomSheetActionList;
+/// Pre-built feedback widgets: dialogs, snackbars, toasts, and bottom sheets.
+library;
+
+export 'src/bottom_sheet.dart'
+    show DmBottomSheetAction, showDmBottomSheetActionList;
 export 'src/dialog.dart' show DmDialogAction, showDmDialog;
 export 'src/fullscreen_dialog.dart' show showDmFullscreenDialog;
 export 'src/helper.dart' show dmScaffoldMessengerKey, getDmWidgetSize;

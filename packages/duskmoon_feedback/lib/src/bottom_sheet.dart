@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 
 /// An action item for [showDmBottomSheetActionList].
 class DmBottomSheetAction {
+  /// Creates a bottom sheet action with a [title] and [onTap] callback.
   const DmBottomSheetAction({
     required this.title,
     required this.onTap,
     this.style,
   });
 
+  /// The label widget displayed on the action button.
   final Widget title;
+
+  /// Callback invoked when this action is tapped.
   final VoidCallback onTap;
+
+  /// Optional custom button style override.
   final ButtonStyle? style;
 }
 

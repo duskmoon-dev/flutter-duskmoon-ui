@@ -37,13 +37,11 @@ class CupertinoSettingsSection extends AbstractSettingsSection {
     );
 
     // Check if last tile has description (affects bottom padding)
-    final isLastNonDescriptive =
-        tiles.last is SettingsTile &&
+    final isLastNonDescriptive = tiles.last is SettingsTile &&
         (tiles.last as SettingsTile).description == null;
 
     return Padding(
-      padding:
-          margin ??
+      padding: margin ??
           EdgeInsets.only(
             top: textScaler.scale(_sectionTopPadding),
             bottom: isLastNonDescriptive

@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'generated/moonlight_tokens.g.dart';
 import 'generated/sunshine_tokens.g.dart';
 
+/// A [ThemeExtension] carrying 20 non-standard semantic color tokens.
+///
+/// Access via `Theme.of(context).extension<DmColorExtension>()`.
 @immutable
 class DmColorExtension extends ThemeExtension<DmColorExtension> {
+  /// Creates a [DmColorExtension] with all required semantic color tokens.
   const DmColorExtension({
     required this.primaryFocus,
     required this.secondaryFocus,
@@ -28,27 +32,67 @@ class DmColorExtension extends ThemeExtension<DmColorExtension> {
     required this.baseContent,
   });
 
+  /// Focused variant of the primary color.
   final Color primaryFocus;
+
+  /// Focused variant of the secondary color.
   final Color secondaryFocus;
+
+  /// Focused variant of the tertiary color.
   final Color tertiaryFocus;
+
+  /// Accent color for highlights and emphasis.
   final Color accent;
+
+  /// Focused variant of the accent color.
   final Color accentFocus;
+
+  /// Content color for use on accent backgrounds.
   final Color accentContent;
+
+  /// Neutral color for subdued UI elements.
   final Color neutral;
+
+  /// Focused variant of the neutral color.
   final Color neutralFocus;
+
+  /// Content color for use on neutral backgrounds.
   final Color neutralContent;
+
+  /// Neutral variant for subtle differentiation.
   final Color neutralVariant;
+
+  /// Semantic color for informational states.
   final Color info;
+
+  /// Content color for use on info backgrounds.
   final Color infoContent;
+
+  /// Semantic color for success states.
   final Color success;
+
+  /// Content color for use on success backgrounds.
   final Color successContent;
+
+  /// Semantic color for warning states.
   final Color warning;
+
+  /// Content color for use on warning backgrounds.
   final Color warningContent;
+
+  /// Base surface color at the first elevation level.
   final Color base100;
+
+  /// Base surface color at the second elevation level.
   final Color base200;
+
+  /// Base surface color at the third elevation level.
   final Color base300;
+
+  /// Content color for use on base surfaces.
   final Color baseContent;
 
+  /// Returns a [DmColorExtension] using the Sunshine (light) design tokens.
   static DmColorExtension sunshine() {
     return const DmColorExtension(
       primaryFocus: SunshineTokens.primaryFocus,
@@ -74,6 +118,7 @@ class DmColorExtension extends ThemeExtension<DmColorExtension> {
     );
   }
 
+  /// Returns a [DmColorExtension] using the Moonlight (dark) design tokens.
   static DmColorExtension moonlight() {
     return const DmColorExtension(
       primaryFocus: MoonlightTokens.primaryFocus,

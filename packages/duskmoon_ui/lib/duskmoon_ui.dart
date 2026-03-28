@@ -1,4 +1,8 @@
-library duskmoon_ui;
+/// Umbrella library that re-exports theme, widgets, settings, and feedback.
+///
+/// Import this single library to access all DuskMoon UI components.
+/// Note: `duskmoon_theme_bloc` is intentionally excluded; import it directly.
+library;
 
 export 'package:duskmoon_theme/duskmoon_theme.dart';
 export 'package:duskmoon_widgets/duskmoon_widgets.dart';

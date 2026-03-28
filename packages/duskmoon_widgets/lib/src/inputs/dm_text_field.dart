@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import '../adaptive/adaptive_widget.dart';
 import '../adaptive/platform_resolver.dart';
 
+/// An adaptive text input that renders Material or Cupertino styles.
 class DmTextField extends StatelessWidget with AdaptiveWidget {
+  /// Creates an adaptive text field.
   const DmTextField({
     super.key,
     this.controller,
@@ -21,16 +23,37 @@ class DmTextField extends StatelessWidget with AdaptiveWidget {
     this.platformOverride,
   });
 
+  /// Controller for reading and manipulating the text value.
   final TextEditingController? controller;
+
+  /// Placeholder hint text shown when the field is empty.
   final String? placeholder;
+
+  /// Whether to obscure the entered text (for passwords).
   final bool obscureText;
+
+  /// Called when the text value changes.
   final ValueChanged<String>? onChanged;
+
+  /// Called when the user submits the field (e.g. presses done).
   final ValueChanged<String>? onSubmitted;
+
+  /// Whether the text field is interactive.
   final bool enabled;
+
+  /// The type of keyboard to show.
   final TextInputType? keyboardType;
+
+  /// Maximum number of lines; `null` for unlimited.
   final int? maxLines;
+
+  /// Material-specific input decoration override.
   final InputDecoration? decoration;
+
+  /// Widget displayed before the text content.
   final Widget? prefix;
+
+  /// Widget displayed after the text content.
   final Widget? suffix;
 
   @override

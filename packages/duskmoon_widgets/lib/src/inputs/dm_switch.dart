@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import '../adaptive/adaptive_widget.dart';
 import '../adaptive/platform_resolver.dart';
 
+/// An adaptive toggle switch that renders Material or Cupertino styles.
 class DmSwitch extends StatelessWidget with AdaptiveWidget {
+  /// Creates an adaptive switch.
   const DmSwitch({
     super.key,
     required this.value,
@@ -12,7 +14,10 @@ class DmSwitch extends StatelessWidget with AdaptiveWidget {
     this.platformOverride,
   });
 
+  /// Whether the switch is on.
   final bool value;
+
+  /// Called when the switch value changes; `null` disables interaction.
   final ValueChanged<bool>? onChanged;
 
   @override

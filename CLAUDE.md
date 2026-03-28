@@ -4,12 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Flutter monorepo implementing the DuskMoon Design System component library, managed by **Melos**. Requires Dart >=3.5.0 and Flutter >=3.24.0.
+Flutter monorepo implementing the DuskMoon Design System component library. Uses Dart native workspace + Melos scripts. Requires Dart >=3.5.0 and Flutter >=3.24.0.
 
 ## Commands
 
 ```bash
-melos bootstrap                # Install all workspace dependencies (run first)
+dart pub get                   # Install all workspace dependencies (run first)
 melos run analyze              # dart analyze --fatal-infos in all packages
 melos run test                 # flutter test in all packages
 melos run format               # dart format --set-exit-if-changed in all packages
@@ -93,6 +93,7 @@ Adaptive feedback helpers migrated from `app_widget/feedback`, with `app_locale`
 | 3 | `duskmoon_settings` | Done |
 | 4 | `duskmoon_feedback` | Done |
 | 5 | `duskmoon_widgets` | Done |
+| 6 | Polish & Publish Prep | Done |
 
 ## Conventions
 

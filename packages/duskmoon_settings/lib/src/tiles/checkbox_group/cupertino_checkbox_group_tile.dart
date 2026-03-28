@@ -49,8 +49,7 @@ class CupertinoCheckboxGroupTile extends StatelessWidget {
     );
 
     Widget content = Container(
-      color:
-          theme.themeData.settingsSectionBackground ??
+      color: theme.themeData.settingsSectionBackground ??
           CupertinoColors.secondarySystemGroupedBackground.resolveFrom(context),
       padding: const EdgeInsets.all(_horizontalPadding),
       child: Column(
@@ -69,7 +68,7 @@ class CupertinoCheckboxGroupTile extends StatelessWidget {
                       color: enabled
                           ? theme.themeData.leadingIconsColor
                           : theme.themeData.inactiveTitleColor ??
-                                secondaryLabelColor,
+                              secondaryLabelColor,
                     ),
                     child: Center(child: leading!),
                   ),
@@ -82,7 +81,7 @@ class CupertinoCheckboxGroupTile extends StatelessWidget {
                     color: enabled
                         ? theme.themeData.settingsTileTextColor ?? labelColor
                         : theme.themeData.inactiveTitleColor ??
-                              secondaryLabelColor,
+                            secondaryLabelColor,
                     fontSize: _titleFontSize,
                     letterSpacing: -0.4,
                   ),
@@ -186,8 +185,7 @@ class CupertinoCheckboxGroupTile extends StatelessWidget {
       decoration: BoxDecoration(color: theme.themeData.settingsListBackground),
       child: DefaultTextStyle(
         style: TextStyle(
-          color:
-              theme.themeData.titleTextColor ??
+          color: theme.themeData.titleTextColor ??
               CupertinoColors.secondaryLabel.resolveFrom(context),
           fontSize: _descriptionFontSize,
         ),

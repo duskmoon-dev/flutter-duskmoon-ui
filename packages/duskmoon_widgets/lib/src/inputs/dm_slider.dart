@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import '../adaptive/adaptive_widget.dart';
 import '../adaptive/platform_resolver.dart';
 
+/// An adaptive slider that renders Material or Cupertino styles.
 class DmSlider extends StatelessWidget with AdaptiveWidget {
+  /// Creates an adaptive slider.
   const DmSlider({
     super.key,
     required this.value,
@@ -15,10 +17,19 @@ class DmSlider extends StatelessWidget with AdaptiveWidget {
     this.platformOverride,
   });
 
+  /// The current value of the slider.
   final double value;
+
+  /// Called when the slider value changes; `null` disables interaction.
   final ValueChanged<double>? onChanged;
+
+  /// The minimum selectable value.
   final double min;
+
+  /// The maximum selectable value.
   final double max;
+
+  /// Number of discrete divisions between [min] and [max].
   final int? divisions;
 
   @override

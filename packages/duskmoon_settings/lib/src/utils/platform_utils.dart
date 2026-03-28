@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+/// Enumerates supported target platforms for settings UI styling.
 enum DevicePlatform {
   /// Android: <https://www.android.com/>
   android,

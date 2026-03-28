@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import '../adaptive/adaptive_widget.dart';
 import '../adaptive/platform_resolver.dart';
 
+/// An adaptive icon button that renders Material or Cupertino styles.
 class DmIconButton extends StatelessWidget with AdaptiveWidget {
+  /// Creates an adaptive icon button.
   const DmIconButton({
     super.key,
     required this.icon,
@@ -13,8 +15,13 @@ class DmIconButton extends StatelessWidget with AdaptiveWidget {
     this.platformOverride,
   });
 
+  /// The icon widget to display.
   final Widget icon;
+
+  /// Callback invoked when the button is tapped, or `null` to disable.
   final VoidCallback? onPressed;
+
+  /// Optional tooltip text shown on long press (Material only).
   final String? tooltip;
 
   @override

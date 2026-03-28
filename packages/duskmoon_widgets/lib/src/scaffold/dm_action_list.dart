@@ -27,6 +27,7 @@ class DmAction {
   /// [DmActionList.hideDisabled].
   final bool disabled;
 
+  /// Creates an action with a [title], [icon], and [onPressed] callback.
   const DmAction({
     required this.title,
     required this.icon,
@@ -56,6 +57,7 @@ class DmActionList extends StatelessWidget {
   /// Whether disabled actions should be hidden rather than greyed out.
   final bool hideDisabled;
 
+  /// Creates an action list that filters out disabled actions when [hideDisabled] is `true`.
   DmActionList({
     super.key,
     this.size = DmActionSize.medium,

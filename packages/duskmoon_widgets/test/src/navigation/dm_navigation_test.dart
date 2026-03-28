@@ -49,7 +49,9 @@ void main() {
             child: Scaffold(
               appBar: DmAppBar(
                 title: const Text('Title'),
-                actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.add))],
+                actions: [
+                  IconButton(onPressed: () {}, icon: const Icon(Icons.add))
+                ],
               ),
               body: const SizedBox(),
             ),
@@ -271,9 +273,12 @@ void main() {
       expect(find.text('Drawer content'), findsOneWidget);
 
       // Find the decorated Container
-      final container = tester.widgetList<Container>(
-        find.byType(Container),
-      ).where((c) => c.decoration != null).first;
+      final container = tester
+          .widgetList<Container>(
+            find.byType(Container),
+          )
+          .where((c) => c.decoration != null)
+          .first;
       final decoration = container.decoration! as BoxDecoration;
       expect(decoration.border, isNotNull);
     });

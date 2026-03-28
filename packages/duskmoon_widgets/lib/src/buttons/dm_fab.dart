@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import '../adaptive/adaptive_widget.dart';
 import '../adaptive/platform_resolver.dart';
 
+/// An adaptive floating action button (Material FAB / Cupertino filled).
 class DmFab extends StatelessWidget with AdaptiveWidget {
+  /// Creates an adaptive floating action button.
   const DmFab({
     super.key,
     required this.onPressed,
@@ -14,9 +16,16 @@ class DmFab extends StatelessWidget with AdaptiveWidget {
     this.platformOverride,
   });
 
+  /// Callback invoked when the FAB is tapped, or `null` to disable.
   final VoidCallback? onPressed;
+
+  /// Primary content widget; used when [icon] and [label] are not set.
   final Widget? child;
+
+  /// Icon displayed inside the FAB.
   final Widget? icon;
+
+  /// Label displayed next to [icon] in extended mode.
   final Widget? label;
 
   @override

@@ -90,6 +90,7 @@ class DmScaffold extends StatelessWidget {
   /// Custom builder for navigation rail destinations.
   final NavigationRailDestinationBuilder? navigationRailDestinationBuilder;
 
+  /// Creates a responsive scaffold with adaptive navigation.
   const DmScaffold({
     super.key,
     required this.destinations,

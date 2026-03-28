@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Install dependencies
+        run: dart pub get
+      - name: Analyze
+        run: |
+          for pkg in packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_ui; do
+            echo "Analyzing $pkg..."
+            (cd $pkg && dart analyze --fatal-infos)
+          done
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Install dependencies
+        run: dart pub get
+      - name: Test
+        run: |
+          for pkg in packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback; do
+            echo "Testing $pkg..."
+            (cd $pkg && flutter test)
+          done
+
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Format
+        run: dart format --set-exit-if-changed packages/

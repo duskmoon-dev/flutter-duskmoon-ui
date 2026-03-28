@@ -1,3 +1,9 @@
+/// DuskMoon Design System theme package.
+///
+/// Provides codegen-driven color schemes, text themes, and theme data
+/// factories for Material 3 applications.
+library;
+
 // Theme factories
 export 'src/theme_data.dart' show DmThemeData, DmThemeEntry;
 export 'src/color_scheme.dart' show DmColorScheme;

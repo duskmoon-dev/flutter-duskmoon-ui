@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../adaptive/adaptive_widget.dart';
 import '../adaptive/platform_resolver.dart';
 
+/// An adaptive side drawer that renders Material [Drawer] or Cupertino panel.
 class DmDrawer extends StatelessWidget with AdaptiveWidget {
+  /// Creates an adaptive drawer.
   const DmDrawer({
     super.key,
     this.child,
@@ -11,8 +13,12 @@ class DmDrawer extends StatelessWidget with AdaptiveWidget {
     this.platformOverride,
   });
 
+  /// The content displayed inside the drawer.
   final Widget? child;
+
+  /// Optional fixed width of the drawer.
   final double? width;
+
   @override
   final DmPlatformStyle? platformOverride;
 

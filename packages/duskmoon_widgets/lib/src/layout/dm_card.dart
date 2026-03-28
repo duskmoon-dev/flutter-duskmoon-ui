@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../adaptive/adaptive_widget.dart';
 import '../adaptive/platform_resolver.dart';
 
+/// An adaptive card container that renders Material or Cupertino styles.
 class DmCard extends StatelessWidget with AdaptiveWidget {
+  /// Creates an adaptive card.
   const DmCard({
     super.key,
     this.child,
@@ -13,10 +15,18 @@ class DmCard extends StatelessWidget with AdaptiveWidget {
     this.platformOverride,
   });
 
+  /// The widget below this card in the tree.
   final Widget? child;
+
+  /// Shadow elevation depth.
   final double? elevation;
+
+  /// Outer margin around the card.
   final EdgeInsetsGeometry? margin;
+
+  /// Inner padding applied to [child].
   final EdgeInsetsGeometry? padding;
+
   @override
   final DmPlatformStyle? platformOverride;
 

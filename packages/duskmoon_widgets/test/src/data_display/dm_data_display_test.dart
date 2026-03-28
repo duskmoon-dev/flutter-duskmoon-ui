@@ -260,8 +260,7 @@ void main() {
       expect(avatar.radius, 30);
     });
 
-    testWidgets(
-        'uses primaryContainer as default backgroundColor on Cupertino',
+    testWidgets('uses primaryContainer as default backgroundColor on Cupertino',
         (tester) async {
       final theme = ThemeData(platform: TargetPlatform.iOS);
       await tester.pumpWidget(

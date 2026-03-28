@@ -70,7 +70,7 @@ class FluentInputTile extends StatelessWidget {
                       style: TextStyle(
                         color: enabled
                             ? theme.themeData.settingsTileTextColor ??
-                                  colorScheme.onSurface
+                                colorScheme.onSurface
                             : colorScheme.onSurface.withValues(alpha: 0.38),
                         fontSize: _headerFontSize,
                         fontWeight: FontWeight.w600,
@@ -110,7 +110,7 @@ class FluentInputTile extends StatelessWidget {
                     style: TextStyle(
                       color: enabled
                           ? theme.themeData.tileDescriptionTextColor ??
-                                colorScheme.onSurfaceVariant
+                              colorScheme.onSurfaceVariant
                           : colorScheme.onSurfaceVariant.withValues(
                               alpha: 0.38,
                             ),

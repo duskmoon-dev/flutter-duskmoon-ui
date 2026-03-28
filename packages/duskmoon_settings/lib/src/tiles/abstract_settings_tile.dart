@@ -2,17 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:duskmoon_settings/src/utils/settings_option.dart';
 
 /// Enum representing the type of settings tile.
+/// Enum representing the type of settings tile.
 enum SettingsTileType {
+  /// A basic tile with title and optional value.
   simpleTile,
+
+  /// A tile with an integrated toggle switch.
   switchTile,
+
+  /// A tile with a trailing chevron for navigation.
   navigationTile,
+
+  /// A tile with a checkmark indicator.
   checkTile,
-  // New tile types
+
+  /// A tile with a single-line text input field.
   inputTile,
+
+  /// A tile with a slider for numeric value selection.
   sliderTile,
+
+  /// A tile with a dropdown/picker for option selection.
   selectTile,
+
+  /// A tile with a multi-line text area.
   textareaTile,
+
+  /// A tile with a radio button group for single selection.
   radioGroupTile,
+
+  /// A tile with a checkbox group for multiple selection.
   checkboxGroupTile,
 }
 

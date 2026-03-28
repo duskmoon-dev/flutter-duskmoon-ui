@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 /// Adaptive dialog action that renders as [TextButton] on Material platforms
 /// and [CupertinoDialogAction] on Apple platforms.
 class DmDialogAction extends StatelessWidget {
+  /// Creates an adaptive dialog action button.
   const DmDialogAction({super.key, this.onPressed, required this.child});
 
+  /// Callback invoked when the action is pressed.
   final Function(BuildContext context)? onPressed;
+
+  /// The label widget displayed inside the action button.
   final Widget child;
 
   VoidCallback? _onPressed(BuildContext context) {

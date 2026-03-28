@@ -30,8 +30,7 @@ class CupertinoSettingsList extends AbstractSettingsList {
     final themeData = SettingsThemeData.withContext(context, effectivePlatform);
 
     // Use Cupertino system grouped background
-    final backgroundColor =
-        themeData.settingsListBackground ??
+    final backgroundColor = themeData.settingsListBackground ??
         CupertinoColors.systemGroupedBackground.resolveFrom(context);
 
     return LayoutBuilder(

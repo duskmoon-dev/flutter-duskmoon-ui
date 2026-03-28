@@ -8,7 +8,9 @@ import 'state.dart';
 const _keyThemeName = 'dm_theme_name';
 const _keyThemeMode = 'dm_theme_mode';
 
+/// BLoC that manages theme selection and mode with SharedPreferences persistence.
 class DmThemeBloc extends Bloc<DmThemeEvent, DmThemeState> {
+  /// Creates a [DmThemeBloc], restoring persisted theme from [prefs].
   DmThemeBloc({required SharedPreferences prefs})
       : _prefs = prefs,
         super(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// Factory for building the DuskMoon [TextTheme] following the Material 3 type scale.
 abstract final class DmTextTheme {
+  /// Returns a [TextTheme] with exact Material 3 spec values for all text styles.
   static TextTheme textTheme() {
     return const TextTheme(
       displayLarge: TextStyle(

@@ -1,7 +1,17 @@
 name: duskmoon_theme
 description: DuskMoon Design System theme for Flutter — codegen-driven, zero dependencies
 version: 0.1.0
-publish_to: none
+homepage: https://github.com/duskmoon-dev/flutter_duskmoon_ui
+repository: https://github.com/duskmoon-dev/flutter_duskmoon_ui
+issue_tracker: https://github.com/duskmoon-dev/flutter_duskmoon_ui/issues
+topics:
+  - flutter
+  - design-system
+  - theme
+  - material-design
+  - color-scheme
+
+resolution: workspace
 
 environment:
   sdk: ">=3.5.0 <4.0.0"

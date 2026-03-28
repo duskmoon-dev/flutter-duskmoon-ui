@@ -2,10 +2,15 @@ import 'package:duskmoon_theme/duskmoon_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:duskmoon_settings/src/utils/platform_utils.dart';
 
+/// InheritedWidget that provides [SettingsThemeData] to settings widgets.
 class SettingsTheme extends InheritedWidget {
+  /// The theme data for settings widgets.
   final SettingsThemeData themeData;
+
+  /// The target platform for platform-specific styling.
   final DevicePlatform platform;
 
+  /// Creates a [SettingsTheme] with the given [themeData] and [platform].
   const SettingsTheme({
     required this.themeData,
     required this.platform,
@@ -16,10 +21,12 @@ class SettingsTheme extends InheritedWidget {
   @override
   bool updateShouldNotify(SettingsTheme oldWidget) => true;
 
+  /// Returns the nearest [SettingsTheme], or null if none exists.
   static SettingsTheme? maybeOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<SettingsTheme>();
   }
 
+  /// Returns the nearest [SettingsTheme], or asserts if none exists.
   static SettingsTheme of(BuildContext context) {
     final SettingsTheme? result = maybeOf(context);
     assert(result != null, 'No SettingsTheme found in context');
@@ -27,7 +34,9 @@ class SettingsTheme extends InheritedWidget {
   }
 }
 
+/// Color and styling data for settings widgets.
 class SettingsThemeData {
+  /// Creates a [SettingsThemeData] from the current [BuildContext] theme.
   static SettingsThemeData withContext(
     BuildContext context,
     DevicePlatform? platform,
@@ -39,6 +48,7 @@ class SettingsThemeData {
     return withColorScheme(colorScheme, platform, dmColors: dmColors);
   }
 
+  /// Creates a [SettingsThemeData] from a [ColorScheme] and platform.
   static SettingsThemeData withColorScheme(
     ColorScheme colorScheme,
     DevicePlatform? platform, {
@@ -69,13 +79,10 @@ class SettingsThemeData {
     DmColorExtension? dmColors,
   ) {
     return SettingsThemeData(
-      settingsListBackground:
-          dmColors?.base100 ?? colorScheme.surface,
-      settingsSectionBackground:
-          dmColors?.base100 ?? colorScheme.surface,
+      settingsListBackground: dmColors?.base100 ?? colorScheme.surface,
+      settingsSectionBackground: dmColors?.base100 ?? colorScheme.surface,
       titleTextColor: colorScheme.primary,
-      settingsTileTextColor:
-          dmColors?.baseContent ?? colorScheme.onSurface,
+      settingsTileTextColor: dmColors?.baseContent ?? colorScheme.onSurface,
       tileDescriptionTextColor: colorScheme.onSurfaceVariant,
       tileHighlightColor: colorScheme.surfaceContainerHighest,
       leadingIconsColor: colorScheme.onSurfaceVariant,
@@ -94,11 +101,9 @@ class SettingsThemeData {
     return SettingsThemeData(
       settingsListBackground:
           dmColors?.base200 ?? colorScheme.surfaceContainerHighest,
-      settingsSectionBackground:
-          dmColors?.base100 ?? colorScheme.surface,
+      settingsSectionBackground: dmColors?.base100 ?? colorScheme.surface,
       titleTextColor: colorScheme.onSurfaceVariant,
-      settingsTileTextColor:
-          dmColors?.baseContent ?? colorScheme.onSurface,
+      settingsTileTextColor: dmColors?.baseContent ?? colorScheme.onSurface,
       tileDescriptionTextColor: colorScheme.onSurfaceVariant,
       dividerColor: colorScheme.outlineVariant,
       trailingTextColor: colorScheme.onSurfaceVariant,
@@ -121,10 +126,8 @@ class SettingsThemeData {
           dmColors?.base100 ?? colorScheme.surfaceContainerLow,
       settingsSectionBackground:
           dmColors?.base200 ?? colorScheme.surfaceContainerHighest,
-      titleTextColor:
-          dmColors?.baseContent ?? colorScheme.onSurface,
-      settingsTileTextColor:
-          dmColors?.baseContent ?? colorScheme.onSurface,
+      titleTextColor: dmColors?.baseContent ?? colorScheme.onSurface,
+      settingsTileTextColor: dmColors?.baseContent ?? colorScheme.onSurface,
       tileDescriptionTextColor: colorScheme.onSurfaceVariant,
       tileHighlightColor: colorScheme.surfaceContainerHigh,
       leadingIconsColor: colorScheme.primary,
@@ -135,6 +138,7 @@ class SettingsThemeData {
     );
   }
 
+  /// Creates a [SettingsThemeData] with explicit color values.
   const SettingsThemeData({
     this.trailingTextColor,
     this.settingsListBackground,
@@ -149,18 +153,40 @@ class SettingsThemeData {
     this.inactiveSubtitleColor,
   });
 
+  /// Background color for the entire settings list.
   final Color? settingsListBackground;
+
+  /// Text color for trailing value labels.
   final Color? trailingTextColor;
+
+  /// Color for leading icons in tiles.
   final Color? leadingIconsColor;
+
+  /// Background color for individual settings sections.
   final Color? settingsSectionBackground;
+
+  /// Color for section dividers.
   final Color? dividerColor;
+
+  /// Text color for tile description labels.
   final Color? tileDescriptionTextColor;
+
+  /// Highlight color when a tile is pressed.
   final Color? tileHighlightColor;
+
+  /// Text color for section titles.
   final Color? titleTextColor;
+
+  /// Text color for tile main text.
   final Color? settingsTileTextColor;
+
+  /// Text color for disabled tile titles.
   final Color? inactiveTitleColor;
+
+  /// Text color for disabled tile subtitles.
   final Color? inactiveSubtitleColor;
 
+  /// Merges this theme data with [theme], preferring values from [theme].
   SettingsThemeData merge({SettingsThemeData? theme}) {
     if (theme == null) return this;
 
@@ -179,6 +205,7 @@ class SettingsThemeData {
     );
   }
 
+  /// Returns a copy with the given fields replaced.
   SettingsThemeData copyWith({
     Color? settingsListBackground,
     Color? trailingTextColor,

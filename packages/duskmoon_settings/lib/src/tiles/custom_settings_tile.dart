@@ -26,7 +26,7 @@ import 'package:duskmoon_settings/src/utils/settings_theme.dart';
 class CustomSettingsTile extends AbstractSettingsTile {
   /// Creates a custom settings tile with the given child widget.
   const CustomSettingsTile({required this.child, super.key})
-    : super(title: null, tileType: SettingsTileType.simpleTile);
+      : super(title: null, tileType: SettingsTileType.simpleTile);
 
   /// The custom widget to display as the tile content.
   final Widget child;
@@ -41,8 +41,7 @@ class CustomSettingsTile extends AbstractSettingsTile {
     switch (platform) {
       case DevicePlatform.iOS:
       case DevicePlatform.macOS:
-        backgroundColor =
-            theme?.themeData.settingsSectionBackground ??
+        backgroundColor = theme?.themeData.settingsSectionBackground ??
             CupertinoColors.secondarySystemGroupedBackground.resolveFrom(
               context,
             );
@@ -55,15 +54,15 @@ class CustomSettingsTile extends AbstractSettingsTile {
     final additionalInfo = CupertinoSettingsTileAdditionalInfo.of(context);
     final borderRadius =
         (platform == DevicePlatform.iOS || platform == DevicePlatform.macOS)
-        ? BorderRadius.vertical(
-            top: additionalInfo.enableTopBorderRadius
-                ? const Radius.circular(10)
-                : Radius.zero,
-            bottom: additionalInfo.enableBottomBorderRadius
-                ? const Radius.circular(10)
-                : Radius.zero,
-          )
-        : BorderRadius.zero;
+            ? BorderRadius.vertical(
+                top: additionalInfo.enableTopBorderRadius
+                    ? const Radius.circular(10)
+                    : Radius.zero,
+                bottom: additionalInfo.enableBottomBorderRadius
+                    ? const Radius.circular(10)
+                    : Radius.zero,
+              )
+            : BorderRadius.zero;
 
     return ClipRRect(
       borderRadius: borderRadius,
