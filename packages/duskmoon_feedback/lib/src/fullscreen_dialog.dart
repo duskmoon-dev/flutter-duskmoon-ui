@@ -1,13 +1,26 @@
-// Placeholder — implementation in Phase 4
 import 'package:flutter/material.dart';
 
-Future<T?> showDmFullscreenDialog<T>({
+/// Pushes a fullscreen dialog with an [AppBar] containing a close button.
+void showDmFullscreenDialog({
   required BuildContext context,
+  required Widget title,
   required WidgetBuilder builder,
 }) {
-  return showDialog<T>(
-    context: context,
-    builder: builder,
-    useSafeArea: false,
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      fullscreenDialog: true,
+      builder: (BuildContext context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: title,
+            leading: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+          body: SafeArea(child: builder(context)),
+        );
+      },
+    ),
   );
 }

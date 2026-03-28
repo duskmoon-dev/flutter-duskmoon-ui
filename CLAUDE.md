@@ -69,6 +69,20 @@ Three-tier resolution: **widget override → `DmPlatformOverride` InheritedWidge
 - `SettingsTheme` / `SettingsThemeData` — InheritedWidget + 11-color theme data with platform factories
 - Integrates with `DmColorExtension` semantic colors when available (base100/200/300, baseContent)
 
+### Feedback (`duskmoon_feedback` — fully implemented)
+
+Adaptive feedback helpers migrated from `app_widget/feedback`, with `app_locale` dependency removed.
+
+- `DmDialogAction` — adaptive action: `TextButton` (Material) / `CupertinoDialogAction` (Apple)
+- `showDmDialog()` — `AlertDialog.adaptive` with title, content, actions
+- `showDmSnackbar()` — generic snackbar with optional action
+- `showDmUndoSnackbar()` — snackbar with configurable undo label (no l10n dependency)
+- `showDmSuccessToast()` — success toast with checkmark icon, primary colors
+- `showDmErrorToast()` — persistent error toast with selectable message text
+- `showDmBottomSheetActionList()` / `DmBottomSheetAction` — bottom sheet with action buttons
+- `showDmFullscreenDialog()` — fullscreen modal with AppBar close button
+- `dmScaffoldMessengerKey` / `getDmWidgetSize()` — utility helpers
+
 ### Implementation Status
 
 | Phase | Package | Status |
@@ -76,7 +90,7 @@ Three-tier resolution: **widget override → `DmPlatformOverride` InheritedWidge
 | 1 | `duskmoon_theme` | Done |
 | 2 | `duskmoon_theme_bloc` | Done |
 | 3 | `duskmoon_settings` | Done |
-| 4 | `duskmoon_feedback` | Stubs |
+| 4 | `duskmoon_feedback` | Done |
 | 5 | `duskmoon_widgets` | Platform layer only |
 
 ## Conventions
