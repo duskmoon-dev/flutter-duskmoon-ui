@@ -49,13 +49,14 @@ Flow: **Design tokens → codegen → `*Tokens` classes → `DmColorScheme` → 
 - `ThemeModeExtension` — `fromString()`, `title`, `icon` helpers on `ThemeMode`
 - `DmThemeEntry` — bundles a theme name with its light/dark `ThemeData` variants
 
-### Adaptive Widget Pattern (`duskmoon_widgets` — platform layer only)
+### Adaptive Widget Pattern (`duskmoon_widgets`)
 
 Three-tier resolution: **widget override → `DmPlatformOverride` InheritedWidget → `Theme.of(context).platform`**
 
 - `DmPlatformStyle` enum: `material` | `cupertino`
 - `AdaptiveWidget` mixin on `StatelessWidget` for platform-aware rendering
 - `DmPlatformOverride` InheritedWidget for app-level style override
+- 18 widgets: DmScaffold, DmActionList, DmButton, DmIconButton, DmFab, DmTextField, DmCheckbox, DmSwitch, DmSlider, DmCard, DmDivider, DmAppBar, DmBottomNav, DmTabBar, DmDrawer, DmBadge, DmChip, DmAvatar
 
 ### Settings UI (`duskmoon_settings` — fully implemented)
 
@@ -91,7 +92,7 @@ Adaptive feedback helpers migrated from `app_widget/feedback`, with `app_locale`
 | 2 | `duskmoon_theme_bloc` | Done |
 | 3 | `duskmoon_settings` | Done |
 | 4 | `duskmoon_feedback` | Done |
-| 5 | `duskmoon_widgets` | Platform layer only |
+| 5 | `duskmoon_widgets` | Done |
 
 ## Conventions
 
