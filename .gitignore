@@ -29,14 +29,14 @@ migrate_working_dir/
 .packages
 .pub-cache/
 .pub/
-/build/
+build/
 pubspec.lock
 
 
 # devenv
 /.devenv*
- /local.properties
- /.template-sync
+local.properties
+/.template-sync
 
 /.claude/*
 !/.claude/commands/
