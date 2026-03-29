@@ -116,6 +116,9 @@ jobs:
             echo "::group::Publishing $pkg"
             (cd "$pkg" && dart pub publish --force)
             echo "::endgroup::"
+            # Wait between publishes to avoid pub.dev rate limits
+            echo "Waiting 60s before next publish..."
+            sleep 60
           done
 
       - name: Configure git
