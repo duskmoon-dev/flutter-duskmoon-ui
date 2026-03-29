@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Flutter monorepo implementing the DuskMoon Design System component library. Uses Dart native workspace + Melos scripts. Requires Dart >=3.5.0 and Flutter >=3.24.0.
+Flutter monorepo implementing the DuskMoon Design System component library. Uses Dart native workspace + Melos 7.x (config in root `pubspec.yaml` under `melos:` key). Requires Dart >=3.5.0 and Flutter >=3.24.0.
 
 ## Commands
 
@@ -103,3 +103,6 @@ Adaptive feedback helpers migrated from `app_widget/feedback`, with `app_locale`
 - Linting: `flutter_lints` with `--fatal-infos` (infos are errors)
 - Tests assert exact hex color values from codegen as golden-value checks
 - `duskmoon_theme_bloc` is intentionally excluded from the umbrella re-export
+- All packages use `publish_to: none` during development (remove when ready to publish)
+- Melos config lives in root `pubspec.yaml` under `melos:` key (Melos 7.x — no standalone `melos.yaml`)
+- Each package has its own copy of the MIT LICENSE file (required by pub.dev)

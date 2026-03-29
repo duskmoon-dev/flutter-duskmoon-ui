@@ -12,3 +12,29 @@ workspace:
   - packages/duskmoon_feedback
   - packages/duskmoon_ui
   - example
+
+dev_dependencies:
+  melos: ^7.0.0
+
+melos:
+  repository: https://github.com/duskmoon-dev/flutter_duskmoon_ui
+
+  command:
+    bootstrap:
+      environment:
+        sdk: ">=3.5.0 <4.0.0"
+        flutter: ">=3.24.0"
+
+  scripts:
+    analyze:
+      run: melos exec -- dart analyze --fatal-infos
+    test:
+      run: melos exec -- flutter test
+    format:
+      run: melos exec -- dart format --set-exit-if-changed .
+    codegen:
+      description: "Run duskmoon-codegen to update generated token files"
+      run: |
+        duskmoon-codegen generate --target dart \
+          --input ../duskmoon-dev-design/tokens \
+          --output packages/duskmoon_theme/lib/src/generated
