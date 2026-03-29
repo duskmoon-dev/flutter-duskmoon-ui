@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Flutter monorepo implementing the DuskMoon Design System component library. Uses Dart native workspace + Melos 7.x (config in root `pubspec.yaml` under `melos:` key). Requires Dart >=3.5.0 and Flutter >=3.24.0.
+Flutter monorepo for the DuskMoon Design System component library. Uses Dart native workspace + Melos 7.x (config in root `pubspec.yaml` under `melos:` key — no standalone `melos.yaml`). Requires Dart >=3.5.0 and Flutter >=3.24.0.
 
 ## Commands
 
@@ -15,9 +15,9 @@ melos run test                 # flutter test in all packages
 melos run format               # dart format --set-exit-if-changed in all packages
 melos run codegen              # Regenerate design tokens from external repo
 
-# Single package operations
-cd packages/duskmoon_theme && flutter test              # Test one package
-cd packages/duskmoon_theme && dart analyze --fatal-infos # Analyze one package
+# Single package
+cd packages/duskmoon_theme && flutter test
+cd packages/duskmoon_theme && dart analyze --fatal-infos
 ```
 
 ## Architecture
@@ -25,84 +25,51 @@ cd packages/duskmoon_theme && dart analyze --fatal-infos # Analyze one package
 ### Package Dependency Graph
 
 ```
-duskmoon_theme              ← Pure theme package, zero external deps
-    ├── duskmoon_theme_bloc ← Opt-in BLoC for theme persistence (not in umbrella)
-    ├── duskmoon_widgets    ← Adaptive widgets (material/cupertino)
-    ├── duskmoon_settings   ← Settings UI components
+duskmoon_theme              ← Pure theme, zero external deps
+    ├── duskmoon_theme_bloc ← Opt-in BLoC for theme persistence (NOT in umbrella)
+    ├── duskmoon_widgets    ← 18 adaptive widgets (Material/Cupertino)
+    ├── duskmoon_settings   ← Settings UI (Material/Cupertino/Fluent)
     └── duskmoon_feedback   ← Dialogs, snackbars, toasts, bottom sheets
             │
         duskmoon_ui         ← Umbrella: re-exports theme + widgets + settings + feedback
             │
-          example           ← Showcase app (uses duskmoon_ui + duskmoon_theme_bloc)
+          example           ← 5-page showcase app
 ```
 
-### Theme System (`duskmoon_theme` — fully implemented)
+### Theme System (`duskmoon_theme`)
 
-**Codegen-driven, no runtime color generation.** Colors come exclusively from generated `*Tokens` classes (`src/generated/*.g.dart`).
+**Codegen-driven, no runtime color generation.** Flow: design tokens → codegen → `*Tokens` classes → `DmColorScheme` → `DmThemeData`.
 
-Flow: **Design tokens → codegen → `*Tokens` classes → `DmColorScheme` → `DmThemeData`**
-
-- `DmColorScheme` — static factory methods returning `ColorScheme` (e.g., `sunshine()`, `moonlight()`)
-- `DmThemeData` — static factory methods returning complete `ThemeData` with component themes
-- `DmColorExtension` — `ThemeExtension` carrying 20 non-standard semantic tokens (info, success, warning, accent, neutral, base100-300, etc.)
-- `DmTextTheme` — Material 3 type scale with exact M3 spec values
+- `DmThemeData` — static factories returning complete `ThemeData` (`.sunshine()`, `.moonlight()`)
+- `DmColorScheme` — static factories returning `ColorScheme`
+- `DmColorExtension` — `ThemeExtension` with 20 semantic tokens (info, success, warning, accent, neutral, base100-300)
+- `DmTextTheme` — Material 3 type scale
 - `ThemeModeExtension` — `fromString()`, `title`, `icon` helpers on `ThemeMode`
-- `DmThemeEntry` — bundles a theme name with its light/dark `ThemeData` variants
+- `DmThemeEntry` — bundles theme name with light/dark `ThemeData`
 
 ### Adaptive Widget Pattern (`duskmoon_widgets`)
 
-Three-tier resolution: **widget override → `DmPlatformOverride` InheritedWidget → `Theme.of(context).platform`**
+Three-tier platform resolution: **widget `platformOverride` → `DmPlatformOverride` InheritedWidget → `Theme.of(context).platform`**
 
 - `DmPlatformStyle` enum: `material` | `cupertino`
-- `AdaptiveWidget` mixin on `StatelessWidget` for platform-aware rendering
-- `DmPlatformOverride` InheritedWidget for app-level style override
-- 18 widgets: DmScaffold, DmActionList, DmButton, DmIconButton, DmFab, DmTextField, DmCheckbox, DmSwitch, DmSlider, DmCard, DmDivider, DmAppBar, DmBottomNav, DmTabBar, DmDrawer, DmBadge, DmChip, DmAvatar
+- `AdaptiveWidget` mixin provides `resolveStyle(context)` for platform-aware `build()`
+- Each widget switches Material/Cupertino rendering via `switch (resolveStyle(context))`
 
-### Settings UI (`duskmoon_settings` — fully implemented)
+### Settings UI (`duskmoon_settings`)
 
-**Compositor pattern with 3 platform renderers** (Material, Cupertino, Fluent).
+Compositor pattern with **3 platform renderers** (Material, Cupertino, Fluent). `SettingsList` auto-detects platform and routes to the correct renderer. 10 tile types via named constructors on `SettingsTile`. `SettingsThemeData.withContext()` auto-derives colors from `ColorScheme` and optional `DmColorExtension`.
 
-- `DevicePlatform` enum with `fromContext(BuildContext)` — resolves via `Theme.of(context).platform` + `kIsWeb`
-- `SettingsList` → routes to `MaterialSettingsList` / `CupertinoSettingsList` / `FluentSettingsList`
-- `SettingsSection` → platform-specific section rendering with title/margin
-- `SettingsTile` — 10 tile types: simple, navigation, switch, check, input, slider, select, textarea, radioGroup, checkboxGroup
-- `CustomSettingsTile` — wraps arbitrary widgets with platform-aware styling
-- `SettingsTheme` / `SettingsThemeData` — InheritedWidget + 11-color theme data with platform factories
-- Integrates with `DmColorExtension` semantic colors when available (base100/200/300, baseContent)
+### Feedback (`duskmoon_feedback`)
 
-### Feedback (`duskmoon_feedback` — fully implemented)
-
-Adaptive feedback helpers migrated from `app_widget/feedback`, with `app_locale` dependency removed.
-
-- `DmDialogAction` — adaptive action: `TextButton` (Material) / `CupertinoDialogAction` (Apple)
-- `showDmDialog()` — `AlertDialog.adaptive` with title, content, actions
-- `showDmSnackbar()` — generic snackbar with optional action
-- `showDmUndoSnackbar()` — snackbar with configurable undo label (no l10n dependency)
-- `showDmSuccessToast()` — success toast with checkmark icon, primary colors
-- `showDmErrorToast()` — persistent error toast with selectable message text
-- `showDmBottomSheetActionList()` / `DmBottomSheetAction` — bottom sheet with action buttons
-- `showDmFullscreenDialog()` — fullscreen modal with AppBar close button
-- `dmScaffoldMessengerKey` / `getDmWidgetSize()` — utility helpers
-
-### Implementation Status
-
-| Phase | Package | Status |
-|-------|---------|--------|
-| 1 | `duskmoon_theme` | Done |
-| 2 | `duskmoon_theme_bloc` | Done |
-| 3 | `duskmoon_settings` | Done |
-| 4 | `duskmoon_feedback` | Done |
-| 5 | `duskmoon_widgets` | Done |
-| 6 | Polish & Publish Prep | Done |
+Adaptive feedback helpers: `showDmDialog()` (uses `AlertDialog.adaptive`), `DmDialogAction` (platform-switches Material/Cupertino), `showDmSnackbar()`, `showDmUndoSnackbar()`, `showDmSuccessToast()`, `showDmErrorToast()`, `showDmBottomSheetActionList()`, `showDmFullscreenDialog()`.
 
 ## Conventions
 
-- Generated files use `.g.dart` suffix in `src/generated/`
-- All classes use `Dm` prefix (e.g., `DmThemeData`, `DmColorScheme`)
-- Factory classes are `abstract final` with static methods (no instantiation)
+- Generated files: `.g.dart` suffix in `src/generated/`
+- All public classes use `Dm` prefix
+- Factory classes are `abstract final` with static methods
 - Linting: `flutter_lints` with `--fatal-infos` (infos are errors)
 - Tests assert exact hex color values from codegen as golden-value checks
 - `duskmoon_theme_bloc` is intentionally excluded from the umbrella re-export
-- All packages use `publish_to: none` during development (remove when ready to publish)
-- Melos config lives in root `pubspec.yaml` under `melos:` key (Melos 7.x — no standalone `melos.yaml`)
-- Each package has its own copy of the MIT LICENSE file (required by pub.dev)
+- All packages use `publish_to: none` during development — the release workflow removes it, converts path deps to hosted deps, and publishes to pub.dev
+- Each package has its own MIT LICENSE file
