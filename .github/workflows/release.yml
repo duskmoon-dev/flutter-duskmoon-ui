@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 0.2.0)"
+        required: true
+        type: string
+      git_ref:
+        description: "Git ref to release from"
+        required: true
+        default: "main"
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git_ref }}
+          fetch-depth: 0
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Update package versions
+        run: |
+          for pubspec in packages/*/pubspec.yaml; do
+            sed -i "s/^version: .*/version: ${{ inputs.version }}/" "$pubspec"
+            echo "Updated $pubspec to ${{ inputs.version }}"
+          done
+
+      - name: Analyze
+        run: |
+          for pkg in packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_ui; do
+            (cd $pkg && dart analyze --fatal-infos)
+          done
+
+      - name: Test
+        run: |
+          for pkg in packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_ui; do
+            if [ -d "$pkg/test" ] && [ "$(ls -A $pkg/test)" ]; then
+              (cd $pkg && flutter test)
+            fi
+          done
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit version bump
+        run: |
+          git add packages/*/pubspec.yaml
+          git commit -m "chore(release): v${{ inputs.version }}"
+
+      - name: Create tag
+        run: git tag "v${{ inputs.version }}"
+
+      - name: Push commit and tag
+        run: |
+          git push origin HEAD:${{ inputs.git_ref }}
+          git push origin "v${{ inputs.version }}"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ inputs.version }}" \
+            --title "v${{ inputs.version }}" \
+            --generate-notes \
+            --target "${{ inputs.git_ref }}"
