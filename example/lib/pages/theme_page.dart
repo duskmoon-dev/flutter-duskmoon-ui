@@ -41,8 +41,7 @@ class ThemePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Theme Mode',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text('Theme Mode', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
             SegmentedButton<ThemeMode>(
               segments: [
@@ -55,9 +54,7 @@ class ThemePage extends StatelessWidget {
               ],
               selected: {state.themeMode},
               onSelectionChanged: (modes) {
-                context
-                    .read<DmThemeBloc>()
-                    .add(DmSetThemeMode(modes.first));
+                context.read<DmThemeBloc>().add(DmSetThemeMode(modes.first));
               },
             ),
           ],
@@ -161,8 +158,8 @@ class ThemePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Builder(
-          builder: (context) => Text(title,
-              style: Theme.of(context).textTheme.titleLarge),
+          builder: (context) =>
+              Text(title, style: Theme.of(context).textTheme.titleLarge),
         ),
         const SizedBox(height: 12),
         GridView.builder(

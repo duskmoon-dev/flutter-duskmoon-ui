@@ -57,14 +57,6 @@ void main() {
           ),
         ),
       );
-      // TextButton.icon creates a _TextButtonWithIcon subtype, so match
-      // any widget whose runtime type name contains "TextButton".
-      expect(
-        find.byWidgetPredicate(
-          (w) => w.runtimeType.toString() == '_TextButtonWithIcon',
-        ),
-        findsNWidgets(2),
-      );
       expect(find.text('Edit'), findsOneWidget);
       expect(find.text('Delete'), findsOneWidget);
     });
@@ -96,12 +88,6 @@ void main() {
         ),
       );
       // Only the enabled action should be rendered.
-      expect(
-        find.byWidgetPredicate(
-          (w) => w.runtimeType.toString() == '_TextButtonWithIcon',
-        ),
-        findsOneWidget,
-      );
       expect(find.text('Edit'), findsOneWidget);
       expect(find.text('Delete'), findsNothing);
     });

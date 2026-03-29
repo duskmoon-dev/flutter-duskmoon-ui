@@ -47,7 +47,8 @@ class _SettingsPageState extends State<SettingsPage> {
               ButtonSegment(value: null, label: Text('Auto')),
               ButtonSegment(
                   value: DevicePlatform.android, label: Text('Material')),
-              ButtonSegment(value: DevicePlatform.iOS, label: Text('Cupertino')),
+              ButtonSegment(
+                  value: DevicePlatform.iOS, label: Text('Cupertino')),
               ButtonSegment(
                   value: DevicePlatform.windows, label: Text('Fluent')),
             ],

@@ -31,10 +31,10 @@ class ScaffoldPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('DmActionList',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text('DmActionList', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 4),
-            Text('Renders as popup (small), icon buttons (medium), or text buttons (large)',
+            Text(
+                'Renders as popup (small), icon buttons (medium), or text buttons (large)',
                 style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(height: 16),
             for (final size in DmActionSize.values) ...[
@@ -156,8 +156,7 @@ class ScaffoldPage extends StatelessWidget {
                             child: Text(
                               'DmDrawer',
                               style: TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.onPrimary,
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 fontSize: 24,
                               ),
                             ),

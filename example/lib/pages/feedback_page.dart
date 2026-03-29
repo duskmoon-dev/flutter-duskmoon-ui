@@ -163,8 +163,7 @@ class FeedbackPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Bottom Sheet',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text('Bottom Sheet', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
             DmButton(
               onPressed: () => showDmBottomSheetActionList(
@@ -242,8 +241,7 @@ class FeedbackPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.fullscreen,
-                          size: 64,
-                          color: Theme.of(ctx).colorScheme.primary),
+                          size: 64, color: Theme.of(ctx).colorScheme.primary),
                       const SizedBox(height: 16),
                       Text(
                         'This is a fullscreen dialog',

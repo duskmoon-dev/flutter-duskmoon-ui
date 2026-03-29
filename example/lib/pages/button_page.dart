@@ -53,8 +53,7 @@ class _ButtonPageState extends State<ButtonPage> {
                 ButtonSegment(
                     value: DmPlatformStyle.material, label: Text('Material')),
                 ButtonSegment(
-                    value: DmPlatformStyle.cupertino,
-                    label: Text('Cupertino')),
+                    value: DmPlatformStyle.cupertino, label: Text('Cupertino')),
               ],
               selected: {_platformOverride},
               onSelectionChanged: (v) =>
@@ -116,8 +115,7 @@ class _ButtonPageState extends State<ButtonPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('DmIconButton',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text('DmIconButton', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,
@@ -197,8 +195,7 @@ class _ButtonPageState extends State<ButtonPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Data Display',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text('Data Display', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
 
             // Avatars
@@ -323,8 +320,7 @@ class _InputWidgetsSectionState extends State<_InputWidgetsSection> {
               children: [
                 DmCheckbox(
                   value: _checkboxValue,
-                  onChanged: (v) =>
-                      setState(() => _checkboxValue = v ?? false),
+                  onChanged: (v) => setState(() => _checkboxValue = v ?? false),
                 ),
                 const SizedBox(width: 8),
                 Text(_checkboxValue ? 'Checked' : 'Unchecked'),
