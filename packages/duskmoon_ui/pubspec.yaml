@@ -20,10 +20,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  duskmoon_theme: ^1.0.0
-  duskmoon_widgets: ^1.0.0
-  duskmoon_settings: ^1.0.0
-  duskmoon_feedback: ^1.0.0
+  duskmoon_theme: ^1.0.1
+  duskmoon_widgets: ^1.0.1
+  duskmoon_settings: ^1.0.1
+  duskmoon_feedback: ^1.0.1
 
 dev_dependencies:
   flutter_test:
