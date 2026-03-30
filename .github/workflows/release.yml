@@ -112,4 +112,4 @@ jobs:
       - name: Trigger publish workflow
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh workflow run publish.yml -f tag="v${{ inputs.version }}"
+        run: gh workflow run publish.yml --ref "v${{ inputs.version }}" -f tag="v${{ inputs.version }}"
