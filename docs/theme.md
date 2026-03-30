@@ -1,0 +1,183 @@
+# Theme System
+
+The `duskmoon_theme` package provides codegen-driven color schemes, a Material 3 text theme, and complete `ThemeData` factories. All colors come from generated design tokens — no runtime color computation.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [DmThemeData](#dmthemedata)
+- [DmThemeEntry](#dmthemeentry)
+- [DmColorScheme](#dmcolorscheme)
+- [DmColorExtension](#dmcolorextension)
+- [DmTextTheme](#dmtexttheme)
+- [ThemeModeExtension](#thememodeextension)
+- [Generated Tokens](#generated-tokens)
+
+## Installation
+
+```yaml
+dependencies:
+  duskmoon_theme: ^1.0.1
+```
+
+```dart
+import 'package:duskmoon_theme/duskmoon_theme.dart';
+```
+
+Or use the umbrella package `duskmoon_ui` which re-exports everything.
+
+## DmThemeData
+
+Factory class (`abstract final`) that builds complete Material 3 `ThemeData` instances with color scheme, text theme, component theme overrides, and the `DmColorExtension`.
+
+```dart
+MaterialApp(
+  theme: DmThemeData.sunshine(),      // Light theme
+  darkTheme: DmThemeData.moonlight(), // Dark theme
+  themeMode: ThemeMode.system,
+);
+```
+
+Component themes configured automatically:
+- AppBar, NavigationRail, NavigationBar
+- Card, Divider, InputDecoration, Chip
+
+### Available themes
+
+```dart
+final themes = DmThemeData.themes;
+// Returns: [DmThemeEntry(name: 'sunshine', light: ..., dark: ...)]
+```
+
+## DmThemeEntry
+
+Bundles a named theme with its light and dark `ThemeData` variants. Useful for building theme pickers.
+
+```dart
+for (final entry in DmThemeData.themes) {
+  print(entry.name);   // 'sunshine'
+  // entry.light — light ThemeData
+  // entry.dark  — dark ThemeData
+}
+```
+
+## DmColorScheme
+
+Factory class that builds `ColorScheme` instances from generated tokens. Use this when you need a raw `ColorScheme` without the full `ThemeData` wrapper.
+
+```dart
+final lightColors = DmColorScheme.sunshine();  // Brightness.light
+final darkColors = DmColorScheme.moonlight();  // Brightness.dark
+```
+
+All standard Material 3 color roles are populated: `primary`, `onPrimary`, `primaryContainer`, `secondary`, `tertiary`, `error`, `surface`, `outline`, and all surface container variants.
+
+## DmColorExtension
+
+A `ThemeExtension` carrying 20 semantic color tokens not covered by the standard `ColorScheme`. Access it from any widget:
+
+```dart
+final dmColors = Theme.of(context).extension<DmColorExtension>()!;
+```
+
+### Available tokens
+
+| Category | Tokens |
+|----------|--------|
+| Focus variants | `primaryFocus`, `secondaryFocus`, `tertiaryFocus` |
+| Accent | `accent`, `accentFocus`, `accentContent` |
+| Neutral | `neutral`, `neutralFocus`, `neutralContent`, `neutralVariant` |
+| Status | `info`, `infoContent`, `success`, `successContent`, `warning`, `warningContent` |
+| Base surfaces | `base100`, `base200`, `base300`, `baseContent` |
+
+### Usage example
+
+```dart
+final dmColors = Theme.of(context).extension<DmColorExtension>()!;
+
+Container(
+  color: dmColors.base100,
+  child: Text(
+    'Status: OK',
+    style: TextStyle(color: dmColors.success),
+  ),
+);
+```
+
+### Factory methods
+
+```dart
+DmColorExtension.sunshine()   // Light tokens
+DmColorExtension.moonlight()  // Dark tokens
+```
+
+Both `copyWith()` and `lerp()` are implemented for smooth theme transitions.
+
+## DmTextTheme
+
+Factory that returns a `TextTheme` with the exact Material 3 type scale:
+
+```dart
+final textTheme = DmTextTheme.textTheme();
+```
+
+| Style | Size | Weight |
+|-------|------|--------|
+| displayLarge | 57sp | w400 |
+| displayMedium | 45sp | w400 |
+| displaySmall | 36sp | w400 |
+| headlineLarge | 32sp | w400 |
+| headlineMedium | 28sp | w400 |
+| headlineSmall | 24sp | w400 |
+| titleLarge | 22sp | w400 |
+| titleMedium | 16sp | w500 |
+| titleSmall | 14sp | w500 |
+| bodyLarge | 16sp | w400 |
+| bodyMedium | 14sp | w400 |
+| bodySmall | 12sp | w400 |
+| labelLarge | 14sp | w500 |
+| labelMedium | 12sp | w500 |
+| labelSmall | 11sp | w500 |
+
+## ThemeModeExtension
+
+Convenience extension on Flutter's `ThemeMode` enum for serialization and UI display.
+
+### Parsing
+
+```dart
+ThemeModeExtension.fromString('dark');   // ThemeMode.dark
+ThemeModeExtension.fromString('light');  // ThemeMode.light
+ThemeModeExtension.fromString(null);     // ThemeMode.system (default)
+```
+
+### Display helpers
+
+```dart
+ThemeMode.dark.title           // 'Dark'
+ThemeMode.light.title          // 'Light'
+ThemeMode.system.title         // 'System'
+
+ThemeMode.dark.icon            // Icon(Icons.dark_mode)
+ThemeMode.light.iconOutlined   // Icon(Icons.light_mode_outlined)
+ThemeMode.system.icon          // Icon(Icons.brightness_auto)
+```
+
+## Generated Tokens
+
+For direct access to raw color constants:
+
+```dart
+import 'package:duskmoon_theme/duskmoon_theme.dart';
+
+// Light palette
+SunshineTokens.primary          // const Color(...)
+SunshineTokens.info
+SunshineTokens.success
+
+// Dark palette
+MoonlightTokens.primary
+MoonlightTokens.surface
+```
+
+All tokens are `const Color` values. See [`architecture.md`](architecture.md) for how tokens are generated.
