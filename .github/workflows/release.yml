@@ -19,11 +19,10 @@ concurrency:
 
 permissions:
   contents: write
-  id-token: write
 
 jobs:
   release:
-    name: Release
+    name: Prepare Release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -35,8 +34,6 @@ jobs:
         with:
           channel: stable
           cache: true
-
-      - uses: dart-lang/setup-dart@v1
 
       - name: Install dependencies
         run: dart pub get
@@ -94,31 +91,6 @@ jobs:
             fi
           done
 
-      - name: Publish to pub.dev
-        run: |
-          # Publish order respects dependency graph:
-          # 1. duskmoon_theme (no deps)
-          # 2. duskmoon_widgets, duskmoon_settings, duskmoon_feedback (depend on theme)
-          # 3. duskmoon_ui (depends on all above)
-          # Note: duskmoon_theme_bloc is publish_to: none — skipped
-
-          PUBLISH_ORDER=(
-            packages/duskmoon_theme
-            packages/duskmoon_widgets
-            packages/duskmoon_settings
-            packages/duskmoon_feedback
-            packages/duskmoon_ui
-          )
-
-          for pkg in "${PUBLISH_ORDER[@]}"; do
-            echo "::group::Publishing $pkg"
-            (cd "$pkg" && dart pub publish --force) || echo "::warning::$pkg publish failed (may already exist)"
-            echo "::endgroup::"
-            # Wait between publishes to avoid pub.dev rate limits
-            echo "Waiting 60s before next publish..."
-            sleep 60
-          done
-
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
@@ -129,19 +101,8 @@ jobs:
           git add packages/*/pubspec.yaml
           git commit -m "chore(release): v${{ inputs.version }}"
 
-      - name: Create tag
-        run: git tag "v${{ inputs.version }}"
-
-      - name: Push commit and tag
+      - name: Create tag and push
         run: |
+          git tag "v${{ inputs.version }}"
           git push origin HEAD:${{ inputs.git_ref }}
           git push origin "v${{ inputs.version }}"
-
-      - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create "v${{ inputs.version }}" \
-            --title "v${{ inputs.version }}" \
-            --generate-notes \
-            --target "${{ inputs.git_ref }}"
