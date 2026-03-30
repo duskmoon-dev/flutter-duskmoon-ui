@@ -19,6 +19,7 @@ concurrency:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   release:
@@ -34,6 +35,8 @@ jobs:
         with:
           channel: stable
           cache: true
+
+      - uses: dart-lang/setup-dart@v1
 
       - name: Install dependencies
         run: dart pub get
@@ -90,11 +93,6 @@ jobs:
               echo "::endgroup::"
             fi
           done
-
-      - name: Setup pub.dev credentials
-        run: |
-          mkdir -p "$HOME/.config/dart"
-          echo '${{ secrets.PUB_CREDENTIALS }}' > "$HOME/.config/dart/pub-credentials.json"
 
       - name: Publish to pub.dev
         run: |
