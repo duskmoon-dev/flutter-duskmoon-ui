@@ -58,11 +58,18 @@ jobs:
           # Handles both path format and existing hosted format:
           #   duskmoon_theme:        OR   duskmoon_theme: ^x.y.z
           #     path: ../...
-          for pubspec in packages/duskmoon_widgets/pubspec.yaml packages/duskmoon_settings/pubspec.yaml packages/duskmoon_feedback/pubspec.yaml packages/duskmoon_theme_bloc/pubspec.yaml; do
+          # Packages that depend on duskmoon_theme
+          for pubspec in packages/duskmoon_widgets/pubspec.yaml packages/duskmoon_settings/pubspec.yaml packages/duskmoon_feedback/pubspec.yaml packages/duskmoon_theme_bloc/pubspec.yaml packages/duskmoon_form/pubspec.yaml; do
             # Handle path dep format (two lines)
             sed -i '/^  duskmoon_theme:$/,/^    path: .*$/c\  duskmoon_theme: ^'"$VERSION" "$pubspec"
             # Handle hosted dep format (single line)
             sed -i 's/^  duskmoon_theme: \^.*$/  duskmoon_theme: ^'"$VERSION"'/' "$pubspec"
+          done
+
+          # Packages that depend on duskmoon_widgets
+          for pubspec in packages/duskmoon_form/pubspec.yaml; do
+            sed -i '/^  duskmoon_widgets:$/,/^    path: .*$/c\  duskmoon_widgets: ^'"$VERSION" "$pubspec"
+            sed -i 's/^  duskmoon_widgets: \^.*$/  duskmoon_widgets: ^'"$VERSION"'/' "$pubspec"
           done
 
           for dep in duskmoon_theme duskmoon_widgets duskmoon_settings duskmoon_feedback; do
@@ -77,7 +84,7 @@ jobs:
 
       - name: Analyze
         run: |
-          for pkg in packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_ui; do
+          for pkg in packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_form packages/duskmoon_ui; do
             echo "::group::Analyzing $pkg"
             (cd $pkg && dart analyze --fatal-infos)
             echo "::endgroup::"
@@ -85,7 +92,7 @@ jobs:
 
       - name: Test
         run: |
-          for pkg in packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_ui; do
+          for pkg in packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_form packages/duskmoon_ui; do
             if [ -d "$pkg/test" ] && [ "$(ls -A $pkg/test)" ]; then
               echo "::group::Testing $pkg"
               (cd $pkg && flutter test)

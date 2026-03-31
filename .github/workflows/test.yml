@@ -27,7 +27,7 @@ jobs:
         run: dart pub get
       - name: Run tests
         run: |
-          for pkg in packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_ui example; do
+          for pkg in packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_form packages/duskmoon_ui example; do
             if [ -d "$pkg/test" ] && [ "$(ls -A $pkg/test)" ]; then
               echo "::group::Testing $pkg"
               (cd $pkg && flutter test)

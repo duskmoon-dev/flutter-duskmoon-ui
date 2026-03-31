@@ -45,7 +45,8 @@ jobs:
           # Publish order respects dependency graph:
           # 1. duskmoon_theme (no deps)
           # 2. duskmoon_theme_bloc, duskmoon_widgets, duskmoon_settings, duskmoon_feedback (depend on theme)
-          # 3. duskmoon_ui (depends on all above except theme_bloc)
+          # 3. duskmoon_form (depends on theme + widgets)
+          # 4. duskmoon_ui (depends on all above except theme_bloc and form)
 
           PUBLISH_ORDER=(
             packages/duskmoon_theme
@@ -53,6 +54,7 @@ jobs:
             packages/duskmoon_widgets
             packages/duskmoon_settings
             packages/duskmoon_feedback
+            packages/duskmoon_form
             packages/duskmoon_ui
           )
 
