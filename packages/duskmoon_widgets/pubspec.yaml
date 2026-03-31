@@ -1,6 +1,6 @@
 name: duskmoon_widgets
 description: Adaptive widget library for DuskMoon Design System
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 repository: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 issue_tracker: https://github.com/duskmoon-dev/flutter_duskmoon_ui/issues
@@ -20,7 +20,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  duskmoon_theme: ^1.0.2
+  duskmoon_theme: ^1.0.3
   flutter_adaptive_scaffold: ^0.3.1
 
 dev_dependencies:
