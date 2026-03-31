@@ -54,9 +54,6 @@ jobs:
             sed -i '/^publish_to: none$/d' "$pubspec"
           done
 
-          # Re-add publish_to: none for duskmoon_theme_bloc (intentionally not published)
-          sed -i '/^version: .*/a publish_to: none' packages/duskmoon_theme_bloc/pubspec.yaml
-
           # Replace internal dependencies with hosted version constraints
           # Handles both path format and existing hosted format:
           #   duskmoon_theme:        OR   duskmoon_theme: ^x.y.z
