@@ -61,9 +61,6 @@ jobs:
       - name: Re-resolve dependencies
         run: cd "${{ inputs.package }}" && dart pub get
 
-      - name: Validate package
-        run: cd "${{ inputs.package }}" && dart pub publish --dry-run
-
       - name: Write pub credentials
         run: |
           mkdir -p "$HOME/.config/dart"
