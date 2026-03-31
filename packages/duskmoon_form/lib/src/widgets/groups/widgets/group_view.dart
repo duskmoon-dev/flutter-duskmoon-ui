@@ -375,7 +375,7 @@ class GroupView extends StatelessWidget {
           .map((child) {
             return Expanded(child: child);
           })
-          .splitBetweenIndexed((index, _, _) {
+          .splitBetweenIndexed((index, __, ___) {
             return (index % style.crossAxisCount) == 0;
           });
       return _buildPadded(
