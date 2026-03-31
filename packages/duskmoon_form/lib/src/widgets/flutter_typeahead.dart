@@ -587,8 +587,9 @@ class TypeAheadField<T> extends StatefulWidget {
     required this.removeSuggestionOnLongPress,
     this.showSuggestionsWhenIsEmpty = false,
     this.onTap,
-  }) : assert(animationStart >= 0.0 && animationStart <= 1.0),
-       assert(direction == AxisDirection.down || direction == AxisDirection.up);
+  })  : assert(animationStart >= 0.0 && animationStart <= 1.0),
+        assert(
+            direction == AxisDirection.down || direction == AxisDirection.up);
 
   @override
   State<TypeAheadField<T>> createState() => _TypeAheadFieldState<T>();
@@ -664,8 +665,7 @@ class _TypeAheadFieldState<T> extends State<TypeAheadField<T>>
     if (widget.textFieldConfiguration.focusNode == null) {
       this._focusNode = FocusNode();
     }
-    isWebMobile =
-        kIsWeb &&
+    isWebMobile = kIsWeb &&
         (defaultTargetPlatform == TargetPlatform.iOS ||
             defaultTargetPlatform == TargetPlatform.android);
     this._suggestionsBox = _SuggestionsBox(
@@ -786,8 +786,7 @@ class _TypeAheadFieldState<T> extends State<TypeAheadField<T>>
           if (widget.suggestionsBoxDecoration.constraints!.minWidth != 0.0 &&
               widget.suggestionsBoxDecoration.constraints!.maxWidth !=
                   double.infinity) {
-            w =
-                (widget.suggestionsBoxDecoration.constraints!.minWidth +
+            w = (widget.suggestionsBoxDecoration.constraints!.minWidth +
                     widget.suggestionsBoxDecoration.constraints!.maxWidth) /
                 2;
           } else if (widget.suggestionsBoxDecoration.constraints!.minWidth !=
@@ -810,7 +809,7 @@ class _TypeAheadFieldState<T> extends State<TypeAheadField<T>>
               0.0,
               _suggestionsBox!.direction == AxisDirection.down
                   ? _suggestionsBox!.textBoxHeight +
-                        widget.suggestionsBoxVerticalOffset
+                      widget.suggestionsBoxVerticalOffset
                   : _suggestionsBox!.directionUpOffset,
             ),
             child: _suggestionsBox!.direction == AxisDirection.down
@@ -999,11 +998,12 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
       WidgetsBinding.instance.addPostFrameCallback((duration) {
         if (this.mounted) {
           setState(() {
-            this._animationController!
+            this
+                ._animationController!
                 .reverse(from: widget.animationStart)
                 .then<void>((_) {
-                  widget.suggestionsBox!.close();
-                });
+              widget.suggestionsBox!.close();
+            });
           });
         }
       });
@@ -1022,8 +1022,9 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
       } else {
         setState(() {
           this._animationController!.forward(
-            from: widget.keepSuggestionsOnLoading! || _isLoading! ? 1.0 : 0.0,
-          );
+                from:
+                    widget.keepSuggestionsOnLoading! || _isLoading! ? 1.0 : 0.0,
+              );
 
           this._isLoading = true;
           this._error = null;
@@ -1044,7 +1045,7 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
 
           final remainingElapsedTime =
               widget.animationDuration!.inMilliseconds -
-              suggestionsStopwatch.elapsedMilliseconds;
+                  suggestionsStopwatch.elapsedMilliseconds;
 
           if (remainingElapsedTime > 0 && !widget.hideOnLoading!) {
             // use this for show the animation for open and close
@@ -1076,29 +1077,31 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
             });
           } else if (_suggestions == null) {
             setState(() {
-              this._animationController!
+              this
+                  ._animationController!
                   .reverse(from: widget.animationStart)
                   .then<dynamic>((_) {
-                    if (this.mounted) {
-                      setState(() {
-                        this._animationController!.forward(from: 0.0);
-                        updateSuggestions(error, suggestions);
-                      });
-                    }
+                if (this.mounted) {
+                  setState(() {
+                    this._animationController!.forward(from: 0.0);
+                    updateSuggestions(error, suggestions);
                   });
+                }
+              });
             });
           } else {
             setState(() {
-              this._animationController!
+              this
+                  ._animationController!
                   .reverse(from: widget.animationStart)
                   .then<dynamic>((_) {
-                    if (this.mounted) {
-                      setState(() {
-                        this._animationController!.forward(from: 0.0);
-                        updateSuggestions(error, suggestions);
-                      });
-                    }
+                if (this.mounted) {
+                  setState(() {
+                    this._animationController!.forward(from: 0.0);
+                    updateSuggestions(error, suggestions);
                   });
+                }
+              });
             });
           }
         }
@@ -1264,8 +1267,7 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
 
       return InkWell(
         borderRadius: borderRadius,
-        onLongPress:
-            widget.onSuggestionRemoved == null ||
+        onLongPress: widget.onSuggestionRemoved == null ||
                 !widget.removeSuggestionOnLongPress
             ? null
             : () {
@@ -1706,7 +1708,7 @@ class _SuggestionsBox {
   late double directionUpOffset;
 
   _SuggestionsBox(this.context, this.direction, this.autoFlipDirection)
-    : desiredDirection = direction;
+      : desiredDirection = direction;
 
   void open() {
     if (this._isOpened) return;
@@ -1876,9 +1878,8 @@ class _SuggestionsBox {
   ) {
     // unsafe area, ie: iPhone X 'home button'
     // keyboardHeight includes unsafeAreaHeight, if keyboard is showing, set to 0
-    double unsafeAreaHeight = keyboardHeight == 0
-        ? rootMediaQuery.data.padding.bottom
-        : 0;
+    double unsafeAreaHeight =
+        keyboardHeight == 0 ? rootMediaQuery.data.padding.bottom : 0;
 
     return windowHeight -
         keyboardHeight -
@@ -1908,11 +1909,11 @@ class _SuggestionsBox {
 
     return textBoxAbsY > keyboardAbsY
         ? keyboardAbsY -
-              unsafeAreaHeight -
-              2 * widget.suggestionsBoxVerticalOffset
+            unsafeAreaHeight -
+            2 * widget.suggestionsBoxVerticalOffset
         : textBoxAbsY -
-              unsafeAreaHeight -
-              2 * widget.suggestionsBoxVerticalOffset;
+            unsafeAreaHeight -
+            2 * widget.suggestionsBoxVerticalOffset;
   }
 
   Future<void> onChangeMetrics() async {

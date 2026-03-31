@@ -196,10 +196,8 @@ class DmChoiceChipFieldBlocBuilder<T> extends StatelessWidget {
       singleFieldBloc: selectFieldBloc,
       animateWhenCanShow: animateWhenCanShow,
       builder: (context, canShow) {
-        return BlocBuilder<
-          SelectFieldBloc<T, dynamic>,
-          SelectFieldBlocState<T, dynamic>
-        >(
+        return BlocBuilder<SelectFieldBloc<T, dynamic>,
+            SelectFieldBlocState<T, dynamic>>(
           bloc: selectFieldBloc,
           builder: (context, state) {
             final isEnabled = fieldBlocIsEnabled(

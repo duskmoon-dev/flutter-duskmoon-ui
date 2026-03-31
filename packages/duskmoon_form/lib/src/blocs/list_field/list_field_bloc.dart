@@ -4,7 +4,7 @@ class ListFieldBlocState<T extends FieldBloc, ExtraData>
     extends MultiFieldBlocState<ExtraData> {
   final List<T> fieldBlocs;
 
-  ListFieldBlocState({
+  const ListFieldBlocState({
     required super.formBloc,
     required super.name,
     required super.isValidating,
@@ -49,15 +49,15 @@ class ListFieldBloc<T extends FieldBloc, ExtraData>
     List<T> fieldBlocs = const [],
     ExtraData? extraData,
   }) : super(
-         ListFieldBlocState(
-           name: name ?? Uuid().v1(),
-           formBloc: null,
-           isValidating: MultiFieldBloc.areFieldBlocsValidating(fieldBlocs),
-           isValid: MultiFieldBloc.areFieldBlocsValid(fieldBlocs),
-           extraData: extraData,
-           fieldBlocs: fieldBlocs,
-         ),
-       );
+          ListFieldBlocState(
+            name: name ?? Uuid().v1(),
+            formBloc: null,
+            isValidating: MultiFieldBloc.areFieldBlocsValidating(fieldBlocs),
+            isValid: MultiFieldBloc.areFieldBlocsValid(fieldBlocs),
+            extraData: extraData,
+            fieldBlocs: fieldBlocs,
+          ),
+        );
 
   List<T> get value => state.fieldBlocs;
 

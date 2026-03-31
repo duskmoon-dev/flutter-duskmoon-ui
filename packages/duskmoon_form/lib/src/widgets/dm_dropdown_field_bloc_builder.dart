@@ -160,10 +160,8 @@ class DmDropdownFieldBlocBuilder<Value> extends StatelessWidget {
       singleFieldBloc: selectFieldBloc,
       animateWhenCanShow: animateWhenCanShow,
       builder: (context, canShow) {
-        return BlocBuilder<
-          SelectFieldBloc<Value, dynamic>,
-          SelectFieldBlocState<Value, dynamic>
-        >(
+        return BlocBuilder<SelectFieldBloc<Value, dynamic>,
+            SelectFieldBlocState<Value, dynamic>>(
           bloc: selectFieldBloc,
           builder: (context, fieldState) {
             final isEnabled = fieldBlocIsEnabled(
@@ -193,14 +191,12 @@ class DmDropdownFieldBlocBuilder<Value> extends StatelessWidget {
                     hint: hint,
                     isExpanded: isExpanded,
                     isDense: true,
-                    disabledHint:
-                        disabledHint ??
+                    disabledHint: disabledHint ??
                         (decoration.hintText != null
                             ? DefaultTextStyle(
                                 style: Style.resolveTextStyle(
                                   isEnabled: isEnabled,
-                                  style:
-                                      decoration.hintStyle ??
+                                  style: decoration.hintStyle ??
                                       fieldTheme.textStyle!,
                                   color: fieldTheme.textColor!,
                                 ),
@@ -229,8 +225,7 @@ class DmDropdownFieldBlocBuilder<Value> extends StatelessWidget {
                       isEnabled: isEnabled,
                       isSelected: true,
                     ),
-                    icon:
-                        this.decoration.suffixIcon ??
+                    icon: this.decoration.suffixIcon ??
                         fieldTheme.moreIcon ??
                         const Icon(Icons.arrow_drop_down),
                   ),
@@ -254,9 +249,8 @@ class DmDropdownFieldBlocBuilder<Value> extends StatelessWidget {
       maxLines: isSelected ? fieldTheme.selectedMaxLines : fieldTheme.maxLines,
       style: Style.resolveTextStyle(
         isEnabled: isEnabled,
-        style: isSelected
-            ? fieldTheme.selectedTextStyle!
-            : fieldTheme.textStyle!,
+        style:
+            isSelected ? fieldTheme.selectedTextStyle! : fieldTheme.textStyle!,
         color: fieldTheme.textColor!,
       ),
       child: child,

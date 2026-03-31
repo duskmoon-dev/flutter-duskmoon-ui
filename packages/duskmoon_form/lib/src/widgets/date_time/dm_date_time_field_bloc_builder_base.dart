@@ -121,8 +121,7 @@ class DateTimeFieldBlocBuilderBase<T> extends StatefulWidget {
       textAlign: textAlign ?? fieldTheme.textAlign ?? TextAlign.start,
       showClearIcon: showClearIcon ?? fieldTheme.showClearIcon ?? true,
       clearSuffixButtonTheme: ClearSuffixButtonTheme(
-        visibleWithoutValue:
-            cleanTheme.visibleWithoutValue ??
+        visibleWithoutValue: cleanTheme.visibleWithoutValue ??
             formTheme.clearSuffixButtonTheme.visibleWithoutValue ??
             false,
         appearDuration: cleanTheme.appearDuration,
@@ -198,10 +197,8 @@ class _DateTimeFieldBlocBuilderBaseState<T>
         singleFieldBloc: widget.dateTimeFieldBloc,
         animateWhenCanShow: widget.animateWhenCanShow,
         builder: (context0, __) {
-          return BlocBuilder<
-            InputFieldBloc<T, dynamic>,
-            InputFieldBlocState<T, dynamic>
-          >(
+          return BlocBuilder<InputFieldBloc<T, dynamic>,
+              InputFieldBlocState<T, dynamic>>(
             bloc: widget.dateTimeFieldBloc,
             builder: (context, state) {
               final isEnabled = fieldBlocIsEnabled(
@@ -253,8 +250,7 @@ class _DateTimeFieldBlocBuilderBaseState<T>
                       state,
                       isEnabled,
                     ),
-                    isEmpty:
-                        state.value == null &&
+                    isEmpty: state.value == null &&
                         widget.decoration.hintText == null,
                     child: child,
                   ),
@@ -270,8 +266,7 @@ class _DateTimeFieldBlocBuilderBaseState<T>
   Future<DateTime?> _showDatePicker(BuildContext context) async {
     return await showDatePicker(
       context: context,
-      initialDate:
-          widget.dateTimeFieldBloc.state.value as DateTime? ??
+      initialDate: widget.dateTimeFieldBloc.state.value as DateTime? ??
           widget.initialDate!,
       firstDate: widget.firstDate!,
       lastDate: widget.lastDate!,
@@ -348,8 +343,7 @@ class _DateTimeFieldBlocBuilderBaseState<T>
         fieldBlocState: state,
         fieldBloc: widget.dateTimeFieldBloc,
       ),
-      suffixIcon:
-          decoration.suffixIcon ??
+      suffixIcon: decoration.suffixIcon ??
           (fieldTheme.showClearIcon!
               ? _buildClearSuffixButton(fieldTheme.clearSuffixButtonTheme)
               : null),

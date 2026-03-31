@@ -38,12 +38,11 @@ class FlexGroupStyle extends GroupStyle {
   }
 
   @override
-  String toString() =>
-      (ToString(runtimeType)
-            ..add('direction', direction)
-            ..add('textDirection', textDirection)
-            ..add('verticalDirection', verticalDirection))
-          .toString();
+  String toString() => (ToString(runtimeType)
+        ..add('direction', direction)
+        ..add('textDirection', textDirection)
+        ..add('verticalDirection', verticalDirection))
+      .toString();
 }
 
 /// Similar to [Table] without borders or [GridView] without scroll
@@ -64,8 +63,8 @@ class TableGroupStyle extends GroupStyle {
     this.mainVerticalDirection = VerticalDirection.down,
     this.crossVerticalDirection = VerticalDirection.down,
     this.crossAxisCount = 2,
-  }) : assert(crossAxisCount >= 2),
-       super._();
+  })  : assert(crossAxisCount >= 2),
+        super._();
 
   TableGroupStyle copyWith({
     TextDirection? textDirection,
@@ -84,13 +83,12 @@ class TableGroupStyle extends GroupStyle {
   }
 
   @override
-  String toString() =>
-      (ToString(runtimeType)
-            ..add('textDirection', textDirection)
-            ..add('mainVerticalDirection', mainVerticalDirection)
-            ..add('crossVerticalDirection', crossVerticalDirection)
-            ..add('crossAxisCount', crossAxisCount))
-          .toString();
+  String toString() => (ToString(runtimeType)
+        ..add('textDirection', textDirection)
+        ..add('mainVerticalDirection', mainVerticalDirection)
+        ..add('crossVerticalDirection', crossVerticalDirection)
+        ..add('crossAxisCount', crossAxisCount))
+      .toString();
 }
 
 /// [Wrap]
@@ -159,17 +157,16 @@ class WrapGroupStyle extends GroupStyle {
   }
 
   @override
-  String toString() =>
-      (ToString(runtimeType)
-            ..add('direction', direction)
-            ..add('alignment', alignment)
-            ..add('spacing', spacing)
-            ..add('runAlignment', runAlignment)
-            ..add('crossAxisAlignment', crossAxisAlignment)
-            ..add('textDirection', textDirection)
-            ..add('verticalDirection', verticalDirection)
-            ..add('clipBehavior', clipBehavior))
-          .toString();
+  String toString() => (ToString(runtimeType)
+        ..add('direction', direction)
+        ..add('alignment', alignment)
+        ..add('spacing', spacing)
+        ..add('runAlignment', runAlignment)
+        ..add('crossAxisAlignment', crossAxisAlignment)
+        ..add('textDirection', textDirection)
+        ..add('verticalDirection', verticalDirection)
+        ..add('clipBehavior', clipBehavior))
+      .toString();
 }
 
 /// [ListView]
@@ -205,8 +202,8 @@ class ListGroupStyle extends GroupStyle {
     this.physics,
     this.height,
     this.width,
-  }) : assert(height != null || width != null),
-       super._();
+  })  : assert(height != null || width != null),
+        super._();
 
   ListGroupStyle copyWith({
     ScrollController? controller,
@@ -229,16 +226,15 @@ class ListGroupStyle extends GroupStyle {
   }
 
   @override
-  String toString() =>
-      (ToString(runtimeType)
-            ..add('scrollDirection', scrollDirection)
-            ..add('reverse', reverse)
-            ..add('controller', controller)
-            ..add('primary', primary)
-            ..add('physics', physics)
-            ..add('height', height)
-            ..add('width', width))
-          .toString();
+  String toString() => (ToString(runtimeType)
+        ..add('scrollDirection', scrollDirection)
+        ..add('reverse', reverse)
+        ..add('controller', controller)
+        ..add('primary', primary)
+        ..add('physics', physics)
+        ..add('height', height)
+        ..add('width', width))
+      .toString();
 }
 
 /// [GridView]
@@ -278,8 +274,8 @@ class GridGroupStyle extends GroupStyle {
     required this.gridDelegate,
     this.height,
     this.width,
-  }) : assert(height != null || width != null),
-       super._();
+  })  : assert(height != null || width != null),
+        super._();
 
   GridGroupStyle copyWith({
     ScrollController? controller,
@@ -304,17 +300,16 @@ class GridGroupStyle extends GroupStyle {
   }
 
   @override
-  String toString() =>
-      (ToString(runtimeType)
-            ..add('scrollDirection', scrollDirection)
-            ..add('reverse', reverse)
-            ..add('controller', controller)
-            ..add('primary', primary)
-            ..add('physics', physics)
-            ..add('height', height)
-            ..add('gridDelegate', gridDelegate)
-            ..add('width', width))
-          .toString();
+  String toString() => (ToString(runtimeType)
+        ..add('scrollDirection', scrollDirection)
+        ..add('reverse', reverse)
+        ..add('controller', controller)
+        ..add('primary', primary)
+        ..add('physics', physics)
+        ..add('height', height)
+        ..add('gridDelegate', gridDelegate)
+        ..add('width', width))
+      .toString();
 }
 
 /// {@template duskmoon_form.FieldBlocBuilder.groupStyle}
@@ -371,13 +366,11 @@ class GroupView extends StatelessWidget {
         ),
       );
     } else if (style is TableGroupStyle) {
-      final children = _generateChildren(context)
-          .map((child) {
-            return Expanded(child: child);
-          })
-          .splitBetweenIndexed((index, __, ___) {
-            return (index % style.crossAxisCount) == 0;
-          });
+      final children = _generateChildren(context).map((child) {
+        return Expanded(child: child);
+      }).splitBetweenIndexed((index, __, ___) {
+        return (index % style.crossAxisCount) == 0;
+      });
       return _buildPadded(
         Column(
           textDirection: style.textDirection,

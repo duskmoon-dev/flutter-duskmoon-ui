@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 import '../blocs/field/field_bloc.dart';
 import '../validators/field_bloc_validators.dart';
 
-typedef DefaultFieldBlocErrorBuilder =
-    String? Function(BuildContext context, Object error, FieldBloc fieldBloc);
+typedef DefaultFieldBlocErrorBuilder = String? Function(
+    BuildContext context, Object error, FieldBloc fieldBloc);
 
 class FieldBlocBuilder {
   /// It must return a string error to display in the widget

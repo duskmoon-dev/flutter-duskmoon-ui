@@ -114,8 +114,7 @@ class DmCheckboxFieldBlocBuilder extends StatelessWidget {
         shape: shape,
         side: side,
       ),
-      controlAffinity:
-          controlAffinity ??
+      controlAffinity: controlAffinity ??
           fieldTheme.controlAffinity ??
           FieldBlocBuilderControlAffinity.leading,
     );
@@ -145,13 +144,11 @@ class DmCheckboxFieldBlocBuilder extends StatelessWidget {
                 padding: padding,
                 child: InputDecorator(
                   decoration: Style.inputDecorationWithoutBorder.copyWith(
-                    prefixIcon:
-                        fieldTheme.controlAffinity! ==
+                    prefixIcon: fieldTheme.controlAffinity! ==
                             FieldBlocBuilderControlAffinity.leading
                         ? _buildCheckbox(context, state)
                         : null,
-                    suffixIcon:
-                        fieldTheme.controlAffinity! ==
+                    suffixIcon: fieldTheme.controlAffinity! ==
                             FieldBlocBuilderControlAffinity.trailing
                         ? _buildCheckbox(context, state)
                         : null,

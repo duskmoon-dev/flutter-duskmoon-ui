@@ -28,8 +28,8 @@ bool fieldBlocIsEnabled({
 }) {
   return isEnabled
       ? (enableOnlyWhenFormBlocCanSubmit ?? false)
-            ? fieldBlocState.formBloc?.state.canSubmit ?? true
-            : true
+          ? fieldBlocState.formBloc?.state.canSubmit ?? true
+          : true
       : false;
 }
 

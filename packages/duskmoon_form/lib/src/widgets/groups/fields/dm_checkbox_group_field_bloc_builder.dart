@@ -133,10 +133,8 @@ class DmCheckboxGroupFieldBlocBuilder<Value> extends StatelessWidget {
         singleFieldBloc: multiSelectFieldBloc,
         animateWhenCanShow: animateWhenCanShow,
         builder: (context0, __) {
-          return BlocBuilder<
-            MultiSelectFieldBloc<Value, dynamic>,
-            MultiSelectFieldBlocState<Value, dynamic>
-          >(
+          return BlocBuilder<MultiSelectFieldBloc<Value, dynamic>,
+              MultiSelectFieldBlocState<Value, dynamic>>(
             bloc: multiSelectFieldBloc,
             builder: (context, state) {
               final isEnabled = fieldBlocIsEnabled(

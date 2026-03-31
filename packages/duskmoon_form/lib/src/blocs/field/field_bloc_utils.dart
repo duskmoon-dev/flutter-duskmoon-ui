@@ -50,8 +50,7 @@ class FieldBlocUtils {
 
     final hasAsyncValidators = asyncValidators != null;
 
-    var isValidating =
-        !hasInitialStateError &&
+    var isValidating = !hasInitialStateError &&
         hasAsyncValidators &&
         asyncValidators.isNotEmpty;
 

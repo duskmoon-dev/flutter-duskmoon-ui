@@ -29,8 +29,7 @@ class ObscureSuffixButton extends StatelessWidget {
     return ObscureSuffixButtonTheme(
       trueIcon:
           trueIcon ?? buttonTheme.trueIcon ?? const Icon(Icons.visibility),
-      falseIcon:
-          falseIcon ??
+      falseIcon: falseIcon ??
           buttonTheme.falseIcon ??
           const Icon(Icons.visibility_off),
     );

@@ -125,10 +125,8 @@ class DmRadioButtonGroupFieldBlocBuilder<Value> extends StatelessWidget {
         fieldBloc: selectFieldBloc,
         animate: animateWhenCanShow,
         builder: (context0, __) {
-          return BlocBuilder<
-            SelectFieldBloc<Value, dynamic>,
-            SelectFieldBlocState<Value, dynamic>
-          >(
+          return BlocBuilder<SelectFieldBloc<Value, dynamic>,
+              SelectFieldBlocState<Value, dynamic>>(
             bloc: selectFieldBloc,
             builder: (context, state) {
               final isEnabled = fieldBlocIsEnabled(
@@ -202,8 +200,10 @@ class DmRadioButtonGroupFieldBlocBuilder<Value> extends StatelessWidget {
             ),
             onTap: fieldTheme.canTapItemTile && onChanged != null
                 ? () => onChanged(
-                    fieldTheme.canDeselect && state.value == item ? null : item,
-                  )
+                      fieldTheme.canDeselect && state.value == item
+                          ? null
+                          : item,
+                    )
                 : null,
             leading: Radio<Value>(
               value: item,

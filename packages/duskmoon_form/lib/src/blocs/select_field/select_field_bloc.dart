@@ -2,14 +2,8 @@ part of '../field/field_bloc.dart';
 
 /// A `FieldBloc` used to select one item
 /// from multiple items.
-class SelectFieldBloc<Value, ExtraData>
-    extends
-        SingleFieldBloc<
-          Value?,
-          Value,
-          SelectFieldBlocState<Value, ExtraData>,
-          ExtraData?
-        > {
+class SelectFieldBloc<Value, ExtraData> extends SingleFieldBloc<Value?, Value,
+    SelectFieldBlocState<Value, ExtraData>, ExtraData?> {
   /// ## SelectFieldBloc<Value, ExtraData>
   ///
   /// ### Properties:
@@ -55,35 +49,35 @@ class SelectFieldBloc<Value, ExtraData>
     dynamic Function(Value? value)? toJson,
     ExtraData? extraData,
   }) : super(
-         initialState: SelectFieldBlocState(
-           isValueChanged: false,
-           initialValue: initialValue,
-           updatedValue: initialValue,
-           value: initialValue,
-           error: FieldBlocUtils.getInitialStateError(
-             validators: validators,
-             value: initialValue,
-           ),
-           isDirty: false,
-           suggestions: suggestions,
-           isValidated: FieldBlocUtils.getInitialIsValidated(
-             FieldBlocUtils.getInitialStateIsValidating(
-               asyncValidators: asyncValidators,
-               validators: validators,
-               value: initialValue,
-             ),
-           ),
-           isValidating: FieldBlocUtils.getInitialStateIsValidating(
-             asyncValidators: asyncValidators,
-             validators: validators,
-             value: initialValue,
-           ),
-           name: FieldBlocUtils.generateName(name),
-           items: SingleFieldBloc._itemsWithoutDuplicates(items),
-           toJson: toJson,
-           extraData: extraData,
-         ),
-       );
+          initialState: SelectFieldBlocState(
+            isValueChanged: false,
+            initialValue: initialValue,
+            updatedValue: initialValue,
+            value: initialValue,
+            error: FieldBlocUtils.getInitialStateError(
+              validators: validators,
+              value: initialValue,
+            ),
+            isDirty: false,
+            suggestions: suggestions,
+            isValidated: FieldBlocUtils.getInitialIsValidated(
+              FieldBlocUtils.getInitialStateIsValidating(
+                asyncValidators: asyncValidators,
+                validators: validators,
+                value: initialValue,
+              ),
+            ),
+            isValidating: FieldBlocUtils.getInitialStateIsValidating(
+              asyncValidators: asyncValidators,
+              validators: validators,
+              value: initialValue,
+            ),
+            name: FieldBlocUtils.generateName(name),
+            items: SingleFieldBloc._itemsWithoutDuplicates(items),
+            toJson: toJson,
+            extraData: extraData,
+          ),
+        );
 
   /// Set [items] to the `items` of the current state.
   ///

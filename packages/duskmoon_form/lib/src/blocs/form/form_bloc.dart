@@ -18,7 +18,7 @@ abstract class FormBloc<SuccessResponse, FailureResponse>
 
   /// See [_setupFormBlocStateSubscription()].
   StreamSubscription<FormBlocState<dynamic, dynamic>>?
-  _formBlocStateSubscription;
+      _formBlocStateSubscription;
 
   /// Subscription to the state of the submission
   /// for know if the current state is [FormBlocSubmitting].
@@ -36,18 +36,18 @@ abstract class FormBloc<SuccessResponse, FailureResponse>
   final bool _autoValidate;
 
   late final StreamSubscription<dynamic>
-  _setupAreAllFieldsValidSubscriptionSubscription;
+      _setupAreAllFieldsValidSubscriptionSubscription;
 
   FormBloc({
     bool isLoading = false,
     bool autoValidate = true,
     bool isEditing = false,
-  }) : _autoValidate = autoValidate,
-       super(
-         isLoading
-             ? FormBlocLoading(isEditing: isEditing, progress: 0.0)
-             : FormBlocLoaded(isEditing: isEditing),
-       ) {
+  })  : _autoValidate = autoValidate,
+        super(
+          isLoading
+              ? FormBlocLoading(isEditing: isEditing, progress: 0.0)
+              : FormBlocLoaded(isEditing: isEditing),
+        ) {
     _initStepValidationSubs();
     _callOnLoadingIfNeeded(isLoading);
   }
@@ -88,13 +88,13 @@ abstract class FormBloc<SuccessResponse, FailureResponse>
     }
 
     allFieldBlocs.forEach((step, fieldBlocs) {
-      _stepValidationSubs[step] = MultiFieldBloc.onValidationStatus(fieldBlocs)
-          .listen((status) {
-            if (_autoValidate) {
-              _canSubmit = !status.isValidating;
-            }
-            _updateValidStep(isValid: status.isValid, step: step);
-          });
+      _stepValidationSubs[step] =
+          MultiFieldBloc.onValidationStatus(fieldBlocs).listen((status) {
+        if (_autoValidate) {
+          _canSubmit = !status.isValidating;
+        }
+        _updateValidStep(isValid: status.isValid, step: step);
+      });
     });
   }
 

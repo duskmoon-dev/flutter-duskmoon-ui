@@ -123,8 +123,7 @@ class DmSwitchFieldBlocBuilder extends StatelessWidget {
         overlayColor: overlayColor,
         splashRadius: splashRadius,
       ),
-      controlAffinity:
-          controlAffinity ??
+      controlAffinity: controlAffinity ??
           fieldTheme.controlAffinity ??
           FieldBlocBuilderControlAffinity.leading,
     );
@@ -154,13 +153,11 @@ class DmSwitchFieldBlocBuilder extends StatelessWidget {
                 padding: padding,
                 child: InputDecorator(
                   decoration: Style.inputDecorationWithoutBorder.copyWith(
-                    prefixIcon:
-                        fieldTheme.controlAffinity ==
+                    prefixIcon: fieldTheme.controlAffinity ==
                             FieldBlocBuilderControlAffinity.leading
                         ? _buildSwitch(context, state)
                         : null,
-                    suffixIcon:
-                        fieldTheme.controlAffinity ==
+                    suffixIcon: fieldTheme.controlAffinity ==
                             FieldBlocBuilderControlAffinity.trailing
                         ? _buildSwitch(context, state)
                         : null,

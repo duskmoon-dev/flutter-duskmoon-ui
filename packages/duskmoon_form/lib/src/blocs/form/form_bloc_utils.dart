@@ -4,28 +4,19 @@ class FormBlocUtils {
   FormBlocUtils._();
 
   static Iterable<
-    SingleFieldBloc<
-      dynamic,
-      dynamic,
-      FieldBlocState<dynamic, dynamic, dynamic>,
-      dynamic
-    >
-  >
-  getAllSingleFieldBlocs(Iterable<FieldBloc> fieldBlocs) {
+      SingleFieldBloc<
+          dynamic,
+          dynamic,
+          FieldBlocState<dynamic, dynamic, dynamic>,
+          dynamic>> getAllSingleFieldBlocs(Iterable<FieldBloc> fieldBlocs) {
     return fieldBlocs.expand((fieldBloc) {
       if (fieldBloc is SingleFieldBloc) {
         return [fieldBloc];
       } else if (fieldBloc is MultiFieldBloc) {
         return getAllSingleFieldBlocs(fieldBloc.flatFieldBlocs);
       }
-      return const <
-        SingleFieldBloc<
-          dynamic,
-          dynamic,
-          FieldBlocState<dynamic, dynamic, dynamic>,
-          dynamic
-        >
-      >[];
+      return const <SingleFieldBloc<dynamic, dynamic,
+          FieldBlocState<dynamic, dynamic, dynamic>, dynamic>>[];
     });
   }
 
@@ -275,7 +266,7 @@ class FormBlocUtils {
   }
 
   static Iterable<FieldBlocState<dynamic, dynamic, dynamic>>
-  flattenFieldBlocsStateList(Iterable<dynamic> fieldBlocStateList) {
+      flattenFieldBlocsStateList(Iterable<dynamic> fieldBlocStateList) {
     final list = <FieldBlocState<dynamic, dynamic, dynamic>>[];
 
     for (var fieldBlocState in fieldBlocStateList) {

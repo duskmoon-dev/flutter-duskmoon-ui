@@ -99,10 +99,8 @@ class DmSliderFieldBlocBuilder extends StatelessWidget {
         singleFieldBloc: inputFieldBloc,
         animateWhenCanShow: animateWhenCanShow,
         builder: (context, _) {
-          return BlocBuilder<
-            InputFieldBloc<double, dynamic>,
-            InputFieldBlocState<double, dynamic>
-          >(
+          return BlocBuilder<InputFieldBloc<double, dynamic>,
+              InputFieldBlocState<double, dynamic>>(
             bloc: inputFieldBloc,
             builder: (context, state) {
               final isEnabled = fieldBlocIsEnabled(
@@ -151,8 +149,7 @@ class DmSliderFieldBlocBuilder extends StatelessWidget {
   ) {
     return decoration.copyWith(
       enabled: isEnabled,
-      contentPadding:
-          decoration.contentPadding ??
+      contentPadding: decoration.contentPadding ??
           const EdgeInsets.symmetric(vertical: 8.0),
       errorText: Style.getErrorText(
         context: context,

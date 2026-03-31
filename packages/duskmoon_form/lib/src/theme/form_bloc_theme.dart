@@ -107,19 +107,19 @@ class DmFormTheme extends Equatable {
 
   @override
   List<Object?> get props => [
-    textStyle,
-    textColor,
-    decorationTheme,
-    padding,
-    checkboxTheme,
-    choiceChipTheme,
-    filterChipTheme,
-    dateTimeTheme,
-    dropdownTheme,
-    switchTheme,
-    radioTheme,
-    textTheme.hashCode,
-  ];
+        textStyle,
+        textColor,
+        decorationTheme,
+        padding,
+        checkboxTheme,
+        choiceChipTheme,
+        filterChipTheme,
+        dateTimeTheme,
+        dropdownTheme,
+        switchTheme,
+        radioTheme,
+        textTheme.hashCode,
+      ];
 
   @override
   String toString() {
@@ -181,11 +181,11 @@ class CheckboxFieldTheme extends FieldTheme {
 
   @override
   List<Object?> get props => [
-    super.props,
-    checkboxTheme,
-    controlAffinity,
-    canTapItemTile,
-  ];
+        super.props,
+        checkboxTheme,
+        controlAffinity,
+        canTapItemTile,
+      ];
 
   @override
   String toString([ToString? toString]) {
@@ -336,12 +336,12 @@ class DateTimeFieldTheme extends FieldTheme {
 
   @override
   List<Object?> get props => [
-    super.props,
-    textAlign,
-    showClearIcon,
-    clearIcon,
-    clearSuffixButtonTheme,
-  ];
+        super.props,
+        textAlign,
+        showClearIcon,
+        clearIcon,
+        clearSuffixButtonTheme,
+      ];
 
   @override
   String toString([ToString? toString]) {
@@ -407,13 +407,13 @@ class DropdownFieldTheme extends FieldTheme {
 
   @override
   List<Object?> get props => [
-    super.props,
-    textOverflow,
-    maxLines,
-    selectedTextStyle,
-    selectedMaxLines,
-    moreIcon,
-  ];
+        super.props,
+        textOverflow,
+        maxLines,
+        selectedTextStyle,
+        selectedMaxLines,
+        moreIcon,
+      ];
 
   @override
   String toString([ToString? toString]) {
@@ -529,11 +529,11 @@ class RadioFieldTheme extends FieldTheme {
 
   @override
   List<Object?> get props => [
-    super.props,
-    radioTheme,
-    canTapItemTile,
-    canDeselect,
-  ];
+        super.props,
+        radioTheme,
+        canTapItemTile,
+        canDeselect,
+      ];
 
   @override
   String toString([ToString? toString]) {
@@ -609,15 +609,15 @@ class TextFieldTheme extends FieldTheme {
 
   @override
   List<Object?> get props => [
-    super.props,
-    textAlign,
-    clearIcon,
-    clearSuffixButtonTheme,
-    obscureTrueIcon,
-    obscureFalseIcon,
-    obscureSuffixButtonTheme,
-    suggestionsTextStyle,
-  ];
+        super.props,
+        textAlign,
+        clearIcon,
+        clearSuffixButtonTheme,
+        obscureTrueIcon,
+        obscureFalseIcon,
+        obscureSuffixButtonTheme,
+        suggestionsTextStyle,
+      ];
 
   @override
   String toString([ToString? toString]) {

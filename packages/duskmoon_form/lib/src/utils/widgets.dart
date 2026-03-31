@@ -25,8 +25,7 @@ class DefaultFieldBlocBuilderTextStyle extends StatelessWidget {
       style: Style.resolveTextStyle(
         isEnabled: isEnabled,
         style: style ?? formStyle.textStyle ?? theme.textTheme.titleMedium!,
-        color:
-            formStyle.textColor ??
+        color: formStyle.textColor ??
             SimpleMaterialStateProperty(
               normal: theme.textTheme.titleMedium!.color,
               disabled: theme.disabledColor,
@@ -50,8 +49,7 @@ class DefaultFieldBlocBuilderPadding extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          padding ??
+      padding: padding ??
           DmFormTheme.of(context).padding ??
           DmFormTheme.defaultPadding,
       child: child,

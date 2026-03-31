@@ -83,13 +83,10 @@ mixin FieldBloc<State extends FieldBlocStateBase> on BlocBase<State> {
 /// * [SelectFieldBloc].
 /// * [MultiSelectFieldBloc].
 abstract class SingleFieldBloc<
-  Value,
-  Suggestion,
-  State extends FieldBlocState<Value, Suggestion, ExtraData>,
-  ExtraData
->
-    extends Cubit<State>
-    with FieldBloc {
+    Value,
+    Suggestion,
+    State extends FieldBlocState<Value, Suggestion, ExtraData>,
+    ExtraData> extends Cubit<State> with FieldBloc {
   bool _autoValidate = true;
 
   List<Validator<Value>> _validators;
@@ -118,10 +115,10 @@ abstract class SingleFieldBloc<
     required List<AsyncValidator<Value>>? asyncValidators,
     required Duration asyncValidatorDebounceTime,
     required State initialState,
-  }) : _validators = validators ?? [],
-       _asyncValidators = asyncValidators ?? [],
-       _asyncValidatorDebounceTime = asyncValidatorDebounceTime,
-       super(initialState) {
+  })  : _validators = validators ?? [],
+        _asyncValidators = asyncValidators ?? [],
+        _asyncValidatorDebounceTime = asyncValidatorDebounceTime,
+        super(initialState) {
     _setUpAsyncValidatorsSubscription();
   }
 
@@ -200,13 +197,12 @@ abstract class SingleFieldBloc<
 
     emit(
       state.copyWith(
-            value: Param(value),
-            error: Param(error),
-            isValueChanged: true,
-            isValidated: _isValidated(isValidating),
-            isValidating: isValidating,
-          )
-          as State,
+        value: Param(value),
+        error: Param(error),
+        isValueChanged: true,
+        isValidated: _isValidated(isValidating),
+        isValidating: isValidating,
+      ) as State,
     );
   }
 
@@ -219,14 +215,13 @@ abstract class SingleFieldBloc<
 
     emit(
       state.copyWith(
-            value: Param(value),
-            updatedValue: Param(value),
-            error: Param(error),
-            isValueChanged: false,
-            isValidated: _isValidated(isValidating),
-            isValidating: isValidating,
-          )
-          as State,
+        value: Param(value),
+        updatedValue: Param(value),
+        error: Param(error),
+        isValueChanged: false,
+        isValidated: _isValidated(isValidating),
+        isValidating: isValidating,
+      ) as State,
     );
   }
 
@@ -242,16 +237,15 @@ abstract class SingleFieldBloc<
 
     emit(
       state.copyWith(
-            value: Param(value),
-            initialValue: Param(value),
-            updatedValue: Param(value),
-            error: Param(error),
-            isDirty: false,
-            isValueChanged: false,
-            isValidated: _isValidated(isValidating),
-            isValidating: isValidating,
-          )
-          as State,
+        value: Param(value),
+        initialValue: Param(value),
+        updatedValue: Param(value),
+        error: Param(error),
+        isDirty: false,
+        isValueChanged: false,
+        isValidated: _isValidated(isValidating),
+        isValidating: isValidating,
+      ) as State,
     );
   }
 
@@ -349,34 +343,25 @@ abstract class SingleFieldBloc<
     // because it emit a completed async validation
     // TODO: It does not manage MultiFieldBloc fields
     if (fieldBlocs.isNotEmpty) {
-      _revalidateFieldBlocsSubscription =
-          Rx.combineLatest<dynamic, void>(
-            fieldBlocs
-                .whereType<
-                  SingleFieldBloc<
-                    dynamic,
-                    dynamic,
-                    FieldBlocState<dynamic, dynamic, dynamic>,
-                    dynamic
-                  >
-                >()
-                .toList()
-                .map((state) {
-                  return state.stream
-                      .map<dynamic>((state) => state.value)
-                      .distinct();
-                }),
-            (_) {},
-          ).listen((_) {
-            if (_autoValidate) {
-              _validate();
-            } else {
-              emit(
-                state.copyWith(isValidated: false, isValidating: false)
-                    as State,
-              );
-            }
-          });
+      _revalidateFieldBlocsSubscription = Rx.combineLatest<dynamic, void>(
+        fieldBlocs
+            .whereType<
+                SingleFieldBloc<dynamic, dynamic,
+                    FieldBlocState<dynamic, dynamic, dynamic>, dynamic>>()
+            .toList()
+            .map((state) {
+          return state.stream.map<dynamic>((state) => state.value).distinct();
+        }),
+        (_) {},
+      ).listen((_) {
+        if (_autoValidate) {
+          _validate();
+        } else {
+          emit(
+            state.copyWith(isValidated: false, isValidating: false) as State,
+          );
+        }
+      });
 
       if (_autoValidate) {
         _validate();
@@ -438,8 +423,8 @@ abstract class SingleFieldBloc<
 
   bool _isValidated(bool isValidating) => _autoValidate
       ? isValidating
-            ? false
-            : true
+          ? false
+          : true
       : false;
 
   /// Launch validation if it is [force] or field has [_autoValidate]
@@ -458,12 +443,11 @@ abstract class SingleFieldBloc<
 
     emit(
       state.copyWith(
-            error: Param(error),
-            isDirty: shouldDirty,
-            isValidated: !isValidating,
-            isValidating: isValidating,
-          )
-          as State,
+        error: Param(error),
+        isDirty: shouldDirty,
+        isValidated: !isValidating,
+        isValidating: isValidating,
+      ) as State,
     );
   }
 
@@ -516,8 +500,7 @@ abstract class SingleFieldBloc<
 
     bool isValidating;
 
-    isValidating =
-        (_autoValidate || forceValidation) &&
+    isValidating = (_autoValidate || forceValidation) &&
         !hasError &&
         _asyncValidators.isNotEmpty;
 
@@ -561,11 +544,10 @@ abstract class SingleFieldBloc<
     if (state.value == value) {
       emit(
         state.copyWith(
-              error: Param(error),
-              isValidating: false,
-              isValidated: true,
-            )
-            as State,
+          error: Param(error),
+          isValidating: false,
+          isValidated: true,
+        ) as State,
       );
     }
   }
@@ -581,12 +563,11 @@ abstract class SingleFieldBloc<
     if (!_autoValidate) {
       emit(
         state.copyWith(
-              error: Param(null),
-              isValidated: false,
-              isValidating: false,
-              formBloc: Param(formBloc),
-            )
-            as State,
+          error: Param(null),
+          isValidated: false,
+          isValidating: false,
+          formBloc: Param(formBloc),
+        ) as State,
       );
     } else {
       emit(state.copyWith(formBloc: Param(formBloc)) as State);
@@ -613,18 +594,17 @@ abstract class SingleFieldBloc<
     _asyncValidatorsSubscription = _asyncValidatorsSubject
         .debounceTime(_asyncValidatorDebounceTime)
         .switchMap((value) async* {
-          Object? error;
+      Object? error;
 
-          for (var asyncValidator in _asyncValidators) {
-            error = await asyncValidator(value);
-            if (error != null) break;
-          }
+      for (var asyncValidator in _asyncValidators) {
+        error = await asyncValidator(value);
+        if (error != null) break;
+      }
 
-          yield ValueAndError(value, error);
-        })
-        .listen((vls) {
-          updateStateError(value: vls.value, error: vls.error);
-        });
+      yield ValueAndError(value, error);
+    }).listen((vls) {
+      updateStateError(value: vls.value, error: vls.error);
+    });
 
     if (_getInitialStateIsValidating) {
       _getAsyncValidatorsError(
@@ -670,8 +650,7 @@ class ValidationStatus extends Equatable {
 }
 
 class MultiFieldBloc<ExtraData, TState extends MultiFieldBlocState<ExtraData>>
-    extends Cubit<TState>
-    with FieldBloc<TState> {
+    extends Cubit<TState> with FieldBloc<TState> {
   late final StreamSubscription<dynamic> _onValidationStatus;
 
   bool _autoValidate = false;
@@ -679,19 +658,16 @@ class MultiFieldBloc<ExtraData, TState extends MultiFieldBlocState<ExtraData>>
   bool get autoValidate => _autoValidate;
 
   MultiFieldBloc(super.initialState) {
-    _onValidationStatus = stream
-        .switchMap((state) {
-          return MultiFieldBloc.onValidationStatus(state.flatFieldBlocs);
-        })
-        .listen((validationStatus) {
-          emit(
-            state.copyWith(
-                  isValidating: validationStatus.isValidating,
-                  isValid: validationStatus.isValid,
-                )
-                as TState,
-          );
-        });
+    _onValidationStatus = stream.switchMap((state) {
+      return MultiFieldBloc.onValidationStatus(state.flatFieldBlocs);
+    }).listen((validationStatus) {
+      emit(
+        state.copyWith(
+          isValidating: validationStatus.isValidating,
+          isValid: validationStatus.isValid,
+        ) as TState,
+      );
+    });
   }
 
   Iterable<FieldBloc> get flatFieldBlocs => state.flatFieldBlocs;

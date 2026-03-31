@@ -27,8 +27,8 @@ class ControlsDetails {
   bool get isActive => currentStep == stepIndex;
 }
 
-typedef ControlsWidgetBuilder =
-    Widget Function(BuildContext context, ControlsDetails details);
+typedef ControlsWidgetBuilder = Widget Function(
+    BuildContext context, ControlsDetails details);
 
 const Color _kErrorLight = Colors.red;
 final Color _kErrorDark = Colors.red.shade400;
