@@ -1,0 +1,73 @@
+name: First Publish to pub.dev
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: "Package path (e.g. packages/duskmoon_theme_bloc)"
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.package }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  first-publish:
+    name: First Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - uses: dart-lang/setup-dart@v1
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Prepare package for publishing
+        run: |
+          PUBSPEC="${{ inputs.package }}/pubspec.yaml"
+          if [ ! -f "$PUBSPEC" ]; then
+            echo "::error::$PUBSPEC not found"
+            exit 1
+          fi
+
+          # Remove publish_to: none
+          sed -i '/^publish_to: none$/d' "$PUBSPEC"
+
+          # Replace workspace resolution with explicit dependency constraints
+          sed -i '/^resolution: workspace$/d' "$PUBSPEC"
+
+          # Get version from pubspec
+          VERSION=$(grep '^version: ' "$PUBSPEC" | sed 's/version: //')
+          echo "Publishing ${{ inputs.package }} version $VERSION"
+
+          # Replace internal path/hosted deps with version constraint
+          for dep in duskmoon_theme duskmoon_theme_bloc duskmoon_widgets duskmoon_settings duskmoon_feedback; do
+            # Handle hosted dep format (single line)
+            sed -i "s/^  ${dep}: \^.*$/  ${dep}: ^${VERSION}/" "$PUBSPEC"
+            # Handle path dep format (two lines)
+            sed -i "/^  ${dep}:$/,/^    path: .*$/c\\  ${dep}: ^${VERSION}" "$PUBSPEC"
+          done
+
+      - name: Re-resolve dependencies
+        run: cd "${{ inputs.package }}" && dart pub get
+
+      - name: Validate package
+        run: cd "${{ inputs.package }}" && dart pub publish --dry-run
+
+      - name: Write pub credentials
+        run: |
+          mkdir -p "$HOME/.config/dart"
+          echo '${{ secrets.PUB_CREDENTIALS }}' > "$HOME/.config/dart/pub-credentials.json"
+
+      - name: Publish to pub.dev
+        run: cd "${{ inputs.package }}" && dart pub publish --force
