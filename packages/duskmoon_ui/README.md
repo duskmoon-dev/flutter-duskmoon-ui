@@ -1,6 +1,6 @@
 # duskmoon_ui
 
-Umbrella package for the DuskMoon Design System. Re-exports all core packages in a single import.
+Umbrella package for the DuskMoon Design System. Re-exports all workspace packages in a single import.
 
 ## Installation
 
@@ -13,7 +13,7 @@ flutter pub add duskmoon_ui
 ```dart
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 
-// Access everything: theme, widgets, settings, feedback
+// Access everything: theme, widgets, settings, feedback, bloc, forms
 MaterialApp(
   theme: DmThemeData.sunshine(),
   darkTheme: DmThemeData.moonlight(),
@@ -38,8 +38,8 @@ MaterialApp(
 | [`duskmoon_widgets`](https://pub.dev/packages/duskmoon_widgets) | 18 adaptive Material/Cupertino widgets |
 | [`duskmoon_settings`](https://pub.dev/packages/duskmoon_settings) | Settings UI with 3 platform renderers |
 | [`duskmoon_feedback`](https://pub.dev/packages/duskmoon_feedback) | Dialogs, snackbars, toasts, bottom sheets |
-
-> **Note:** `duskmoon_theme_bloc` is intentionally excluded — add it separately if you use BLoC for theme persistence.
+| [`duskmoon_theme_bloc`](https://pub.dev/packages/duskmoon_theme_bloc) | Theme persistence BLoC with SharedPreferences support |
+| [`duskmoon_form`](https://pub.dev/packages/duskmoon_form) | Form state management and adaptive form widgets |
 
 ## License
 
