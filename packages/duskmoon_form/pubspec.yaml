@@ -25,12 +25,12 @@ dependencies:
   duskmoon_widgets: ^1.0.2
   bloc: ^9.0.0
   flutter_bloc: ^9.0.0
-  rxdart: any
+  rxdart: ^0.28.0
   equatable: ^2.0.7
-  collection: any
-  meta: any
-  uuid: any
-  intl: any
+  collection: ^1.18.0
+  meta: ^1.12.0
+  uuid: ^4.4.0
+  intl: ^0.20.0
   flutter_keyboard_visibility: ^6.0.0
 
 dev_dependencies:
