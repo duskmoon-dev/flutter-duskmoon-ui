@@ -635,7 +635,7 @@ class _DmTextFieldBlocBuilderState extends State<DmTextFieldBlocBuilder> {
       singleFieldBloc: widget.textFieldBloc,
       animateWhenCanShow: widget.animateWhenCanShow,
       focusOnValidationFailed: widget.focusOnValidationFailed,
-      builder: (_, _) {
+      builder: (context0, __) {
         return BlocBuilder<TextFieldBloc, TextFieldBlocState>(
           bloc: widget.textFieldBloc,
           builder: (context, state) {

@@ -197,7 +197,7 @@ class _DateTimeFieldBlocBuilderBaseState<T>
       child: DmSimpleFieldBlocBuilder(
         singleFieldBloc: widget.dateTimeFieldBloc,
         animateWhenCanShow: widget.animateWhenCanShow,
-        builder: (_, _) {
+        builder: (context0, __) {
           return BlocBuilder<
             InputFieldBloc<T, dynamic>,
             InputFieldBlocState<T, dynamic>

@@ -167,7 +167,7 @@ abstract class SingleFieldBloc<
     required Stream<R> Function(State previous, State current) onData,
     void Function(State previous, State current, R result)? onFinish,
   }) {
-    final onStart0 = onStart ?? (_, _) {};
+    final onStart0 = onStart ?? (State p, State c) {};
 
     final onFinish0 = onFinish ?? (State p, State c, R r) {};
 

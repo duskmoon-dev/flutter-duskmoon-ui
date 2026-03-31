@@ -124,7 +124,7 @@ class DmRadioButtonGroupFieldBlocBuilder<Value> extends StatelessWidget {
       child: DmCanShowFieldBlocBuilder(
         fieldBloc: selectFieldBloc,
         animate: animateWhenCanShow,
-        builder: (_, _) {
+        builder: (context0, __) {
           return BlocBuilder<
             SelectFieldBloc<Value, dynamic>,
             SelectFieldBlocState<Value, dynamic>
