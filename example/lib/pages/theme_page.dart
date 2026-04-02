@@ -1,7 +1,5 @@
-import 'package:duskmoon_theme_bloc/duskmoon_theme_bloc.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ThemePage extends StatelessWidget {
   const ThemePage({super.key});

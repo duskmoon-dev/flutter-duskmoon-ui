@@ -1,7 +1,5 @@
-import 'package:duskmoon_theme_bloc/duskmoon_theme_bloc.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'pages/button_page.dart';
@@ -9,6 +7,7 @@ import 'pages/feedback_page.dart';
 import 'pages/scaffold_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/theme_page.dart';
+import 'pages/visualization_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,6 +57,7 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
     SettingsPage(),
     FeedbackPage(),
     ScaffoldPage(),
+    VisualizationPage(),
   ];
 
   @override
@@ -73,6 +73,8 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
           DmNavDestination(icon: Icon(Icons.settings), label: 'Settings'),
           DmNavDestination(icon: Icon(Icons.feedback), label: 'Feedback'),
           DmNavDestination(icon: Icon(Icons.dashboard), label: 'Scaffold'),
+          DmNavDestination(
+              icon: Icon(Icons.show_chart), label: 'Visualization'),
         ],
       ),
     );
