@@ -26,12 +26,13 @@ cd packages/duskmoon_theme && dart analyze --fatal-infos
 
 ```
 duskmoon_theme              ← Pure theme, zero external deps
-    ├── duskmoon_theme_bloc ← Opt-in BLoC for theme persistence (NOT in umbrella)
+    ├── duskmoon_theme_bloc ← BLoC for theme persistence
     ├── duskmoon_widgets    ← 18 adaptive widgets (Material/Cupertino)
     ├── duskmoon_settings   ← Settings UI (Material/Cupertino/Fluent)
-    └── duskmoon_feedback   ← Dialogs, snackbars, toasts, bottom sheets
+    ├── duskmoon_feedback   ← Dialogs, snackbars, toasts, bottom sheets
+    └── duskmoon_form       ← BLoC-based form management (depends on theme + widgets)
             │
-        duskmoon_ui         ← Umbrella: re-exports theme + widgets + settings + feedback
+        duskmoon_ui         ← Umbrella: re-exports all packages
             │
           example           ← 5-page showcase app
 ```
@@ -63,6 +64,10 @@ Compositor pattern with **3 platform renderers** (Material, Cupertino, Fluent). 
 
 Adaptive feedback helpers: `showDmDialog()` (uses `AlertDialog.adaptive`), `DmDialogAction` (platform-switches Material/Cupertino), `showDmSnackbar()`, `showDmUndoSnackbar()`, `showDmSuccessToast()`, `showDmErrorToast()`, `showDmBottomSheetActionList()`, `showDmFullscreenDialog()`.
 
+### Form Management (`duskmoon_form`)
+
+BLoC-based form state management merged from `form_bloc` + `flutter_form_bloc`. 7 field BLoCs (`TextFieldBloc`, `BooleanFieldBloc`, `SelectFieldBloc`, `MultiSelectFieldBloc`, `InputFieldBloc`, `GroupFieldBloc`, `ListFieldBloc`) + `FormBloc` for form orchestration. 11 Dm-prefixed widget builders. Sync/async validators with debouncing. Multi-step form support. `DmFormTheme` + `DmFormThemeProvider` for theming. BLoC classes keep original names (user-subclassable); only UI widgets get `Dm` prefix.
+
 ## Conventions
 
 - Generated files: `.g.dart` suffix in `src/generated/`
@@ -70,6 +75,6 @@ Adaptive feedback helpers: `showDmDialog()` (uses `AlertDialog.adaptive`), `DmDi
 - Factory classes are `abstract final` with static methods
 - Linting: `flutter_lints` with `--fatal-infos` (infos are errors)
 - Tests assert exact hex color values from codegen as golden-value checks
-- `duskmoon_theme_bloc` is intentionally excluded from the umbrella re-export
+- In `duskmoon_form`, BLoC classes keep original names (e.g., `FormBloc`); only UI widgets get `Dm` prefix
 - All packages use `publish_to: none` during development — the release workflow removes it, converts path deps to hosted deps, and publishes to pub.dev
 - Each package has its own MIT LICENSE file
