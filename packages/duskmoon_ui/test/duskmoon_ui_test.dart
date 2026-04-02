@@ -6,6 +6,7 @@ void main() {
   test('umbrella package exports all workspace packages', () {
     expect(DmThemeData.themes, isNotEmpty);
     expect(DmThemeBloc, isNotNull);
+    expect(DmVisualization.packageName, 'duskmoon_visualization');
     expect(DmTextFieldBlocBuilder, isNotNull);
   });
 }

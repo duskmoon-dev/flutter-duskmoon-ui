@@ -10,6 +10,7 @@ workspace:
   - packages/duskmoon_widgets
   - packages/duskmoon_settings
   - packages/duskmoon_feedback
+  - packages/duskmoon_visualization
   - packages/duskmoon_ui
   - packages/duskmoon_form
   - example

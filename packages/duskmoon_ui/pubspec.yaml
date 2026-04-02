@@ -25,6 +25,7 @@ dependencies:
   duskmoon_widgets: ^1.0.3
   duskmoon_settings: ^1.0.3
   duskmoon_feedback: ^1.0.3
+  duskmoon_visualization: ^0.1.0
   duskmoon_form: ^1.0.3
 
 dev_dependencies:
