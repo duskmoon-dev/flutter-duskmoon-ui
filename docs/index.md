@@ -1,6 +1,6 @@
 # DuskMoon UI
 
-A Flutter component library providing codegen-driven theming, adaptive widgets, platform-aware settings, and feedback helpers for Material 3 applications.
+A Flutter component library providing codegen-driven theming, adaptive widgets, platform-aware settings, feedback helpers, and BLoC-based form management for Material 3 applications.
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@ Add `duskmoon_ui` to your `pubspec.yaml` for access to all components in a singl
 
 ```yaml
 dependencies:
-  duskmoon_ui: ^1.0.1
+  duskmoon_ui: ^1.0.3
 ```
 
 ```dart
@@ -72,12 +72,13 @@ class HomePage extends StatelessWidget {
 
 | Package | Description |
 |---------|-------------|
-| [`duskmoon_ui`](https://pub.dev/packages/duskmoon_ui) | Umbrella — re-exports theme, widgets, settings, and feedback |
+| [`duskmoon_ui`](https://pub.dev/packages/duskmoon_ui) | Umbrella — re-exports all packages below |
 | [`duskmoon_theme`](theme.md) | Codegen-driven color schemes, text themes, and ThemeData factories |
 | [`duskmoon_widgets`](widgets.md) | 18 adaptive widgets (Material / Cupertino) |
 | [`duskmoon_settings`](settings.md) | Platform-aware settings UI (Material / Cupertino / Fluent) |
 | [`duskmoon_feedback`](feedback.md) | Dialogs, snackbars, toasts, and bottom sheets |
-| [`duskmoon_theme_bloc`](theme-bloc.md) | BLoC for persisting theme via SharedPreferences (opt-in, not in umbrella) |
+| [`duskmoon_form`](form.md) | BLoC-based form state management with 11 widget builders |
+| [`duskmoon_theme_bloc`](theme-bloc.md) | BLoC for persisting theme via SharedPreferences |
 
 ### Individual installation
 
@@ -85,11 +86,12 @@ If you only need specific functionality:
 
 ```yaml
 dependencies:
-  duskmoon_theme: ^1.0.1      # Theme only
-  duskmoon_widgets: ^1.0.1    # Adaptive widgets
-  duskmoon_settings: ^1.0.1   # Settings UI
-  duskmoon_feedback: ^1.0.1   # Feedback helpers
-  duskmoon_theme_bloc: ^1.0.1 # BLoC persistence (requires flutter_bloc, shared_preferences)
+  duskmoon_theme: ^1.0.3      # Theme only
+  duskmoon_widgets: ^1.0.3    # Adaptive widgets
+  duskmoon_settings: ^1.0.3   # Settings UI
+  duskmoon_feedback: ^1.0.3   # Feedback helpers
+  duskmoon_form: ^1.0.3       # BLoC-based form management
+  duskmoon_theme_bloc: ^1.0.3 # BLoC persistence (requires flutter_bloc, shared_preferences)
 ```
 
 ## Guides
@@ -98,5 +100,6 @@ dependencies:
 - [Adaptive Widgets](widgets.md) — Platform-aware buttons, inputs, navigation, layout, and data display
 - [Settings UI](settings.md) — Cross-platform settings pages with 10 tile types
 - [Feedback Helpers](feedback.md) — Adaptive dialogs, snackbars, toasts, and bottom sheets
+- [Form Management](form.md) — BLoC-based forms with validation and 11 widget builders
 - [Theme BLoC](theme-bloc.md) — Persistent theme switching with BLoC pattern
 - [Architecture](architecture.md) — Package dependency graph, design decisions, and conventions

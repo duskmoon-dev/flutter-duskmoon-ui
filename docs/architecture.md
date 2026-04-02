@@ -13,15 +13,16 @@ This document covers the package dependency graph, key design decisions, and con
 
 ```
 duskmoon_theme              <-- Pure theme, zero external dependencies
-    |-- duskmoon_theme_bloc <-- Opt-in BLoC for theme persistence (NOT in umbrella)
+    |-- duskmoon_theme_bloc <-- BLoC for theme persistence
     |-- duskmoon_widgets    <-- 18 adaptive widgets (Material/Cupertino)
     |-- duskmoon_settings   <-- Settings UI (Material/Cupertino/Fluent)
     |-- duskmoon_feedback   <-- Dialogs, snackbars, toasts, bottom sheets
+    |-- duskmoon_form       <-- BLoC-based form management (depends on theme + widgets)
             |
-        duskmoon_ui         <-- Umbrella: re-exports theme + widgets + settings + feedback
+        duskmoon_ui         <-- Umbrella: re-exports all packages
 ```
 
-All packages depend on `duskmoon_theme` for consistent color tokens and theme data. The umbrella `duskmoon_ui` re-exports everything except `duskmoon_theme_bloc`, which is opt-in for apps that use the BLoC pattern.
+All packages depend on `duskmoon_theme` for consistent color tokens and theme data. `duskmoon_form` additionally depends on `duskmoon_widgets`. The umbrella `duskmoon_ui` re-exports all packages.
 
 ## Design Decisions
 
@@ -56,19 +57,9 @@ The settings package uses a compositor pattern with three platform renderers:
 
 `SettingsList`, `SettingsSection`, and `SettingsTile` detect the platform and delegate to the appropriate renderer. This allows the same code to produce native-looking settings on every platform.
 
-### Umbrella exclusion of theme_bloc
+### Form BLoC naming convention
 
-`duskmoon_theme_bloc` is intentionally excluded from the `duskmoon_ui` umbrella because:
-
-- Not all apps use the BLoC pattern
-- It introduces dependencies on `flutter_bloc`, `shared_preferences`, `equatable`, and `bloc`
-- Apps using other state management solutions should not pay for these dependencies
-
-Import it separately when needed:
-
-```dart
-import 'package:duskmoon_theme_bloc/duskmoon_theme_bloc.dart';
-```
+In `duskmoon_form`, BLoC classes that users subclass (e.g., `FormBloc`, `TextFieldBloc`) keep their original names for ergonomic API. Only UI-facing widget classes get the `Dm` prefix (e.g., `DmTextFieldBlocBuilder`, `DmFormBlocListener`). This matches the pattern where `DmButton`, `DmTextField`, etc. are UI components.
 
 ## Conventions
 
