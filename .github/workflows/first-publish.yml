@@ -50,12 +50,15 @@ jobs:
           VERSION=$(grep '^version: ' "$PUBSPEC" | sed 's/version: //')
           echo "Publishing ${{ inputs.package }} version $VERSION"
 
-          # Replace internal path/hosted deps with version constraint
-          for dep in duskmoon_theme duskmoon_theme_bloc duskmoon_widgets duskmoon_settings duskmoon_feedback; do
-            # Handle hosted dep format (single line)
-            sed -i "s/^  ${dep}: \^.*$/  ${dep}: ^${VERSION}/" "$PUBSPEC"
-            # Handle path dep format (two lines)
-            sed -i "/^  ${dep}:$/,/^    path: .*$/c\\  ${dep}: ^${VERSION}" "$PUBSPEC"
+          # Replace internal path deps with version constraints
+          # Only replaces path: format deps; hosted deps with version constraints are left as-is
+          for dep in duskmoon_theme duskmoon_theme_bloc duskmoon_widgets duskmoon_settings duskmoon_feedback duskmoon_form; do
+            DEP_PUBSPEC="packages/${dep}/pubspec.yaml"
+            if [ -f "$DEP_PUBSPEC" ]; then
+              DEP_VERSION=$(grep '^version: ' "$DEP_PUBSPEC" | sed 's/version: //')
+              # Handle path dep format (two lines: "  dep_name:\n    path: ...")
+              sed -i "/^  ${dep}:$/,/^    path: .*$/c\\  ${dep}: ^${DEP_VERSION}" "$PUBSPEC"
+            fi
           done
 
       - name: Re-resolve dependencies
