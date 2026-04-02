@@ -1,6 +1,6 @@
 # DuskMoon UI
 
-A Flutter component library providing codegen-driven theming, adaptive widgets, platform-aware settings, feedback helpers, and BLoC-based form management for Material 3 applications.
+A Flutter component library providing codegen-driven theming, adaptive widgets, platform-aware settings, feedback helpers, BLoC-based form management, and data visualization for Material 3 applications.
 
 ## Table of Contents
 
@@ -78,6 +78,7 @@ class HomePage extends StatelessWidget {
 | [`duskmoon_settings`](settings.md) | Platform-aware settings UI (Material / Cupertino / Fluent) |
 | [`duskmoon_feedback`](feedback.md) | Dialogs, snackbars, toasts, and bottom sheets |
 | [`duskmoon_form`](form.md) | BLoC-based form state management with 11 widget builders |
+| [`duskmoon_visualization`](visualization.md) | Data visualization: line, bar, scatter, heatmap, network graph |
 | [`duskmoon_theme_bloc`](theme-bloc.md) | BLoC for persisting theme via SharedPreferences |
 
 ### Individual installation
@@ -90,8 +91,9 @@ dependencies:
   duskmoon_widgets: ^1.0.3    # Adaptive widgets
   duskmoon_settings: ^1.0.3   # Settings UI
   duskmoon_feedback: ^1.0.3   # Feedback helpers
-  duskmoon_form: ^1.0.3       # BLoC-based form management
-  duskmoon_theme_bloc: ^1.0.3 # BLoC persistence (requires flutter_bloc, shared_preferences)
+  duskmoon_form: ^1.0.3            # BLoC-based form management
+  duskmoon_visualization: ^0.1.0   # Data visualization charts
+  duskmoon_theme_bloc: ^1.0.3      # BLoC persistence (requires flutter_bloc, shared_preferences)
 ```
 
 ## Guides
@@ -101,5 +103,6 @@ dependencies:
 - [Settings UI](settings.md) — Cross-platform settings pages with 10 tile types
 - [Feedback Helpers](feedback.md) — Adaptive dialogs, snackbars, toasts, and bottom sheets
 - [Form Management](form.md) — BLoC-based forms with validation and 11 widget builders
+- [Data Visualization](visualization.md) — Line, bar, scatter, heatmap, and network graph charts
 - [Theme BLoC](theme-bloc.md) — Persistent theme switching with BLoC pattern
 - [Architecture](architecture.md) — Package dependency graph, design decisions, and conventions

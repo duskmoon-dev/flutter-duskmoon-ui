@@ -112,6 +112,8 @@ showDmUndoSnackbar(
 );
 ```
 
+> **Type difference:** Snackbar `message` accepts a `Widget` (e.g. `const Text('...')`). Toast `message` accepts a plain `String`.
+
 ## Toasts
 
 ### showDmSuccessToast

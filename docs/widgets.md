@@ -275,6 +275,8 @@ Material: `Card`. Cupertino: `Container` with rounded corners and box shadow.
 
 Renders as a `FilterChip` when `onSelected` is provided, otherwise a plain `Chip`.
 
+> **Note:** `DmChip` always uses Material widgets regardless of platform — it does not have a Cupertino variant.
+
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `label` | `Widget` | required | Chip content |
@@ -302,6 +304,7 @@ DmScaffold(
   largeBody: (_) => const DesktopView(),
   secondaryBody: (_) => const DetailPanel(),
   bodyRatio: 0.5,
+  appBarBreakpoint: null,  // Optional: breakpoint above which the app bar is shown
 )
 ```
 

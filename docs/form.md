@@ -452,6 +452,24 @@ DmRadioButtonGroupFieldBlocBuilder<String>(
 )
 ```
 
+### DmCanShowFieldBlocBuilder
+
+Conditionally shows or hides a field based on the field BLoC's `canShow` state, with optional animation:
+
+```dart
+DmCanShowFieldBlocBuilder(
+  fieldBloc: formBloc.addressField,
+  animate: true,   // Animated show/hide (default: true)
+  builder: (context, canShow) {
+    return canShow
+        ? DmTextFieldBlocBuilder(textFieldBloc: formBloc.addressField, ...)
+        : const SizedBox.shrink();
+  },
+)
+```
+
+This is useful for conditionally rendering fields based on other field values — toggle the BLoC's `canShow` state to show or hide the widget.
+
 ## Form Listener
 
 `DmFormBlocListener` reacts to form state changes without rebuilding UI:

@@ -12,17 +12,18 @@ This document covers the package dependency graph, key design decisions, and con
 ## Package Dependency Graph
 
 ```
-duskmoon_theme              <-- Pure theme, zero external dependencies
-    |-- duskmoon_theme_bloc <-- BLoC for theme persistence
-    |-- duskmoon_widgets    <-- 18 adaptive widgets (Material/Cupertino)
-    |-- duskmoon_settings   <-- Settings UI (Material/Cupertino/Fluent)
-    |-- duskmoon_feedback   <-- Dialogs, snackbars, toasts, bottom sheets
-    |-- duskmoon_form       <-- BLoC-based form management (depends on theme + widgets)
+duskmoon_theme                  <-- Pure theme, zero external dependencies
+    |-- duskmoon_theme_bloc     <-- BLoC for theme persistence
+    |-- duskmoon_widgets        <-- 18 adaptive widgets (Material/Cupertino)
+    |-- duskmoon_settings       <-- Settings UI (Material/Cupertino/Fluent)
+    |-- duskmoon_feedback       <-- Dialogs, snackbars, toasts, bottom sheets
+    |-- duskmoon_form           <-- BLoC-based form management (depends on theme + widgets)
+    |-- duskmoon_visualization  <-- Data visualization charts (depends on theme)
             |
-        duskmoon_ui         <-- Umbrella: re-exports all packages
+        duskmoon_ui             <-- Umbrella: re-exports all packages
 ```
 
-All packages depend on `duskmoon_theme` for consistent color tokens and theme data. `duskmoon_form` additionally depends on `duskmoon_widgets`. The umbrella `duskmoon_ui` re-exports all packages.
+All packages depend on `duskmoon_theme` for consistent color tokens and theme data. `duskmoon_form` additionally depends on `duskmoon_widgets`. `duskmoon_visualization` uses `DmColorExtension` for palette derivation. The umbrella `duskmoon_ui` re-exports all packages.
 
 ## Design Decisions
 

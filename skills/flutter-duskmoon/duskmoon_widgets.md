@@ -257,6 +257,7 @@ DmChip(
   onSelected: (bool selected) {},
 )
 ```
+> **Note:** `DmChip` always renders Material widgets (`FilterChip`/`Chip`) regardless of platform — it does not have a Cupertino variant.
 
 ### Scaffold
 
@@ -279,6 +280,7 @@ DmScaffold(
   // Optional secondary body (split view):
   secondaryBody: (_) => const DetailPanel(),
   bodyRatio: 0.5,
+  appBarBreakpoint: null,  // Breakpoint above which app bar is shown (optional)
 )
 ```
 

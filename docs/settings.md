@@ -239,6 +239,18 @@ For fully custom content, use `CustomSettingsTile`:
 CustomSettingsTile(child: MyCustomWidget())
 ```
 
+## SettingsTileType
+
+The underlying enum exported by the package. You rarely need this directly — use the named constructors on `SettingsTile` instead. It's available if you need to inspect tile type at runtime:
+
+```dart
+enum SettingsTileType {
+  simpleTile, switchTile, navigationTile, checkTile,
+  inputTile, sliderTile, selectTile, textareaTile,
+  radioGroupTile, checkboxGroupTile,
+}
+```
+
 ## SettingsOption
 
 Data class used by `select`, `radioGroup`, and `checkboxGroup` tiles.

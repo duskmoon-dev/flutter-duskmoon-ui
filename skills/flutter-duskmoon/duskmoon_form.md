@@ -152,6 +152,45 @@ FormBloc({
 - `emitSubmissionCancelled()` / `emitDeleteFailed({F?})` / `emitDeleteSuccessful({S?})`
 - `emitUpdatingFields({double? progress})`
 
+### Field management methods
+
+```dart
+addFieldBlocs(fieldBlocs: [...]);        // Add multiple field blocs
+addFieldBloc(step: 0, fieldBloc: f);     // Add single field (specific step)
+removeFieldBloc(fieldBloc: f);           // Remove a single field
+removeFieldBlocs(fieldBlocs: [...]);     // Remove multiple fields
+clear();                                 // Clear all field blocs
+```
+
+### Lifecycle methods
+
+```dart
+reload()             // Calls onLoading() and sets state to FormBlocLoading
+delete()             // Calls onDeleting() and sets state to FormBlocDeleting
+cancelSubmission()   // Calls onCancelingSubmission() when form is submitting
+```
+
+Override these callbacks in your subclass:
+```dart
+@override void onLoading() async { ... }
+@override void onDeleting() async { ... }
+@override void onCancelingSubmission() async { ... }
+```
+
+### Utility methods
+
+```dart
+isValuesChanged({int? step})   // true if any field value changed from initial
+hasInitialValues({int? step})  // true if all fields have initial values
+hasUpdatedValues({int? step})  // true if any field has updated values
+```
+
+### State properties
+
+- `state.canSubmit` — `bool`, whether the form is currently submittable
+- `state.fieldBlocs([int? step])` — field blocs map for a given step
+- `state.flatFieldBlocs([int? step])` — flat list of all field blocs
+
 ### Multi-step forms
 
 ```dart
@@ -311,6 +350,22 @@ DmRadioButtonGroupFieldBlocBuilder<String>(
 )
 ```
 
+### DmCanShowFieldBlocBuilder
+
+Conditionally shows or hides a field based on its `canShow` state:
+
+```dart
+DmCanShowFieldBlocBuilder(
+  fieldBloc: formBloc.addressField,
+  animate: true,  // animated show/hide (default: true)
+  builder: (context, canShow) {
+    return canShow
+        ? DmTextFieldBlocBuilder(textFieldBloc: formBloc.addressField, ...)
+        : const SizedBox.shrink();
+  },
+)
+```
+
 ## Form Listener
 
 React to form state changes:
@@ -346,6 +401,17 @@ DmStepperFormBlocBuilder<WizardFormBloc>(
     FormBlocStep(title: const Text('Confirm'), content: confirmFields),
   ],
 )
+```
+
+`FormBlocStep` constructor:
+```dart
+const FormBlocStep({
+  required Widget title,
+  Widget? subtitle,
+  required Widget content,
+  StepState state = StepState.indexed,
+  bool? isActive,
+})
 ```
 
 ## Theme

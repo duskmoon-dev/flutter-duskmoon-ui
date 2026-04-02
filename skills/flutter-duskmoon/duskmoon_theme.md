@@ -110,6 +110,41 @@ DmColorExtension.sunshine()   // Light tokens
 DmColorExtension.moonlight()  // Dark tokens
 ```
 
+Construct a fully custom extension:
+```dart
+const DmColorExtension(
+  primaryFocus: Color(0xFF...),
+  secondaryFocus: Color(0xFF...),
+  tertiaryFocus: Color(0xFF...),
+  accent: Color(0xFF...),
+  accentFocus: Color(0xFF...),
+  accentContent: Color(0xFF...),
+  neutral: Color(0xFF...),
+  neutralFocus: Color(0xFF...),
+  neutralContent: Color(0xFF...),
+  neutralVariant: Color(0xFF...),
+  info: Color(0xFF...),
+  infoContent: Color(0xFF...),
+  success: Color(0xFF...),
+  successContent: Color(0xFF...),
+  warning: Color(0xFF...),
+  warningContent: Color(0xFF...),
+  base100: Color(0xFF...),
+  base200: Color(0xFF...),
+  base300: Color(0xFF...),
+  baseContent: Color(0xFF...),
+)
+```
+
+Standard `ThemeExtension` methods:
+```dart
+// Copy with overrides
+final modified = dmColors.copyWith(accent: Colors.purple);
+
+// Lerp for animations
+final interpolated = dmColors.lerp(other, 0.5);
+```
+
 ### DmTextTheme — Material 3 Type Scale
 
 ```dart

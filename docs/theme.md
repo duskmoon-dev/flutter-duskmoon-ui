@@ -111,7 +111,25 @@ DmColorExtension.sunshine()   // Light tokens
 DmColorExtension.moonlight()  // Dark tokens
 ```
 
-Both `copyWith()` and `lerp()` are implemented for smooth theme transitions.
+You can also construct a fully custom instance by passing all 20 required color parameters:
+
+```dart
+const DmColorExtension(
+  primaryFocus: Color(0xFF...),
+  accent: Color(0xFF...),
+  // ... all 20 parameters required
+)
+```
+
+`ThemeExtension` methods:
+
+```dart
+// Copy with overrides (useful for testing or one-off customization)
+final modified = dmColors.copyWith(accent: Colors.purple, success: Colors.teal);
+
+// Lerp between two extensions (used by Flutter for animated theme transitions)
+final interpolated = dmColors.lerp(otherExtension, 0.5);
+```
 
 ## DmTextTheme
 

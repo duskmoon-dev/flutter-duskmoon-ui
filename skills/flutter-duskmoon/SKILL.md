@@ -1,11 +1,11 @@
 ---
 name: flutter-duskmoon
-description: Flutter DuskMoon UI design system — theme, adaptive widgets, settings, feedback, forms, and BLoC theme persistence. Use when building Flutter apps with duskmoon_ui, duskmoon_theme, duskmoon_widgets, duskmoon_settings, duskmoon_feedback, duskmoon_form, or duskmoon_theme_bloc packages.
+description: Flutter DuskMoon UI design system — theme, adaptive widgets, settings, feedback, forms, data visualization, and BLoC theme persistence. Use when building Flutter apps with duskmoon_ui, duskmoon_theme, duskmoon_widgets, duskmoon_settings, duskmoon_feedback, duskmoon_form, duskmoon_visualization, or duskmoon_theme_bloc packages.
 ---
 
 # Flutter DuskMoon UI Design System
 
-Complete component library for Flutter apps with codegen-driven theming, adaptive (Material/Cupertino) widgets, platform-aware settings UI, and feedback helpers.
+Complete component library for Flutter apps with codegen-driven theming, adaptive (Material/Cupertino) widgets, platform-aware settings UI, feedback helpers, and data visualization.
 
 ## Quick Start
 
@@ -27,12 +27,13 @@ import 'package:duskmoon_ui/duskmoon_ui.dart';
 
 ```yaml
 dependencies:
-  duskmoon_theme: ^1.0.0      # Theme only
-  duskmoon_widgets: ^1.0.0    # Adaptive widgets
-  duskmoon_settings: ^1.0.0   # Settings UI
-  duskmoon_feedback: ^1.0.0   # Dialogs, toasts, snackbars
-  duskmoon_form: ^1.0.0       # BLoC-based form management
-  duskmoon_theme_bloc: ^1.0.0 # Opt-in BLoC persistence
+  duskmoon_theme: ^1.0.0           # Theme only
+  duskmoon_widgets: ^1.0.0         # Adaptive widgets
+  duskmoon_settings: ^1.0.0        # Settings UI
+  duskmoon_feedback: ^1.0.0        # Dialogs, toasts, snackbars
+  duskmoon_form: ^1.0.0            # BLoC-based form management
+  duskmoon_visualization: ^0.1.0   # Data visualization charts
+  duskmoon_theme_bloc: ^1.0.0      # Opt-in BLoC persistence
 ```
 
 ## Skill Modules
@@ -44,6 +45,7 @@ Detailed documentation is split by package:
 - [duskmoon_settings.md](duskmoon_settings.md) — Platform-aware settings UI (Material/Cupertino/Fluent)
 - [duskmoon_feedback.md](duskmoon_feedback.md) — Dialogs, snackbars, toasts, bottom sheets
 - [duskmoon_form.md](duskmoon_form.md) — BLoC-based form state management with 11 widget builders
+- [duskmoon_visualization.md](duskmoon_visualization.md) — Data visualization: line, bar, scatter, heatmap, network graph
 - [duskmoon_theme_bloc.md](duskmoon_theme_bloc.md) — BLoC for persisting theme via SharedPreferences
 
 ## Minimal App Example
@@ -98,6 +100,7 @@ duskmoon_theme              <- Pure theme, zero external deps
     +-- duskmoon_settings   <- Settings UI (Material/Cupertino/Fluent)
     +-- duskmoon_feedback   <- Dialogs, snackbars, toasts, bottom sheets
     +-- duskmoon_form       <- BLoC-based form management (depends on theme + widgets)
+    +-- duskmoon_visualization <- Data visualization charts (depends on theme)
             |
         duskmoon_ui         <- Umbrella: re-exports all packages
 ```
