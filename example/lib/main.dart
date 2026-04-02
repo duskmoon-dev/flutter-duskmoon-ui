@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'pages/button_page.dart';
 import 'pages/feedback_page.dart';
+import 'pages/form_page.dart';
 import 'pages/scaffold_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/theme_page.dart';
@@ -53,6 +54,7 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
 
   static const _pages = <Widget>[
     ThemePage(),
+    FormPage(),
     ButtonPage(),
     SettingsPage(),
     FeedbackPage(),
@@ -69,6 +71,8 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
         onDestinationSelected: (i) => setState(() => _selectedIndex = i),
         destinations: const [
           DmNavDestination(icon: Icon(Icons.palette), label: 'Theme'),
+          DmNavDestination(
+              icon: Icon(Icons.dynamic_form_outlined), label: 'Form'),
           DmNavDestination(icon: Icon(Icons.smart_button), label: 'Buttons'),
           DmNavDestination(icon: Icon(Icons.settings), label: 'Settings'),
           DmNavDestination(icon: Icon(Icons.feedback), label: 'Feedback'),

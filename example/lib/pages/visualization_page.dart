@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 
 import 'visualization/chart_gallery_page.dart';
-import 'visualization/geo_map_page.dart';
-import 'visualization/interactive_chart_page.dart';
+import 'visualization/geo_gallery_page.dart';
+import 'visualization/interactions_page.dart';
+import 'visualization/lines_bars_page.dart';
+import 'visualization/radial_page.dart';
+import 'visualization/scatter_network_page.dart';
+
+// ---------------------------------------------------------------------------
+// VisualizationPage
+// ---------------------------------------------------------------------------
 
 class VisualizationPage extends StatelessWidget {
   const VisualizationPage({super.key});
@@ -15,58 +22,89 @@ class VisualizationPage extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         Text(
-          'Visualization',
+          'Data Visualization Gallery',
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 8),
         Text(
-          'Migrated from the original data_visualization showcase and merged into the DuskMoon example app as a dedicated module.',
+          '35+ chart types from basic to advanced, migrated from the data_visualization showcase.',
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         const SizedBox(height: 16),
         const _VisualizationModuleCard(
-          title: 'Curated Charts',
+          icon: Icons.show_chart_outlined,
+          title: 'DmViz Charts',
           description:
-              'DuskMoon-native DmViz wrappers for line, bar, scatter, heatmap, and network views.',
-          icon: Icons.dashboard_customize_outlined,
-          tags: ['DmViz*', 'Theme-aware', 'Showcase'],
+              'DuskMoon-native curated chart wrappers (line, bar, scatter, heatmap, network).',
+          tags: ['DmViz', 'Theme-aware', '5 types'],
           destination: ChartGalleryPage(),
         ),
         const SizedBox(height: 12),
         const _VisualizationModuleCard(
-          title: 'Geo Projection Lab',
+          icon: Icons.timeline_outlined,
+          title: 'Lines & Bars',
           description:
-              'Projection switching and map interaction migrated from the source showcase app using the compat surface.',
-          icon: Icons.public_outlined,
-          tags: ['Compat', 'Geo', 'Projection'],
-          destination: GeoMapPage(),
+              'Line, area, bar, stacked, horizontal, streamgraph charts.',
+          tags: ['Line', 'Bar', 'Area', 'Stream'],
+          destination: LinesBarsPage(),
         ),
         const SizedBox(height: 12),
         const _VisualizationModuleCard(
-          title: 'Interactive Hover Demo',
+          icon: Icons.pie_chart_outline,
+          title: 'Radial & Hierarchy',
           description:
-              'Pointer-driven detail inspection adapted from the original interactive chart example.',
-          icon: Icons.ads_click_outlined,
-          tags: ['Compat', 'Desktop', 'Touch'],
-          destination: InteractiveChartPage(),
+              'Pie, radar, radial bar, and box plot charts.',
+          tags: ['Pie', 'Radar', 'Radial', 'BoxPlot'],
+          destination: RadialPage(),
+        ),
+        const SizedBox(height: 12),
+        const _VisualizationModuleCard(
+          icon: Icons.scatter_plot_outlined,
+          title: 'Scatter & Network',
+          description:
+              'Scatter, heatmap, force-directed networks, chord, sankey.',
+          tags: ['Scatter', 'Network', 'Chord', 'Sankey'],
+          destination: ScatterNetworkPage(),
+        ),
+        const SizedBox(height: 12),
+        const _VisualizationModuleCard(
+          icon: Icons.public_outlined,
+          title: 'Geographic',
+          description:
+              'World map projections, animated globe, regional focus.',
+          tags: ['Mercator', 'Globe', 'Regions'],
+          destination: GeoGalleryPage(),
+        ),
+        const SizedBox(height: 12),
+        const _VisualizationModuleCard(
+          icon: Icons.touch_app_outlined,
+          title: 'Interactions & Utilities',
+          description:
+              'Hover, brush selection, zoom/pan, scale types, wordcloud.',
+          tags: ['Interactive', 'Brush', 'Zoom'],
+          destination: InteractionsPage(),
         ),
       ],
     );
   }
 }
 
+// ---------------------------------------------------------------------------
+// _VisualizationModuleCard  (unchanged API, updated implementation)
+// ---------------------------------------------------------------------------
+
 class _VisualizationModuleCard extends StatelessWidget {
   const _VisualizationModuleCard({
+    required this.icon,
     required this.title,
     required this.description,
-    required this.icon,
     required this.tags,
     required this.destination,
   });
 
+  final IconData icon;
   final String title;
   final String description;
-  final IconData icon;
   final List<String> tags;
   final Widget destination;
 
