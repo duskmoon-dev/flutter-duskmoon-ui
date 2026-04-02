@@ -1,0 +1,101 @@
+// Generated from: assets/south-america/venezuela.50m.json
+// ignore_for_file: lines_longer_than_80_chars
+
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/widgets.dart';
+import 'package:duskmoon_visualization/src/vendor/dv_geo_core/dv_geo_core.dart';
+import 'package:duskmoon_visualization/src/vendor/dv_point/dv_point.dart';
+import 'package:duskmoon_visualization/src/vendor/dv_map/src/map_widget.dart';
+
+/// Gzipped GeoJSON data for south-america/venezuela.50m.json (base64 encoded)
+const String _kCompressedData =
+    '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';
+
+/// Cached parsed GeoJSON
+GeoJsonFeatureCollection? _cached;
+
+/// Parses the GeoJSON for south-america/venezuela.50m.json
+///
+/// The data is stored as gzipped binary to reduce package size.
+/// First access decompresses and parses; subsequent accesses use cached result.
+GeoJsonFeatureCollection get southAmericaVenezuela50m {
+  if (_cached != null) return _cached!;
+
+  // Decode base64 and decompress
+  final compressed = base64Decode(_kCompressedData);
+  final decompressed = gzip.decode(compressed);
+  final jsonString = utf8.decode(decompressed);
+
+  // Parse GeoJSON
+  final data = parseGeoJson(
+    jsonDecode(jsonString) as Map<String, dynamic>,
+  );
+
+  if (data is! GeoJsonFeatureCollection) {
+    throw StateError('Invalid GeoJSON format');
+  }
+
+  _cached = data;
+  return _cached!;
+}
+
+/// Widget for rendering the south-america/venezuela.50m.json map.
+///
+/// This widget provides a convenient way to render this specific map
+/// with customizable projection and styling.
+///
+/// Example:
+/// ```dart
+/// Venezuela50mWidget(
+///   projection: MercatorProjection(),
+///   fillColor: Color(0xFFE0E0E0),
+///   strokeColor: Color(0xFF333333),
+///   onFeatureTap: (feature, position) {
+///     print('Tapped: ${feature.properties}');
+///   },
+/// )
+/// ```
+class Venezuela50mWidget extends StatelessWidget {
+  /// The projection to use for rendering.
+  final Projection projection;
+
+  /// The color to use for filling shapes.
+  final Color? fillColor;
+
+  /// The color to use for stroking shapes.
+  final Color? strokeColor;
+
+  /// The stroke width for shape outlines.
+  final double strokeWidth;
+
+  /// Optional callback when a feature is tapped.
+  final void Function(GeoJsonFeature feature, Point position)? onFeatureTap;
+
+  /// Whether to enable anti-aliasing.
+  final bool antiAlias;
+
+  /// Creates a Venezuela50mWidget.
+  const Venezuela50mWidget({
+    super.key,
+    required this.projection,
+    this.fillColor,
+    this.strokeColor,
+    this.strokeWidth = 1.0,
+    this.onFeatureTap,
+    this.antiAlias = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MapWidget(
+      geoJson: southAmericaVenezuela50m,
+      projection: projection,
+      fillColor: fillColor,
+      strokeColor: strokeColor,
+      strokeWidth: strokeWidth,
+      onFeatureTap: onFeatureTap,
+      antiAlias: antiAlias,
+    );
+  }
+}

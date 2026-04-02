@@ -1,0 +1,101 @@
+// Generated from: assets/africa/democratic-republic-of-the-congo.50m.json
+// ignore_for_file: lines_longer_than_80_chars
+
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/widgets.dart';
+import 'package:duskmoon_visualization/src/vendor/dv_geo_core/dv_geo_core.dart';
+import 'package:duskmoon_visualization/src/vendor/dv_point/dv_point.dart';
+import 'package:duskmoon_visualization/src/vendor/dv_map/src/map_widget.dart';
+
+/// Gzipped GeoJSON data for africa/democratic-republic-of-the-congo.50m.json (base64 encoded)
+const String _kCompressedData =
+    'H4sIAAAAAAAAE61dS48mx3G881cMeNYkKrOyXroZEny14ashGDS9kheguAS1OgiC/rsR2VzBZEfLiA/WgaB2OLFVXa98REb+9au3t68//+WHD1//+u3rf/7wzec///jhN5++++7Dt58/fvr+61/hx7+//vhPX//67d+/ent7e/tr/fP+i/Wf1w9++PHTDx9+/PyxfunLf/729vX33/yxfuG3H/746dsfv/n88du3f/vww5//87uP3759+v3b5//+8PabT9//4dPfkd7evv74p0//8U3gt37z29uf9/rzf/nZD7799P3nj99/+P4zfvZPv//x47fffP3TT//29xH+4cOnP374/ONffj6+LxP610/f/eUPP83/76iffvyvj99/8/l/fYjrf//733/5/97eerM13JefX/3iJ+/b/PQ5ov/sB7/71f+JF22fnQyvZT85RLw5+m573vCWnVV/k4g3xt57LoK3tp/ep4iXe8zMQfBmLE95fNnm6rsTvJwNf5OI11dihQle73suPyqed9+drUe0vrypeOExz2DzbX3t09T18Onb533/TTurt5zq+LzNuK/utOOj9eMKWhw7j6PbrXtIixvH1tnONt+0eXyLhw147cy5GZzPF+DGefh4/WSKRw1w2Xa0+1aZ2JR7rlDxHkbnK9pq0sUXx3K3trYTvCavax4+02Fnjoyz5IWYnV16w9YaZ011JSa+j7PxrYg5prwSJz3b/VIZNgc+qroWI6PvuG/kYXnObil/v+tqY3itvfD9cs2cycbXfc7mMl409xUEz9d08ZKPYz1jrX6/ptLO7t6Gup979OzrftbS9tk7tnqN9hiTPUJpuw/1kQTeXIOd3bQ5986l7pds6efc1yMtz5xLPr/ZekTcz29a5uk+JSMD813nYXxxzmrq8Hr3nosNr52R3tTrIKJHxn143Y633c9W8Zy/ut12h5Ghbr/wuc68Xwfd5s4zNRuo8JZvcjy65aqNLuO1NojN3K3PHtvl9fDoLe/r2w1g6mGLmG0lW13XLdLCy/S8H95ubfThQ/16PvhhCztjxOrqYWszV877+ML2S49bu54IgrcONp88Pk+f7b4eYWvs3pp62ppnH+O+mwO+YXhqeNtO+FrrbmyETRhJ4vfbtg/cUIrXB86NjAfbheGNMcYUL+dte+DNZuuRqT8e2/aafXK81uKon+88OGxh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';
+
+/// Cached parsed GeoJSON
+GeoJsonFeatureCollection? _cached;
+
+/// Parses the GeoJSON for africa/democratic-republic-of-the-congo.50m.json
+///
+/// The data is stored as gzipped binary to reduce package size.
+/// First access decompresses and parses; subsequent accesses use cached result.
+GeoJsonFeatureCollection get africaDemocraticRepublicOfTheCongo50m {
+  if (_cached != null) return _cached!;
+
+  // Decode base64 and decompress
+  final compressed = base64Decode(_kCompressedData);
+  final decompressed = gzip.decode(compressed);
+  final jsonString = utf8.decode(decompressed);
+
+  // Parse GeoJSON
+  final data = parseGeoJson(
+    jsonDecode(jsonString) as Map<String, dynamic>,
+  );
+
+  if (data is! GeoJsonFeatureCollection) {
+    throw StateError('Invalid GeoJSON format');
+  }
+
+  _cached = data;
+  return _cached!;
+}
+
+/// Widget for rendering the africa/democratic-republic-of-the-congo.50m.json map.
+///
+/// This widget provides a convenient way to render this specific map
+/// with customizable projection and styling.
+///
+/// Example:
+/// ```dart
+/// DemocraticRepublicOfTheCongo50mWidget(
+///   projection: MercatorProjection(),
+///   fillColor: Color(0xFFE0E0E0),
+///   strokeColor: Color(0xFF333333),
+///   onFeatureTap: (feature, position) {
+///     print('Tapped: ${feature.properties}');
+///   },
+/// )
+/// ```
+class DemocraticRepublicOfTheCongo50mWidget extends StatelessWidget {
+  /// The projection to use for rendering.
+  final Projection projection;
+
+  /// The color to use for filling shapes.
+  final Color? fillColor;
+
+  /// The color to use for stroking shapes.
+  final Color? strokeColor;
+
+  /// The stroke width for shape outlines.
+  final double strokeWidth;
+
+  /// Optional callback when a feature is tapped.
+  final void Function(GeoJsonFeature feature, Point position)? onFeatureTap;
+
+  /// Whether to enable anti-aliasing.
+  final bool antiAlias;
+
+  /// Creates a DemocraticRepublicOfTheCongo50mWidget.
+  const DemocraticRepublicOfTheCongo50mWidget({
+    super.key,
+    required this.projection,
+    this.fillColor,
+    this.strokeColor,
+    this.strokeWidth = 1.0,
+    this.onFeatureTap,
+    this.antiAlias = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MapWidget(
+      geoJson: africaDemocraticRepublicOfTheCongo50m,
+      projection: projection,
+      fillColor: fillColor,
+      strokeColor: strokeColor,
+      strokeWidth: strokeWidth,
+      onFeatureTap: onFeatureTap,
+      antiAlias: antiAlias,
+    );
+  }
+}

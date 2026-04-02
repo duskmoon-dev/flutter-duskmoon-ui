@@ -1,0 +1,101 @@
+// Generated from: assets/asia/turkey.50m.json
+// ignore_for_file: lines_longer_than_80_chars
+
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/widgets.dart';
+import 'package:duskmoon_visualization/src/vendor/dv_geo_core/dv_geo_core.dart';
+import 'package:duskmoon_visualization/src/vendor/dv_point/dv_point.dart';
+import 'package:duskmoon_visualization/src/vendor/dv_map/src/map_widget.dart';
+
+/// Gzipped GeoJSON data for asia/turkey.50m.json (base64 encoded)
+const String _kCompressedData =
+    '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';
+
+/// Cached parsed GeoJSON
+GeoJsonFeatureCollection? _cached;
+
+/// Parses the GeoJSON for asia/turkey.50m.json
+///
+/// The data is stored as gzipped binary to reduce package size.
+/// First access decompresses and parses; subsequent accesses use cached result.
+GeoJsonFeatureCollection get asiaTurkey50m {
+  if (_cached != null) return _cached!;
+
+  // Decode base64 and decompress
+  final compressed = base64Decode(_kCompressedData);
+  final decompressed = gzip.decode(compressed);
+  final jsonString = utf8.decode(decompressed);
+
+  // Parse GeoJSON
+  final data = parseGeoJson(
+    jsonDecode(jsonString) as Map<String, dynamic>,
+  );
+
+  if (data is! GeoJsonFeatureCollection) {
+    throw StateError('Invalid GeoJSON format');
+  }
+
+  _cached = data;
+  return _cached!;
+}
+
+/// Widget for rendering the asia/turkey.50m.json map.
+///
+/// This widget provides a convenient way to render this specific map
+/// with customizable projection and styling.
+///
+/// Example:
+/// ```dart
+/// Turkey50mWidget(
+///   projection: MercatorProjection(),
+///   fillColor: Color(0xFFE0E0E0),
+///   strokeColor: Color(0xFF333333),
+///   onFeatureTap: (feature, position) {
+///     print('Tapped: ${feature.properties}');
+///   },
+/// )
+/// ```
+class Turkey50mWidget extends StatelessWidget {
+  /// The projection to use for rendering.
+  final Projection projection;
+
+  /// The color to use for filling shapes.
+  final Color? fillColor;
+
+  /// The color to use for stroking shapes.
+  final Color? strokeColor;
+
+  /// The stroke width for shape outlines.
+  final double strokeWidth;
+
+  /// Optional callback when a feature is tapped.
+  final void Function(GeoJsonFeature feature, Point position)? onFeatureTap;
+
+  /// Whether to enable anti-aliasing.
+  final bool antiAlias;
+
+  /// Creates a Turkey50mWidget.
+  const Turkey50mWidget({
+    super.key,
+    required this.projection,
+    this.fillColor,
+    this.strokeColor,
+    this.strokeWidth = 1.0,
+    this.onFeatureTap,
+    this.antiAlias = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MapWidget(
+      geoJson: asiaTurkey50m,
+      projection: projection,
+      fillColor: fillColor,
+      strokeColor: strokeColor,
+      strokeWidth: strokeWidth,
+      onFeatureTap: onFeatureTap,
+      antiAlias: antiAlias,
+    );
+  }
+}

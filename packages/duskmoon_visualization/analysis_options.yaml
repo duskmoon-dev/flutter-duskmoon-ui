@@ -1,0 +1,13 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  errors:
+    unintended_html_in_doc_comment: ignore
+    unnecessary_getters_setters: ignore
+    unnecessary_library_name: ignore
+    unnecessary_this: ignore
+    no_leading_underscores_for_local_identifiers: ignore
+    dangling_library_doc_comments: ignore
+    curly_braces_in_flow_control_structures: ignore
+    sort_child_properties_last: ignore
+    file_names: ignore

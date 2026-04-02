@@ -1,0 +1,101 @@
+// Generated from: assets/europe/spain.50m.json
+// ignore_for_file: lines_longer_than_80_chars
+
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/widgets.dart';
+import 'package:duskmoon_visualization/src/vendor/dv_geo_core/dv_geo_core.dart';
+import 'package:duskmoon_visualization/src/vendor/dv_point/dv_point.dart';
+import 'package:duskmoon_visualization/src/vendor/dv_map/src/map_widget.dart';
+
+/// Gzipped GeoJSON data for europe/spain.50m.json (base64 encoded)
+const String _kCompressedData =
+    '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';
+
+/// Cached parsed GeoJSON
+GeoJsonFeatureCollection? _cached;
+
+/// Parses the GeoJSON for europe/spain.50m.json
+///
+/// The data is stored as gzipped binary to reduce package size.
+/// First access decompresses and parses; subsequent accesses use cached result.
+GeoJsonFeatureCollection get europeSpain50m {
+  if (_cached != null) return _cached!;
+
+  // Decode base64 and decompress
+  final compressed = base64Decode(_kCompressedData);
+  final decompressed = gzip.decode(compressed);
+  final jsonString = utf8.decode(decompressed);
+
+  // Parse GeoJSON
+  final data = parseGeoJson(
+    jsonDecode(jsonString) as Map<String, dynamic>,
+  );
+
+  if (data is! GeoJsonFeatureCollection) {
+    throw StateError('Invalid GeoJSON format');
+  }
+
+  _cached = data;
+  return _cached!;
+}
+
+/// Widget for rendering the europe/spain.50m.json map.
+///
+/// This widget provides a convenient way to render this specific map
+/// with customizable projection and styling.
+///
+/// Example:
+/// ```dart
+/// Spain50mWidget(
+///   projection: MercatorProjection(),
+///   fillColor: Color(0xFFE0E0E0),
+///   strokeColor: Color(0xFF333333),
+///   onFeatureTap: (feature, position) {
+///     print('Tapped: ${feature.properties}');
+///   },
+/// )
+/// ```
+class Spain50mWidget extends StatelessWidget {
+  /// The projection to use for rendering.
+  final Projection projection;
+
+  /// The color to use for filling shapes.
+  final Color? fillColor;
+
+  /// The color to use for stroking shapes.
+  final Color? strokeColor;
+
+  /// The stroke width for shape outlines.
+  final double strokeWidth;
+
+  /// Optional callback when a feature is tapped.
+  final void Function(GeoJsonFeature feature, Point position)? onFeatureTap;
+
+  /// Whether to enable anti-aliasing.
+  final bool antiAlias;
+
+  /// Creates a Spain50mWidget.
+  const Spain50mWidget({
+    super.key,
+    required this.projection,
+    this.fillColor,
+    this.strokeColor,
+    this.strokeWidth = 1.0,
+    this.onFeatureTap,
+    this.antiAlias = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MapWidget(
+      geoJson: europeSpain50m,
+      projection: projection,
+      fillColor: fillColor,
+      strokeColor: strokeColor,
+      strokeWidth: strokeWidth,
+      onFeatureTap: onFeatureTap,
+      antiAlias: antiAlias,
+    );
+  }
+}
