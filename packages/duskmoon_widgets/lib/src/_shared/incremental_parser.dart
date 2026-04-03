@@ -282,7 +282,9 @@ class IncrementalParser {
       lineCounter += nodeLineCount;
     }
 
-    startNode ??= 0;
+    // If no node covers the dirty region, it's beyond all known nodes
+    // (append case). Default to nodes.length so replaceRange appends.
+    startNode ??= nodes.length;
     endNode ??= nodes.length;
     return _IntRange(startNode, endNode);
   }
