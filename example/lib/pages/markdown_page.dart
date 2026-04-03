@@ -17,6 +17,7 @@ class _MarkdownPageState extends State<MarkdownPage>
   final _inputController = DmMarkdownInputController();
   StreamController<String>? _streamController;
   Timer? _streamTimer;
+  Key _streamKey = UniqueKey();
 
   static const _sampleMarkdown = '''
 # DmMarkdown Showcase
@@ -125,8 +126,10 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
   void _startStreaming() {
     _streamTimer?.cancel();
     _streamController?.close();
-    _streamController = StreamController<String>();
+    _streamController = StreamController<String>.broadcast();
+    _streamKey = UniqueKey();
     var index = 0;
+    setState(() {});
     _streamTimer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
       if (index < _streamingText.length) {
         _streamController!.add(_streamingText[index]);
@@ -136,7 +139,6 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
         timer.cancel();
       }
     });
-    setState(() {});
   }
 
   @override
@@ -209,6 +211,7 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
         Expanded(
           child: _streamController != null
               ? DmMarkdown(
+                  key: _streamKey,
                   stream: _streamController!.stream,
                   config: const DmMarkdownConfig(enableKatex: true),
                   padding: const EdgeInsets.all(16),
