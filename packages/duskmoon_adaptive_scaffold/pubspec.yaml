@@ -1,0 +1,19 @@
+name: duskmoon_adaptive_scaffold
+description: Adaptive scaffold widgets for DuskMoon Design System, forked from flutter_adaptive_scaffold.
+version: 0.3.3+1
+publish_to: none
+
+resolution: workspace
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
