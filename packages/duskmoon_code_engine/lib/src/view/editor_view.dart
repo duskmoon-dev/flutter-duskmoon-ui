@@ -19,6 +19,13 @@ class EditorView extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Notify all listeners without dispatching a transaction.
+  ///
+  /// Useful when external state (e.g. theme) changes and the view should
+  /// redraw without modifying the document or selection.
+  // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+  void invalidate() => notifyListeners();
+
   Output facet<Input, Output>(Facet<Input, Output> facet) =>
       _state.facet(facet);
 

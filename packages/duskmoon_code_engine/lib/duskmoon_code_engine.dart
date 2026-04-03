@@ -61,6 +61,7 @@ export 'src/theme/editor_theme.dart' show EditorTheme;
 export 'src/theme/default_highlight.dart' show defaultLightHighlight, defaultDarkHighlight;
 
 // View
+export 'src/view/editor_view_controller.dart' show EditorViewController;
 export 'src/view/viewport.dart' show EditorViewport;
 export 'src/view/highlight_builder.dart' show InlineSpan, HighlightBuilder;
 export 'src/view/editor_view.dart' show EditorView;
