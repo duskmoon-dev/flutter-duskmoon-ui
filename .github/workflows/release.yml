@@ -67,7 +67,7 @@ jobs:
           done
 
           # Packages that depend on duskmoon_widgets
-          for pubspec in packages/duskmoon_form/pubspec.yaml; do
+          for pubspec in packages/duskmoon_settings/pubspec.yaml packages/duskmoon_form/pubspec.yaml; do
             sed -i '/^  duskmoon_widgets:$/,/^    path: .*$/c\  duskmoon_widgets: ^'"$VERSION" "$pubspec"
             sed -i 's/^  duskmoon_widgets: \^.*$/  duskmoon_widgets: ^'"$VERSION"'/' "$pubspec"
           done
