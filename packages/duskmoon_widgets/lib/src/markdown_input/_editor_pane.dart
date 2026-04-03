@@ -52,9 +52,30 @@ class _EditorPaneState extends State<EditorPane> {
   static const _editorPadding = EdgeInsets.all(12);
 
   @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_onTextChanged);
+  }
+
+  @override
+  void didUpdateWidget(EditorPane oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_onTextChanged);
+      widget.controller.addListener(_onTextChanged);
+    }
+  }
+
+  @override
   void dispose() {
+    widget.controller.removeListener(_onTextChanged);
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onTextChanged() {
+    // Rebuild to update line count in the gutter.
+    setState(() {});
   }
 
   @override
