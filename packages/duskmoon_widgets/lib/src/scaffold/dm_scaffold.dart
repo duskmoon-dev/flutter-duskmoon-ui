@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+import 'package:duskmoon_adaptive_scaffold/duskmoon_adaptive_scaffold.dart';
 
-export 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+export 'package:duskmoon_adaptive_scaffold/duskmoon_adaptive_scaffold.dart';
 
 /// A convenience wrapper around [AdaptiveScaffold] that exposes named
 /// breakpoint constants and shorter parameter names for breakpoints.
