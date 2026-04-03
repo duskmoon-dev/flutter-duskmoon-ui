@@ -72,7 +72,7 @@ jobs:
             sed -i 's/^  duskmoon_widgets: \^.*$/  duskmoon_widgets: ^'"$VERSION"'/' "$pubspec"
           done
 
-          for dep in duskmoon_theme duskmoon_widgets duskmoon_settings duskmoon_feedback; do
+          for dep in duskmoon_theme duskmoon_theme_bloc duskmoon_widgets duskmoon_settings duskmoon_feedback duskmoon_visualization duskmoon_form; do
             # Handle path dep format
             sed -i '/^  '"$dep"':$/,/^    path: .*$/c\  '"$dep"': ^'"$VERSION" packages/duskmoon_ui/pubspec.yaml
             # Handle hosted dep format
