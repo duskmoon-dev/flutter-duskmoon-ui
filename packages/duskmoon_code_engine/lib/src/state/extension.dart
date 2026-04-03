@@ -1,3 +1,5 @@
+part 'state_field.dart';
+
 /// The base type for all editor extensions.
 sealed class Extension {
   const Extension();
