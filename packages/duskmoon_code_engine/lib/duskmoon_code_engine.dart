@@ -25,5 +25,8 @@ export 'src/state/extension.dart'
         prec,
         Compartment,
         CompartmentExtension,
-        StateField;
+        StateField,
+        Facet,
+        FacetExtension,
+        FacetStore;
 export 'src/state/state_effect.dart' show StateEffectType, StateEffect;

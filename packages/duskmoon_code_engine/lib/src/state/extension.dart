@@ -2,6 +2,7 @@ import 'state_effect.dart';
 
 part 'compartment.dart';
 part 'state_field.dart';
+part 'facet.dart';
 
 /// The base type for all editor extensions.
 sealed class Extension {
