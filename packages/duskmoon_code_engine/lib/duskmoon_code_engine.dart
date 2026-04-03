@@ -35,3 +35,4 @@ export 'src/state/editor_state.dart'
 
 // Lezer common
 export 'src/lezer/common/node_type.dart' show NodeProp, NodeType, NodeSet;
+export 'src/lezer/common/tree.dart' show Tree, TreeBuffer, SyntaxNode, TreeCursor;
