@@ -54,29 +54,17 @@ jobs:
             sed -i '/^publish_to: none$/d' "$pubspec"
           done
 
-          # Replace internal dependencies with hosted version constraints
-          # Handles both path format and existing hosted format:
-          #   duskmoon_theme:        OR   duskmoon_theme: ^x.y.z
-          #     path: ../...
-          # Packages that depend on duskmoon_theme
-          for pubspec in packages/duskmoon_widgets/pubspec.yaml packages/duskmoon_settings/pubspec.yaml packages/duskmoon_feedback/pubspec.yaml packages/duskmoon_theme_bloc/pubspec.yaml packages/duskmoon_form/pubspec.yaml; do
-            # Handle path dep format (two lines)
-            sed -i '/^  duskmoon_theme:$/,/^    path: .*$/c\  duskmoon_theme: ^'"$VERSION" "$pubspec"
-            # Handle hosted dep format (single line)
-            sed -i 's/^  duskmoon_theme: \^.*$/  duskmoon_theme: ^'"$VERSION"'/' "$pubspec"
-          done
-
-          # Packages that depend on duskmoon_widgets
-          for pubspec in packages/duskmoon_settings/pubspec.yaml packages/duskmoon_form/pubspec.yaml; do
-            sed -i '/^  duskmoon_widgets:$/,/^    path: .*$/c\  duskmoon_widgets: ^'"$VERSION" "$pubspec"
-            sed -i 's/^  duskmoon_widgets: \^.*$/  duskmoon_widgets: ^'"$VERSION"'/' "$pubspec"
-          done
-
-          for dep in duskmoon_theme duskmoon_theme_bloc duskmoon_widgets duskmoon_settings duskmoon_feedback duskmoon_visualization duskmoon_form; do
-            # Handle path dep format
-            sed -i '/^  '"$dep"':$/,/^    path: .*$/c\  '"$dep"': ^'"$VERSION" packages/duskmoon_ui/pubspec.yaml
-            # Handle hosted dep format
-            sed -i 's/^  '"$dep"': \^.*$/  '"$dep"': ^'"$VERSION"'/' packages/duskmoon_ui/pubspec.yaml
+          # Replace ALL internal duskmoon_* dependencies with hosted version
+          # constraints across every package pubspec in one pass.
+          # Handles both formats:
+          #   duskmoon_foo: ^x.y.z   (hosted, single line)
+          #   duskmoon_foo:          (path dep, two lines)
+          #     path: ../duskmoon_foo
+          for pubspec in packages/*/pubspec.yaml; do
+            # Convert path-dep blocks (two lines) to hosted constraint first
+            perl -i -0pe 's/^  (duskmoon_\w+):\n    path: [^\n]+/  $1: ^'"$VERSION"'/mg' "$pubspec"
+            # Update any remaining hosted constraints
+            sed -i 's/^  \(duskmoon_[a-z_]*\): \^.*$/  \1: ^'"$VERSION"'/' "$pubspec"
           done
 
       - name: Re-resolve dependencies
