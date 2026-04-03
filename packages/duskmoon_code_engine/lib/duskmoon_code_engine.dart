@@ -30,3 +30,5 @@ export 'src/state/extension.dart'
         FacetExtension,
         FacetStore;
 export 'src/state/state_effect.dart' show StateEffectType, StateEffect;
+export 'src/state/editor_state.dart'
+    show EditorState, TransactionSpec, Transaction;
