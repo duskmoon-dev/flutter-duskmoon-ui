@@ -22,14 +22,16 @@ void main() {
       await tester.tap(find.text('Visualization'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Curated Charts'), findsOneWidget);
-      expect(find.text('Geo Projection Lab'), findsOneWidget);
+      expect(find.text('DmViz Charts'), findsOneWidget);
+
+      await tester.scrollUntilVisible(find.text('Geographic'), 300);
+      expect(find.text('Geographic'), findsOneWidget);
 
       await tester.scrollUntilVisible(
-        find.text('Interactive Hover Demo'),
+        find.text('Interactions & Utilities'),
         300,
       );
-      expect(find.text('Interactive Hover Demo'), findsOneWidget);
+      expect(find.text('Interactions & Utilities'), findsOneWidget);
     });
 
     testWidgets('visualization module page renders migrated cards', (
@@ -38,14 +40,16 @@ void main() {
       await tester.pumpWidget(const MaterialApp(home: VisualizationPage()));
       await tester.pumpAndSettle();
 
-      expect(find.text('Curated Charts'), findsOneWidget);
-      expect(find.text('Geo Projection Lab'), findsOneWidget);
+      expect(find.text('DmViz Charts'), findsOneWidget);
+
+      await tester.scrollUntilVisible(find.text('Geographic'), 300);
+      expect(find.text('Geographic'), findsOneWidget);
 
       await tester.scrollUntilVisible(
-        find.text('Interactive Hover Demo'),
+        find.text('Interactions & Utilities'),
         300,
       );
-      expect(find.text('Interactive Hover Demo'), findsOneWidget);
+      expect(find.text('Interactions & Utilities'), findsOneWidget);
     });
 
     testWidgets('chart gallery screen builds', (tester) async {
