@@ -1,6 +1,6 @@
 name: duskmoon_ui
 description: DuskMoon UI — umbrella package re-exporting all DuskMoon Flutter packages
-version: 1.0.3
+version: 1.1.0
 homepage: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 repository: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 issue_tracker: https://github.com/duskmoon-dev/flutter_duskmoon_ui/issues
@@ -20,13 +20,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  duskmoon_theme: ^1.0.3
-  duskmoon_theme_bloc: ^1.0.3
-  duskmoon_widgets: ^1.0.3
-  duskmoon_settings: ^1.0.3
-  duskmoon_feedback: ^1.0.3
-  duskmoon_visualization: ^0.1.0
-  duskmoon_form: ^1.0.3
+  duskmoon_theme: ^1.1.0
+  duskmoon_theme_bloc: ^1.1.0
+  duskmoon_widgets: ^1.1.0
+  duskmoon_settings: ^1.1.0
+  duskmoon_feedback: ^1.1.0
+  duskmoon_visualization: ^1.1.0
+  duskmoon_form: ^1.1.0
 
 dev_dependencies:
   flutter_test:
