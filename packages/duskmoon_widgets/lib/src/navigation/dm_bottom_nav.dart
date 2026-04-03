@@ -48,6 +48,15 @@ class DmBottomNav extends StatelessWidget with AdaptiveWidget {
               )
               .toList(),
         ),
+      DmPlatformStyle.fluent => NavigationBar(
+          selectedIndex: selectedIndex,
+          onDestinationSelected: onDestinationSelected,
+          destinations: destinations
+              .map(
+                (d) => NavigationDestination(icon: d.icon, label: d.label),
+              )
+              .toList(),
+        ),
     };
   }
 }

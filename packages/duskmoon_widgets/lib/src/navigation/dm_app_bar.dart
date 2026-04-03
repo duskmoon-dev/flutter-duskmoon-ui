@@ -53,6 +53,12 @@ class DmAppBar extends StatelessWidget
               : null,
           automaticallyImplyLeading: automaticallyImplyLeading,
         ),
+      DmPlatformStyle.fluent => AppBar(
+          title: title,
+          leading: leading,
+          actions: actions,
+          automaticallyImplyLeading: automaticallyImplyLeading,
+        ),
     };
   }
 }

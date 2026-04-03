@@ -40,6 +40,11 @@ class DmIconButton extends StatelessWidget with AdaptiveWidget {
           onPressed: onPressed,
           child: icon,
         ),
+      DmPlatformStyle.fluent => IconButton(
+          icon: icon,
+          onPressed: onPressed,
+          tooltip: tooltip,
+        ),
     };
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:duskmoon_widgets/duskmoon_widgets.dart'
+    show DmPlatformStyle, resolvePlatformStyle;
 import 'package:duskmoon_settings/src/list/abstract_settings_list.dart';
 import 'package:duskmoon_settings/src/list/platforms/cupertino_settings_list.dart';
 import 'package:duskmoon_settings/src/list/platforms/fluent_settings_list.dart';
@@ -23,38 +25,42 @@ class SettingsList extends AbstractSettingsList {
 
   @override
   Widget build(BuildContext context) {
-    final effectivePlatform = platform ?? DevicePlatform.fromContext(context);
+    // Keep DevicePlatform.fromContext for sub-lists (they may use it internally).
+    final resolvedPlatform = platform ?? DevicePlatform.fromContext(context);
 
-    switch (effectivePlatform) {
-      case DevicePlatform.android:
-      case DevicePlatform.fuchsia:
-      case DevicePlatform.linux:
-      case DevicePlatform.web:
-      case DevicePlatform.custom:
-        return MaterialSettingsList(
+    // Convert the explicit DevicePlatform override (if any) to DmPlatformStyle
+    // so DuskmoonApp (L3) is honoured when platform is null.
+    final DmPlatformStyle? platformOverride = switch (platform) {
+      null => null,
+      DevicePlatform.iOS || DevicePlatform.macOS => DmPlatformStyle.cupertino,
+      DevicePlatform.windows => DmPlatformStyle.fluent,
+      _ => DmPlatformStyle.material,
+    };
+
+    final style = resolvePlatformStyle(context, widgetOverride: platformOverride);
+
+    return switch (style) {
+      DmPlatformStyle.cupertino => CupertinoSettingsList(
           sections: sections,
           shrinkWrap: shrinkWrap,
           physics: physics,
-          platform: effectivePlatform,
+          platform: resolvedPlatform,
           contentPadding: contentPadding,
-        );
-      case DevicePlatform.iOS:
-      case DevicePlatform.macOS:
-        return CupertinoSettingsList(
+        ),
+      DmPlatformStyle.fluent => FluentSettingsList(
           sections: sections,
           shrinkWrap: shrinkWrap,
           physics: physics,
-          platform: effectivePlatform,
+          platform: resolvedPlatform,
           contentPadding: contentPadding,
-        );
-      case DevicePlatform.windows:
-        return FluentSettingsList(
+        ),
+      DmPlatformStyle.material => MaterialSettingsList(
           sections: sections,
           shrinkWrap: shrinkWrap,
           physics: physics,
-          platform: effectivePlatform,
+          platform: resolvedPlatform,
           contentPadding: contentPadding,
-        );
-    }
+        ),
+    };
   }
 }
