@@ -42,4 +42,7 @@ local.properties
 !/.claude/commands/
 !/.claude/skills/
 
+# git worktrees
+/.trees/
+
 
