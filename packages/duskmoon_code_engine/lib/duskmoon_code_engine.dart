@@ -51,3 +51,7 @@ export 'src/lezer/lr/lr_parser.dart' show LRParser;
 export 'src/language/language.dart' show Language, LanguageSupport;
 export 'src/language/language_data.dart' show LanguageData, CommentTokens;
 export 'src/language/syntax.dart' show syntaxTree, syntaxTreeAvailable;
+
+// Grammars
+export 'src/grammars/_registry.dart' show LanguageRegistry;
+export 'src/grammars/json.dart' show jsonLanguageSupport, jsonHighlightMapping;
