@@ -3,16 +3,16 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('NodeProp', () {
-    test('predefined bool props are the same canonical const instance', () {
-      // In Dart, identical const constructors with the same type args canonicalize
-      // to the same object; NodeProp.error/top/skipped are all NodeProp<bool>().
-      expect(NodeProp.error, same(NodeProp.top));
-      expect(NodeProp.error, same(NodeProp.skipped));
+    test('predefined bool props are distinct instances', () {
+      // NodeProp uses final (not const) to ensure distinct identity
+      expect(NodeProp.error, isNot(same(NodeProp.top)));
+      expect(NodeProp.error, isNot(same(NodeProp.skipped)));
+      expect(NodeProp.top, isNot(same(NodeProp.skipped)));
     });
 
-    test('predefined List<String> props are the same canonical const instance', () {
-      expect(NodeProp.closedBy, same(NodeProp.openedBy));
-      expect(NodeProp.closedBy, same(NodeProp.group));
+    test('predefined List<String> props are distinct instances', () {
+      expect(NodeProp.closedBy, isNot(same(NodeProp.openedBy)));
+      expect(NodeProp.closedBy, isNot(same(NodeProp.group)));
     });
 
     test('closedBy and openedBy are predefined', () {
@@ -25,19 +25,17 @@ void main() {
     });
 
     test('custom NodeProp can be created', () {
-      const customProp = NodeProp<String>();
+      final customProp = NodeProp<String>();
       expect(customProp, isA<NodeProp<String>>());
     });
 
-    test('const NodeProp instances with the same type arg canonicalize', () {
-      const propA = NodeProp<int>();
-      const propB = NodeProp<int>();
-      // Dart const canonicalization: propA and propB are identical.
-      expect(propA, same(propB));
-      final node = NodeType('x', 1, props: {propA: 42});
+    test('distinct NodeProp instances serve as independent keys', () {
+      final propA = NodeProp<int>();
+      final propB = NodeProp<int>();
+      expect(propA, isNot(same(propB)));
+      final node = NodeType('x', 1, props: {propA: 42, propB: 99});
       expect(node.prop(propA), 42);
-      // propB is the same key, so it also returns 42
-      expect(node.prop(propB), 42);
+      expect(node.prop(propB), 99);
     });
   });
 

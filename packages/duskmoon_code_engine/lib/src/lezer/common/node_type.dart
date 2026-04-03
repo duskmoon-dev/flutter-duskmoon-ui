@@ -1,13 +1,29 @@
 /// A property that can be attached to a [NodeType].
+///
+/// Properties are identified by reference identity. Each static
+/// field is a distinct instance created with `final` (not `const`)
+/// to avoid Dart's const canonicalization merging same-type props.
 class NodeProp<T> {
-  const NodeProp();
+  /// Create a new property. Use `final` (not `const`) for distinct identity.
+  NodeProp();
 
-  static const NodeProp<bool> error = NodeProp<bool>();
-  static const NodeProp<bool> top = NodeProp<bool>();
-  static const NodeProp<bool> skipped = NodeProp<bool>();
-  static const NodeProp<List<String>> closedBy = NodeProp<List<String>>();
-  static const NodeProp<List<String>> openedBy = NodeProp<List<String>>();
-  static const NodeProp<List<String>> group = NodeProp<List<String>>();
+  /// Marks a node as an error (recovery) node.
+  static final NodeProp<bool> error = NodeProp<bool>();
+
+  /// Marks a node as top-level (root grammar node).
+  static final NodeProp<bool> top = NodeProp<bool>();
+
+  /// Marks a node as skipped (whitespace, comments).
+  static final NodeProp<bool> skipped = NodeProp<bool>();
+
+  /// Names of tokens that close this node.
+  static final NodeProp<List<String>> closedBy = NodeProp<List<String>>();
+
+  /// Names of tokens that open this node.
+  static final NodeProp<List<String>> openedBy = NodeProp<List<String>>();
+
+  /// Group name(s) for highlight tagging.
+  static final NodeProp<List<String>> group = NodeProp<List<String>>();
 }
 
 /// Describes the type of a syntax tree node.
