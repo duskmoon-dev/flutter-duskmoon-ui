@@ -44,22 +44,22 @@ class TestScaffold extends StatefulWidget {
 
   static const List<NavigationDestination> destinations =
       <NavigationDestination>[
-        NavigationDestination(
-          key: Key('Inbox'),
-          icon: Icon(Icons.inbox),
-          label: 'Inbox',
-        ),
-        NavigationDestination(
-          key: Key('Articles'),
-          icon: Icon(Icons.article),
-          label: 'Articles',
-        ),
-        NavigationDestination(
-          key: Key('Chat'),
-          icon: Icon(Icons.chat),
-          label: 'Chat',
-        ),
-      ];
+    NavigationDestination(
+      key: Key('Inbox'),
+      icon: Icon(Icons.inbox),
+      label: 'Inbox',
+    ),
+    NavigationDestination(
+      key: Key('Articles'),
+      icon: Icon(Icons.article),
+      label: 'Articles',
+    ),
+    NavigationDestination(
+      key: Key('Chat'),
+      icon: Icon(Icons.chat),
+      label: 'Chat',
+    ),
+  ];
 
   @override
   State<TestScaffold> createState() => TestScaffoldState();
@@ -152,8 +152,8 @@ enum SimulatedLayout {
     required double width,
     double height = 2000,
     required this.navSlotKey,
-  }) : _width = width,
-       _height = height;
+  })  : _width = width,
+        _height = height;
 
   final double _width;
   final double _height;

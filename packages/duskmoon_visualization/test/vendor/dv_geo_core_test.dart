@@ -88,7 +88,10 @@ void main() {
 
   group('GeoJSON', () {
     test('parses Point', () {
-      final json = {'type': 'Point', 'coordinates': [100.0, 0.0]};
+      final json = {
+        'type': 'Point',
+        'coordinates': [100.0, 0.0]
+      };
       final point = GeoJsonGeometry.fromJson(json) as GeoJsonPoint;
       expect(point.longitude, equals(100.0));
       expect(point.latitude, equals(0.0));
@@ -126,7 +129,10 @@ void main() {
     test('parses Feature', () {
       final json = {
         'type': 'Feature',
-        'geometry': {'type': 'Point', 'coordinates': [100.0, 0.0]},
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [100.0, 0.0]
+        },
         'properties': {'name': 'Test'},
       };
       final feature = GeoJsonFeature.fromJson(json);
@@ -140,7 +146,10 @@ void main() {
         'features': [
           {
             'type': 'Feature',
-            'geometry': {'type': 'Point', 'coordinates': [100.0, 0.0]},
+            'geometry': {
+              'type': 'Point',
+              'coordinates': [100.0, 0.0]
+            },
             'properties': {},
           },
         ],

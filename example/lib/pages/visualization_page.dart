@@ -52,8 +52,7 @@ class VisualizationPage extends StatelessWidget {
         const _VisualizationModuleCard(
           icon: Icons.pie_chart_outline,
           title: 'Radial & Hierarchy',
-          description:
-              'Pie, radar, radial bar, and box plot charts.',
+          description: 'Pie, radar, radial bar, and box plot charts.',
           tags: ['Pie', 'Radar', 'Radial', 'BoxPlot'],
           destination: RadialPage(),
         ),
@@ -70,8 +69,7 @@ class VisualizationPage extends StatelessWidget {
         const _VisualizationModuleCard(
           icon: Icons.public_outlined,
           title: 'Geographic',
-          description:
-              'World map projections, animated globe, regional focus.',
+          description: 'World map projections, animated globe, regional focus.',
           tags: ['Mercator', 'Globe', 'Regions'],
           destination: GeoGalleryPage(),
         ),

@@ -81,16 +81,17 @@ class SlotLayout extends StatefulWidget {
     Curve? inCurve,
     Curve? outCurve,
     required Key key,
-  }) => SlotLayoutConfig._(
-    builder: builder,
-    inAnimation: inAnimation,
-    outAnimation: outAnimation,
-    inDuration: inDuration,
-    outDuration: outDuration,
-    inCurve: inCurve,
-    outCurve: outCurve,
-    key: key,
-  );
+  }) =>
+      SlotLayoutConfig._(
+        builder: builder,
+        inAnimation: inAnimation,
+        outAnimation: outAnimation,
+        inDuration: inDuration,
+        outDuration: outDuration,
+        inCurve: inCurve,
+        outCurve: outCurve,
+        key: key,
+      );
 
   @override
   State<SlotLayout> createState() => _SlotLayoutState();

@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:duskmoon_visualization/src/vendor/dv_vendor/dv_vendor.dart' as dv;
+import 'package:duskmoon_visualization/src/vendor/dv_vendor/dv_vendor.dart'
+    as dv;
 
 void main() {
   group('Array functions', () {

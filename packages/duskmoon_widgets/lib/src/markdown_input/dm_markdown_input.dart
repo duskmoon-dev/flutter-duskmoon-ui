@@ -199,7 +199,8 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.edit_note, size: 18, color: colorScheme.onSurfaceVariant),
+                    Icon(Icons.edit_note,
+                        size: 18, color: colorScheme.onSurfaceVariant),
                     const SizedBox(width: 6),
                     Text(widget.tabLabelWrite),
                   ],
@@ -209,7 +210,8 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.visibility, size: 18, color: colorScheme.onSurfaceVariant),
+                    Icon(Icons.visibility,
+                        size: 18, color: colorScheme.onSurfaceVariant),
                     const SizedBox(width: 6),
                     Text(widget.tabLabelPreview),
                   ],

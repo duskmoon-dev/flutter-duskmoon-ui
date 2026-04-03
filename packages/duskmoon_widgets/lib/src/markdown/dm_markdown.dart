@@ -40,12 +40,12 @@ class DmMarkdown extends StatefulWidget {
     this.onImageTap,
     this.imageErrorBuilder,
   }) : assert(
-         (data != null ? 1 : 0) +
-                 (nodes != null ? 1 : 0) +
-                 (stream != null ? 1 : 0) ==
-             1,
-         'Exactly one of data, nodes, or stream must be provided',
-       );
+          (data != null ? 1 : 0) +
+                  (nodes != null ? 1 : 0) +
+                  (stream != null ? 1 : 0) ==
+              1,
+          'Exactly one of data, nodes, or stream must be provided',
+        );
 
   /// Raw markdown string — parsed internally.
   final String? data;
@@ -216,9 +216,7 @@ class _DmMarkdownState extends State<DmMarkdown> {
       controller: widget.controller,
       shrinkWrap: widget.shrinkWrap,
       physics: widget.physics ??
-          (widget.shrinkWrap
-              ? const NeverScrollableScrollPhysics()
-              : null),
+          (widget.shrinkWrap ? const NeverScrollableScrollPhysics() : null),
       padding: widget.padding ?? const EdgeInsets.all(16),
       itemCount: widgets.length,
       itemBuilder: (_, index) => widgets[index],

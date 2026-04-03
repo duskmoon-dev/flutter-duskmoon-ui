@@ -279,7 +279,8 @@ class BlockWidgetBuilder {
 
     if (inlineNodes.isNotEmpty) {
       widgets.add(Text.rich(
-        _inlineBuilder.buildSpan(inlineNodes, parentStyle: textTheme.bodyMedium),
+        _inlineBuilder.buildSpan(inlineNodes,
+            parentStyle: textTheme.bodyMedium),
       ));
     }
 
@@ -400,7 +401,8 @@ class BlockWidgetBuilder {
 
   Widget _buildCodeBlock(md.Element element) {
     // A <pre> element typically contains a single <code> child.
-    final codeElement = (element.children ?? []).whereType<md.Element>().firstOrNull;
+    final codeElement =
+        (element.children ?? []).whereType<md.Element>().firstOrNull;
     final code = codeElement?.textContent ?? element.textContent;
 
     // Extract language from class attribute (e.g. "language-dart").

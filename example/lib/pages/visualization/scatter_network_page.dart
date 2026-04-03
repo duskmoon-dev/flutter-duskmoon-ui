@@ -32,8 +32,7 @@ class ScatterNetworkPage extends StatelessWidget {
           const SizedBox(height: 16),
           const _ChartCard(
             title: 'Scatter Plot',
-            description:
-                'Bubble scatter with two groups and variable radius.',
+            description: 'Bubble scatter with two groups and variable radius.',
             height: 280,
             child: _ScatterPlot(),
           ),
@@ -48,8 +47,7 @@ class ScatterNetworkPage extends StatelessWidget {
           const SizedBox(height: 16),
           const _ChartCard(
             title: 'Force-Directed Network Graph',
-            description:
-                'Animated force-directed graph with 15 nodes.',
+            description: 'Animated force-directed graph with 15 nodes.',
             height: 320,
             child: _ForceGraph(),
           ),
@@ -64,8 +62,7 @@ class ScatterNetworkPage extends StatelessWidget {
           const SizedBox(height: 16),
           const _ChartCard(
             title: 'Sankey Diagram',
-            description:
-                'Energy flow from sources to consumption end-uses.',
+            description: 'Energy flow from sources to consumption end-uses.',
             height: 300,
             child: _SankeyDiagram(),
           ),
@@ -231,10 +228,14 @@ class _ScatterPainter extends CustomPainter {
 
     // Legend
     final legendStyle = TextStyle(color: colorScheme.onSurface, fontSize: 10);
-    canvas.drawCircle(Offset(w - 80, 8), 5, Paint()..color = colorScheme.primary.withValues(alpha: 0.7));
-    _drawText(canvas, 'Group A', Offset(w - 72, 8), legendStyle, align: TextAlign.left, baseline: true);
-    canvas.drawCircle(Offset(w - 80, 22), 5, Paint()..color = colorScheme.tertiary.withValues(alpha: 0.7));
-    _drawText(canvas, 'Group B', Offset(w - 72, 22), legendStyle, align: TextAlign.left, baseline: true);
+    canvas.drawCircle(Offset(w - 80, 8), 5,
+        Paint()..color = colorScheme.primary.withValues(alpha: 0.7));
+    _drawText(canvas, 'Group A', Offset(w - 72, 8), legendStyle,
+        align: TextAlign.left, baseline: true);
+    canvas.drawCircle(Offset(w - 80, 22), 5,
+        Paint()..color = colorScheme.tertiary.withValues(alpha: 0.7));
+    _drawText(canvas, 'Group B', Offset(w - 72, 22), legendStyle,
+        align: TextAlign.left, baseline: true);
 
     canvas.restore();
   }
@@ -294,8 +295,18 @@ class _HeatmapPainter extends CustomPainter {
 
   static final _days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   static final _months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
   Color _heatColor(double v) {
@@ -317,7 +328,8 @@ class _HeatmapPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final rng = math.Random(42);
-    final data = List.generate(7, (_) => List.generate(12, (_) => rng.nextDouble() * 100));
+    final data = List.generate(
+        7, (_) => List.generate(12, (_) => rng.nextDouble() * 100));
 
     const margin = EdgeInsets.fromLTRB(36, 8, 8, 28);
     final w = size.width - margin.left - margin.right;
@@ -330,7 +342,8 @@ class _HeatmapPainter extends CustomPainter {
 
     for (var row = 0; row < 7; row++) {
       for (var col = 0; col < 12; col++) {
-        final rect = Rect.fromLTWH(col * cellW, row * cellH, cellW - 1, cellH - 1);
+        final rect =
+            Rect.fromLTWH(col * cellW, row * cellH, cellW - 1, cellH - 1);
         canvas.drawRRect(
           RRect.fromRectAndRadius(rect, const Radius.circular(2)),
           Paint()..color = _heatColor(data[row][col]),
@@ -341,12 +354,16 @@ class _HeatmapPainter extends CustomPainter {
     // Row labels (days)
     final labelStyle = TextStyle(color: colorScheme.onSurface, fontSize: 9);
     for (var row = 0; row < 7; row++) {
-      _drawText(canvas, _days[row], Offset(-4, row * cellH + cellH / 2), labelStyle, baseline: true);
+      _drawText(
+          canvas, _days[row], Offset(-4, row * cellH + cellH / 2), labelStyle,
+          baseline: true);
     }
 
     // Column labels (months)
     for (var col = 0; col < 12; col++) {
-      _drawText(canvas, _months[col], Offset(col * cellW + cellW / 2, h + 3), labelStyle, center: true);
+      _drawText(canvas, _months[col], Offset(col * cellW + cellW / 2, h + 3),
+          labelStyle,
+          center: true);
     }
 
     canvas.restore();
@@ -572,7 +589,8 @@ class _ForceGraphPainter extends CustomPainter {
     // Nodes
     for (final node in nodes) {
       final center = nodeOffset(node.id);
-      canvas.drawCircle(center, 12, Paint()..color = node.color.withValues(alpha: 0.85));
+      canvas.drawCircle(
+          center, 12, Paint()..color = node.color.withValues(alpha: 0.85));
       canvas.drawCircle(
         center,
         12,
@@ -585,7 +603,8 @@ class _ForceGraphPainter extends CustomPainter {
       final tp = TextPainter(
         text: TextSpan(
           text: '${node.id + 1}',
-          style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+              color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold),
         ),
         textDirection: TextDirection.ltr,
       )..layout();
@@ -623,7 +642,13 @@ class _ChordPainter extends CustomPainter {
 
   final ColorScheme colorScheme;
 
-  static const _products = ['Electronics', 'Clothing', 'Food', 'Books', 'Sports'];
+  static const _products = [
+    'Electronics',
+    'Clothing',
+    'Food',
+    'Books',
+    'Sports'
+  ];
 
   // 5x5 symmetric flow matrix
   static const _matrix = [
@@ -672,8 +697,10 @@ class _ChordPainter extends CustomPainter {
         final angleI = startAngles[i] + (flow / 2) * anglePerUnit;
         final angleJ = startAngles[j] + (flow / 2) * anglePerUnit;
 
-        final p1 = Offset(cx + innerRadius * math.cos(angleI), cy + innerRadius * math.sin(angleI));
-        final p2 = Offset(cx + innerRadius * math.cos(angleJ), cy + innerRadius * math.sin(angleJ));
+        final p1 = Offset(cx + innerRadius * math.cos(angleI),
+            cy + innerRadius * math.sin(angleI));
+        final p2 = Offset(cx + innerRadius * math.cos(angleJ),
+            cy + innerRadius * math.sin(angleJ));
 
         final path = Path()
           ..moveTo(p1.dx, p1.dy)
@@ -693,8 +720,10 @@ class _ChordPainter extends CustomPainter {
       final startAngle = startAngles[i];
       final sweepAngle = totals[i] * anglePerUnit;
 
-      final arcRect = Rect.fromCircle(center: Offset(cx, cy), radius: outerRadius);
-      final innerRect = Rect.fromCircle(center: Offset(cx, cy), radius: innerRadius);
+      final arcRect =
+          Rect.fromCircle(center: Offset(cx, cy), radius: outerRadius);
+      final innerRect =
+          Rect.fromCircle(center: Offset(cx, cy), radius: innerRadius);
 
       final path = Path();
       path.moveTo(
@@ -769,7 +798,8 @@ class _SankeyFlow {
   final int targetIdx;
   final double value;
 
-  const _SankeyFlow(this.sourceCol, this.sourceIdx, this.targetCol, this.targetIdx, this.value);
+  const _SankeyFlow(this.sourceCol, this.sourceIdx, this.targetCol,
+      this.targetIdx, this.value);
 }
 
 class _SankeyPainter extends CustomPainter {
@@ -823,7 +853,8 @@ class _SankeyPainter extends CustomPainter {
     const numCols = 3;
 
     // Column x positions
-    final colX = List.generate(numCols, (i) => margin.left + (i * (w - nodeWidth) / (numCols - 1)));
+    final colX = List.generate(
+        numCols, (i) => margin.left + (i * (w - nodeWidth) / (numCols - 1)));
 
     // Compute node heights (proportional to value, fit in column)
     List<List<Rect>> nodeRects = [];
@@ -865,15 +896,21 @@ class _SankeyPainter extends CustomPainter {
       final path = Path()
         ..moveTo(x0, y0)
         ..cubicTo(
-          x0 + (x1 - x0) * 0.5, y0,
-          x0 + (x1 - x0) * 0.5, y1,
-          x1, y1,
+          x0 + (x1 - x0) * 0.5,
+          y0,
+          x0 + (x1 - x0) * 0.5,
+          y1,
+          x1,
+          y1,
         )
         ..lineTo(x1, y1 + dstFlowH)
         ..cubicTo(
-          x0 + (x1 - x0) * 0.5, y0 + srcFlowH,
-          x0 + (x1 - x0) * 0.5, y0 + srcFlowH,
-          x0, y0 + srcFlowH,
+          x0 + (x1 - x0) * 0.5,
+          y0 + srcFlowH,
+          x0 + (x1 - x0) * 0.5,
+          y0 + srcFlowH,
+          x0,
+          y0 + srcFlowH,
         )
         ..close();
 
@@ -960,10 +997,12 @@ class _DelaunayVoronoiState extends State<_DelaunayVoronoi> {
 
   void _regenerate() {
     final rng = math.Random();
-    _points = List.generate(25, (_) => dv.Point(
-      0.05 + rng.nextDouble() * 0.9,
-      0.05 + rng.nextDouble() * 0.9,
-    ));
+    _points = List.generate(
+        25,
+        (_) => dv.Point(
+              0.05 + rng.nextDouble() * 0.9,
+              0.05 + rng.nextDouble() * 0.9,
+            ));
   }
 
   @override
@@ -977,7 +1016,8 @@ class _DelaunayVoronoiState extends State<_DelaunayVoronoi> {
               child: SegmentedButton<_DvMode>(
                 segments: const [
                   ButtonSegment(value: _DvMode.voronoi, label: Text('Voronoi')),
-                  ButtonSegment(value: _DvMode.delaunay, label: Text('Delaunay')),
+                  ButtonSegment(
+                      value: _DvMode.delaunay, label: Text('Delaunay')),
                   ButtonSegment(value: _DvMode.both, label: Text('Both')),
                 ],
                 selected: {_mode},
@@ -1153,5 +1193,7 @@ class _DvPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _DvPainter old) =>
-      old.points != points || old.mode != mode || old.colorScheme != colorScheme;
+      old.points != points ||
+      old.mode != mode ||
+      old.colorScheme != colorScheme;
 }
