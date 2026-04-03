@@ -46,3 +46,8 @@ export 'src/lezer/highlight/highlight.dart' show TagStyle, HighlightStyle;
 // Lezer LR
 export 'src/lezer/lr/grammar_data.dart' show GrammarData;
 export 'src/lezer/lr/lr_parser.dart' show LRParser;
+
+// Language system
+export 'src/language/language.dart' show Language, LanguageSupport;
+export 'src/language/language_data.dart' show LanguageData, CommentTokens;
+export 'src/language/syntax.dart' show syntaxTree, syntaxTreeAvailable;
