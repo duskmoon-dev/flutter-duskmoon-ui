@@ -4,3 +4,7 @@
 /// providing: document model, state management, incremental parser,
 /// virtual-viewport rendering, and syntax highlighting.
 library;
+
+// Document model
+export 'src/document/rope.dart' show RopeNode, RopeLeaf, RopeBranch, Rope;
+export 'src/document/text.dart' show Line;
