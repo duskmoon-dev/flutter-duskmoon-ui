@@ -13,6 +13,7 @@ workspace:
   - packages/duskmoon_visualization
   - packages/duskmoon_ui
   - packages/duskmoon_form
+  - packages/duskmoon_code_engine
   - packages/duskmoon_adaptive_scaffold
   - example
 
