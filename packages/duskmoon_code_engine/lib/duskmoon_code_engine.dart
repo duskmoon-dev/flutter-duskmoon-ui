@@ -14,6 +14,13 @@ export 'src/document/text.dart' show Line;
 export 'src/state/annotation.dart'
     show AnnotationType, Annotation, Annotations;
 export 'src/state/extension.dart'
-    show Extension, ExtensionGroup, PrecedenceExtension, Precedence, prec,
+    show
+        Extension,
+        ExtensionGroup,
+        PrecedenceExtension,
+        Precedence,
+        prec,
+        Compartment,
+        CompartmentExtension,
         StateField;
 export 'src/state/state_effect.dart' show StateEffectType, StateEffect;

@@ -1,3 +1,6 @@
+import 'state_effect.dart';
+
+part 'compartment.dart';
 part 'state_field.dart';
 
 /// The base type for all editor extensions.
