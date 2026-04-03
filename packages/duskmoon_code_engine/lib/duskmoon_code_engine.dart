@@ -59,3 +59,7 @@ export 'src/grammars/json.dart' show jsonLanguageSupport, jsonHighlightMapping;
 // Theme
 export 'src/theme/editor_theme.dart' show EditorTheme;
 export 'src/theme/default_highlight.dart' show defaultLightHighlight, defaultDarkHighlight;
+
+// View
+export 'src/view/viewport.dart' show EditorViewport;
+export 'src/view/highlight_builder.dart' show InlineSpan, HighlightBuilder;
