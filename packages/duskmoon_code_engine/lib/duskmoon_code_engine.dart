@@ -11,5 +11,8 @@ export 'src/document/rope.dart' show RopeNode, RopeLeaf, RopeBranch, Rope;
 export 'src/document/text.dart' show Line;
 
 // State system
+export 'src/state/annotation.dart'
+    show AnnotationType, Annotation, Annotations;
 export 'src/state/extension.dart'
     show Extension, ExtensionGroup, PrecedenceExtension, Precedence, prec;
+export 'src/state/state_effect.dart' show StateEffectType, StateEffect;
