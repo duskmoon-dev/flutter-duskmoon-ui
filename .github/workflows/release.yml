@@ -43,28 +43,39 @@ jobs:
         run: |
           VERSION="${{ inputs.version }}"
 
-          # Update version in all packages
+          # duskmoon_adaptive_scaffold is independently versioned — skip it.
+          SKIP="packages/duskmoon_adaptive_scaffold/pubspec.yaml"
+
+          # Update version in all packages except duskmoon_adaptive_scaffold
           for pubspec in packages/*/pubspec.yaml; do
+            [ "$pubspec" = "$SKIP" ] && continue
             sed -i "s/^version: .*/version: $VERSION/" "$pubspec"
             echo "Updated $pubspec to $VERSION"
           done
 
-          # Remove publish_to: none from all packages
+          # Remove publish_to: none from all packages except duskmoon_adaptive_scaffold
           for pubspec in packages/*/pubspec.yaml; do
+            [ "$pubspec" = "$SKIP" ] && continue
             sed -i '/^publish_to: none$/d' "$pubspec"
           done
 
-          # Replace ALL internal duskmoon_* dependencies with hosted version
-          # constraints across every package pubspec in one pass.
+          # Replace internal duskmoon_* dependencies with hosted version constraints
+          # across every package pubspec (except duskmoon_adaptive_scaffold itself).
           # Handles both formats:
           #   duskmoon_foo: ^x.y.z   (hosted, single line)
           #   duskmoon_foo:          (path dep, two lines)
           #     path: ../duskmoon_foo
+          # duskmoon_adaptive_scaffold keeps its own version constraint unchanged.
           for pubspec in packages/*/pubspec.yaml; do
-            # Convert path-dep blocks (two lines) to hosted constraint first
-            perl -i -0pe 's/^  (duskmoon_\w+):\n    path: [^\n]+/  $1: ^'"$VERSION"'/mg' "$pubspec"
-            # Update any remaining hosted constraints
+            [ "$pubspec" = "$SKIP" ] && continue
+            # Convert path-dep blocks (two lines) to hosted constraint first,
+            # but NOT for duskmoon_adaptive_scaffold (it has its own versioning).
+            perl -i -0pe 's/^  (duskmoon_(?!adaptive_scaffold)\w+):\n    path: [^\n]+/  $1: ^'"$VERSION"'/mg' "$pubspec"
+            # Update versioned constraints for all duskmoon_* except duskmoon_adaptive_scaffold
             sed -i 's/^  \(duskmoon_[a-z_]*\): \^.*$/  \1: ^'"$VERSION"'/' "$pubspec"
+            # Restore duskmoon_adaptive_scaffold to its own version
+            SCAFFOLD_VER=$(grep '^version:' packages/duskmoon_adaptive_scaffold/pubspec.yaml | awk '{print $2}')
+            sed -i "s/^  duskmoon_adaptive_scaffold: \^.*$/  duskmoon_adaptive_scaffold: ^$SCAFFOLD_VER/" "$pubspec"
           done
 
       - name: Re-resolve dependencies
