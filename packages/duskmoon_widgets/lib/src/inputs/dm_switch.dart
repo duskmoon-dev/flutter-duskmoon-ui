@@ -34,6 +34,10 @@ class DmSwitch extends StatelessWidget with AdaptiveWidget {
           value: value,
           onChanged: onChanged,
         ),
+      DmPlatformStyle.fluent => Switch(
+          value: value,
+          onChanged: onChanged,
+        ),
     };
   }
 }

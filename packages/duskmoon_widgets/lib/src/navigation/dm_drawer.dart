@@ -41,6 +41,7 @@ class DmDrawer extends StatelessWidget with AdaptiveWidget {
             child: child,
           ),
         ),
+      DmPlatformStyle.fluent => Drawer(width: width, child: child),
     };
   }
 }

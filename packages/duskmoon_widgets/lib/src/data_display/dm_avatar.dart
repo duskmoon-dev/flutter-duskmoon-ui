@@ -46,6 +46,12 @@ class DmAvatar extends StatelessWidget with AdaptiveWidget {
           radius: radius,
           child: child,
         ),
+      DmPlatformStyle.fluent => CircleAvatar(
+          backgroundImage: backgroundImage,
+          backgroundColor: backgroundColor,
+          radius: radius,
+          child: child,
+        ),
     };
   }
 }

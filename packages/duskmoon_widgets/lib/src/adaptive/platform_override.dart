@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'platform_resolver.dart';
+import 'dm_platform_style.dart';
 
 /// An [InheritedWidget] that overrides the platform style for its subtree.
 ///

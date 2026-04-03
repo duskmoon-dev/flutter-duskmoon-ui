@@ -54,13 +54,13 @@ void main() {
       expect(resolved, DmPlatformStyle.cupertino);
     });
 
-    testWidgets('returns material for Windows', (tester) async {
+    testWidgets('returns fluent for Windows', (tester) async {
       late DmPlatformStyle resolved;
       await tester.pumpWidget(buildApp(
         platform: TargetPlatform.windows,
         onResolved: (s) => resolved = s,
       ));
-      expect(resolved, DmPlatformStyle.material);
+      expect(resolved, DmPlatformStyle.fluent);
     });
 
     testWidgets('widget override takes precedence over theme', (tester) async {

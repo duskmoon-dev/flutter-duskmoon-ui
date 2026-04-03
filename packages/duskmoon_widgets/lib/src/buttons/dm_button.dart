@@ -47,6 +47,7 @@ class DmButton extends StatelessWidget with AdaptiveWidget {
     return switch (resolveStyle(context)) {
       DmPlatformStyle.material => _buildMaterial(context),
       DmPlatformStyle.cupertino => _buildCupertino(context),
+      DmPlatformStyle.fluent => _buildMaterial(context),
     };
   }
 

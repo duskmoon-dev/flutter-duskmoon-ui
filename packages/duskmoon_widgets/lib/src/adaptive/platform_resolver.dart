@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
 
-/// The two platform rendering styles supported by adaptive widgets.
-enum DmPlatformStyle {
-  /// Google Material Design rendering.
-  material,
+import 'dm_platform_style.dart';
+export 'dm_platform_style.dart';
 
-  /// Apple Cupertino rendering.
-  cupertino,
-}
-
-/// Resolves the [DmPlatformStyle] to use for the current context.
+/// Resolves the [DmPlatformStyle] for the current context.
 ///
-/// If [widgetOverride] is provided it takes precedence; otherwise the
-/// style is inferred from the theme's [TargetPlatform].
+/// Priority: [widgetOverride] > theme platform.
+/// L2 (DmPlatformOverride) and L3 (DuskmoonApp) will be added in a later task.
 DmPlatformStyle resolvePlatformStyle(
   BuildContext context, {
   DmPlatformStyle? widgetOverride,
 }) {
   if (widgetOverride != null) return widgetOverride;
-  final platform = Theme.of(context).platform;
-  return switch (platform) {
-    TargetPlatform.iOS || TargetPlatform.macOS => DmPlatformStyle.cupertino,
-    _ => DmPlatformStyle.material,
-  };
+  return _defaultStyle(Theme.of(context).platform);
 }
+
+DmPlatformStyle _defaultStyle(TargetPlatform platform) =>
+    switch (platform) {
+      TargetPlatform.iOS || TargetPlatform.macOS => DmPlatformStyle.cupertino,
+      TargetPlatform.windows => DmPlatformStyle.fluent,
+      _ => DmPlatformStyle.material,
+    };

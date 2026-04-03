@@ -51,6 +51,14 @@ class DmTabBar extends StatelessWidget with AdaptiveWidget {
               ),
           },
         ),
+      DmPlatformStyle.fluent => DefaultTabController(
+          length: tabs.length,
+          initialIndex: selectedIndex,
+          child: TabBar(
+            onTap: onChanged,
+            tabs: tabs.map((t) => Tab(text: t.label, icon: t.icon)).toList(),
+          ),
+        ),
     };
   }
 }
