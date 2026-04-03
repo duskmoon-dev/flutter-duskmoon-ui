@@ -7,6 +7,7 @@ library;
 
 // Document model
 export 'src/document/change.dart' show ChangeSpec, ChangeSet;
+export 'src/document/document.dart' show Document;
 export 'src/document/position.dart' show Pos, Range;
 export 'src/document/rope.dart' show RopeNode, RopeLeaf, RopeBranch, Rope;
 export 'src/document/text.dart' show Line;
