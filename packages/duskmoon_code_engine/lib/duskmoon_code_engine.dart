@@ -42,3 +42,7 @@ export 'src/lezer/common/token.dart' show Token, ExternalTokenizer;
 // Lezer highlight
 export 'src/lezer/highlight/tags.dart' show Tag;
 export 'src/lezer/highlight/highlight.dart' show TagStyle, HighlightStyle;
+
+// Lezer LR
+export 'src/lezer/lr/grammar_data.dart' show GrammarData;
+export 'src/lezer/lr/lr_parser.dart' show LRParser;
