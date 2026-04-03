@@ -63,3 +63,7 @@ export 'src/theme/default_highlight.dart' show defaultLightHighlight, defaultDar
 // View
 export 'src/view/viewport.dart' show EditorViewport;
 export 'src/view/highlight_builder.dart' show InlineSpan, HighlightBuilder;
+
+// Commands
+export 'src/commands/keymap.dart' show Command, KeyBinding, Keymap;
+export 'src/commands/commands.dart' show EditorCommands;
