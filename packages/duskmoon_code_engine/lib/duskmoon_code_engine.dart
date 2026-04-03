@@ -36,3 +36,9 @@ export 'src/state/editor_state.dart'
 // Lezer common
 export 'src/lezer/common/node_type.dart' show NodeProp, NodeType, NodeSet;
 export 'src/lezer/common/tree.dart' show Tree, TreeBuffer, SyntaxNode, TreeCursor;
+export 'src/lezer/common/parser.dart' show Parser, ChangedRange;
+export 'src/lezer/common/token.dart' show Token, ExternalTokenizer;
+
+// Lezer highlight
+export 'src/lezer/highlight/tags.dart' show Tag;
+export 'src/lezer/highlight/highlight.dart' show TagStyle, HighlightStyle;
