@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/button_page.dart';
 import 'pages/feedback_page.dart';
 import 'pages/form_page.dart';
+import 'pages/markdown_page.dart';
 import 'pages/scaffold_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/theme_page.dart';
@@ -60,6 +61,7 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
     FeedbackPage(),
     ScaffoldPage(),
     VisualizationPage(),
+    MarkdownPage(),
   ];
 
   @override
@@ -79,6 +81,8 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
           DmNavDestination(icon: Icon(Icons.dashboard), label: 'Scaffold'),
           DmNavDestination(
               icon: Icon(Icons.show_chart), label: 'Visualization'),
+          DmNavDestination(
+              icon: Icon(Icons.edit_document), label: 'Markdown'),
         ],
       ),
     );

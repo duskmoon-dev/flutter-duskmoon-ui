@@ -38,3 +38,13 @@ export 'src/navigation/dm_tab_bar.dart';
 export 'src/data_display/dm_avatar.dart';
 export 'src/data_display/dm_badge.dart';
 export 'src/data_display/dm_chip.dart';
+
+// Markdown
+export 'src/markdown/dm_markdown.dart';
+export 'src/markdown/dm_markdown_config.dart';
+export 'src/markdown/dm_markdown_scroll_controller.dart';
+
+// Markdown Input
+export 'src/markdown_input/dm_markdown_input.dart';
+export 'src/markdown_input/dm_markdown_input_controller.dart';
+export 'src/markdown_input/dm_markdown_tab.dart';
