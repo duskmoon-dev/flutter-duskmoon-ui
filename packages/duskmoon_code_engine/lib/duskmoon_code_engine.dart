@@ -55,3 +55,7 @@ export 'src/language/syntax.dart' show syntaxTree, syntaxTreeAvailable;
 // Grammars
 export 'src/grammars/_registry.dart' show LanguageRegistry;
 export 'src/grammars/json.dart' show jsonLanguageSupport, jsonHighlightMapping;
+
+// Theme
+export 'src/theme/editor_theme.dart' show EditorTheme;
+export 'src/theme/default_highlight.dart' show defaultLightHighlight, defaultDarkHighlight;
