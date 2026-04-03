@@ -1,6 +1,8 @@
 import '../document/change.dart';
+import '../state/annotation.dart';
 import '../state/editor_state.dart';
 import '../state/selection.dart';
+import 'history.dart';
 
 /// A collection of standard editor commands that produce [TransactionSpec]s.
 ///
@@ -187,6 +189,52 @@ abstract final class EditorCommands {
     return TransactionSpec(
       changes: changes,
       selection: EditorSelection.cursor(main.from),
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // History
+  // ---------------------------------------------------------------------------
+
+  /// Undo the last edit.
+  ///
+  /// Returns null if the [historyField] is not present in [state] or the undo
+  /// stack is empty.
+  static TransactionSpec? undo(EditorState state) {
+    final HistoryState history;
+    try {
+      history = state.field(historyField);
+    } catch (_) {
+      return null;
+    }
+    if (history.undoStack.isEmpty) return null;
+    final entry = history.undoStack.last;
+    return TransactionSpec(
+      changes: entry.changes,
+      selection: entry.selection,
+      effects: [undoEffect.of(true)],
+      annotations: [const Annotation(Annotations.addToHistory, false)],
+    );
+  }
+
+  /// Redo the last undone edit.
+  ///
+  /// Returns null if the [historyField] is not present in [state] or the redo
+  /// stack is empty.
+  static TransactionSpec? redo(EditorState state) {
+    final HistoryState history;
+    try {
+      history = state.field(historyField);
+    } catch (_) {
+      return null;
+    }
+    if (history.redoStack.isEmpty) return null;
+    final entry = history.redoStack.last;
+    return TransactionSpec(
+      changes: entry.changes,
+      selection: entry.selection,
+      effects: [redoEffect.of(true)],
+      annotations: [const Annotation(Annotations.addToHistory, false)],
     );
   }
 }

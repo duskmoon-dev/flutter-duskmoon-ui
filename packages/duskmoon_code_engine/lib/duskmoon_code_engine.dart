@@ -67,3 +67,4 @@ export 'src/view/highlight_builder.dart' show InlineSpan, HighlightBuilder;
 // Commands
 export 'src/commands/keymap.dart' show Command, KeyBinding, Keymap;
 export 'src/commands/commands.dart' show EditorCommands;
+export 'src/commands/history.dart' show HistoryState, HistoryEntry, historyExtension;
