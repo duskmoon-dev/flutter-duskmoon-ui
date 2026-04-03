@@ -9,6 +9,10 @@ export 'src/theme_data.dart' show DmThemeData, DmThemeEntry;
 export 'src/color_scheme.dart' show DmColorScheme;
 export 'src/text_theme.dart' show DmTextTheme;
 
+// Theme containers
+export 'src/dm_theme.dart' show DmTheme;
+export 'src/dm_colors.dart' show DmColors;
+
 // Extensions
 export 'src/extensions.dart' show DmColorExtension;
 export 'src/theme_mode_extension.dart' show ThemeModeExtension;
