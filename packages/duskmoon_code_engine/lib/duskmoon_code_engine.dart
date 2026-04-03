@@ -68,6 +68,7 @@ export 'src/view/editor_view.dart' show EditorView;
 export 'src/view/line_painter.dart' show LinePainter;
 export 'src/view/gutter_painter.dart' show GutterPainter;
 export 'src/view/selection_painter.dart' show SelectionPainter;
+export 'src/view/code_editor_widget.dart' show CodeEditorWidget;
 
 // Commands
 export 'src/commands/keymap.dart' show Command, KeyBinding, Keymap;
