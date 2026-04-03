@@ -111,7 +111,8 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _inputController.text = '# Write your markdown here\n\nTry using **bold** or *italic* text!';
+    _inputController.text =
+        '# Write your markdown here\n\nTry using **bold** or *italic* text!';
   }
 
   @override

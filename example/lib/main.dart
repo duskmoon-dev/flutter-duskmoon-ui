@@ -83,8 +83,7 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
           DmNavDestination(icon: Icon(Icons.dashboard), label: 'Scaffold'),
           DmNavDestination(
               icon: Icon(Icons.show_chart), label: 'Visualization'),
-          DmNavDestination(
-              icon: Icon(Icons.edit_document), label: 'Markdown'),
+          DmNavDestination(icon: Icon(Icons.edit_document), label: 'Markdown'),
         ],
       ),
     );

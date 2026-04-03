@@ -226,7 +226,8 @@ void main() {
 
     test('angleBetween calculates angle', () {
       expect(angleBetween(Point(0, 0), Point(1, 0)), equals(0));
-      expect(angleBetween(Point(0, 0), Point(0, 1)), closeTo(math.pi / 2, 1e-10));
+      expect(
+          angleBetween(Point(0, 0), Point(0, 1)), closeTo(math.pi / 2, 1e-10));
     });
 
     test('pointAt creates point at distance and angle', () {

@@ -24,8 +24,7 @@ class GeoGalleryPage extends StatelessWidget {
           SizedBox(height: 12),
           _GeoCard(
             title: 'Interactive Globe',
-            description:
-                'Auto-rotating 3D globe. Drag to change the view.',
+            description: 'Auto-rotating 3D globe. Drag to change the view.',
             height: 380,
             child: _GlobeDemo(),
           ),
@@ -197,8 +196,7 @@ class _WorldMapDemoState extends State<_WorldMapDemo> {
                           projection: projection,
                           fillColor: dmColors?.accent.withValues(alpha: 0.22) ??
                               colorScheme.primary.withValues(alpha: 0.18),
-                          strokeColor:
-                              dmColors?.accent ?? colorScheme.primary,
+                          strokeColor: dmColors?.accent ?? colorScheme.primary,
                           strokeWidth: 0.8,
                           onFeatureTap: (feature, _) => setState(
                             () => _selectedFeatureName = _featureName(feature),
@@ -285,8 +283,7 @@ class _GlobeDemoState extends State<_GlobeDemo>
 
           return LayoutBuilder(
             builder: (context, constraints) {
-              final size =
-                  Size(constraints.maxWidth, constraints.maxHeight);
+              final size = Size(constraints.maxWidth, constraints.maxHeight);
               final center = dv.Point(size.width / 2, size.height / 2);
               final scale = size.width / 2.2;
 
@@ -347,7 +344,12 @@ class _RegionalFocusDemo extends StatefulWidget {
 }
 
 class _RegionalFocusDemoState extends State<_RegionalFocusDemo> {
-  static const _regions = <String>['World', 'Americas', 'Europe/Africa', 'Asia-Pacific'];
+  static const _regions = <String>[
+    'World',
+    'Americas',
+    'Europe/Africa',
+    'Asia-Pacific'
+  ];
 
   String _selected = 'World';
 

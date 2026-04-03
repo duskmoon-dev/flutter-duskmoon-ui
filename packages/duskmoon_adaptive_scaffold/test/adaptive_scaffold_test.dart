@@ -427,21 +427,20 @@ void main() {
           home: MediaQuery(
             data: const MediaQueryData(size: Size(700, 900)),
             child: StatefulBuilder(
-              builder:
-                  (
-                    BuildContext context,
-                    void Function(void Function()) setState,
-                  ) {
-                    return AdaptiveScaffold(
-                      destinations: destinations,
-                      selectedIndex: selectedDestination,
-                      onSelectedIndexChange: (int value) {
-                        setState(() {
-                          selectedDestination = value;
-                        });
-                      },
-                    );
+              builder: (
+                BuildContext context,
+                void Function(void Function()) setState,
+              ) {
+                return AdaptiveScaffold(
+                  destinations: destinations,
+                  selectedIndex: selectedDestination,
+                  onSelectedIndexChange: (int value) {
+                    setState(() {
+                      selectedDestination = value;
+                    });
                   },
+                );
+              },
             ),
           ),
         ),
@@ -604,23 +603,22 @@ void main() {
         home: MediaQuery(
           data: const MediaQueryData(size: Size(450, 900)),
           child: StatefulBuilder(
-            builder:
-                (
-                  BuildContext context,
-                  void Function(void Function()) setState,
-                ) {
-                  return AdaptiveScaffold(
-                    destinations: destinations,
-                    selectedIndex: selectedDestination,
-                    smallBreakpoint: TestBreakpoint400(),
-                    drawerBreakpoint: TestBreakpoint400(),
-                    onSelectedIndexChange: (int value) {
-                      setState(() {
-                        selectedDestination = value;
-                      });
-                    },
-                  );
+            builder: (
+              BuildContext context,
+              void Function(void Function()) setState,
+            ) {
+              return AdaptiveScaffold(
+                destinations: destinations,
+                selectedIndex: selectedDestination,
+                smallBreakpoint: TestBreakpoint400(),
+                drawerBreakpoint: TestBreakpoint400(),
+                onSelectedIndexChange: (int value) {
+                  setState(() {
+                    selectedDestination = value;
+                  });
                 },
+              );
+            },
           ),
         ),
       ),
@@ -667,19 +665,19 @@ void main() {
     (WidgetTester tester) async {
       const List<NavigationRailDestination> destinations =
           <NavigationRailDestination>[
-            NavigationRailDestination(
-              icon: Icon(Icons.home),
-              label: Text('Home'),
-            ),
-            NavigationRailDestination(
-              icon: Icon(Icons.account_circle),
-              label: Text('Profile'),
-            ),
-            NavigationRailDestination(
-              icon: Icon(Icons.settings),
-              label: Text('Settings'),
-            ),
-          ];
+        NavigationRailDestination(
+          icon: Icon(Icons.home),
+          label: Text('Home'),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Icons.account_circle),
+          label: Text('Profile'),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Icons.settings),
+          label: Text('Settings'),
+        ),
+      ];
 
       const double groupAlignment = 1.0;
 

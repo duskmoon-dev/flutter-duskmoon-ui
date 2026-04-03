@@ -7,7 +7,8 @@ void main() {
   group('DmMarkdownInputController', () {
     test('wrapSelection wraps text with marker', () {
       final controller = DmMarkdownInputController(text: 'hello world');
-      controller.selection = const TextSelection(baseOffset: 6, extentOffset: 11);
+      controller.selection =
+          const TextSelection(baseOffset: 6, extentOffset: 11);
       controller.wrapSelection('**');
 
       expect(controller.text, 'hello **world**');
@@ -15,7 +16,8 @@ void main() {
 
     test('wrapSelection unwraps when already wrapped', () {
       final controller = DmMarkdownInputController(text: 'hello **world**');
-      controller.selection = const TextSelection(baseOffset: 6, extentOffset: 15);
+      controller.selection =
+          const TextSelection(baseOffset: 6, extentOffset: 15);
       controller.wrapSelection('**');
 
       expect(controller.text, 'hello world');
@@ -23,8 +25,7 @@ void main() {
 
     test('insertAtCursor inserts content', () {
       final controller = DmMarkdownInputController(text: 'hello world');
-      controller.selection =
-          const TextSelection.collapsed(offset: 5);
+      controller.selection = const TextSelection.collapsed(offset: 5);
       controller.insertAtCursor(' beautiful');
 
       expect(controller.text, 'hello beautiful world');
@@ -32,7 +33,8 @@ void main() {
 
     test('insertCodeFence wraps selection', () {
       final controller = DmMarkdownInputController(text: 'some code');
-      controller.selection = const TextSelection(baseOffset: 0, extentOffset: 9);
+      controller.selection =
+          const TextSelection(baseOffset: 0, extentOffset: 9);
       controller.insertCodeFence(language: 'dart');
 
       expect(controller.text, contains('```dart'));
@@ -42,7 +44,8 @@ void main() {
 
     test('insertLink creates markdown link', () {
       final controller = DmMarkdownInputController(text: 'click here');
-      controller.selection = const TextSelection(baseOffset: 0, extentOffset: 10);
+      controller.selection =
+          const TextSelection(baseOffset: 0, extentOffset: 10);
       controller.insertLink(url: 'https://example.com');
 
       expect(controller.text, '[click here](https://example.com)');
@@ -57,7 +60,8 @@ void main() {
 
     test('toggleLinePrefix adds prefix', () {
       final controller = DmMarkdownInputController(text: 'Item 1\nItem 2');
-      controller.selection = const TextSelection(baseOffset: 0, extentOffset: 13);
+      controller.selection =
+          const TextSelection(baseOffset: 0, extentOffset: 13);
       controller.toggleLinePrefix('- ');
 
       expect(controller.text, '- Item 1\n- Item 2');
@@ -65,7 +69,8 @@ void main() {
 
     test('toggleLinePrefix removes prefix if already present', () {
       final controller = DmMarkdownInputController(text: '- Item 1\n- Item 2');
-      controller.selection = const TextSelection(baseOffset: 0, extentOffset: 17);
+      controller.selection =
+          const TextSelection(baseOffset: 0, extentOffset: 17);
       controller.toggleLinePrefix('- ');
 
       expect(controller.text, 'Item 1\nItem 2');

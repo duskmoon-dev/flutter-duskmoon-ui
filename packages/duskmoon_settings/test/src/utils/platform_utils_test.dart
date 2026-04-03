@@ -48,7 +48,8 @@ void main() {
   });
 
   group('SettingsList dispatches via DmPlatformStyle', () {
-    testWidgets('DmPlatformStyle.fluent dispatches to FluentSettingsList via DuskmoonApp',
+    testWidgets(
+        'DmPlatformStyle.fluent dispatches to FluentSettingsList via DuskmoonApp',
         (tester) async {
       await tester.pumpWidget(
         DuskmoonApp(
@@ -69,7 +70,8 @@ void main() {
       expect(find.text('Fluent'), findsOneWidget);
     });
 
-    testWidgets('DmPlatformStyle.cupertino dispatches to CupertinoSettingsList via DuskmoonApp',
+    testWidgets(
+        'DmPlatformStyle.cupertino dispatches to CupertinoSettingsList via DuskmoonApp',
         (tester) async {
       await tester.pumpWidget(
         DuskmoonApp(
@@ -90,7 +92,8 @@ void main() {
       expect(find.text('Cupertino'), findsOneWidget);
     });
 
-    testWidgets('DmPlatformStyle.material dispatches to MaterialSettingsList via DuskmoonApp',
+    testWidgets(
+        'DmPlatformStyle.material dispatches to MaterialSettingsList via DuskmoonApp',
         (tester) async {
       await tester.pumpWidget(
         DuskmoonApp(

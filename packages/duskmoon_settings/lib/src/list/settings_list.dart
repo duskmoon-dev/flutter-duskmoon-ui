@@ -37,7 +37,8 @@ class SettingsList extends AbstractSettingsList {
       _ => DmPlatformStyle.material,
     };
 
-    final style = resolvePlatformStyle(context, widgetOverride: platformOverride);
+    final style =
+        resolvePlatformStyle(context, widgetOverride: platformOverride);
 
     return switch (style) {
       DmPlatformStyle.cupertino => CupertinoSettingsList(

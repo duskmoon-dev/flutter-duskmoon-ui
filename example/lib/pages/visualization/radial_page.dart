@@ -49,8 +49,7 @@ class RadialPage extends StatelessWidget {
           const SizedBox(height: 16),
           _ChartCard(
             title: 'Box Plot',
-            description:
-                'Statistical distribution comparison across groups',
+            description: 'Statistical distribution comparison across groups',
             height: 300,
             child: CustomPaint(
               size: Size.infinite,
@@ -123,9 +122,11 @@ class _DonutChartPainter extends CustomPainter {
       );
       outerPath.close();
 
-      canvas.drawPath(outerPath, Paint()
-        ..color = _colors[i]
-        ..style = PaintingStyle.fill);
+      canvas.drawPath(
+          outerPath,
+          Paint()
+            ..color = _colors[i]
+            ..style = PaintingStyle.fill);
 
       // White separator
       final sep = Paint()
@@ -256,8 +257,7 @@ class _RadarChartPainter extends CustomPainter {
     const labelPadding = 28.0;
     final cx = size.width / 2;
     final cy = (size.height - legendHeight) / 2;
-    final radius =
-        math.min(cx, cy) - labelPadding;
+    final radius = math.min(cx, cy) - labelPadding;
     const n = 6;
     const levels = 5;
     const maxVal = 100.0;
@@ -453,7 +453,8 @@ class _RadialBarChartPainter extends CustomPainter {
       _drawText(
         canvas,
         _days[i],
-        Offset(cx + labelR * math.cos(midAngle), cy + labelR * math.sin(midAngle)),
+        Offset(
+            cx + labelR * math.cos(midAngle), cy + labelR * math.sin(midAngle)),
         TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 10),
         align: TextAlign.center,
       );
@@ -490,7 +491,8 @@ class _RadialBarChartPainter extends CustomPainter {
       fontSize: 10,
     );
     _drawText(canvas, avgHours.toStringAsFixed(1), Offset(cx, cy - 8),
-        centerValueStyle, align: TextAlign.center);
+        centerValueStyle,
+        align: TextAlign.center);
     _drawText(canvas, 'avg h/day', Offset(cx, cy + 10), centerLabelStyle,
         align: TextAlign.center);
   }
@@ -509,7 +511,13 @@ class _BoxPlotPainter extends CustomPainter {
 
   final ColorScheme colorScheme;
 
-  static const _groupNames = ['Group A', 'Group B', 'Group C', 'Group D', 'Group E'];
+  static const _groupNames = [
+    'Group A',
+    'Group B',
+    'Group C',
+    'Group D',
+    'Group E'
+  ];
 
   // Fixed seed data per group: raw sample values
   static final List<List<double>> _rawData = _generateData();
@@ -535,9 +543,9 @@ class _BoxPlotPainter extends CustomPainter {
     final lowerFence = q1 - 1.5 * iqr;
     final upperFence = q3 + 1.5 * iqr;
     final whiskerLow = sorted.firstWhere((v) => v >= lowerFence);
-    final whiskerHigh =
-        sorted.lastWhere((v) => v <= upperFence);
-    final outliers = sorted.where((v) => v < lowerFence || v > upperFence).toList();
+    final whiskerHigh = sorted.lastWhere((v) => v <= upperFence);
+    final outliers =
+        sorted.where((v) => v < lowerFence || v > upperFence).toList();
     return _BoxStats(
       q1: q1,
       median: median,

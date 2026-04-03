@@ -25,8 +25,7 @@ void main() {
         Point(0.75, 0.75),
       ];
 
-      final voronoi = Voronoi.fromPoints(points,
-          bounds: [0, 0, 1, 1]);
+      final voronoi = Voronoi.fromPoints(points, bounds: [0, 0, 1, 1]);
 
       final polygons = voronoi.cellPolygons().toList();
 
@@ -47,8 +46,7 @@ void main() {
         Point(0.75, 0.75),
       ];
 
-      final voronoi = Voronoi.fromPoints(points,
-          bounds: [0, 0, 1, 1]);
+      final voronoi = Voronoi.fromPoints(points, bounds: [0, 0, 1, 1]);
 
       final polygon = voronoi.cellPolygon(0);
 
@@ -96,8 +94,7 @@ void main() {
         Point(0.75, 0.75),
       ];
 
-      final voronoi = Voronoi.fromPoints(points,
-          bounds: [0, 0, 1, 1]);
+      final voronoi = Voronoi.fromPoints(points, bounds: [0, 0, 1, 1]);
 
       final centroid = voronoi.cellCentroid(0);
 
@@ -115,8 +112,7 @@ void main() {
         Point(0.75, 0.75),
       ];
 
-      final voronoi = Voronoi.fromPoints(points,
-          bounds: [0, 0, 1, 1]);
+      final voronoi = Voronoi.fromPoints(points, bounds: [0, 0, 1, 1]);
 
       final area = voronoi.cellArea(0);
 
@@ -170,8 +166,7 @@ void main() {
         Point(0.75, 0.75),
       ];
 
-      final voronoi = Voronoi.fromPoints(points,
-          bounds: [0, 0, 1, 1]);
+      final voronoi = Voronoi.fromPoints(points, bounds: [0, 0, 1, 1]);
 
       // At least one cell should have a polygon
       bool hasValidPolygon = false;

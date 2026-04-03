@@ -105,9 +105,11 @@ class DmMarkdownInputController extends MarkdownEditingController {
 
     final newText = newLines.join('\n');
     final lineCount = endLine - startLine + 1;
-    final totalDelta = (allPrefixed ? -prefix.length : prefix.length) * lineCount;
-    final newStart = (sel.start + (allPrefixed ? -prefix.length : prefix.length))
-        .clamp(0, newText.length);
+    final totalDelta =
+        (allPrefixed ? -prefix.length : prefix.length) * lineCount;
+    final newStart =
+        (sel.start + (allPrefixed ? -prefix.length : prefix.length))
+            .clamp(0, newText.length);
     final newEnd = (sel.end + totalDelta).clamp(newStart, newText.length);
     value = value.copyWith(
       text: newText,

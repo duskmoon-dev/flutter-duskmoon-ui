@@ -37,17 +37,17 @@ class KeyboardShortcutHandler extends StatelessWidget {
     return Shortcuts(
       shortcuts: {
         // Cmd/Ctrl + B → Bold
-        SingleActivator(LogicalKeyboardKey.keyB, meta: isMacOS, control: !isMacOS):
-            const _WrapIntent('**'),
+        SingleActivator(LogicalKeyboardKey.keyB,
+            meta: isMacOS, control: !isMacOS): const _WrapIntent('**'),
         // Cmd/Ctrl + I → Italic
-        SingleActivator(LogicalKeyboardKey.keyI, meta: isMacOS, control: !isMacOS):
-            const _WrapIntent('*'),
+        SingleActivator(LogicalKeyboardKey.keyI,
+            meta: isMacOS, control: !isMacOS): const _WrapIntent('*'),
         // Cmd/Ctrl + E → Inline code
-        SingleActivator(LogicalKeyboardKey.keyE, meta: isMacOS, control: !isMacOS):
-            const _WrapIntent('`'),
+        SingleActivator(LogicalKeyboardKey.keyE,
+            meta: isMacOS, control: !isMacOS): const _WrapIntent('`'),
         // Cmd/Ctrl + K → Link
-        SingleActivator(LogicalKeyboardKey.keyK, meta: isMacOS, control: !isMacOS):
-            const _LinkIntent(),
+        SingleActivator(LogicalKeyboardKey.keyK,
+            meta: isMacOS, control: !isMacOS): const _LinkIntent(),
         // Cmd/Ctrl + Shift + K → Code fence
         SingleActivator(
           LogicalKeyboardKey.keyK,

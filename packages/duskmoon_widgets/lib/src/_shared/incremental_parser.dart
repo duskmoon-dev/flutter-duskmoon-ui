@@ -144,10 +144,9 @@ class IncrementalParser {
 
     // Find where new content starts.
     var divergeAt = 0;
-    final minLen =
-        _cachedLines.length < newLines.length
-            ? _cachedLines.length
-            : newLines.length;
+    final minLen = _cachedLines.length < newLines.length
+        ? _cachedLines.length
+        : newLines.length;
     for (var i = 0; i < minLen; i++) {
       if (i >= _cachedLines.length || _cachedLines[i] != newLines[i]) break;
       divergeAt = i + 1;
@@ -269,7 +268,8 @@ class IncrementalParser {
     int? endNode;
 
     for (var i = 0; i < nodes.length; i++) {
-      final nodeLineCount = _estimateNodeLineCount(nodes[i], lines, lineCounter);
+      final nodeLineCount =
+          _estimateNodeLineCount(nodes[i], lines, lineCounter);
       final nodeEndLine = lineCounter + nodeLineCount - 1;
 
       if (startNode == null && nodeEndLine >= lineStart) {

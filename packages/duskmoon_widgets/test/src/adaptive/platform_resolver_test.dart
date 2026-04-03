@@ -153,7 +153,8 @@ void main() {
       expect(resolved, DmPlatformStyle.material);
     });
 
-    testWidgets('DuskmoonApp with null platformStyle falls through to platform default',
+    testWidgets(
+        'DuskmoonApp with null platformStyle falls through to platform default',
         (tester) async {
       late DmPlatformStyle resolved;
       await tester.pumpWidget(

@@ -992,7 +992,8 @@ void main() {
     );
   });
 
-  group('Slot And Up Layout Tests with Portrait and Landscape Mixed Layout', () {
+  group('Slot And Up Layout Tests with Portrait and Landscape Mixed Layout',
+      () {
     testWidgets(
       'slotAndUp shows correct slot for smallPortraitMediumLandscape layout',
       (WidgetTester tester) async {

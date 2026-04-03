@@ -28,8 +28,7 @@ DmPlatformStyle resolvePlatformStyle(
   return _defaultStyle(Theme.of(context).platform);
 }
 
-DmPlatformStyle _defaultStyle(TargetPlatform platform) =>
-    switch (platform) {
+DmPlatformStyle _defaultStyle(TargetPlatform platform) => switch (platform) {
       TargetPlatform.iOS || TargetPlatform.macOS => DmPlatformStyle.cupertino,
       TargetPlatform.windows => DmPlatformStyle.fluent,
       _ => DmPlatformStyle.material,

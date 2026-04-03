@@ -46,7 +46,8 @@ void main() {
       expect(DmTheme.all, contains(DmTheme.moonlight));
     });
 
-    test('sunshine.colors.colorScheme.primary matches DmColorScheme.sunshine()', () {
+    test('sunshine.colors.colorScheme.primary matches DmColorScheme.sunshine()',
+        () {
       expect(
         DmTheme.sunshine.colors.colorScheme.primary,
         DmColors.sunshine().colorScheme.primary,

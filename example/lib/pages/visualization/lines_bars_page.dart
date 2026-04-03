@@ -206,10 +206,11 @@ class _LineChartPainter extends CustomPainter {
 
     if (smoothed.isEmpty) return;
 
-    final path = Path()..moveTo(
-      margin.left + smoothed.first.x,
-      margin.top + smoothed.first.y,
-    );
+    final path = Path()
+      ..moveTo(
+        margin.left + smoothed.first.x,
+        margin.top + smoothed.first.y,
+      );
     for (final pt in smoothed.skip(1)) {
       path.lineTo(margin.left + pt.x, margin.top + pt.y);
     }
@@ -272,8 +273,7 @@ class _LineChartPainter extends CustomPainter {
         Paint()..color = item.color,
       );
       x += swatchSize + spacing;
-      _drawText(canvas, item.label, Offset(x, y), style,
-          align: TextAlign.left);
+      _drawText(canvas, item.label, Offset(x, y), style, align: TextAlign.left);
       x += _measureText(item.label, style).width + itemSpacing;
     }
   }
@@ -316,7 +316,8 @@ class _AreaChartPainter extends CustomPainter {
     if (w <= 0 || h <= 0) return;
 
     // Compute stacked totals
-    final maxTotal = _raw.map((row) => row[1] + row[2] + row[3]).reduce(math.max);
+    final maxTotal =
+        _raw.map((row) => row[1] + row[2] + row[3]).reduce(math.max);
 
     final xScale = dv.scaleLinear(domain: [0, 9], range: [0, w]);
     final yScale = dv.scaleLinear(domain: [0, maxTotal * 1.05], range: [h, 0]);
@@ -345,7 +346,8 @@ class _AreaChartPainter extends CustomPainter {
       if (smoothedTop.isEmpty || smoothedBottom.isEmpty) continue;
 
       final areaPath = Path()
-        ..moveTo(margin.left + smoothedTop.first.x, margin.top + smoothedTop.first.y);
+        ..moveTo(margin.left + smoothedTop.first.x,
+            margin.top + smoothedTop.first.y);
       for (final pt in smoothedTop.skip(1)) {
         areaPath.lineTo(margin.left + pt.x, margin.top + pt.y);
       }
@@ -363,7 +365,8 @@ class _AreaChartPainter extends CustomPainter {
 
       // Stroke the top edge
       final strokePath = Path()
-        ..moveTo(margin.left + smoothedTop.first.x, margin.top + smoothedTop.first.y);
+        ..moveTo(margin.left + smoothedTop.first.x,
+            margin.top + smoothedTop.first.y);
       for (final pt in smoothedTop.skip(1)) {
         strokePath.lineTo(margin.left + pt.x, margin.top + pt.y);
       }
@@ -391,7 +394,8 @@ class _AreaChartPainter extends CustomPainter {
       axisPaint,
     );
 
-    final labelStyle = TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 10);
+    final labelStyle =
+        TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 10);
     for (var i = 0; i < _raw.length; i += 2) {
       final x = margin.left + xScale(_raw[i][0]);
       _drawText(
@@ -462,7 +466,8 @@ class _BarChartPainter extends CustomPainter {
 
     final bw = xBand.bandwidth;
     final subBw = bw / 2 - 2;
-    final labelStyle = TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 10);
+    final labelStyle =
+        TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 10);
 
     for (var i = 0; i < _categories.length; i++) {
       final cat = _categories[i];
@@ -632,7 +637,8 @@ class _StackedBarChartPainter extends CustomPainter {
         ..strokeWidth = 1,
     );
 
-    final labelStyle = TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 10);
+    final labelStyle =
+        TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 10);
     for (var v = 0.0; v <= maxValue; v += 25) {
       final y = margin.top + h * (1 - v / maxValue);
       _drawText(
@@ -732,7 +738,8 @@ class _HorizontalBarChartPainter extends CustomPainter {
     );
 
     final bw = yBand.bandwidth;
-    final labelStyle = TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 10);
+    final labelStyle =
+        TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 10);
 
     for (var i = 0; i < _items.length; i++) {
       final item = _items[i];
@@ -804,7 +811,8 @@ class _StreamgraphPainter extends CustomPainter {
   List<List<double>> _buildData() {
     return List.generate(_numLayers, (layer) {
       return List.generate(_numPoints, (i) {
-        return 5 + 15 * math.sin(i * 0.4 + layer * 1.3).abs() +
+        return 5 +
+            15 * math.sin(i * 0.4 + layer * 1.3).abs() +
             8 * math.cos(i * 0.7 + layer * 0.8).abs();
       });
     });
