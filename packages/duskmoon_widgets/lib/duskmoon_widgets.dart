@@ -6,6 +6,8 @@ library;
 
 // Adaptive infrastructure
 export 'src/adaptive/adaptive_widget.dart';
+export 'src/adaptive/dm_platform_style.dart';
+export 'src/adaptive/duskmoon_app.dart';
 export 'src/adaptive/platform_override.dart';
 export 'src/adaptive/platform_resolver.dart';
 
