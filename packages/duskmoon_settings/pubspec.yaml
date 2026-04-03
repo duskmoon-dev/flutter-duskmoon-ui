@@ -21,6 +21,8 @@ dependencies:
   flutter:
     sdk: flutter
   duskmoon_theme: ^1.0.3
+  duskmoon_widgets:
+    path: ../duskmoon_widgets
 
 dev_dependencies:
   flutter_test:
