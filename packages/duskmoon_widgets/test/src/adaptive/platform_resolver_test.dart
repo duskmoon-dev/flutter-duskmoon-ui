@@ -72,5 +72,105 @@ void main() {
       ));
       expect(resolved, DmPlatformStyle.cupertino);
     });
+
+    testWidgets('DmPlatformOverride beats theme platform', (tester) async {
+      late DmPlatformStyle resolved;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.android),
+          home: DmPlatformOverride(
+            style: DmPlatformStyle.cupertino,
+            child: Builder(
+              builder: (context) {
+                resolved = resolvePlatformStyle(context);
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ),
+      );
+      expect(resolved, DmPlatformStyle.cupertino);
+    });
+
+    testWidgets('DuskmoonApp L3 beats theme platform default', (tester) async {
+      late DmPlatformStyle resolved;
+      await tester.pumpWidget(
+        DuskmoonApp(
+          platformStyle: DmPlatformStyle.fluent,
+          child: MaterialApp(
+            theme: ThemeData(platform: TargetPlatform.android),
+            home: Builder(
+              builder: (context) {
+                resolved = resolvePlatformStyle(context);
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ),
+      );
+      expect(resolved, DmPlatformStyle.fluent);
+    });
+
+    testWidgets('DmPlatformOverride beats DuskmoonApp', (tester) async {
+      late DmPlatformStyle resolved;
+      await tester.pumpWidget(
+        DuskmoonApp(
+          platformStyle: DmPlatformStyle.fluent,
+          child: MaterialApp(
+            home: DmPlatformOverride(
+              style: DmPlatformStyle.cupertino,
+              child: Builder(
+                builder: (context) {
+                  resolved = resolvePlatformStyle(context);
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(resolved, DmPlatformStyle.cupertino);
+    });
+
+    testWidgets('widget override beats DuskmoonApp', (tester) async {
+      late DmPlatformStyle resolved;
+      await tester.pumpWidget(
+        DuskmoonApp(
+          platformStyle: DmPlatformStyle.fluent,
+          child: MaterialApp(
+            home: Builder(
+              builder: (context) {
+                resolved = resolvePlatformStyle(
+                  context,
+                  widgetOverride: DmPlatformStyle.material,
+                );
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ),
+      );
+      expect(resolved, DmPlatformStyle.material);
+    });
+
+    testWidgets('DuskmoonApp with null platformStyle falls through to platform default',
+        (tester) async {
+      late DmPlatformStyle resolved;
+      await tester.pumpWidget(
+        DuskmoonApp(
+          platformStyle: null,
+          child: MaterialApp(
+            theme: ThemeData(platform: TargetPlatform.iOS),
+            home: Builder(
+              builder: (context) {
+                resolved = resolvePlatformStyle(context);
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ),
+      );
+      expect(resolved, DmPlatformStyle.cupertino);
+    });
   });
 }
