@@ -175,10 +175,10 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
   }
 
   Widget _buildRendererDemo() {
-    return DmMarkdown(
+    return const DmMarkdown(
       data: _sampleMarkdown,
-      config: const DmMarkdownConfig(enableKatex: true),
-      padding: const EdgeInsets.all(16),
+      config: DmMarkdownConfig(enableKatex: true),
+      padding: EdgeInsets.all(16),
     );
   }
 
