@@ -32,3 +32,6 @@ export 'src/state/extension.dart'
 export 'src/state/state_effect.dart' show StateEffectType, StateEffect;
 export 'src/state/editor_state.dart'
     show EditorState, TransactionSpec, Transaction;
+
+// Lezer common
+export 'src/lezer/common/node_type.dart' show NodeProp, NodeType, NodeSet;
