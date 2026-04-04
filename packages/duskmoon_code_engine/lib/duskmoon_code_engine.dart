@@ -74,5 +74,7 @@ export 'src/view/code_editor_widget.dart' show CodeEditorWidget;
 export 'src/commands/keymap.dart' show Command, KeyBinding, Keymap;
 export 'src/commands/commands.dart' show EditorCommands;
 export 'src/commands/history.dart' show HistoryState, HistoryEntry, historyExtension;
+export 'src/commands/default_keymap.dart' show defaultKeymap;
 export 'src/view/position_utils.dart' show LineColumn, PositionUtils;
 export 'src/view/cursor_blink.dart' show CursorBlink;
+export 'src/view/input_handler.dart' show InputHandler;
