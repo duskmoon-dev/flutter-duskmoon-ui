@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'pages/button_page.dart';
+import 'pages/code_editor_page.dart';
 import 'pages/feedback_page.dart';
 import 'pages/form_page.dart';
 import 'pages/markdown_page.dart';
@@ -62,6 +63,7 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
     ScaffoldPage(),
     VisualizationPage(),
     MarkdownPage(),
+    CodeEditorPage(),
   ];
 
   @override
@@ -83,6 +85,7 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
               icon: Icon(Icons.show_chart), label: 'Visualization'),
           DmNavDestination(
               icon: Icon(Icons.edit_document), label: 'Markdown'),
+          DmNavDestination(icon: Icon(Icons.code), label: 'Code Editor'),
         ],
       ),
     );

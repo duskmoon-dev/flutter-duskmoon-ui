@@ -17,6 +17,8 @@ dependencies:
     path: ../packages/duskmoon_widgets
   duskmoon_visualization:
     path: ../packages/duskmoon_visualization
+  duskmoon_code_engine:
+    path: ../packages/duskmoon_code_engine
   duskmoon_theme_bloc:
     path: ../packages/duskmoon_theme_bloc
   flutter_bloc: ^9.0.0
