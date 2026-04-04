@@ -1,8 +1,36 @@
 /// Pure Dart code editor engine with incremental parsing.
 ///
 /// A ground-up port of the CodeMirror 6 architecture for Flutter,
-/// providing: document model, state management, incremental parser,
-/// virtual-viewport rendering, and syntax highlighting.
+/// providing document model, state management, syntax highlighting,
+/// and an interactive editor widget.
+///
+/// ## Quick Start
+///
+/// ```dart
+/// import 'package:duskmoon_code_engine/duskmoon_code_engine.dart';
+///
+/// CodeEditorWidget(
+///   initialDoc: 'print("hello")',
+///   language: dartLanguageSupport(),
+///   theme: EditorTheme.dark(),
+///   lineNumbers: true,
+/// )
+/// ```
+///
+/// ## Supported Languages
+///
+/// 19 languages: Dart, JavaScript/TypeScript, Python, HTML, CSS,
+/// JSON, Markdown, Rust, Go, YAML, C/C++, Elixir, Java, Kotlin,
+/// PHP, Ruby, Erlang, Swift, Zig.
+///
+/// ## Key Classes
+///
+/// - [CodeEditorWidget] — the main editor widget
+/// - [EditorViewController] — programmatic editor control
+/// - [EditorState] — immutable editor state snapshot
+/// - [EditorTheme] — editor visual theme configuration
+/// - [Language] / [LanguageSupport] — language definitions
+/// - [EditorCommands] — standard editing commands
 library;
 
 // Document model
