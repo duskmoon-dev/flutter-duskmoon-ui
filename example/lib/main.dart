@@ -56,6 +56,20 @@ class ShowcaseHome extends StatefulWidget {
 class _ShowcaseHomeState extends State<ShowcaseHome> {
   int _selectedIndex = 0;
 
+  static const _destinations = <NavigationDestination>[
+    NavigationDestination(icon: Icon(Icons.palette), label: 'Theme'),
+    NavigationDestination(
+        icon: Icon(Icons.dynamic_form_outlined), label: 'Form'),
+    NavigationDestination(icon: Icon(Icons.smart_button), label: 'Buttons'),
+    NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
+    NavigationDestination(icon: Icon(Icons.feedback), label: 'Feedback'),
+    NavigationDestination(icon: Icon(Icons.dashboard), label: 'Scaffold'),
+    NavigationDestination(icon: Icon(Icons.show_chart), label: 'Visualization'),
+    NavigationDestination(
+        icon: Icon(Icons.edit_document), label: 'Markdown'),
+    NavigationDestination(icon: Icon(Icons.code), label: 'Code Editor'),
+  ];
+
   static const _pages = <Widget>[
     ThemePage(),
     FormPage(),
@@ -70,25 +84,14 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: DmBottomNav(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (i) => setState(() => _selectedIndex = i),
-        destinations: const [
-          DmNavDestination(icon: Icon(Icons.palette), label: 'Theme'),
-          DmNavDestination(
-              icon: Icon(Icons.dynamic_form_outlined), label: 'Form'),
-          DmNavDestination(icon: Icon(Icons.smart_button), label: 'Buttons'),
-          DmNavDestination(icon: Icon(Icons.settings), label: 'Settings'),
-          DmNavDestination(icon: Icon(Icons.feedback), label: 'Feedback'),
-          DmNavDestination(icon: Icon(Icons.dashboard), label: 'Scaffold'),
-          DmNavDestination(
-              icon: Icon(Icons.show_chart), label: 'Visualization'),
-          DmNavDestination(icon: Icon(Icons.edit_document), label: 'Markdown'),
-          DmNavDestination(icon: Icon(Icons.code), label: 'Code Editor'),
-        ],
-      ),
+    return DmScaffold(
+      selectedIndex: _selectedIndex,
+      onSelectedIndexChange: (i) => setState(() => _selectedIndex = i),
+      destinations: _destinations,
+      useDrawer: true,
+      appBar: const DmAppBar(title: Text('DuskMoon UI Showcase')),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => _pages[_selectedIndex],
     );
   }
 }
