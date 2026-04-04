@@ -1,6 +1,7 @@
 import '../state/editor_state.dart';
 import '../view/editor_view.dart';
 import 'commands.dart';
+import 'comment.dart';
 import 'keymap.dart';
 
 /// Returns the default [Keymap] with standard editor key bindings.
@@ -33,6 +34,18 @@ Keymap defaultKeymap() {
     // Undo/Redo
     KeyBinding(key: 'Ctrl-z', run: _wrap((s) => EditorCommands.undo(s))),
     KeyBinding(key: 'Ctrl-Shift-z', run: _wrap((s) => EditorCommands.redo(s))),
+
+    // Comment toggling
+    KeyBinding(
+      key: 'Ctrl-/',
+      run: (dynamic view) {
+        final ev = view as EditorView;
+        final spec = CommentCommands.toggleLineComment(ev.state, '//');
+        if (spec == null) return false;
+        ev.dispatch(spec);
+        return true;
+      },
+    ),
   ]);
 }
 
