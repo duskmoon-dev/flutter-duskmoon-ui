@@ -40,6 +40,7 @@ MaterialApp(
 | [`duskmoon_form`](packages/duskmoon_form/) | BLoC-based form management with 7 field types | [![pub package](https://img.shields.io/pub/v/duskmoon_form.svg)](https://pub.dev/packages/duskmoon_form) |
 | [`duskmoon_visualization`](packages/duskmoon_visualization/) | Data visualization widgets | [![pub package](https://img.shields.io/pub/v/duskmoon_visualization.svg)](https://pub.dev/packages/duskmoon_visualization) |
 | [`duskmoon_adaptive_scaffold`](packages/duskmoon_adaptive_scaffold/) | Adaptive scaffold with responsive nav (forked from flutter_adaptive_scaffold) | [![pub package](https://img.shields.io/pub/v/duskmoon_adaptive_scaffold.svg)](https://pub.dev/packages/duskmoon_adaptive_scaffold) |
+| [`duskmoon_code_engine`](packages/duskmoon_code_engine/) | Pure Dart code editor — 19-language syntax highlighting, CodeMirror 6 architecture | [![pub package](https://img.shields.io/pub/v/duskmoon_code_engine.svg)](https://pub.dev/packages/duskmoon_code_engine) |
 | [`duskmoon_ui`](packages/duskmoon_ui/) | Umbrella — single import for all above (except theme_bloc) | [![pub package](https://img.shields.io/pub/v/duskmoon_ui.svg)](https://pub.dev/packages/duskmoon_ui) |
 
 ## Installation
@@ -131,6 +132,22 @@ SettingsList(
   ],
 );
 ```
+
+## Code Editor
+
+A pure Dart code editor engine with 19-language syntax highlighting, built on a CodeMirror 6-inspired architecture:
+
+```dart
+import 'package:duskmoon_code_engine/duskmoon_code_engine.dart';
+
+CodeEditorWidget(
+  initialCode: 'void main() => print("Hello!");',
+  language: 'dart',
+  theme: HighlightStyle.defaultStyle(),
+);
+```
+
+Supported languages: Dart, JavaScript, TypeScript, Python, HTML, CSS, JSON, Markdown, Rust, Go, YAML, C, C++, Elixir, Java, Kotlin, PHP, Ruby, Erlang, Swift, Zig.
 
 ## Development
 
