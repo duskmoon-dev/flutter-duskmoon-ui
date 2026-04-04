@@ -306,19 +306,25 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
     final activeLineNumber = doc.lineAtOffset(state.selection.main.head).number;
     final cursorLine = doc.lineAtOffset(state.selection.main.head);
 
+    // Materialise the document string once per build — not per visible line.
+    final docSource = doc.toString();
+
+    final tree = syntaxTree(state) ?? Tree.empty;
+    final highlightStyle = theme.highlightStyle.specs.isEmpty
+        ? defaultLightHighlight
+        : theme.highlightStyle;
+
+    // Single ListView.builder that renders both gutter cell and content cell
+    // per row, so gutter and content always scroll together.
     Widget listView = ListView.builder(
       physics: widget.scrollPhysics,
       itemCount: lineCount,
       itemExtent: _kLineHeight,
       itemBuilder: (context, index) {
         final line = doc.lineAt(index + 1); // 1-based
-        final tree = syntaxTree(state) ?? Tree.empty;
-        final highlightStyle = theme.highlightStyle.specs.isEmpty
-            ? defaultLightHighlight
-            : theme.highlightStyle;
         final spans = HighlightBuilder.buildSpans(
           tree: tree,
-          source: doc.toString(),
+          source: docSource,
           lineFrom: line.from,
           lineTo: line.to,
           highlightStyle: highlightStyle,
@@ -365,29 +371,14 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
           );
         }
 
-        return SizedBox(height: _kLineHeight, child: lineWidget);
-      },
-    );
-
-    if (widget.padding != null) {
-      listView = Padding(padding: widget.padding!, child: listView);
-    }
-
-    Widget content;
-    if (widget.lineNumbers) {
-      content = Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: _kGutterWidth,
-            child: ListView.builder(
-              physics: widget.scrollPhysics,
-              itemCount: lineCount,
-              itemExtent: _kLineHeight,
-              itemBuilder: (context, index) {
-                return SizedBox(
-                  height: _kLineHeight,
+        if (widget.lineNumbers) {
+          return SizedBox(
+            height: _kLineHeight,
+            child: Row(
+              children: [
+                SizedBox(
                   width: _kGutterWidth,
+                  height: _kLineHeight,
                   child: CustomPaint(
                     painter: GutterPainter(
                       firstLine: index,
@@ -402,16 +393,22 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
                       gutterWidth: _kGutterWidth,
                     ),
                   ),
-                );
-              },
+                ),
+                Expanded(child: lineWidget),
+              ],
             ),
-          ),
-          Expanded(child: listView),
-        ],
-      );
-    } else {
-      content = listView;
+          );
+        }
+
+        return SizedBox(height: _kLineHeight, child: lineWidget);
+      },
+    );
+
+    if (widget.padding != null) {
+      listView = Padding(padding: widget.padding!, child: listView);
     }
+
+    final Widget content = listView;
 
     Widget editorContent = Container(
       color: theme.background,

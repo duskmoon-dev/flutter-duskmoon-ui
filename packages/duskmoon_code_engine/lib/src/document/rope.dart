@@ -232,33 +232,85 @@ class Rope {
     }
   }
 
-  /// Builds a [Line] object for the given 1-based [lineNumber].
+  /// Builds a [Line] object for the given 1-based [lineNumber] in O(log n)
+  /// time by walking the rope tree using cached [lineCount] values.
+  ///
+  /// The algorithm navigates the tree to find the start offset of the target
+  /// line, then extracts only that line's text — avoiding full materialisation.
   Line _buildLine(int lineNumber) {
-    final full = sliceString(0);
-    var currentLine = 1;
-    var lineStart = 0;
+    // Find the character offset where lineNumber begins.
+    final lineStart = _lineStartOffset(root, 0, lineNumber);
 
-    for (var i = 0; i <= full.length; i++) {
-      if (currentLine == lineNumber) {
-        // Scan to find end of this line.
-        var j = i;
-        while (j < full.length && full.codeUnitAt(j) != 10) {
-          j++;
+    // Extract just this line (up to the next newline or end of document).
+    final lineEnd = _lineEndOffset(root, 0, lineStart);
+
+    final text = sliceString(lineStart, lineEnd);
+    return Line(
+      number: lineNumber,
+      from: lineStart,
+      to: lineEnd,
+      text: text,
+    );
+  }
+
+  /// Returns the character offset at which [targetLine] (1-based) starts.
+  ///
+  /// Walks the rope tree in O(log n) using [RopeNode.lineCount] to choose
+  /// left vs right at each branch.
+  static int _lineStartOffset(RopeNode node, int nodeStart, int targetLine) {
+    switch (node) {
+      case RopeLeaf(:final text):
+        // Scan within this leaf to find the start of targetLine.
+        // linesBeforeNode is implicit: caller ensures nodeStart's line context.
+        var currentLine = 1;
+        for (var i = 0; i < text.length; i++) {
+          if (currentLine == targetLine) return nodeStart + i;
+          if (text.codeUnitAt(i) == 10) currentLine++;
         }
-        return Line(
-          number: lineNumber,
-          from: lineStart,
-          to: j,
-          text: full.substring(lineStart, j),
-        );
-      }
-      if (i < full.length && full.codeUnitAt(i) == 10) {
-        currentLine++;
-        lineStart = i + 1;
-      }
+        // targetLine == currentLine and we're at end-of-leaf (no newline after).
+        return nodeStart + text.length;
+      case RopeBranch(:final left, :final right):
+        // left spans lines 1 .. left.lineCount (relative to this branch start).
+        if (targetLine <= left.lineCount) {
+          return _lineStartOffset(left, nodeStart, targetLine);
+        } else {
+          // The target line is in the right subtree.
+          // Right starts at line (left.lineCount) relative to branch start
+          // because the last line of left continues into right (shared boundary).
+          final rightStart = nodeStart + left.length;
+          final targetInRight = targetLine - (left.lineCount - 1);
+          return _lineStartOffset(right, rightStart, targetInRight);
+        }
     }
+  }
 
-    // Should never reach here for valid lineNumber.
-    throw RangeError('lineNumber $lineNumber out of range');
+  /// Returns the end offset (exclusive, before newline) of the line that
+  /// starts at [lineStart].
+  static int _lineEndOffset(RopeNode node, int nodeStart, int lineStart) {
+    final nodeEnd = nodeStart + node.length;
+    if (lineStart >= nodeEnd) return nodeEnd;
+
+    switch (node) {
+      case RopeLeaf(:final text):
+        final localStart = lineStart - nodeStart;
+        for (var i = localStart; i < text.length; i++) {
+          if (text.codeUnitAt(i) == 10) return nodeStart + i;
+        }
+        return nodeEnd; // no newline in this leaf — end of document (or line spans further)
+      case RopeBranch(:final left, :final right):
+        final rightNodeStart = nodeStart + left.length;
+        if (lineStart < rightNodeStart) {
+          // lineStart is in the left subtree; the line may extend into right.
+          final endInLeft = _lineEndOffset(left, nodeStart, lineStart);
+          if (endInLeft < rightNodeStart) {
+            // Newline was found inside the left subtree.
+            return endInLeft;
+          }
+          // Line continues into right subtree — search from right's beginning.
+          return _lineEndOffset(right, rightNodeStart, rightNodeStart);
+        } else {
+          return _lineEndOffset(right, rightNodeStart, lineStart);
+        }
+    }
   }
 }
