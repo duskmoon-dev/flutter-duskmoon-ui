@@ -67,6 +67,13 @@ export 'src/grammars/go.dart' show goLanguageSupport;
 export 'src/grammars/yaml.dart' show yamlLanguageSupport;
 export 'src/grammars/c.dart' show cLanguageSupport;
 export 'src/grammars/elixir.dart' show elixirLanguageSupport;
+export 'src/grammars/java.dart' show javaLanguageSupport;
+export 'src/grammars/kotlin.dart' show kotlinLanguageSupport;
+export 'src/grammars/php.dart' show phpLanguageSupport;
+export 'src/grammars/ruby.dart' show rubyLanguageSupport;
+export 'src/grammars/erlang.dart' show erlangLanguageSupport;
+export 'src/grammars/swift.dart' show swiftLanguageSupport;
+export 'src/grammars/zig.dart' show zigLanguageSupport;
 
 // Theme
 export 'src/theme/editor_theme.dart' show EditorTheme;
