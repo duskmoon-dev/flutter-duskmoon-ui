@@ -193,6 +193,234 @@ abstract final class EditorCommands {
   }
 
   // ---------------------------------------------------------------------------
+  // Word-level cursor movement
+  // ---------------------------------------------------------------------------
+
+  /// Move the cursor to the end of the current word (or start of next word
+  /// after whitespace). Word characters: a-z, A-Z, 0-9, _.
+  /// Returns null if the cursor is already at the end of the document.
+  static TransactionSpec? cursorWordRight(EditorState state) {
+    final head = state.selection.main.head;
+    if (head >= state.doc.length) return null;
+    final text = state.doc.toString();
+    final newPos = _findWordBoundaryRight(text, head);
+    if (newPos == head) return null;
+    return TransactionSpec(selection: EditorSelection.cursor(newPos));
+  }
+
+  /// Move the cursor to the start of the current word (or end of previous
+  /// word). Word characters: a-z, A-Z, 0-9, _.
+  /// Returns null if the cursor is already at the start of the document.
+  static TransactionSpec? cursorWordLeft(EditorState state) {
+    final head = state.selection.main.head;
+    if (head <= 0) return null;
+    final text = state.doc.toString();
+    final newPos = _findWordBoundaryLeft(text, head);
+    if (newPos == head) return null;
+    return TransactionSpec(selection: EditorSelection.cursor(newPos));
+  }
+
+  /// Extend the selection head to the next word boundary to the right.
+  /// Returns null if the head is already at the end of the document.
+  static TransactionSpec? selectWordRight(EditorState state) {
+    final main = state.selection.main;
+    if (main.head >= state.doc.length) return null;
+    final text = state.doc.toString();
+    final newHead = _findWordBoundaryRight(text, main.head);
+    if (newHead == main.head) return null;
+    return TransactionSpec(
+      selection: EditorSelection.single(anchor: main.anchor, head: newHead),
+    );
+  }
+
+  /// Extend the selection head to the next word boundary to the left.
+  /// Returns null if the head is already at the start of the document.
+  static TransactionSpec? selectWordLeft(EditorState state) {
+    final main = state.selection.main;
+    if (main.head <= 0) return null;
+    final text = state.doc.toString();
+    final newHead = _findWordBoundaryLeft(text, main.head);
+    if (newHead == main.head) return null;
+    return TransactionSpec(
+      selection: EditorSelection.single(anchor: main.anchor, head: newHead),
+    );
+  }
+
+  /// Delete from the cursor to the word boundary to the left.
+  /// Returns null if the cursor is at the start of the document.
+  static TransactionSpec? deleteWordBackward(EditorState state) {
+    final main = state.selection.main;
+    if (!main.isEmpty) return deleteSelection(state);
+    final head = main.head;
+    if (head <= 0) return null;
+    final text = state.doc.toString();
+    final boundary = _findWordBoundaryLeft(text, head);
+    if (boundary == head) return null;
+    final changes = ChangeSet.of(state.doc.length, [
+      ChangeSpec(from: boundary, to: head),
+    ]);
+    return TransactionSpec(
+      changes: changes,
+      selection: EditorSelection.cursor(boundary),
+    );
+  }
+
+  /// Delete from the cursor to the word boundary to the right.
+  /// Returns null if the cursor is at the end of the document.
+  static TransactionSpec? deleteWordForward(EditorState state) {
+    final main = state.selection.main;
+    if (!main.isEmpty) return deleteSelection(state);
+    final head = main.head;
+    if (head >= state.doc.length) return null;
+    final text = state.doc.toString();
+    final boundary = _findWordBoundaryRight(text, head);
+    if (boundary == head) return null;
+    final changes = ChangeSet.of(state.doc.length, [
+      ChangeSpec(from: head, to: boundary),
+    ]);
+    return TransactionSpec(
+      changes: changes,
+      selection: EditorSelection.cursor(head),
+    );
+  }
+
+  /// Scan right from [pos]: skip word chars, then skip non-word chars.
+  static int _findWordBoundaryRight(String text, int pos) {
+    final len = text.length;
+    // Skip over word characters first
+    while (pos < len && _isWordChar(text[pos])) {
+      pos++;
+    }
+    // Then skip over non-word characters (whitespace / punctuation)
+    while (pos < len && !_isWordChar(text[pos])) {
+      pos++;
+    }
+    return pos;
+  }
+
+  /// Scan left from [pos]: skip non-word chars, then skip word chars.
+  static int _findWordBoundaryLeft(String text, int pos) {
+    // Skip over non-word characters first
+    while (pos > 0 && !_isWordChar(text[pos - 1])) {
+      pos--;
+    }
+    // Then skip over word characters
+    while (pos > 0 && _isWordChar(text[pos - 1])) {
+      pos--;
+    }
+    return pos;
+  }
+
+  static bool _isWordChar(String ch) {
+    final c = ch.codeUnitAt(0);
+    return (c >= 65 && c <= 90) || // A-Z
+        (c >= 97 && c <= 122) || // a-z
+        (c >= 48 && c <= 57) || // 0-9
+        c == 95; // _
+  }
+
+  // ---------------------------------------------------------------------------
+  // Line operations
+  // ---------------------------------------------------------------------------
+
+  /// Delete the line containing the cursor, including its newline.
+  /// Handles first, last, only, and middle lines.
+  static TransactionSpec deleteLine(EditorState state) {
+    final head = state.selection.main.head;
+    final line = state.doc.lineAtOffset(head);
+    final int from;
+    final int to;
+
+    if (state.doc.lineCount == 1) {
+      // Only line: delete all content but leave empty document.
+      from = 0;
+      to = line.to;
+    } else if (line.number < state.doc.lineCount) {
+      // Not the last line: delete from line start through the trailing newline.
+      from = line.from;
+      to = line.to + 1; // +1 to consume the '\n'
+    } else {
+      // Last line: delete the preceding newline and the line content.
+      from = line.from - 1; // consume the '\n' before this line
+      to = line.to;
+    }
+
+    final changes = ChangeSet.of(state.doc.length, [
+      ChangeSpec(from: from, to: to),
+    ]);
+    final newHead = from.clamp(0, state.doc.length - (to - from));
+    return TransactionSpec(
+      changes: changes,
+      selection: EditorSelection.cursor(newHead),
+    );
+  }
+
+  /// Insert a copy of the current line after itself.
+  /// Cursor is placed at the same column on the duplicated line.
+  static TransactionSpec duplicateLine(EditorState state) {
+    final head = state.selection.main.head;
+    final line = state.doc.lineAtOffset(head);
+    final col = head - line.from;
+    final insert = '\n${line.text}';
+    final changes = ChangeSet.of(state.doc.length, [
+      ChangeSpec(from: line.to, to: line.to, insert: insert),
+    ]);
+    // New head is on the duplicated line at the same column.
+    final newHead = line.to + 1 + col.clamp(0, line.length);
+    return TransactionSpec(
+      changes: changes,
+      selection: EditorSelection.cursor(newHead),
+    );
+  }
+
+  /// Swap the current line with the line above it.
+  /// Returns null if the cursor is on the first line.
+  static TransactionSpec? moveLineUp(EditorState state) {
+    final head = state.selection.main.head;
+    final line = state.doc.lineAtOffset(head);
+    if (line.number <= 1) return null;
+    final prevLine = state.doc.lineAt(line.number - 1);
+    final col = head - line.from;
+
+    // Replace the two-line block (prevLine\nline) with (line\nprevLine).
+    final from = prevLine.from;
+    final to = line.to;
+    final newText = '${line.text}\n${prevLine.text}';
+    final changes = ChangeSet.of(state.doc.length, [
+      ChangeSpec(from: from, to: to, insert: newText),
+    ]);
+    final newHead = from + col.clamp(0, line.length);
+    return TransactionSpec(
+      changes: changes,
+      selection: EditorSelection.cursor(newHead),
+    );
+  }
+
+  /// Swap the current line with the line below it.
+  /// Returns null if the cursor is on the last line.
+  static TransactionSpec? moveLineDown(EditorState state) {
+    final head = state.selection.main.head;
+    final line = state.doc.lineAtOffset(head);
+    if (line.number >= state.doc.lineCount) return null;
+    final nextLine = state.doc.lineAt(line.number + 1);
+    final col = head - line.from;
+
+    // Replace the two-line block (line\nnextLine) with (nextLine\nline).
+    final from = line.from;
+    final to = nextLine.to;
+    final newText = '${nextLine.text}\n${line.text}';
+    final changes = ChangeSet.of(state.doc.length, [
+      ChangeSpec(from: from, to: to, insert: newText),
+    ]);
+    // Cursor stays on the same logical content, now on line.number + 1.
+    final newHead = from + nextLine.length + 1 + col.clamp(0, line.length);
+    return TransactionSpec(
+      changes: changes,
+      selection: EditorSelection.cursor(newHead),
+    );
+  }
+
+  // ---------------------------------------------------------------------------
   // History
   // ---------------------------------------------------------------------------
 

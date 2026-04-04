@@ -19,17 +19,29 @@ Keymap defaultKeymap() {
     KeyBinding(key: 'End', run: _wrap((s) => EditorCommands.cursorLineEnd(s))),
     KeyBinding(key: 'Ctrl-Home', run: _wrap((s) => EditorCommands.cursorDocStart(s))),
     KeyBinding(key: 'Ctrl-End', run: _wrap((s) => EditorCommands.cursorDocEnd(s))),
+    KeyBinding(key: 'Ctrl-ArrowRight', run: _wrap((s) => EditorCommands.cursorWordRight(s))),
+    KeyBinding(key: 'Ctrl-ArrowLeft', run: _wrap((s) => EditorCommands.cursorWordLeft(s))),
 
     // Selection
     KeyBinding(key: 'Shift-ArrowRight', run: _wrap((s) => EditorCommands.selectCharRight(s))),
     KeyBinding(key: 'Shift-ArrowLeft', run: _wrap((s) => EditorCommands.selectCharLeft(s))),
     KeyBinding(key: 'Ctrl-a', run: _wrapNonNull((s) => EditorCommands.selectAll(s))),
+    KeyBinding(key: 'Ctrl-Shift-ArrowRight', run: _wrap((s) => EditorCommands.selectWordRight(s))),
+    KeyBinding(key: 'Ctrl-Shift-ArrowLeft', run: _wrap((s) => EditorCommands.selectWordLeft(s))),
 
     // Editing
     KeyBinding(key: 'Backspace', run: _wrap((s) => EditorCommands.deleteCharBackward(s))),
     KeyBinding(key: 'Delete', run: _wrap((s) => EditorCommands.deleteCharForward(s))),
     KeyBinding(key: 'Enter', run: _wrapNonNull((s) => EditorCommands.insertNewline(s))),
     KeyBinding(key: 'Tab', run: _wrapNonNull((s) => EditorCommands.insertTab(s))),
+    KeyBinding(key: 'Ctrl-Backspace', run: _wrap((s) => EditorCommands.deleteWordBackward(s))),
+    KeyBinding(key: 'Ctrl-Delete', run: _wrap((s) => EditorCommands.deleteWordForward(s))),
+
+    // Line operations
+    KeyBinding(key: 'Ctrl-Shift-k', run: _wrapNonNull((s) => EditorCommands.deleteLine(s))),
+    KeyBinding(key: 'Ctrl-Shift-d', run: _wrapNonNull((s) => EditorCommands.duplicateLine(s))),
+    KeyBinding(key: 'Alt-ArrowUp', run: _wrap((s) => EditorCommands.moveLineUp(s))),
+    KeyBinding(key: 'Alt-ArrowDown', run: _wrap((s) => EditorCommands.moveLineDown(s))),
 
     // Undo/Redo
     KeyBinding(key: 'Ctrl-z', run: _wrap((s) => EditorCommands.undo(s))),
