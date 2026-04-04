@@ -1,5 +1,8 @@
 # DuskMoon UI for Flutter
 
+[![CI](https://github.com/duskmoon-dev/flutter-duskmoon-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/duskmoon-dev/flutter-duskmoon-ui/actions/workflows/ci.yml)
+[![Deploy Pages](https://github.com/duskmoon-dev/flutter-duskmoon-ui/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/duskmoon-dev/flutter-duskmoon-ui/actions/workflows/deploy-pages.yml)
+
 A Flutter component library implementing the [DuskMoon Design System](https://github.com/duskmoon-dev). Codegen-driven theming, adaptive widgets, platform-aware settings UI, and feedback helpers — all in a Melos-managed monorepo.
 
 [Live Demo](https://duskmoon-dev.github.io/flutter-duskmoon-ui/) | [API Reference](https://pub.dev/packages/duskmoon_ui)
@@ -27,14 +30,17 @@ MaterialApp(
 
 ## Packages
 
-| Package | Description |
-|---------|-------------|
-| [`duskmoon_theme`](packages/duskmoon_theme/) | Codegen-driven theme — Sunshine/Moonlight color schemes, 20 semantic color tokens, M3 text theme |
-| [`duskmoon_theme_bloc`](packages/duskmoon_theme_bloc/) | BLoC for theme name + mode persistence via SharedPreferences |
-| [`duskmoon_widgets`](packages/duskmoon_widgets/) | 18 adaptive widgets with Material/Cupertino rendering |
-| [`duskmoon_settings`](packages/duskmoon_settings/) | Settings UI — 10 tile types, 3 platform renderers (Material/Cupertino/Fluent) |
-| [`duskmoon_feedback`](packages/duskmoon_feedback/) | Adaptive dialogs, snackbars, toasts, bottom sheets |
-| [`duskmoon_ui`](packages/duskmoon_ui/) | Umbrella — single import for all above (except theme_bloc) |
+| Package | Description | pub.dev |
+|---------|-------------|---------|
+| [`duskmoon_theme`](packages/duskmoon_theme/) | Codegen-driven theme — Sunshine/Moonlight color schemes, 20 semantic color tokens, M3 text theme | [![pub package](https://img.shields.io/pub/v/duskmoon_theme.svg)](https://pub.dev/packages/duskmoon_theme) |
+| [`duskmoon_theme_bloc`](packages/duskmoon_theme_bloc/) | BLoC for theme name + mode persistence via SharedPreferences | [![pub package](https://img.shields.io/pub/v/duskmoon_theme_bloc.svg)](https://pub.dev/packages/duskmoon_theme_bloc) |
+| [`duskmoon_widgets`](packages/duskmoon_widgets/) | 18 adaptive widgets with Material/Cupertino rendering | [![pub package](https://img.shields.io/pub/v/duskmoon_widgets.svg)](https://pub.dev/packages/duskmoon_widgets) |
+| [`duskmoon_settings`](packages/duskmoon_settings/) | Settings UI — 10 tile types, 3 platform renderers (Material/Cupertino/Fluent) | [![pub package](https://img.shields.io/pub/v/duskmoon_settings.svg)](https://pub.dev/packages/duskmoon_settings) |
+| [`duskmoon_feedback`](packages/duskmoon_feedback/) | Adaptive dialogs, snackbars, toasts, bottom sheets | [![pub package](https://img.shields.io/pub/v/duskmoon_feedback.svg)](https://pub.dev/packages/duskmoon_feedback) |
+| [`duskmoon_form`](packages/duskmoon_form/) | BLoC-based form management with 7 field types | [![pub package](https://img.shields.io/pub/v/duskmoon_form.svg)](https://pub.dev/packages/duskmoon_form) |
+| [`duskmoon_visualization`](packages/duskmoon_visualization/) | Data visualization widgets | [![pub package](https://img.shields.io/pub/v/duskmoon_visualization.svg)](https://pub.dev/packages/duskmoon_visualization) |
+| [`duskmoon_adaptive_scaffold`](packages/duskmoon_adaptive_scaffold/) | Adaptive scaffold with responsive nav (forked from flutter_adaptive_scaffold) | [![pub package](https://img.shields.io/pub/v/duskmoon_adaptive_scaffold.svg)](https://pub.dev/packages/duskmoon_adaptive_scaffold) |
+| [`duskmoon_ui`](packages/duskmoon_ui/) | Umbrella — single import for all above (except theme_bloc) | [![pub package](https://img.shields.io/pub/v/duskmoon_ui.svg)](https://pub.dev/packages/duskmoon_ui) |
 
 ## Installation
 

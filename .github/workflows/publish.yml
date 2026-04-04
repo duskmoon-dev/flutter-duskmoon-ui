@@ -43,12 +43,14 @@ jobs:
       - name: Publish to pub.dev
         run: |
           # Publish order respects dependency graph:
-          # 1. duskmoon_theme (no deps)
+          # 0. duskmoon_adaptive_scaffold (independently versioned, no internal deps)
+          # 1. duskmoon_theme (no internal deps)
           # 2. duskmoon_theme_bloc, duskmoon_widgets, duskmoon_settings, duskmoon_feedback (depend on theme)
           # 3. duskmoon_form (depends on theme + widgets)
           # 4. duskmoon_ui (depends on all above except theme_bloc and form)
 
           PUBLISH_ORDER=(
+            packages/duskmoon_adaptive_scaffold
             packages/duskmoon_theme
             packages/duskmoon_theme_bloc
             packages/duskmoon_widgets

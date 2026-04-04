@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'color_scheme.dart';
+import 'dm_theme.dart';
 import 'extensions.dart';
 import 'text_theme.dart';
 
@@ -39,6 +40,12 @@ abstract final class DmThemeData {
   static ThemeData moonlight() => _buildThemeData(
         colorScheme: DmColorScheme.moonlight(),
         colorExtension: DmColorExtension.moonlight(),
+      );
+
+  /// Build [ThemeData] from a [DmTheme] token container.
+  static ThemeData fromDmTheme(DmTheme theme) => _buildThemeData(
+        colorScheme: theme.colors.colorScheme,
+        colorExtension: theme.colors.extension,
       );
 
   /// Returns all available [DmThemeEntry] instances.

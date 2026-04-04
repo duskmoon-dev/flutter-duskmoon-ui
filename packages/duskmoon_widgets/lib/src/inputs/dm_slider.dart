@@ -52,6 +52,13 @@ class DmSlider extends StatelessWidget with AdaptiveWidget {
           max: max,
           divisions: divisions,
         ),
+      DmPlatformStyle.fluent => Slider(
+          value: value,
+          onChanged: onChanged,
+          min: min,
+          max: max,
+          divisions: divisions,
+        ),
     };
   }
 }

@@ -89,6 +89,21 @@ class DmTextField extends StatelessWidget with AdaptiveWidget {
           prefix: prefix,
           suffix: suffix,
         ),
+      DmPlatformStyle.fluent => TextField(
+          controller: controller,
+          decoration: decoration ??
+              InputDecoration(
+                hintText: placeholder,
+                prefixIcon: prefix,
+                suffixIcon: suffix,
+              ),
+          obscureText: obscureText,
+          onChanged: onChanged,
+          onSubmitted: onSubmitted,
+          enabled: enabled,
+          keyboardType: keyboardType,
+          maxLines: maxLines,
+        ),
     };
   }
 }

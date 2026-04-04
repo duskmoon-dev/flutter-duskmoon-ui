@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:duskmoon_settings/duskmoon_settings.dart';
+import 'package:duskmoon_widgets/duskmoon_widgets.dart';
 
 void main() {
   group('DevicePlatform', () {
@@ -42,6 +44,74 @@ void main() {
     test('Fluent design platforms', () {
       // Windows should use Fluent Design
       expect(DevicePlatform.values, contains(DevicePlatform.windows));
+    });
+  });
+
+  group('SettingsList dispatches via DmPlatformStyle', () {
+    testWidgets(
+        'DmPlatformStyle.fluent dispatches to FluentSettingsList via DuskmoonApp',
+        (tester) async {
+      await tester.pumpWidget(
+        DuskmoonApp(
+          platformStyle: DmPlatformStyle.fluent,
+          child: MaterialApp(
+            home: Scaffold(
+              body: SettingsList(
+                sections: [
+                  SettingsSection(
+                    tiles: [SettingsTile(title: const Text('Fluent'))],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.text('Fluent'), findsOneWidget);
+    });
+
+    testWidgets(
+        'DmPlatformStyle.cupertino dispatches to CupertinoSettingsList via DuskmoonApp',
+        (tester) async {
+      await tester.pumpWidget(
+        DuskmoonApp(
+          platformStyle: DmPlatformStyle.cupertino,
+          child: MaterialApp(
+            home: Scaffold(
+              body: SettingsList(
+                sections: [
+                  SettingsSection(
+                    tiles: [SettingsTile(title: const Text('Cupertino'))],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.text('Cupertino'), findsOneWidget);
+    });
+
+    testWidgets(
+        'DmPlatformStyle.material dispatches to MaterialSettingsList via DuskmoonApp',
+        (tester) async {
+      await tester.pumpWidget(
+        DuskmoonApp(
+          platformStyle: DmPlatformStyle.material,
+          child: MaterialApp(
+            home: Scaffold(
+              body: SettingsList(
+                sections: [
+                  SettingsSection(
+                    tiles: [SettingsTile(title: const Text('Material'))],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.text('Material'), findsOneWidget);
     });
   });
 }

@@ -25,20 +25,22 @@ class DuskmoonShowcaseApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => DmThemeBloc(prefs: prefs),
-      child: BlocBuilder<DmThemeBloc, DmThemeState>(
-        builder: (context, state) {
-          final entry = state.entry;
-          return MaterialApp(
-            title: 'DuskMoon UI Showcase',
-            theme: entry.light,
-            darkTheme: entry.dark,
-            themeMode: state.themeMode,
-            scaffoldMessengerKey: dmScaffoldMessengerKey,
-            home: const ShowcaseHome(),
-          );
-        },
+    return DuskmoonApp(
+      child: BlocProvider(
+        create: (_) => DmThemeBloc(prefs: prefs),
+        child: BlocBuilder<DmThemeBloc, DmThemeState>(
+          builder: (context, state) {
+            final entry = state.entry;
+            return MaterialApp(
+              title: 'DuskMoon UI Showcase',
+              theme: entry.light,
+              darkTheme: entry.dark,
+              themeMode: state.themeMode,
+              scaffoldMessengerKey: dmScaffoldMessengerKey,
+              home: const ShowcaseHome(),
+            );
+          },
+        ),
       ),
     );
   }

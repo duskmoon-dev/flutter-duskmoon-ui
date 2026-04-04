@@ -69,6 +69,12 @@ class DmBadge extends StatelessWidget with AdaptiveWidget {
               ),
           ],
         ),
+      DmPlatformStyle.fluent => Badge(
+          label: label != null ? Text(label!) : null,
+          backgroundColor: backgroundColor,
+          textColor: textColor,
+          child: child,
+        ),
     };
   }
 }

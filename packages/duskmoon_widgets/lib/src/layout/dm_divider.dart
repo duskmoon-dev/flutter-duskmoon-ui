@@ -56,6 +56,13 @@ class DmDivider extends StatelessWidget with AdaptiveWidget {
             color: color ?? Theme.of(context).colorScheme.outlineVariant,
           ),
         ),
+      DmPlatformStyle.fluent => Divider(
+          height: height,
+          thickness: thickness,
+          indent: indent,
+          endIndent: endIndent,
+          color: color,
+        ),
     };
   }
 }

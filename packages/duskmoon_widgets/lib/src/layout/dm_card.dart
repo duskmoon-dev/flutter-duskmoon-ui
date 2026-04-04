@@ -55,6 +55,11 @@ class DmCard extends StatelessWidget with AdaptiveWidget {
           ),
           child: content,
         ),
+      DmPlatformStyle.fluent => Card(
+          elevation: elevation,
+          margin: margin,
+          child: content,
+        ),
     };
   }
 }

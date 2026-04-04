@@ -34,6 +34,10 @@ class DmCheckbox extends StatelessWidget with AdaptiveWidget {
           value: value,
           onChanged: onChanged,
         ),
+      DmPlatformStyle.fluent => Checkbox(
+          value: value,
+          onChanged: onChanged,
+        ),
     };
   }
 }
