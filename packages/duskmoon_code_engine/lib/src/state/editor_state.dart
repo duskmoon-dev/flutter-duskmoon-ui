@@ -69,10 +69,11 @@ class EditorState {
 
   /// Read a state field value.
   T field<T>(StateField<T> f) {
-    assert(
-      _fieldValues.containsKey(f),
-      'StateField not found — was it included in the extensions list?',
-    );
+    if (!_fieldValues.containsKey(f)) {
+      throw StateError(
+        'StateField not found — was it included in the extensions list?',
+      );
+    }
     return _fieldValues[f] as T;
   }
 

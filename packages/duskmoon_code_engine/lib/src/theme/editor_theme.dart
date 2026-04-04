@@ -1,5 +1,6 @@
 import 'package:flutter/painting.dart';
 import '../lezer/highlight/highlight.dart';
+import 'default_highlight.dart';
 
 class EditorTheme {
   const EditorTheme({
@@ -51,7 +52,7 @@ class EditorTheme {
         matchingBracketOutline: const Color(0xFF00CC00),
         scrollbarThumb: const Color(0x33000000),
         scrollbarTrack: const Color(0x0A000000),
-        highlightStyle: HighlightStyle([]),
+        highlightStyle: defaultLightHighlight,
       );
 
   factory EditorTheme.dark() => EditorTheme(
@@ -69,6 +70,6 @@ class EditorTheme {
         matchingBracketOutline: const Color(0xFF00CC00),
         scrollbarThumb: const Color(0x33FFFFFF),
         scrollbarTrack: const Color(0x0AFFFFFF),
-        highlightStyle: HighlightStyle([]),
+        highlightStyle: defaultDarkHighlight,
       );
 }

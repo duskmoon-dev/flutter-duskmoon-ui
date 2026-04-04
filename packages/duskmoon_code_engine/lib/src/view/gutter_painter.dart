@@ -55,5 +55,8 @@ class GutterPainter extends CustomPainter {
   bool shouldRepaint(GutterPainter old) =>
       firstLine != old.firstLine ||
       lineCount != old.lineCount ||
-      activeLine != old.activeLine;
+      activeLine != old.activeLine ||
+      foreground != old.foreground ||
+      activeForeground != old.activeForeground ||
+      background != old.background;
 }

@@ -37,5 +37,9 @@ class SelectionPainter extends CustomPainter {
   bool shouldRepaint(SelectionPainter old) =>
       cursorOffset != old.cursorOffset ||
       showCursor != old.showCursor ||
-      selectionRects != old.selectionRects;
+      selectionRects != old.selectionRects ||
+      cursorColor != old.cursorColor ||
+      selectionColor != old.selectionColor ||
+      cursorWidth != old.cursorWidth ||
+      cursorHeight != old.cursorHeight;
 }

@@ -31,6 +31,7 @@ class CursorBlink extends ChangeNotifier {
   void restart() {
     _timer?.cancel();
     _timer = null;
+    _started = true;
     _visible = true;
     notifyListeners();
     _timer = Timer.periodic(const Duration(milliseconds: 530), (_) {
