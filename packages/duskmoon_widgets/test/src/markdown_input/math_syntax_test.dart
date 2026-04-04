@@ -20,8 +20,7 @@ void main() {
 
         expect(nodes, isNotEmpty);
         final p = nodes.first as md.Element;
-        final mathElements =
-            _findElements(p, 'math');
+        final mathElements = _findElements(p, 'math');
         expect(mathElements, isNotEmpty);
         expect(mathElements.first.textContent, 'E = mc^2');
       });

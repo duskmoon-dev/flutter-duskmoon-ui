@@ -181,8 +181,7 @@ class AstSpanVisitor {
           ));
         }
         // Closing marker.
-        final closingMarker =
-            _closingMarkerForTag(el.tag) ?? marker;
+        final closingMarker = _closingMarkerForTag(el.tag) ?? marker;
         final closingIdx = source.indexOf(closingMarker, idx + text.length);
         if (closingIdx >= 0) {
           ranges.add(StyledRange(

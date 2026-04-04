@@ -275,7 +275,8 @@ void main() {
     },
   );
 
-  testWidgets('AnimatedSwitcher does not spawn duplicate keys on rapid resize', (
+  testWidgets('AnimatedSwitcher does not spawn duplicate keys on rapid resize',
+      (
     WidgetTester tester,
   ) async {
     // Populate the smaller slot layout and let the animation settle.

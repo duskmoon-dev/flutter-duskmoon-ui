@@ -41,9 +41,8 @@ class LineNumberGutter extends StatelessWidget {
       child: AnimatedBuilder(
         animation: scrollController,
         builder: (_, __) {
-          final offset = scrollController.hasClients
-              ? scrollController.offset
-              : 0.0;
+          final offset =
+              scrollController.hasClients ? scrollController.offset : 0.0;
           return ClipRect(
             child: Transform.translate(
               offset: Offset(0, -offset + topPadding),

@@ -29,8 +29,7 @@ void main(List<String> args) {
   final gotoTable = (json['goto'] as List).cast<int>();
   final tokenData = (json['tokenData'] as List).cast<int>();
   final topRuleIndex = json['topRuleIndex'] as int;
-  final skippedNodes =
-      (json['skippedNodes'] as List?)?.cast<int>() ?? <int>[];
+  final skippedNodes = (json['skippedNodes'] as List?)?.cast<int>() ?? <int>[];
   final tokenPrec = json['tokenPrec'] as int? ?? 0;
   final nodeProps = json['nodeProps'] as Map<String, dynamic>? ?? {};
 
@@ -80,7 +79,8 @@ void main(List<String> args) {
 
   // Parser
   final camel = langName[0].toLowerCase() + langName.substring(1);
-  buf.writeln('/// LR parser for $langName, deserialized from compiled grammar tables.');
+  buf.writeln(
+      '/// LR parser for $langName, deserialized from compiled grammar tables.');
   buf.writeln('final ${camel}LRParser = LRParser.deserialize(');
   buf.writeln('  nodeNames: _nodeNames,');
   buf.writeln('  states: _states,');
@@ -111,5 +111,4 @@ void _writeIntList(StringBuffer buf, String name, List<int> data) {
   buf.writeln();
 }
 
-String _escape(String s) =>
-    s.replaceAll(r'\', r'\\').replaceAll("'", r"\'");
+String _escape(String s) => s.replaceAll(r'\', r'\\').replaceAll("'", r"\'");
