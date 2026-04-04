@@ -1,5 +1,6 @@
 import '../state/editor_state.dart';
 import '../view/editor_view.dart';
+import 'clipboard.dart';
 import 'commands.dart';
 import 'comment.dart';
 import 'keymap.dart';
@@ -46,6 +47,11 @@ Keymap defaultKeymap() {
     // Undo/Redo
     KeyBinding(key: 'Ctrl-z', run: _wrap((s) => EditorCommands.undo(s))),
     KeyBinding(key: 'Ctrl-Shift-z', run: _wrap((s) => EditorCommands.redo(s))),
+
+    // Clipboard
+    KeyBinding(key: 'Ctrl-c', run: ClipboardCommands.copyCommand()),
+    KeyBinding(key: 'Ctrl-x', run: ClipboardCommands.cutCommand()),
+    KeyBinding(key: 'Ctrl-v', run: ClipboardCommands.pasteCommand()),
 
     // Comment toggling
     KeyBinding(

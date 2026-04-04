@@ -96,6 +96,8 @@ export 'src/commands/history.dart' show HistoryState, HistoryEntry, historyExten
 export 'src/commands/default_keymap.dart' show defaultKeymap;
 export 'src/commands/bracket_matching.dart' show BracketPair, BracketMatching;
 export 'src/commands/comment.dart' show CommentCommands;
+export 'src/commands/clipboard.dart' show ClipboardCommands;
+export 'src/commands/search.dart' show SearchMatch, SearchState, SearchCommands;
 export 'src/commands/folding.dart' show FoldRegion, FoldDetector;
 export 'src/view/position_utils.dart' show LineColumn, PositionUtils;
 export 'src/view/cursor_blink.dart' show CursorBlink;
