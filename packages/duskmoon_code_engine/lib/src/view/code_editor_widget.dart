@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart' hide InlineSpan;
+import 'package:flutter/services.dart';
 
+import '../commands/default_keymap.dart';
+import '../commands/keymap.dart';
 import '../language/language.dart';
 import '../language/syntax.dart';
 import '../lezer/common/tree.dart';
 import '../state/editor_state.dart';
 import '../state/extension.dart';
+import '../state/selection.dart';
 import '../theme/default_highlight.dart';
 import '../theme/editor_theme.dart';
+import 'cursor_blink.dart';
 import 'editor_view_controller.dart';
 import 'gutter_painter.dart';
 import 'highlight_builder.dart';
+import 'input_handler.dart';
 import 'line_painter.dart';
+import 'position_utils.dart';
+import 'selection_painter.dart';
 
 const String _kFontFamily = 'monospace';
 const double _kFontSize = 14.0;
@@ -95,6 +103,9 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
   late FocusNode _focusNode;
   bool _ownsController = false;
   bool _ownsFocusNode = false;
+  late CursorBlink _cursorBlink;
+  InputHandler? _inputHandler;
+  late Keymap _keymap;
 
   @override
   void initState() {
@@ -122,6 +133,10 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
     }
 
     _controller.view.addListener(_onViewChanged);
+
+    _cursorBlink = CursorBlink();
+    _cursorBlink.addListener(() => setState(() {}));
+    _keymap = defaultKeymap();
   }
 
   @override
@@ -167,6 +182,8 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
     _controller.view.removeListener(_onViewChanged);
     if (_ownsController) _controller.dispose();
     if (_ownsFocusNode) _focusNode.dispose();
+    _cursorBlink.dispose();
+    _inputHandler?.detach();
     super.dispose();
   }
 
@@ -178,6 +195,94 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
   EditorTheme get _effectiveTheme =>
       widget.theme ?? _controller.theme ?? EditorTheme.light();
 
+  // ---------------------------------------------------------------------------
+  // Event handlers
+  // ---------------------------------------------------------------------------
+
+  void _handleFocusChange(bool focused) {
+    if (focused) {
+      _cursorBlink.start();
+      if (!widget.readOnly) {
+        _inputHandler = InputHandler(_controller.view);
+        _inputHandler!.attach();
+      }
+    } else {
+      _cursorBlink.stop();
+      _inputHandler?.detach();
+      _inputHandler = null;
+    }
+    setState(() {});
+  }
+
+  KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
+    if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
+      return KeyEventResult.ignored;
+    }
+    if (widget.readOnly) return KeyEventResult.ignored;
+
+    final key = event.logicalKey;
+    final ctrl = HardwareKeyboard.instance.isControlPressed ||
+        HardwareKeyboard.instance.isMetaPressed;
+    final shift = HardwareKeyboard.instance.isShiftPressed;
+    final alt = HardwareKeyboard.instance.isAltPressed;
+
+    final binding = _keymap.resolve(key, ctrl, shift, alt);
+    if (binding?.run != null) {
+      final handled = binding!.run!(_controller.view);
+      if (handled) {
+        _cursorBlink.restart();
+        _inputHandler?.syncState();
+        return KeyEventResult.handled;
+      }
+    }
+
+    // Printable character insertion
+    if (!ctrl &&
+        !alt &&
+        event.character != null &&
+        event.character!.isNotEmpty &&
+        !_isControlChar(event.character!)) {
+      _controller.insertText(event.character!);
+      _cursorBlink.restart();
+      _inputHandler?.syncState();
+      return KeyEventResult.handled;
+    }
+
+    return KeyEventResult.ignored;
+  }
+
+  bool _isControlChar(String ch) {
+    final code = ch.codeUnitAt(0);
+    return code < 0x20 || code == 0x7F;
+  }
+
+  void _handleTapDown(TapDownDetails details) {
+    final alreadyFocused = _focusNode.hasFocus;
+    _focusNode.requestFocus();
+    final localY = details.localPosition.dy;
+    final lineIndex = PositionUtils.lineForY(
+      localY,
+      lineHeight: _kLineHeight,
+      maxLine: _controller.document.lineCount - 1,
+    );
+    // MVP: place cursor at start of tapped line
+    final offset = PositionUtils.offsetFromLineCol(
+      lineIndex,
+      0,
+      _controller.document,
+    );
+    _controller.setSelection(EditorSelection.cursor(offset));
+    // Only restart blink if focus was already active;
+    // if gaining focus for the first time, _handleFocusChange will call start().
+    if (alreadyFocused) {
+      _cursorBlink.restart();
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Build
+  // ---------------------------------------------------------------------------
+
   @override
   Widget build(BuildContext context) {
     final theme = _effectiveTheme;
@@ -187,6 +292,7 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
 
     final activeLineNumber =
         doc.lineAtOffset(state.selection.main.head).number;
+    final cursorLine = doc.lineAtOffset(state.selection.main.head);
 
     Widget listView = ListView.builder(
       physics: widget.scrollPhysics,
@@ -210,18 +316,44 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
         final isActiveLine =
             widget.highlightActiveLine && (index + 1) == activeLineNumber;
 
-        return SizedBox(
-          height: _kLineHeight,
-          child: CustomPaint(
-            painter: LinePainter(
-              spans: spans,
-              lineHeight: _kLineHeight,
-              fontFamily: _kFontFamily,
-              fontSize: _kFontSize,
-              backgroundColor: isActiveLine ? theme.lineHighlight : null,
-            ),
+        final hasCursor =
+            _focusNode.hasFocus && (index + 1) == cursorLine.number;
+
+        Widget lineWidget = CustomPaint(
+          painter: LinePainter(
+            spans: spans,
+            lineHeight: _kLineHeight,
+            fontFamily: _kFontFamily,
+            fontSize: _kFontSize,
+            backgroundColor: isActiveLine ? theme.lineHighlight : null,
           ),
         );
+
+        if (hasCursor) {
+          // Approximate cursor x using monospace character width
+          final col = state.selection.main.head - cursorLine.from;
+          const charWidth = _kFontSize * 0.6; // monospace approximation
+          final cursorX = col * charWidth;
+
+          lineWidget = Stack(
+            children: [
+              lineWidget,
+              CustomPaint(
+                painter: SelectionPainter(
+                  selectionRects: const [],
+                  cursorOffset: cursorX,
+                  cursorHeight: _kLineHeight,
+                  selectionColor: theme.selectionBackground,
+                  cursorColor: theme.cursorColor,
+                  cursorWidth: theme.cursorWidth,
+                  showCursor: _cursorBlink.visible,
+                ),
+              ),
+            ],
+          );
+        }
+
+        return SizedBox(height: _kLineHeight, child: lineWidget);
       },
     );
 
@@ -287,7 +419,12 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
     return Focus(
       focusNode: _focusNode,
       autofocus: widget.autofocus,
-      child: container,
+      onFocusChange: _handleFocusChange,
+      onKeyEvent: _handleKeyEvent,
+      child: GestureDetector(
+        onTapDown: _handleTapDown,
+        child: container,
+      ),
     );
   }
 }

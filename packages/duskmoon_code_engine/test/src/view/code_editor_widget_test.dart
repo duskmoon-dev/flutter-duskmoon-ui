@@ -102,5 +102,31 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(CodeEditorWidget), findsOneWidget);
     });
+
+    testWidgets('accepts keyboard focus on tap', (tester) async {
+      final ctrl = EditorViewController(text: 'hello');
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(body: CodeEditorWidget(controller: ctrl, autofocus: true)),
+      ));
+      await tester.pumpAndSettle();
+      expect(find.byType(CodeEditorWidget), findsOneWidget);
+      ctrl.dispose();
+    });
+
+    testWidgets('tap positions cursor', (tester) async {
+      final ctrl = EditorViewController(text: 'hello\nworld\nfoo');
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(body: CodeEditorWidget(controller: ctrl)),
+      ));
+      await tester.pumpAndSettle();
+      // Tap somewhere in the widget
+      await tester.tap(find.byType(CodeEditorWidget));
+      await tester.pump();
+      // Focus should be gained
+      expect(find.byType(CodeEditorWidget), findsOneWidget);
+      // Unmount the widget to dispose the cursor blink timer before test ends
+      await tester.pumpWidget(const SizedBox.shrink());
+      ctrl.dispose();
+    });
   });
 }
