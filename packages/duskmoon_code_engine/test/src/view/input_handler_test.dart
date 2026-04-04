@@ -1,7 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:duskmoon_code_engine/duskmoon_code_engine.dart';
-import 'package:duskmoon_code_engine/src/view/input_handler.dart';
 
 void main() {
   group('InputHandler', () {
@@ -39,9 +38,9 @@ void main() {
         final handler = InputHandler(view);
 
         // Simulate typing 'X' at position 5: 'hello' + 'X' + ' world'
-        final newValue = TextEditingValue(
+        const newValue = TextEditingValue(
           text: 'helloX world',
-          selection: const TextSelection.collapsed(offset: 6),
+          selection: TextSelection.collapsed(offset: 6),
         );
         handler.updateEditingValue(newValue);
 
@@ -54,9 +53,9 @@ void main() {
         final view = EditorView(state: state);
         final handler = InputHandler(view);
 
-        final newValue = TextEditingValue(
+        const newValue = TextEditingValue(
           text: 'Ahello',
-          selection: const TextSelection.collapsed(offset: 1),
+          selection: TextSelection.collapsed(offset: 1),
         );
         handler.updateEditingValue(newValue);
 
@@ -74,9 +73,9 @@ void main() {
         final handler = InputHandler(view);
 
         // Remove 'o' (index 4): 'hell world'
-        final newValue = TextEditingValue(
+        const newValue = TextEditingValue(
           text: 'hell world',
-          selection: const TextSelection.collapsed(offset: 4),
+          selection: TextSelection.collapsed(offset: 4),
         );
         handler.updateEditingValue(newValue);
 
@@ -92,9 +91,9 @@ void main() {
         final view = EditorView(state: state);
         final handler = InputHandler(view);
 
-        final newValue = TextEditingValue(
+        const newValue = TextEditingValue(
           text: 'hell',
-          selection: const TextSelection.collapsed(offset: 4),
+          selection: TextSelection.collapsed(offset: 4),
         );
         handler.updateEditingValue(newValue);
 
@@ -112,9 +111,9 @@ void main() {
         final handler = InputHandler(view);
 
         // Replace 'world' with 'Dart'
-        final newValue = TextEditingValue(
+        const newValue = TextEditingValue(
           text: 'hello Dart',
-          selection: const TextSelection.collapsed(offset: 10),
+          selection: TextSelection.collapsed(offset: 10),
         );
         handler.updateEditingValue(newValue);
 
@@ -130,9 +129,9 @@ void main() {
         final view = EditorView(state: state);
         final handler = InputHandler(view);
 
-        final newValue = TextEditingValue(
+        const newValue = TextEditingValue(
           text: 'new',
-          selection: const TextSelection.collapsed(offset: 3),
+          selection: TextSelection.collapsed(offset: 3),
         );
         handler.updateEditingValue(newValue);
 
@@ -149,9 +148,9 @@ void main() {
         final view = EditorView(state: state);
         final handler = InputHandler(view);
 
-        final newValue = TextEditingValue(
+        const newValue = TextEditingValue(
           text: 'hello world',
-          selection: const TextSelection.collapsed(offset: 5),
+          selection: TextSelection.collapsed(offset: 5),
         );
         handler.updateEditingValue(newValue);
 
