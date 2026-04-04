@@ -88,6 +88,7 @@ export 'src/view/line_painter.dart' show LinePainter;
 export 'src/view/gutter_painter.dart' show GutterPainter;
 export 'src/view/selection_painter.dart' show SelectionPainter;
 export 'src/view/code_editor_widget.dart' show CodeEditorWidget;
+export 'src/view/search_panel.dart' show SearchPanel;
 
 // Commands
 export 'src/commands/keymap.dart' show Command, KeyBinding, Keymap;

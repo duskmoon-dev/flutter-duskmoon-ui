@@ -18,6 +18,7 @@ import 'highlight_builder.dart';
 import 'input_handler.dart';
 import 'line_painter.dart';
 import 'position_utils.dart';
+import 'search_panel.dart';
 import 'selection_painter.dart';
 
 const String _kFontFamily = 'monospace';
@@ -106,6 +107,7 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
   late CursorBlink _cursorBlink;
   InputHandler? _inputHandler;
   late Keymap _keymap;
+  bool _showSearch = false;
 
   @override
   void initState() {
@@ -225,6 +227,17 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
         HardwareKeyboard.instance.isMetaPressed;
     final shift = HardwareKeyboard.instance.isShiftPressed;
     final alt = HardwareKeyboard.instance.isAltPressed;
+
+    // Search toggle
+    if (ctrl && key == LogicalKeyboardKey.keyF) {
+      setState(() => _showSearch = !_showSearch);
+      return KeyEventResult.handled;
+    }
+    // Close search on Escape
+    if (key == LogicalKeyboardKey.escape && _showSearch) {
+      setState(() => _showSearch = false);
+      return KeyEventResult.handled;
+    }
 
     final binding = _keymap.resolve(key, ctrl, shift, alt);
     if (binding?.run != null) {
@@ -401,10 +414,24 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
       content = listView;
     }
 
-    Widget container = Container(
+    Widget editorContent = Container(
       color: theme.background,
       child: content,
     );
+
+    if (_showSearch) {
+      editorContent = Column(
+        children: [
+          SearchPanel(
+            view: _controller.view,
+            onClose: () => setState(() => _showSearch = false),
+          ),
+          Expanded(child: editorContent),
+        ],
+      );
+    }
+
+    Widget container = editorContent;
 
     if (widget.minHeight != null || widget.maxHeight != null) {
       container = ConstrainedBox(
