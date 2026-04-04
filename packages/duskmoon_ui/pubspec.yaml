@@ -27,6 +27,7 @@ dependencies:
   duskmoon_feedback: ^1.1.0
   duskmoon_visualization: ^1.1.0
   duskmoon_form: ^1.1.0
+  duskmoon_code_engine: ^0.1.0
 
 dev_dependencies:
   flutter_test:

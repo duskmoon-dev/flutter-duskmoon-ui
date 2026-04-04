@@ -1,0 +1,13 @@
+{
+  "name": "duskmoon-grammar-codegen",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "compile": "node compile_grammar.mjs"
+  },
+  "dependencies": {
+    "@lezer/generator": "^1.7.0",
+    "@lezer/common": "^1.2.0",
+    "@lezer/lr": "^1.4.0"
+  }
+}
