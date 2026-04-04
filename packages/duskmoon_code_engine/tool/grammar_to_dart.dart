@@ -1,8 +1,8 @@
 #!/usr/bin/env dart
-/// Converts a JSON grammar file (from compile_grammar.mjs) to Dart source
-/// with const data for LRParser.deserialize().
-///
-/// Usage: dart run tool/grammar_to_dart.dart <input.json> <lang_name> [output.dart]
+// Converts a JSON grammar file (from compile_grammar.mjs) to Dart source
+// with const data for LRParser.deserialize().
+//
+// Usage: dart run tool/grammar_to_dart.dart <input.json> <lang_name> [output.dart]
 
 import 'dart:convert';
 import 'dart:io';

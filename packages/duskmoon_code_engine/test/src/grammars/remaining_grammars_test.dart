@@ -61,7 +61,9 @@ void main() {
         final names = <String>{};
         if (cursor.firstChild()) {
           names.add(cursor.name);
-          while (cursor.nextSibling()) names.add(cursor.name);
+          while (cursor.nextSibling()) {
+            names.add(cursor.name);
+          }
         }
         expect(names, isNotEmpty);
       });
