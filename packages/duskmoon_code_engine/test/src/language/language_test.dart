@@ -125,7 +125,8 @@ void main() {
       // Replace "42" (length 2) with "true" (length 4)
       final tr = state.update(
         TransactionSpec(
-          changes: ChangeSet.of(2, [const ChangeSpec(from: 0, to: 2, insert: 'true')]),
+          changes: ChangeSet.of(
+              2, [const ChangeSpec(from: 0, to: 2, insert: 'true')]),
         ),
       );
       final newState = state.applyTransaction(tr);

@@ -44,7 +44,6 @@ final _htmlStream = StreamLanguage(
     TokenRule(RegExp(r'[<>{}]'), 'Punctuation'),
   ],
   data: const LanguageData(
-    commentTokens:
-        CommentTokens(block: (open: '<!--', close: '-->')),
+    commentTokens: CommentTokens(block: (open: '<!--', close: '-->')),
   ),
 );

@@ -107,7 +107,8 @@ void main() {
       test('round-trips with offsetInLine', () {
         const offset = 9;
         final lc = PositionUtils.offsetInLine(offset, doc);
-        final back = PositionUtils.offsetFromLineCol(lc.lineIndex, lc.column, doc);
+        final back =
+            PositionUtils.offsetFromLineCol(lc.lineIndex, lc.column, doc);
         expect(back, offset);
       });
     });

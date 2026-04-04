@@ -36,8 +36,7 @@ final _pythonStream = StreamLanguage(
     TokenRule(RegExp(r'\b\d+\.?\d*([eE][+-]?\d+)?\b'), 'Number'),
     // Keywords
     TokenRule(
-      RegExp(
-          r'\b(and|as|assert|async|await|break|class|continue|def|del|elif|'
+      RegExp(r'\b(and|as|assert|async|await|break|class|continue|def|del|elif|'
           r'else|except|False|finally|for|from|global|if|import|in|is|lambda|'
           r'None|nonlocal|not|or|pass|raise|return|True|try|while|with|yield)\b'),
       'Keyword',

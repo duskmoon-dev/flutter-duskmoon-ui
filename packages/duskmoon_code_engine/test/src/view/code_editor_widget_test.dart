@@ -58,8 +58,10 @@ void main() {
 
     testWidgets('applies dark theme', (tester) async {
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(body: CodeEditorWidget(
-          initialDoc: 'hello', theme: EditorTheme.dark(),
+        home: Scaffold(
+            body: CodeEditorWidget(
+          initialDoc: 'hello',
+          theme: EditorTheme.dark(),
         )),
       ));
       await tester.pumpAndSettle();
@@ -70,7 +72,8 @@ void main() {
       EditorState? lastState;
       final ctrl = EditorViewController(text: 'hello');
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(body: CodeEditorWidget(
+        home: Scaffold(
+            body: CodeEditorWidget(
           controller: ctrl,
           onStateChanged: (s) => lastState = s,
         )),
@@ -87,7 +90,8 @@ void main() {
 
     testWidgets('renders with readOnly', (tester) async {
       await tester.pumpWidget(const MaterialApp(
-        home: Scaffold(body: CodeEditorWidget(initialDoc: 'hello', readOnly: true)),
+        home: Scaffold(
+            body: CodeEditorWidget(initialDoc: 'hello', readOnly: true)),
       ));
       await tester.pumpAndSettle();
       expect(find.byType(CodeEditorWidget), findsOneWidget);
@@ -95,8 +99,10 @@ void main() {
 
     testWidgets('renders with language support', (tester) async {
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(body: CodeEditorWidget(
-          initialDoc: '{"key": 42}', language: jsonLanguageSupport(),
+        home: Scaffold(
+            body: CodeEditorWidget(
+          initialDoc: '{"key": 42}',
+          language: jsonLanguageSupport(),
         )),
       ));
       await tester.pumpAndSettle();
@@ -106,7 +112,8 @@ void main() {
     testWidgets('accepts keyboard focus on tap', (tester) async {
       final ctrl = EditorViewController(text: 'hello');
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(body: CodeEditorWidget(controller: ctrl, autofocus: true)),
+        home:
+            Scaffold(body: CodeEditorWidget(controller: ctrl, autofocus: true)),
       ));
       await tester.pumpAndSettle();
       expect(find.byType(CodeEditorWidget), findsOneWidget);

@@ -5,12 +5,10 @@ class Compartment {
   Compartment();
 
   /// Wrap an extension in this compartment.
-  CompartmentExtension of(Extension ext) =>
-      CompartmentExtension(this, ext);
+  CompartmentExtension of(Extension ext) => CompartmentExtension(this, ext);
 
   /// Create an effect that reconfigures this compartment.
-  StateEffect<Extension> reconfigure(Extension ext) =>
-      _reconfigureType.of(ext);
+  StateEffect<Extension> reconfigure(Extension ext) => _reconfigureType.of(ext);
 
   final _reconfigureType = const StateEffectType<Extension>();
 }

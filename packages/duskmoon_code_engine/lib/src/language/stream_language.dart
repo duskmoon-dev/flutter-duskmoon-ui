@@ -39,7 +39,8 @@ class StreamLanguage {
   }) {
     final language = Language(name: name, parser: _parser, data: data);
     final support = LanguageSupport(language: language);
-    LanguageRegistry.register(support, extensions: extensions, mimeTypes: mimeTypes);
+    LanguageRegistry.register(support,
+        extensions: extensions, mimeTypes: mimeTypes);
     return support;
   }
 
@@ -108,8 +109,8 @@ class _StreamParser extends Parser {
       for (final rule in _rules) {
         final m = rule.pattern.matchAsPrefix(input, pos);
         if (m != null && m.end > pos) {
-          final nodeType = _nodeTypes.byName[rule.nodeName] ??
-              NodeType(rule.nodeName, 0);
+          final nodeType =
+              _nodeTypes.byName[rule.nodeName] ?? NodeType(rule.nodeName, 0);
           final tokenLength = m.end - pos;
           matched = Tree(nodeType, const [], const [], tokenLength);
           matchEnd = m.end;

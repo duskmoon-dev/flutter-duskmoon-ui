@@ -53,8 +53,8 @@ class TreeCursor {
     for (var i = currentIndex + 1; i < parentFrame.tree.children.length; i++) {
       final child = parentFrame.tree.children[i];
       if (child is Tree) {
-        _stack[_stack.length - 1] =
-            _Frame(child, parentFrame.offset + parentFrame.tree.positions[i], i);
+        _stack[_stack.length - 1] = _Frame(
+            child, parentFrame.offset + parentFrame.tree.positions[i], i);
         return true;
       }
     }
@@ -68,8 +68,8 @@ class TreeCursor {
     for (var i = currentIndex - 1; i >= 0; i--) {
       final child = parentFrame.tree.children[i];
       if (child is Tree) {
-        _stack[_stack.length - 1] =
-            _Frame(child, parentFrame.offset + parentFrame.tree.positions[i], i);
+        _stack[_stack.length - 1] = _Frame(
+            child, parentFrame.offset + parentFrame.tree.positions[i], i);
         return true;
       }
     }

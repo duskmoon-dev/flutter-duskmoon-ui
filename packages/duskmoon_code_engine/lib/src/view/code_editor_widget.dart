@@ -303,8 +303,7 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
     final state = _controller.state;
     final lineCount = doc.lineCount;
 
-    final activeLineNumber =
-        doc.lineAtOffset(state.selection.main.head).number;
+    final activeLineNumber = doc.lineAtOffset(state.selection.main.head).number;
     final cursorLine = doc.lineAtOffset(state.selection.main.head);
 
     Widget listView = ListView.builder(

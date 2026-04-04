@@ -47,8 +47,7 @@ final _elixirStream = StreamLanguage(
     TokenRule(RegExp(r'\b\d[\d_]*\.?\d*([eE][+-]?\d+)?\b'), 'Number'),
     // Keywords
     TokenRule(
-      RegExp(
-          r'\b(def|defp|defmodule|defmacro|defmacrop|defstruct|defprotocol|'
+      RegExp(r'\b(def|defp|defmodule|defmacro|defmacrop|defstruct|defprotocol|'
           r'defimpl|defdelegate|defoverridable|do|end|if|else|unless|cond|case|'
           r'when|fn|with|for|raise|rescue|try|catch|after|in|not|and|or|true|'
           r'false|nil|import|require|alias|use|receive|send|spawn|exit|throw)\b'),

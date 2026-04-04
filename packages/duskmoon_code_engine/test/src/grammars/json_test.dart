@@ -68,7 +68,8 @@ void main() {
 
       final tr = state.update(
         TransactionSpec(
-          changes: ChangeSet.of(2, [const ChangeSpec(from: 0, to: 2, insert: '"hi"')]),
+          changes: ChangeSet.of(
+              2, [const ChangeSpec(from: 0, to: 2, insert: '"hi"')]),
         ),
       );
       final state2 = state.applyTransaction(tr);

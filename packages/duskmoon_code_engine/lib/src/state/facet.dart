@@ -11,8 +11,7 @@ class Facet<Input, Output> {
       FacetExtension<Input, Output>(this, value);
 
   /// Invoke [combine] with a raw list of dynamic values.
-  Output _combineRaw(List<dynamic> values) =>
-      combine(values.cast<Input>());
+  Output _combineRaw(List<dynamic> values) => combine(values.cast<Input>());
 }
 
 /// An extension that provides a value to a [Facet].

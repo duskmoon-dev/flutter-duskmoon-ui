@@ -79,9 +79,7 @@ void main() {
         const src = 'if x 42 "hi"';
         final tree = _lang.parser.parse(src);
         expect(tree.children.length, equals(4));
-        final names = tree.children
-            .map((c) => (c as Tree).type.name)
-            .toList();
+        final names = tree.children.map((c) => (c as Tree).type.name).toList();
         expect(names, equals(['Keyword', 'Identifier', 'Number', 'String']));
       });
 
@@ -113,9 +111,7 @@ void main() {
         final tree = _lang.parser.parse(src);
         // Tokens: if, x, return, 0
         expect(tree.children.length, equals(4));
-        final names = tree.children
-            .map((c) => (c as Tree).type.name)
-            .toList();
+        final names = tree.children.map((c) => (c as Tree).type.name).toList();
         expect(names, equals(['Keyword', 'Identifier', 'Keyword', 'Number']));
       });
     });

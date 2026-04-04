@@ -84,8 +84,7 @@ class _CodeEditorPageState extends State<CodeEditorPage> {
               underline: const SizedBox.shrink(),
               items: _languages.keys
                   .map(
-                    (lang) =>
-                        DropdownMenuItem(value: lang, child: Text(lang)),
+                    (lang) => DropdownMenuItem(value: lang, child: Text(lang)),
                   )
                   .toList(),
               onChanged: (lang) {

@@ -70,7 +70,8 @@ void main() {
         () => SearchState.findMatches(doc, r'[invalid', useRegex: true),
         returnsNormally,
       );
-      expect(SearchState.findMatches(doc, r'[invalid', useRegex: true), isEmpty);
+      expect(
+          SearchState.findMatches(doc, r'[invalid', useRegex: true), isEmpty);
     });
 
     test('overlapping literal matches via sliding window', () {

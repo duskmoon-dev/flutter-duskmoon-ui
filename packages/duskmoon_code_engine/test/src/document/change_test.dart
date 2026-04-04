@@ -56,7 +56,8 @@ void main() {
     });
 
     test('single deletion', () {
-      final cs = ChangeSet.of(10, [const ChangeSpec(from: 3, to: 6, insert: '')]);
+      final cs =
+          ChangeSet.of(10, [const ChangeSpec(from: 3, to: 6, insert: '')]);
       expect(cs.oldLength, 10);
       expect(cs.newLength, 7);
       expect(cs.docChanged, isTrue);

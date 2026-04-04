@@ -11,19 +11,22 @@ void main() {
 
   group('defaultKeymap — cursor movement', () {
     test('has binding for ArrowRight', () {
-      final b = keymap.resolve(LogicalKeyboardKey.arrowRight, false, false, false);
+      final b =
+          keymap.resolve(LogicalKeyboardKey.arrowRight, false, false, false);
       expect(b, isNotNull);
       expect(b!.run, isNotNull);
     });
 
     test('has binding for ArrowLeft', () {
-      final b = keymap.resolve(LogicalKeyboardKey.arrowLeft, false, false, false);
+      final b =
+          keymap.resolve(LogicalKeyboardKey.arrowLeft, false, false, false);
       expect(b, isNotNull);
       expect(b!.run, isNotNull);
     });
 
     test('has binding for ArrowDown', () {
-      final b = keymap.resolve(LogicalKeyboardKey.arrowDown, false, false, false);
+      final b =
+          keymap.resolve(LogicalKeyboardKey.arrowDown, false, false, false);
       expect(b, isNotNull);
       expect(b!.run, isNotNull);
     });
@@ -61,13 +64,15 @@ void main() {
 
   group('defaultKeymap — selection', () {
     test('has binding for Shift-ArrowRight', () {
-      final b = keymap.resolve(LogicalKeyboardKey.arrowRight, false, true, false);
+      final b =
+          keymap.resolve(LogicalKeyboardKey.arrowRight, false, true, false);
       expect(b, isNotNull);
       expect(b!.run, isNotNull);
     });
 
     test('has binding for Shift-ArrowLeft', () {
-      final b = keymap.resolve(LogicalKeyboardKey.arrowLeft, false, true, false);
+      final b =
+          keymap.resolve(LogicalKeyboardKey.arrowLeft, false, true, false);
       expect(b, isNotNull);
       expect(b!.run, isNotNull);
     });
@@ -81,7 +86,8 @@ void main() {
 
   group('defaultKeymap — editing', () {
     test('has binding for Backspace', () {
-      final b = keymap.resolve(LogicalKeyboardKey.backspace, false, false, false);
+      final b =
+          keymap.resolve(LogicalKeyboardKey.backspace, false, false, false);
       expect(b, isNotNull);
       expect(b!.run, isNotNull);
     });
@@ -123,7 +129,8 @@ void main() {
     test('ArrowRight command moves cursor and returns true', () {
       final state = EditorState.create(docString: 'hello world');
       final view = EditorView(state: state);
-      final binding = keymap.resolve(LogicalKeyboardKey.arrowRight, false, false, false)!;
+      final binding =
+          keymap.resolve(LogicalKeyboardKey.arrowRight, false, false, false)!;
       final result = binding.run!(view);
       expect(result, isTrue);
       expect(view.state.selection.main.head, 1);
@@ -135,7 +142,8 @@ void main() {
         selection: EditorSelection.cursor(2),
       );
       final view = EditorView(state: state);
-      final binding = keymap.resolve(LogicalKeyboardKey.arrowRight, false, false, false)!;
+      final binding =
+          keymap.resolve(LogicalKeyboardKey.arrowRight, false, false, false)!;
       final result = binding.run!(view);
       expect(result, isFalse);
       expect(view.state.selection.main.head, 2); // unchanged
@@ -144,7 +152,8 @@ void main() {
     test('Enter command inserts newline and returns true', () {
       final state = EditorState.create(docString: 'hello');
       final view = EditorView(state: state);
-      final binding = keymap.resolve(LogicalKeyboardKey.enter, false, false, false)!;
+      final binding =
+          keymap.resolve(LogicalKeyboardKey.enter, false, false, false)!;
       final result = binding.run!(view);
       expect(result, isTrue);
       expect(view.state.doc.toString(), '\nhello');
@@ -153,7 +162,8 @@ void main() {
     test('Ctrl-a selects all and returns true', () {
       final state = EditorState.create(docString: 'hello world');
       final view = EditorView(state: state);
-      final binding = keymap.resolve(LogicalKeyboardKey.keyA, true, false, false)!;
+      final binding =
+          keymap.resolve(LogicalKeyboardKey.keyA, true, false, false)!;
       final result = binding.run!(view);
       expect(result, isTrue);
       expect(view.state.selection.main.from, 0);
@@ -163,7 +173,8 @@ void main() {
     test('Tab command inserts two spaces and returns true', () {
       final state = EditorState.create(docString: 'hello');
       final view = EditorView(state: state);
-      final binding = keymap.resolve(LogicalKeyboardKey.tab, false, false, false)!;
+      final binding =
+          keymap.resolve(LogicalKeyboardKey.tab, false, false, false)!;
       final result = binding.run!(view);
       expect(result, isTrue);
       expect(view.state.doc.toString(), '  hello');

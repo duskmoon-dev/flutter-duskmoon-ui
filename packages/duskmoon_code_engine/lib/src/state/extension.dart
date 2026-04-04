@@ -31,5 +31,4 @@ enum Precedence {
 }
 
 /// Wrap an extension with a precedence level.
-Extension prec(Precedence p, Extension ext) =>
-    PrecedenceExtension(ext, p);
+Extension prec(Precedence p, Extension ext) => PrecedenceExtension(ext, p);

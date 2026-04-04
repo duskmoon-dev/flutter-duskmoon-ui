@@ -25,8 +25,7 @@ final _cssStream = StreamLanguage(
     TokenRule(RegExp(r'/\*[\s\S]*?\*/'), 'Comment'),
     // At-rules
     TokenRule(
-      RegExp(
-          r'@(media|import|keyframes|font-face|charset|namespace|supports|'
+      RegExp(r'@(media|import|keyframes|font-face|charset|namespace|supports|'
           r'page|layer|container|property|color-profile|counter-style)\b'),
       'Keyword',
     ),

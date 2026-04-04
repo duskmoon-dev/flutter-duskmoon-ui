@@ -42,8 +42,7 @@ export 'src/document/text.dart' show Line;
 
 // State system
 export 'src/state/selection.dart' show SelectionRange, EditorSelection;
-export 'src/state/annotation.dart'
-    show AnnotationType, Annotation, Annotations;
+export 'src/state/annotation.dart' show AnnotationType, Annotation, Annotations;
 export 'src/state/extension.dart'
     show
         Extension,
@@ -63,7 +62,8 @@ export 'src/state/editor_state.dart'
 
 // Lezer common
 export 'src/lezer/common/node_type.dart' show NodeProp, NodeType, NodeSet;
-export 'src/lezer/common/tree.dart' show Tree, TreeBuffer, SyntaxNode, TreeCursor;
+export 'src/lezer/common/tree.dart'
+    show Tree, TreeBuffer, SyntaxNode, TreeCursor;
 export 'src/lezer/common/parser.dart' show Parser, ChangedRange;
 export 'src/lezer/common/token.dart' show Token, ExternalTokenizer;
 
@@ -105,7 +105,8 @@ export 'src/grammars/zig.dart' show zigLanguageSupport;
 
 // Theme
 export 'src/theme/editor_theme.dart' show EditorTheme;
-export 'src/theme/default_highlight.dart' show defaultLightHighlight, defaultDarkHighlight;
+export 'src/theme/default_highlight.dart'
+    show defaultLightHighlight, defaultDarkHighlight;
 
 // View
 export 'src/view/editor_view_controller.dart' show EditorViewController;
@@ -121,7 +122,8 @@ export 'src/view/search_panel.dart' show SearchPanel;
 // Commands
 export 'src/commands/keymap.dart' show Command, KeyBinding, Keymap;
 export 'src/commands/commands.dart' show EditorCommands;
-export 'src/commands/history.dart' show HistoryState, HistoryEntry, historyExtension;
+export 'src/commands/history.dart'
+    show HistoryState, HistoryEntry, historyExtension;
 export 'src/commands/default_keymap.dart' show defaultKeymap;
 export 'src/commands/bracket_matching.dart' show BracketPair, BracketMatching;
 export 'src/commands/comment.dart' show CommentCommands;

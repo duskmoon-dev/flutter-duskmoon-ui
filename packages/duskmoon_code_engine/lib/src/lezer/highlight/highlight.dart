@@ -8,8 +8,7 @@ class TagStyle {
 }
 
 class HighlightStyle {
-  HighlightStyle(this.specs)
-      : _byTag = {for (final s in specs) s.tag: s.style};
+  HighlightStyle(this.specs) : _byTag = {for (final s in specs) s.tag: s.style};
 
   final List<TagStyle> specs;
   final Map<Tag, TextStyle> _byTag;

@@ -41,35 +41,24 @@ abstract final class DmEditorTheme {
     bool isDark,
   ) {
     return HighlightStyle([
-      TagStyle(
-          Tag.keyword,
-          TextStyle(
-              color: cs.primary, fontWeight: FontWeight.bold)),
+      TagStyle(Tag.keyword,
+          TextStyle(color: cs.primary, fontWeight: FontWeight.bold)),
       TagStyle(Tag.string, TextStyle(color: cs.tertiary)),
-      TagStyle(
-          Tag.comment,
-          TextStyle(
-              color: cs.onSurfaceVariant,
-              fontStyle: FontStyle.italic)),
+      TagStyle(Tag.comment,
+          TextStyle(color: cs.onSurfaceVariant, fontStyle: FontStyle.italic)),
       TagStyle(Tag.number, TextStyle(color: cs.secondary)),
-      TagStyle(
-          Tag.typeName, TextStyle(color: dmExt?.info ?? cs.primary)),
+      TagStyle(Tag.typeName, TextStyle(color: dmExt?.info ?? cs.primary)),
       TagStyle(Tag.function_, TextStyle(color: cs.onSurface)),
       TagStyle(Tag.variableName, TextStyle(color: cs.onSurface)),
-      TagStyle(
-          Tag.operator_, TextStyle(color: cs.onSurfaceVariant)),
+      TagStyle(Tag.operator_, TextStyle(color: cs.onSurfaceVariant)),
       TagStyle(Tag.punctuation, TextStyle(color: cs.onSurface)),
       TagStyle(Tag.bool_, TextStyle(color: cs.primary)),
       TagStyle(Tag.null_, TextStyle(color: cs.primary)),
       TagStyle(Tag.meta, TextStyle(color: cs.onSurfaceVariant)),
       TagStyle(
-          Tag.annotation_,
-          TextStyle(color: dmExt?.accent ?? cs.secondary)),
-      TagStyle(
-          Tag.invalid,
-          TextStyle(
-              color: cs.error,
-              decoration: TextDecoration.lineThrough)),
+          Tag.annotation_, TextStyle(color: dmExt?.accent ?? cs.secondary)),
+      TagStyle(Tag.invalid,
+          TextStyle(color: cs.error, decoration: TextDecoration.lineThrough)),
     ]);
   }
 }

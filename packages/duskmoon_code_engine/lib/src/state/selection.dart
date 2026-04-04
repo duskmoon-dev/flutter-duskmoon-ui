@@ -4,7 +4,9 @@ import '../document/change.dart';
 /// A single selection range with an anchor and head (cursor position).
 class SelectionRange {
   const SelectionRange({required this.anchor, required this.head});
-  const SelectionRange.cursor(int pos) : anchor = pos, head = pos;
+  const SelectionRange.cursor(int pos)
+      : anchor = pos,
+        head = pos;
 
   final int anchor;
   final int head;
@@ -26,8 +28,7 @@ class SelectionRange {
   int get hashCode => Object.hash(anchor, head);
 
   @override
-  String toString() =>
-      isEmpty ? 'Cursor($head)' : 'Selection($anchor→$head)';
+  String toString() => isEmpty ? 'Cursor($head)' : 'Selection($anchor→$head)';
 }
 
 /// The editor's selection state: one or more SelectionRanges.

@@ -189,7 +189,8 @@ class _HoverChartState extends State<_HoverChart> {
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final chartSize = Size(constraints.maxWidth, constraints.maxHeight);
+              final chartSize =
+                  Size(constraints.maxWidth, constraints.maxHeight);
               return MouseRegion(
                 onHover: (e) => _handleProbe(e.localPosition, chartSize),
                 onExit: (_) => _clearHover(),
@@ -210,8 +211,10 @@ class _HoverChartState extends State<_HoverChart> {
                       ),
                       if (_hoveredIndex != null && _tooltipPos != null)
                         Positioned(
-                          left: (_tooltipPos!.x - 44).clamp(0.0, chartSize.width - 90),
-                          top: (_tooltipPos!.y - 52).clamp(0.0, double.infinity),
+                          left: (_tooltipPos!.x - 44)
+                              .clamp(0.0, chartSize.width - 90),
+                          top:
+                              (_tooltipPos!.y - 52).clamp(0.0, double.infinity),
                           child: Material(
                             color: Colors.transparent,
                             child: Container(
@@ -308,7 +311,8 @@ class _HoverChartPainter extends CustomPainter {
       ..strokeWidth = 0.5;
     for (var i = 0; i <= 4; i++) {
       final y = yScale(yMax * 1.15 * i / 4);
-      canvas.drawLine(Offset(_margin.left, y), Offset(_margin.left + cw, y), gridPaint);
+      canvas.drawLine(
+          Offset(_margin.left, y), Offset(_margin.left + cw, y), gridPaint);
     }
 
     // Area fill
@@ -338,8 +342,11 @@ class _HoverChartPainter extends CustomPainter {
     final linePath = Path();
     for (var i = 0; i < data.length; i++) {
       final o = Offset(xScale(data[i].x), yScale(data[i].y));
-      if (i == 0) { linePath.moveTo(o.dx, o.dy); }
-      else { linePath.lineTo(o.dx, o.dy); }
+      if (i == 0) {
+        linePath.moveTo(o.dx, o.dy);
+      } else {
+        linePath.lineTo(o.dx, o.dy);
+      }
     }
     canvas.drawPath(
       linePath,
@@ -378,13 +385,15 @@ class _HoverChartPainter extends CustomPainter {
     for (var i = 0; i <= 4; i++) {
       final val = (yMax * 1.15 * i / 4).toStringAsFixed(0);
       final y = yScale(yMax * 1.15 * i / 4);
-      _paintText(canvas, val, Offset(_margin.left - 4, y), axisStyle, rightAlign: true);
+      _paintText(canvas, val, Offset(_margin.left - 4, y), axisStyle,
+          rightAlign: true);
     }
 
     // X axis labels
     for (var i = 0; i < data.length; i += 3) {
       final x = xScale(data[i].x);
-      _paintText(canvas, '${i + 1}', Offset(x, _margin.top + ch + 4), axisStyle, centerAlign: true);
+      _paintText(canvas, '${i + 1}', Offset(x, _margin.top + ch + 4), axisStyle,
+          centerAlign: true);
     }
   }
 
@@ -475,7 +484,8 @@ class _BrushChartState extends State<_BrushChart> {
                   _brushEnd = null;
                 }),
                 style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
@@ -771,7 +781,8 @@ class _ZoomPanPainter extends CustomPainter {
     const minimapSize = Size(60, 48);
     final minimapLeft = size.width - minimapSize.width - 8;
     const minimapTop = 8.0;
-    final minimapRect = Rect.fromLTWH(minimapLeft, minimapTop, minimapSize.width, minimapSize.height);
+    final minimapRect = Rect.fromLTWH(
+        minimapLeft, minimapTop, minimapSize.width, minimapSize.height);
 
     canvas.drawRect(
       minimapRect,
@@ -785,8 +796,12 @@ class _ZoomPanPainter extends CustomPainter {
         ..strokeWidth = 0.8,
     );
 
-    final miniXScale = dv.scaleLinear(domain: [0.0, 100.0], range: [minimapLeft + 2, minimapLeft + minimapSize.width - 2]);
-    final miniYScale = dv.scaleLinear(domain: [0.0, 100.0], range: [minimapTop + minimapSize.height - 2, minimapTop + 2]);
+    final miniXScale = dv.scaleLinear(
+        domain: [0.0, 100.0],
+        range: [minimapLeft + 2, minimapLeft + minimapSize.width - 2]);
+    final miniYScale = dv.scaleLinear(
+        domain: [0.0, 100.0],
+        range: [minimapTop + minimapSize.height - 2, minimapTop + 2]);
 
     for (final p in points) {
       canvas.drawCircle(
@@ -799,8 +814,12 @@ class _ZoomPanPainter extends CustomPainter {
     // Viewport indicator in minimap
     final vpW = minimapSize.width / scale;
     final vpH = minimapSize.height / scale;
-    final vpLeft = minimapLeft + (minimapSize.width - vpW) / 2 - translate.dx * minimapSize.width / cw / scale;
-    final vpTop = minimapTop + (minimapSize.height - vpH) / 2 - translate.dy * minimapSize.height / ch / scale;
+    final vpLeft = minimapLeft +
+        (minimapSize.width - vpW) / 2 -
+        translate.dx * minimapSize.width / cw / scale;
+    final vpTop = minimapTop +
+        (minimapSize.height - vpH) / 2 -
+        translate.dy * minimapSize.height / ch / scale;
 
     canvas.drawRect(
       Rect.fromLTWH(
@@ -950,8 +969,10 @@ class _LinearSubPainter extends CustomPainter {
     final w = size.width - m.left - m.right;
     final h = size.height - m.top - m.bottom;
 
-    final xScale = dv.scaleLinear(domain: [0.0, 100.0], range: [m.left, m.left + w]);
-    final yScale = dv.scaleLinear(domain: [0.0, 100.0], range: [m.top + h, m.top]);
+    final xScale =
+        dv.scaleLinear(domain: [0.0, 100.0], range: [m.left, m.left + w]);
+    final yScale =
+        dv.scaleLinear(domain: [0.0, 100.0], range: [m.top + h, m.top]);
 
     _drawAxes(canvas, size, m, colorScheme);
 
@@ -971,13 +992,18 @@ class _LinearSubPainter extends CustomPainter {
     final style = TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 8);
     for (var i = 0; i <= 2; i++) {
       final v = i * 50.0;
-      _paintLabel(canvas, v.toStringAsFixed(0), Offset(m.left - 2, yScale(v)), style, rightAlign: true);
-      _paintLabel(canvas, v.toStringAsFixed(0), Offset(xScale(v), m.top + h + 2), style, centerAlign: true);
+      _paintLabel(
+          canvas, v.toStringAsFixed(0), Offset(m.left - 2, yScale(v)), style,
+          rightAlign: true);
+      _paintLabel(
+          canvas, v.toStringAsFixed(0), Offset(xScale(v), m.top + h + 2), style,
+          centerAlign: true);
     }
   }
 
   @override
-  bool shouldRepaint(covariant _LinearSubPainter old) => old.colorScheme != colorScheme;
+  bool shouldRepaint(covariant _LinearSubPainter old) =>
+      old.colorScheme != colorScheme;
 }
 
 class _LogSubPainter extends CustomPainter {
@@ -991,9 +1017,11 @@ class _LogSubPainter extends CustomPainter {
     final w = size.width - m.left - m.right;
     final h = size.height - m.top - m.bottom;
 
-    final xScale = dv.scaleLinear(domain: [1.0, 100.0], range: [m.left, m.left + w]);
+    final xScale =
+        dv.scaleLinear(domain: [1.0, 100.0], range: [m.left, m.left + w]);
     final yMax = math.log(100) / math.ln10;
-    final yScale = dv.scaleLinear(domain: [0.0, yMax], range: [m.top + h, m.top]);
+    final yScale =
+        dv.scaleLinear(domain: [0.0, yMax], range: [m.top + h, m.top]);
 
     _drawAxes(canvas, size, m, colorScheme);
 
@@ -1002,8 +1030,12 @@ class _LogSubPainter extends CustomPainter {
     for (var i = 1; i <= 100; i++) {
       final y = math.log(i.toDouble()) / math.ln10;
       final o = Offset(xScale(i.toDouble()), yScale(y));
-      if (first) { path.moveTo(o.dx, o.dy); first = false; }
-      else { path.lineTo(o.dx, o.dy); }
+      if (first) {
+        path.moveTo(o.dx, o.dy);
+        first = false;
+      } else {
+        path.lineTo(o.dx, o.dy);
+      }
     }
     canvas.drawPath(
       path,
@@ -1015,13 +1047,21 @@ class _LogSubPainter extends CustomPainter {
 
     final style = TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 8);
     for (final v in [1, 10, 100]) {
-      _paintLabel(canvas, 'e${v == 1 ? '0' : v == 10 ? '1' : '2'}', Offset(m.left - 2, yScale(math.log(v.toDouble()) / math.ln10)), style, rightAlign: true);
-      _paintLabel(canvas, '$v', Offset(xScale(v.toDouble()), m.top + h + 2), style, centerAlign: true);
+      _paintLabel(
+          canvas,
+          'e${v == 1 ? '0' : v == 10 ? '1' : '2'}',
+          Offset(m.left - 2, yScale(math.log(v.toDouble()) / math.ln10)),
+          style,
+          rightAlign: true);
+      _paintLabel(
+          canvas, '$v', Offset(xScale(v.toDouble()), m.top + h + 2), style,
+          centerAlign: true);
     }
   }
 
   @override
-  bool shouldRepaint(covariant _LogSubPainter old) => old.colorScheme != colorScheme;
+  bool shouldRepaint(covariant _LogSubPainter old) =>
+      old.colorScheme != colorScheme;
 }
 
 class _PowerSubPainter extends CustomPainter {
@@ -1035,8 +1075,10 @@ class _PowerSubPainter extends CustomPainter {
     final w = size.width - m.left - m.right;
     final h = size.height - m.top - m.bottom;
 
-    final xScale = dv.scaleLinear(domain: [0.0, 10.0], range: [m.left, m.left + w]);
-    final yScale = dv.scaleLinear(domain: [0.0, 100.0], range: [m.top + h, m.top]);
+    final xScale =
+        dv.scaleLinear(domain: [0.0, 10.0], range: [m.left, m.left + w]);
+    final yScale =
+        dv.scaleLinear(domain: [0.0, 100.0], range: [m.top + h, m.top]);
 
     _drawAxes(canvas, size, m, colorScheme);
 
@@ -1045,8 +1087,11 @@ class _PowerSubPainter extends CustomPainter {
       final x = i / 10.0;
       final y = x * x;
       final o = Offset(xScale(x), yScale(y));
-      if (i == 0) { path.moveTo(o.dx, o.dy); }
-      else { path.lineTo(o.dx, o.dy); }
+      if (i == 0) {
+        path.moveTo(o.dx, o.dy);
+      } else {
+        path.lineTo(o.dx, o.dy);
+      }
     }
     canvas.drawPath(
       path,
@@ -1058,15 +1103,19 @@ class _PowerSubPainter extends CustomPainter {
 
     final style = TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 8);
     for (final v in [0, 50, 100]) {
-      _paintLabel(canvas, '$v', Offset(m.left - 2, yScale(v.toDouble())), style, rightAlign: true);
+      _paintLabel(canvas, '$v', Offset(m.left - 2, yScale(v.toDouble())), style,
+          rightAlign: true);
     }
     for (final v in [0, 5, 10]) {
-      _paintLabel(canvas, '$v', Offset(xScale(v.toDouble()), m.top + h + 2), style, centerAlign: true);
+      _paintLabel(
+          canvas, '$v', Offset(xScale(v.toDouble()), m.top + h + 2), style,
+          centerAlign: true);
     }
   }
 
   @override
-  bool shouldRepaint(covariant _PowerSubPainter old) => old.colorScheme != colorScheme;
+  bool shouldRepaint(covariant _PowerSubPainter old) =>
+      old.colorScheme != colorScheme;
 }
 
 class _BandSubPainter extends CustomPainter {
@@ -1089,7 +1138,8 @@ class _BandSubPainter extends CustomPainter {
       paddingInner: 0.2,
       paddingOuter: 0.1,
     );
-    final yScale = dv.scaleLinear(domain: [0.0, 100.0], range: [m.top + h, m.top]);
+    final yScale =
+        dv.scaleLinear(domain: [0.0, 100.0], range: [m.top + h, m.top]);
 
     _drawAxes(canvas, size, m, colorScheme);
 
@@ -1104,27 +1154,33 @@ class _BandSubPainter extends CustomPainter {
         Paint()..color = colorScheme.primary.withValues(alpha: 0.75),
       );
       final style = TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 8);
-      _paintLabel(canvas, _cats[i], Offset(x + xScale.bandwidth / 2, m.top + h + 2), style, centerAlign: true);
+      _paintLabel(canvas, _cats[i],
+          Offset(x + xScale.bandwidth / 2, m.top + h + 2), style,
+          centerAlign: true);
     }
 
     final style = TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 8);
     for (final v in [0, 50, 100]) {
-      _paintLabel(canvas, '$v', Offset(m.left - 2, yScale(v.toDouble())), style, rightAlign: true);
+      _paintLabel(canvas, '$v', Offset(m.left - 2, yScale(v.toDouble())), style,
+          rightAlign: true);
     }
   }
 
   @override
-  bool shouldRepaint(covariant _BandSubPainter old) => old.colorScheme != colorScheme;
+  bool shouldRepaint(covariant _BandSubPainter old) =>
+      old.colorScheme != colorScheme;
 }
 
-void _drawAxes(Canvas canvas, Size size, EdgeInsets m, ColorScheme colorScheme) {
+void _drawAxes(
+    Canvas canvas, Size size, EdgeInsets m, ColorScheme colorScheme) {
   final axisPaint = Paint()
     ..color = colorScheme.outline
     ..strokeWidth = 1;
   final h = size.height - m.top - m.bottom;
   final w = size.width - m.left - m.right;
   canvas.drawLine(Offset(m.left, m.top), Offset(m.left, m.top + h), axisPaint);
-  canvas.drawLine(Offset(m.left, m.top + h), Offset(m.left + w, m.top + h), axisPaint);
+  canvas.drawLine(
+      Offset(m.left, m.top + h), Offset(m.left + w, m.top + h), axisPaint);
 }
 
 void _paintLabel(Canvas canvas, String text, Offset o, TextStyle style,
@@ -1134,9 +1190,13 @@ void _paintLabel(Canvas canvas, String text, Offset o, TextStyle style,
     textDirection: TextDirection.ltr,
   )..layout(minWidth: 0, maxWidth: 50);
   double dx;
-  if (rightAlign) { dx = o.dx - tp.width; }
-  else if (centerAlign) { dx = o.dx - tp.width / 2; }
-  else { dx = o.dx; }
+  if (rightAlign) {
+    dx = o.dx - tp.width;
+  } else if (centerAlign) {
+    dx = o.dx - tp.width / 2;
+  } else {
+    dx = o.dx;
+  }
   tp.paint(canvas, Offset(dx, o.dy - tp.height / 2));
 }
 
@@ -1228,7 +1288,8 @@ class _WordCloudPainter extends CustomPainter {
 
     for (var idx = 0; idx < sorted.length; idx++) {
       final (word, freq) = sorted[idx];
-      final t = (freq - minFreq) / (maxFreq - minFreq).clamp(1, double.infinity);
+      final t =
+          (freq - minFreq) / (maxFreq - minFreq).clamp(1, double.infinity);
       final fontSize = 12.0 + t * 28.0;
       final color = palette[idx % palette.length];
 
@@ -1260,7 +1321,10 @@ class _WordCloudPainter extends CustomPainter {
         angle += step;
 
         // Bounds check
-        if (x < 4 || y < 4 || x + ww > size.width - 4 || y + wh > size.height - 4) {
+        if (x < 4 ||
+            y < 4 ||
+            x + ww > size.width - 4 ||
+            y + wh > size.height - 4) {
           continue;
         }
 

@@ -250,7 +250,8 @@ class ChangeSet {
 
     // Iterators.
     var ai = 0;
-    var aOff = 0; // offset within current A plan entry (for retain) or insert (for change)
+    var aOff =
+        0; // offset within current A plan entry (for retain) or insert (for change)
     var aci = 0; // index into _changes for A
     var bci = 0;
 
@@ -408,10 +409,9 @@ class ChangeSet {
         final c = _changes[ci++];
         // Original: delete c.deleteLen chars, insert c.insert.
         // Inverse:  delete c.insert.length chars, insert original deleted text.
-        final originalText =
-            c.deleteLen > 0
-                ? originalDoc.sliceString(pos, pos + c.deleteLen)
-                : '';
+        final originalText = c.deleteLen > 0
+            ? originalDoc.sliceString(pos, pos + c.deleteLen)
+            : '';
         invPlan.add(-1);
         invChanges.add(_ChangeEntry(c.insert.length, originalText));
         pos += c.deleteLen;
