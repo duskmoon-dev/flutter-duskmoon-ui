@@ -50,12 +50,23 @@ export 'src/lezer/lr/lr_parser.dart' show LRParser;
 // Language system
 export 'src/language/language.dart' show Language, LanguageSupport;
 export 'src/language/language_data.dart' show LanguageData, CommentTokens;
+export 'src/language/stream_language.dart' show TokenRule, StreamLanguage;
 export 'src/language/syntax.dart' show syntaxTree, syntaxTreeAvailable;
 
 // Grammars
 export 'src/grammars/_registry.dart' show LanguageRegistry;
 export 'src/grammars/json.dart' show jsonLanguageSupport, jsonHighlightMapping;
 export 'src/grammars/dart.dart' show dartLanguageSupport;
+export 'src/grammars/javascript.dart' show javascriptLanguageSupport;
+export 'src/grammars/python.dart' show pythonLanguageSupport;
+export 'src/grammars/html.dart' show htmlLanguageSupport;
+export 'src/grammars/css.dart' show cssLanguageSupport;
+export 'src/grammars/markdown.dart' show markdownLanguageSupport;
+export 'src/grammars/rust.dart' show rustLanguageSupport;
+export 'src/grammars/go.dart' show goLanguageSupport;
+export 'src/grammars/yaml.dart' show yamlLanguageSupport;
+export 'src/grammars/c.dart' show cLanguageSupport;
+export 'src/grammars/elixir.dart' show elixirLanguageSupport;
 
 // Theme
 export 'src/theme/editor_theme.dart' show EditorTheme;
