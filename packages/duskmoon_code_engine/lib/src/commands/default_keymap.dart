@@ -96,6 +96,7 @@ Keymap defaultKeymap() {
       key: 'Ctrl-/',
       run: (dynamic view) {
         final ev = view as EditorView;
+        // TODO: read comment token from active language's LanguageData
         final spec = CommentCommands.toggleLineComment(ev.state, '//');
         if (spec == null) return false;
         ev.dispatch(spec);

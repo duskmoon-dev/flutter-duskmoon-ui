@@ -202,8 +202,10 @@ abstract final class EditorCommands {
   static TransactionSpec? cursorWordRight(EditorState state) {
     final head = state.selection.main.head;
     if (head >= state.doc.length) return null;
-    final text = state.doc.toString();
-    final newPos = _findWordBoundaryRight(text, head);
+    final (window, posInWindow, windowStart) =
+        _wordWindow(state, head, rightward: true);
+    final newPosInWindow = _findWordBoundaryRight(window, posInWindow);
+    final newPos = windowStart + newPosInWindow;
     if (newPos == head) return null;
     return TransactionSpec(selection: EditorSelection.cursor(newPos));
   }
@@ -214,8 +216,10 @@ abstract final class EditorCommands {
   static TransactionSpec? cursorWordLeft(EditorState state) {
     final head = state.selection.main.head;
     if (head <= 0) return null;
-    final text = state.doc.toString();
-    final newPos = _findWordBoundaryLeft(text, head);
+    final (window, posInWindow, windowStart) =
+        _wordWindow(state, head, rightward: false);
+    final newPosInWindow = _findWordBoundaryLeft(window, posInWindow);
+    final newPos = windowStart + newPosInWindow;
     if (newPos == head) return null;
     return TransactionSpec(selection: EditorSelection.cursor(newPos));
   }
@@ -225,8 +229,10 @@ abstract final class EditorCommands {
   static TransactionSpec? selectWordRight(EditorState state) {
     final main = state.selection.main;
     if (main.head >= state.doc.length) return null;
-    final text = state.doc.toString();
-    final newHead = _findWordBoundaryRight(text, main.head);
+    final (window, posInWindow, windowStart) =
+        _wordWindow(state, main.head, rightward: true);
+    final newHeadInWindow = _findWordBoundaryRight(window, posInWindow);
+    final newHead = windowStart + newHeadInWindow;
     if (newHead == main.head) return null;
     return TransactionSpec(
       selection: EditorSelection.single(anchor: main.anchor, head: newHead),
@@ -238,8 +244,10 @@ abstract final class EditorCommands {
   static TransactionSpec? selectWordLeft(EditorState state) {
     final main = state.selection.main;
     if (main.head <= 0) return null;
-    final text = state.doc.toString();
-    final newHead = _findWordBoundaryLeft(text, main.head);
+    final (window, posInWindow, windowStart) =
+        _wordWindow(state, main.head, rightward: false);
+    final newHeadInWindow = _findWordBoundaryLeft(window, posInWindow);
+    final newHead = windowStart + newHeadInWindow;
     if (newHead == main.head) return null;
     return TransactionSpec(
       selection: EditorSelection.single(anchor: main.anchor, head: newHead),
@@ -253,8 +261,10 @@ abstract final class EditorCommands {
     if (!main.isEmpty) return deleteSelection(state);
     final head = main.head;
     if (head <= 0) return null;
-    final text = state.doc.toString();
-    final boundary = _findWordBoundaryLeft(text, head);
+    final (window, posInWindow, windowStart) =
+        _wordWindow(state, head, rightward: false);
+    final boundaryInWindow = _findWordBoundaryLeft(window, posInWindow);
+    final boundary = windowStart + boundaryInWindow;
     if (boundary == head) return null;
     final changes = ChangeSet.of(state.doc.length, [
       ChangeSpec(from: boundary, to: head),
@@ -272,8 +282,10 @@ abstract final class EditorCommands {
     if (!main.isEmpty) return deleteSelection(state);
     final head = main.head;
     if (head >= state.doc.length) return null;
-    final text = state.doc.toString();
-    final boundary = _findWordBoundaryRight(text, head);
+    final (window, posInWindow, windowStart) =
+        _wordWindow(state, head, rightward: true);
+    final boundaryInWindow = _findWordBoundaryRight(window, posInWindow);
+    final boundary = windowStart + boundaryInWindow;
     if (boundary == head) return null;
     final changes = ChangeSet.of(state.doc.length, [
       ChangeSpec(from: head, to: boundary),
@@ -282,6 +294,23 @@ abstract final class EditorCommands {
       changes: changes,
       selection: EditorSelection.cursor(head),
     );
+  }
+
+  /// Extract a ±200-character window around [pos] from the document.
+  ///
+  /// Returns a record of (windowText, posInWindow, windowStart) so callers
+  /// can pass [posInWindow] to the boundary-finding helpers and add
+  /// [windowStart] back to translate the result to a document offset.
+  static (String, int, int) _wordWindow(
+    EditorState state,
+    int pos, {
+    required bool rightward,
+  }) {
+    final windowStart = (pos - 200).clamp(0, state.doc.length);
+    final windowEnd = (pos + 200).clamp(0, state.doc.length);
+    final window = state.doc.sliceString(windowStart, windowEnd);
+    final posInWindow = pos - windowStart;
+    return (window, posInWindow, windowStart);
   }
 
   /// Scan right from [pos]: skip word chars, then skip non-word chars.
