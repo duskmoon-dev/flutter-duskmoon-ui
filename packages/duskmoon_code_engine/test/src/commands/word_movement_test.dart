@@ -12,26 +12,25 @@ void main() {
   // ---------------------------------------------------------------------------
   group('cursorWordRight', () {
     test('moves to end of word from within word', () {
-      // "hello world" cursor at 0 → should land at 5 (end of "hello")
+      // "hello world" cursor at 0 → skip word "hello" → 5, skip " " → 6
       final state = EditorState.create(
         docString: 'hello world',
         selection: EditorSelection.cursor(0),
       );
       final spec = EditorCommands.cursorWordRight(state)!;
       final next = apply(state, spec);
-      expect(next.selection.main.head, 5);
+      expect(next.selection.main.head, 6);
     });
 
     test('skips whitespace after word to reach start of next word', () {
-      // "hello world" cursor at 5 (space) → skips space and stops at end
-      // of "world" which is 11.
+      // "hello world" cursor at 5 (space) → skip non-word " " → 6
       final state = EditorState.create(
         docString: 'hello world',
         selection: EditorSelection.cursor(5),
       );
       final spec = EditorCommands.cursorWordRight(state)!;
       final next = apply(state, spec);
-      expect(next.selection.main.head, 11);
+      expect(next.selection.main.head, 6);
     });
 
     test('handles punctuation as boundary', () {
@@ -55,15 +54,14 @@ void main() {
     });
 
     test('works across lines', () {
-      // "abc\ndef" cursor at 0 → "abc" ends at 3, then "\n" is non-word,
-      // then "def" starts so boundary is at 7 (end of "def").
+      // "abc\ndef" cursor at 0 → skip word "abc" → 3, skip "\n" → 4
       final state = EditorState.create(
         docString: 'abc\ndef',
         selection: EditorSelection.cursor(0),
       );
       final spec = EditorCommands.cursorWordRight(state)!;
       final next = apply(state, spec);
-      expect(next.selection.main.head, 7);
+      expect(next.selection.main.head, 4);
     });
   });
 
@@ -119,7 +117,7 @@ void main() {
   // ---------------------------------------------------------------------------
   group('selectWordRight', () {
     test('extends selection to word boundary right', () {
-      // "hello world" anchor=2, head=2 → select "llo" to reach 5
+      // "hello world" anchor=2, head=2 → skip "llo" → 5, skip " " → 6
       final state = EditorState.create(
         docString: 'hello world',
         selection: EditorSelection.cursor(2),
@@ -127,10 +125,11 @@ void main() {
       final spec = EditorCommands.selectWordRight(state)!;
       final next = apply(state, spec);
       expect(next.selection.main.anchor, 2);
-      expect(next.selection.main.head, 5);
+      expect(next.selection.main.head, 6);
     });
 
     test('keeps anchor fixed while extending head', () {
+      // "hello world" anchor=0, head=0 → skip "hello" → 5, skip " " → 6
       final state = EditorState.create(
         docString: 'hello world',
         selection: EditorSelection.single(anchor: 0, head: 0),
@@ -138,7 +137,7 @@ void main() {
       final spec = EditorCommands.selectWordRight(state)!;
       final next = apply(state, spec);
       expect(next.selection.main.anchor, 0);
-      expect(next.selection.main.head, 5);
+      expect(next.selection.main.head, 6);
     });
 
     test('returns null at end of document', () {
@@ -231,27 +230,28 @@ void main() {
   // ---------------------------------------------------------------------------
   group('deleteWordForward', () {
     test('deletes word after cursor', () {
-      // "hello world" cursor at 0 → deletes "hello " → "world"
+      // "hello world" cursor at 0 → boundary right: skip "hello" → 5,
+      // skip " " → 6. Deletes "hello " → "world"
       final state = EditorState.create(
         docString: 'hello world',
         selection: EditorSelection.cursor(0),
       );
       final spec = EditorCommands.deleteWordForward(state)!;
       final next = apply(state, spec);
-      expect(next.doc.toString(), ' world');
+      expect(next.doc.toString(), 'world');
       expect(next.selection.main.head, 0);
     });
 
     test('deletes trailing whitespace and next word when at word boundary', () {
-      // "hello world" cursor at 5 (end of "hello") → boundary right from 5:
-      // skip non-word " " → 6, then "world" → 11. Deletes " world".
+      // "hello world" cursor at 5 → boundary right: skip " " → 6.
+      // Deletes " " → "helloworld"
       final state = EditorState.create(
         docString: 'hello world',
         selection: EditorSelection.cursor(5),
       );
       final spec = EditorCommands.deleteWordForward(state)!;
       final next = apply(state, spec);
-      expect(next.doc.toString(), 'hello');
+      expect(next.doc.toString(), 'helloworld');
       expect(next.selection.main.head, 5);
     });
 

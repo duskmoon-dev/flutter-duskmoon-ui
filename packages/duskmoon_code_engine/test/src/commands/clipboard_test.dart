@@ -71,7 +71,7 @@ void main() {
     });
 
     test('deletes selection with reversed anchor/head', () {
-      // from=2, to=7
+      // anchor=7, head=2 → from=2, to=7, deletes "llo w" → "he" + "orld"
       final state = EditorState.create(
         docString: 'hello world',
         selection: EditorSelection.single(anchor: 7, head: 2),
@@ -79,7 +79,7 @@ void main() {
       final spec = ClipboardCommands.cutSpec(state);
       expect(spec, isNotNull);
       final next = _apply(state, spec!);
-      expect(next.doc.toString(), 'herld');
+      expect(next.doc.toString(), 'heorld');
     });
   });
 
