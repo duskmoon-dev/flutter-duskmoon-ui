@@ -12,6 +12,8 @@ LanguageSupport? _resolveLanguage(String? language) {
   return switch (language.toLowerCase()) {
     'dart' => dartLanguageSupport(),
     'javascript' || 'js' => javascriptLanguageSupport(),
+    // TypeScript uses the JavaScript grammar — duskmoon_code_engine provides
+    // a unified JS/TS grammar via javascriptLanguageSupport().
     'typescript' || 'ts' => javascriptLanguageSupport(),
     'python' || 'py' => pythonLanguageSupport(),
     'html' => htmlLanguageSupport(),
@@ -196,11 +198,6 @@ class _DmCodeEditorState extends State<DmCodeEditor> {
 
   @override
   Widget build(BuildContext context) {
-    // Update theme on every build to pick up ambient theme changes.
-    // Only applies when no explicit override is provided.
-    if (widget.theme == null) {
-      _controller.theme = DmCodeEditorTheme.fromContext(context);
-    }
     return CodeEditorWidget(
       controller: _controller,
       readOnly: widget.readOnly,
