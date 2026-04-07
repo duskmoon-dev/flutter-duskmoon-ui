@@ -55,4 +55,4 @@ export 'src/markdown_input/dm_markdown_tab.dart';
 export 'src/code_editor/dm_code_editor.dart';
 export 'src/code_editor/dm_code_editor_theme.dart';
 export 'package:duskmoon_code_engine/duskmoon_code_engine.dart'
-    show EditorViewController, EditorState, EditorTheme, CodeEditorWidget;
+    show EditorViewController, EditorState, EditorTheme;

@@ -1,3 +1,5 @@
+import 'package:duskmoon_code_engine/duskmoon_code_engine.dart'
+    show CodeEditorWidget;
 import 'package:duskmoon_theme/duskmoon_theme.dart';
 import 'package:duskmoon_widgets/duskmoon_widgets.dart';
 import 'package:flutter/material.dart';
@@ -145,6 +147,34 @@ void main() {
       expect(lightBackground, isNotNull);
       expect(darkBackground, isNotNull);
       expect(lightBackground, isNot(equals(darkBackground)));
+    });
+
+    testWidgets(
+        'swapping external controllerA → controllerB: A not disposed, B receives theme',
+        (tester) async {
+      final controllerA = EditorViewController(text: 'A');
+      final controllerB = EditorViewController(text: 'B');
+
+      await tester.pumpWidget(_wrap(
+        DmCodeEditor(controller: controllerA),
+        theme: DmThemeData.sunshine(),
+      ));
+      await tester.pump();
+
+      // Swap to controllerB
+      await tester.pumpWidget(_wrap(
+        DmCodeEditor(controller: controllerB),
+        theme: DmThemeData.sunshine(),
+      ));
+      await tester.pump();
+
+      // controllerA must not have been disposed (text still accessible)
+      expect(() => controllerA.text, returnsNormally);
+      // controllerB should have received the theme
+      expect(controllerB.theme, isNotNull);
+
+      controllerA.dispose();
+      controllerB.dispose();
     });
   });
 }
