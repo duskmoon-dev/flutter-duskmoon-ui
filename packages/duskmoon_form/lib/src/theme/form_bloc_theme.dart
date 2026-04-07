@@ -1,3 +1,4 @@
+import 'package:duskmoon_widgets/duskmoon_widgets.dart' show EditorTheme;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -55,6 +56,12 @@ class DmFormTheme extends Equatable {
   /// The theme of [DmScrollableFormBlocManager]
   final ScrollableFormTheme scrollableFormTheme;
 
+  /// The theme of [DmMarkdownFieldBlocBuilder]
+  final MarkdownFieldTheme markdownTheme;
+
+  /// The theme of [DmCodeEditorFieldBlocBuilder]
+  final CodeEditorFieldTheme codeEditorTheme;
+
   /// Returns `EdgeInsets.symmetric(vertical: 8.0)`.
   static EdgeInsets defaultPadding = const EdgeInsets.symmetric(vertical: 8.0);
 
@@ -75,6 +82,8 @@ class DmFormTheme extends Equatable {
     this.clearSuffixButtonTheme = const ClearSuffixButtonTheme(),
     this.obscureSuffixButtonTheme = const ObscureSuffixButtonTheme(),
     this.scrollableFormTheme = const ScrollableFormTheme(),
+    this.markdownTheme = const MarkdownFieldTheme(),
+    this.codeEditorTheme = const CodeEditorFieldTheme(),
   });
 
   static DmFormTheme of(BuildContext context) {
@@ -91,6 +100,8 @@ class DmFormTheme extends Equatable {
     RadioFieldTheme? radioTheme,
     SwitchFieldTheme? switchTheme,
     TextFieldTheme? textTheme,
+    MarkdownFieldTheme? markdownTheme,
+    CodeEditorFieldTheme? codeEditorTheme,
   }) {
     return DmFormTheme(
       textStyle: textStyle ?? this.textStyle,
@@ -102,6 +113,8 @@ class DmFormTheme extends Equatable {
       radioTheme: radioTheme ?? this.radioTheme,
       switchTheme: switchTheme ?? this.switchTheme,
       textTheme: textTheme ?? this.textTheme,
+      markdownTheme: markdownTheme ?? this.markdownTheme,
+      codeEditorTheme: codeEditorTheme ?? this.codeEditorTheme,
     );
   }
 
@@ -119,6 +132,8 @@ class DmFormTheme extends Equatable {
         switchTheme,
         radioTheme,
         textTheme.hashCode,
+        markdownTheme,
+        codeEditorTheme,
       ];
 
   @override
@@ -135,7 +150,9 @@ class DmFormTheme extends Equatable {
           ..add('dropdownTheme', dropdownTheme)
           ..add('switchTheme', switchTheme)
           ..add('radioTheme', radioTheme)
-          ..add('textTheme', textTheme))
+          ..add('textTheme', textTheme)
+          ..add('markdownTheme', markdownTheme)
+          ..add('codeEditorTheme', codeEditorTheme))
         .toString();
   }
 }
@@ -632,4 +649,30 @@ class TextFieldTheme extends FieldTheme {
         ..add('suggestionsTextStyle', suggestionsTextStyle),
     );
   }
+}
+
+/// The theme of [DmMarkdownFieldBlocBuilder].
+class MarkdownFieldTheme extends FieldTheme {
+  const MarkdownFieldTheme({
+    super.textStyle,
+    super.textColor,
+    super.decorationTheme,
+  });
+}
+
+/// The theme of [DmCodeEditorFieldBlocBuilder].
+///
+/// Does not extend [FieldTheme] because text/decoration theming does not
+/// apply to the code editor — it has its own [EditorTheme] system.
+class CodeEditorFieldTheme extends Equatable {
+  /// Form-level default editor theme. Resolution order (highest to lowest):
+  /// 1. `DmCodeEditorFieldBlocBuilder.theme` prop
+  /// 2. This field
+  /// 3. `DmCodeEditorTheme.fromContext(context)` (auto-derived)
+  final EditorTheme? editorTheme;
+
+  const CodeEditorFieldTheme({this.editorTheme});
+
+  @override
+  List<Object?> get props => [editorTheme];
 }
