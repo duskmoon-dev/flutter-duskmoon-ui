@@ -92,11 +92,18 @@ jobs:
 
           for pkg in "${PUBLISH_ORDER[@]}"; do
             echo "::group::Publishing $pkg"
-            (cd "$pkg" && dart pub publish --force) || echo "::warning::$pkg publish failed (may already exist)"
+            PKG_NAME=$(basename "$pkg")
+            PKG_VER=$(grep '^version:' "$pkg/pubspec.yaml" | awk '{print $2}')
+            # Skip if this exact version is already published on pub.dev
+            if curl -s -o /dev/null -w '%{http_code}' "https://pub.dev/api/packages/$PKG_NAME/versions/$PKG_VER" | grep -q '^200$'; then
+              echo "::notice::$PKG_NAME $PKG_VER already published — skipping"
+            else
+              (cd "$pkg" && dart pub publish --force) || echo "::warning::$pkg publish failed"
+              # Wait between publishes to avoid pub.dev rate limits
+              echo "Waiting 30s before next publish..."
+              sleep 30
+            fi
             echo "::endgroup::"
-            # Wait between publishes to avoid pub.dev rate limits
-            echo "Waiting 30s before next publish..."
-            sleep 30
           done
 
       - name: Create GitHub Release
