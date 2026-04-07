@@ -87,26 +87,40 @@ class _EditorPaneState extends State<EditorPane> {
     return tp.preferredLineHeight;
   }
 
-  /// Computes the y-offset of each logical line by measuring how much vertical
-  /// space each line occupies when word-wrapped to [maxWidth].
+  /// Computes the y-offset of each logical line by using the controller's
+  /// styled [TextSpan] so wrapping matches the actual rendered text.
   List<double> _computeLineOffsets(
     TextStyle style,
     StrutStyle strutStyle,
     double maxWidth,
   ) {
     final text = widget.controller.text;
-    final lines = text.split('\n');
-    final offsets = <double>[];
-    var y = 0.0;
+    if (text.isEmpty) return [0.0];
 
-    for (final line in lines) {
-      offsets.add(y);
-      final tp = TextPainter(
-        text: TextSpan(text: line.isEmpty ? ' ' : line, style: style),
-        strutStyle: strutStyle,
-        textDirection: TextDirection.ltr,
-      )..layout(maxWidth: maxWidth > 0 ? maxWidth : double.infinity);
-      y += tp.height;
+    // Use the controller's styled text span so bold/italic/code styles
+    // affect wrapping measurement the same way as the rendered TextField.
+    final styledSpan = widget.controller.buildTextSpan(
+      context: context,
+      style: style,
+      withComposing: false,
+    );
+
+    final tp = TextPainter(
+      text: styledSpan,
+      strutStyle: strutStyle,
+      textDirection: TextDirection.ltr,
+    )..layout(maxWidth: maxWidth > 0 ? maxWidth : double.infinity);
+
+    final offsets = <double>[0.0];
+
+    for (var i = 0; i < text.length; i++) {
+      if (text[i] == '\n') {
+        final caretOffset = tp.getOffsetForCaret(
+          TextPosition(offset: i + 1),
+          Rect.zero,
+        );
+        offsets.add(caretOffset.dy);
+      }
     }
 
     return offsets;
