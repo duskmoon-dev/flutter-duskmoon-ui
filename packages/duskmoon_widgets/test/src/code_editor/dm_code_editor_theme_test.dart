@@ -7,7 +7,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('DmCodeEditorTheme.fromContext', () {
-    testWidgets('light theme: background = colorScheme.surface', (tester) async {
+    testWidgets('light theme: background = colorScheme.surface',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -20,7 +21,8 @@ void main() {
       expect(result.background, cs.surface);
     });
 
-    testWidgets('light theme: foreground = colorScheme.onSurface', (tester) async {
+    testWidgets('light theme: foreground = colorScheme.onSurface',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -33,7 +35,8 @@ void main() {
       expect(result.foreground, cs.onSurface);
     });
 
-    testWidgets('light theme: cursorColor = colorScheme.primary', (tester) async {
+    testWidgets('light theme: cursorColor = colorScheme.primary',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -46,7 +49,8 @@ void main() {
       expect(result.cursorColor, cs.primary);
     });
 
-    testWidgets('light theme: gutterBackground = DmColorExtension.base200', (tester) async {
+    testWidgets('light theme: gutterBackground = DmColorExtension.base200',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -59,7 +63,8 @@ void main() {
       expect(result.gutterBackground, ext.base200);
     });
 
-    testWidgets('light theme: highlightStyle = defaultLightHighlight', (tester) async {
+    testWidgets('light theme: highlightStyle = defaultLightHighlight',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -71,7 +76,9 @@ void main() {
       expect(result.highlightStyle, defaultLightHighlight);
     });
 
-    testWidgets('light theme: gutterForeground = ext.baseContent with 0.5 alpha', (tester) async {
+    testWidgets(
+        'light theme: gutterForeground = ext.baseContent with 0.5 alpha',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -84,7 +91,8 @@ void main() {
       expect(result.gutterForeground, ext.baseContent.withValues(alpha: 0.5));
     });
 
-    testWidgets('light theme: gutterActiveForeground = ext.baseContent', (tester) async {
+    testWidgets('light theme: gutterActiveForeground = ext.baseContent',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -97,7 +105,9 @@ void main() {
       expect(result.gutterActiveForeground, ext.baseContent);
     });
 
-    testWidgets('light theme: selectionBackground = colorScheme.primary with 0.2 alpha', (tester) async {
+    testWidgets(
+        'light theme: selectionBackground = colorScheme.primary with 0.2 alpha',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -110,7 +120,8 @@ void main() {
       expect(result.selectionBackground, cs.primary.withValues(alpha: 0.2));
     });
 
-    testWidgets('light theme: lineHighlight = ext.base200 with 0.5 alpha', (tester) async {
+    testWidgets('light theme: lineHighlight = ext.base200 with 0.5 alpha',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -123,7 +134,9 @@ void main() {
       expect(result.lineHighlight, ext.base200.withValues(alpha: 0.5));
     });
 
-    testWidgets('light theme: searchMatchBackground = ext.warning with 0.3 alpha', (tester) async {
+    testWidgets(
+        'light theme: searchMatchBackground = ext.warning with 0.3 alpha',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -136,7 +149,9 @@ void main() {
       expect(result.searchMatchBackground, ext.warning.withValues(alpha: 0.3));
     });
 
-    testWidgets('light theme: searchActiveMatchBackground = ext.warning with 0.6 alpha', (tester) async {
+    testWidgets(
+        'light theme: searchActiveMatchBackground = ext.warning with 0.6 alpha',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -146,10 +161,13 @@ void main() {
         }),
       ));
       final ext = DmColorExtension.sunshine();
-      expect(result.searchActiveMatchBackground, ext.warning.withValues(alpha: 0.6));
+      expect(result.searchActiveMatchBackground,
+          ext.warning.withValues(alpha: 0.6));
     });
 
-    testWidgets('light theme: matchingBracketBackground = ext.accent with 0.2 alpha', (tester) async {
+    testWidgets(
+        'light theme: matchingBracketBackground = ext.accent with 0.2 alpha',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -159,10 +177,12 @@ void main() {
         }),
       ));
       final ext = DmColorExtension.sunshine();
-      expect(result.matchingBracketBackground, ext.accent.withValues(alpha: 0.2));
+      expect(
+          result.matchingBracketBackground, ext.accent.withValues(alpha: 0.2));
     });
 
-    testWidgets('light theme: matchingBracketOutline = ext.accent', (tester) async {
+    testWidgets('light theme: matchingBracketOutline = ext.accent',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -175,7 +195,9 @@ void main() {
       expect(result.matchingBracketOutline, ext.accent);
     });
 
-    testWidgets('light theme: scrollbarThumb = colorScheme.onSurface with 0.3 alpha', (tester) async {
+    testWidgets(
+        'light theme: scrollbarThumb = colorScheme.onSurface with 0.3 alpha',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -188,7 +210,8 @@ void main() {
       expect(result.scrollbarThumb, cs.onSurface.withValues(alpha: 0.3));
     });
 
-    testWidgets('light theme: scrollbarTrack = Colors.transparent', (tester) async {
+    testWidgets('light theme: scrollbarTrack = Colors.transparent',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.sunshine(),
@@ -213,7 +236,8 @@ void main() {
       expect(result.background, cs.surface);
     });
 
-    testWidgets('dark theme: cursorColor = colorScheme.primary', (tester) async {
+    testWidgets('dark theme: cursorColor = colorScheme.primary',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.moonlight(),
@@ -226,7 +250,8 @@ void main() {
       expect(result.cursorColor, cs.primary);
     });
 
-    testWidgets('dark theme: highlightStyle = defaultDarkHighlight', (tester) async {
+    testWidgets('dark theme: highlightStyle = defaultDarkHighlight',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: DmThemeData.moonlight(),
@@ -238,7 +263,9 @@ void main() {
       expect(result.highlightStyle, defaultDarkHighlight);
     });
 
-    testWidgets('falls back to EditorTheme.light() when DmColorExtension absent', (tester) async {
+    testWidgets(
+        'falls back to EditorTheme.light() when DmColorExtension absent',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: ThemeData.light(), // No DmColorExtension
@@ -252,7 +279,9 @@ void main() {
       expect(result.foreground, fallback.foreground);
     });
 
-    testWidgets('falls back to EditorTheme.dark() when DmColorExtension absent and dark brightness', (tester) async {
+    testWidgets(
+        'falls back to EditorTheme.dark() when DmColorExtension absent and dark brightness',
+        (tester) async {
       late EditorTheme result;
       await tester.pumpWidget(MaterialApp(
         theme: ThemeData.dark(), // No DmColorExtension, dark brightness

@@ -30,8 +30,7 @@ abstract final class DmCodeEditorTheme {
       selectionBackground: cs.primary.withValues(alpha: 0.2),
       cursorColor: cs.primary,
       lineHighlight: ext.base200.withValues(alpha: 0.5),
-      highlightStyle:
-          isDark ? defaultDarkHighlight : defaultLightHighlight,
+      highlightStyle: isDark ? defaultDarkHighlight : defaultLightHighlight,
       searchMatchBackground: ext.warning.withValues(alpha: 0.3),
       searchActiveMatchBackground: ext.warning.withValues(alpha: 0.6),
       matchingBracketBackground: ext.accent.withValues(alpha: 0.2),

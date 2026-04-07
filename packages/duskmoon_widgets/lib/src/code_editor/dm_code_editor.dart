@@ -162,8 +162,7 @@ class _DmCodeEditorState extends State<DmCodeEditor> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _controller.theme =
-        widget.theme ?? DmCodeEditorTheme.fromContext(context);
+    _controller.theme = widget.theme ?? DmCodeEditorTheme.fromContext(context);
   }
 
   @override
@@ -195,8 +194,7 @@ class _DmCodeEditorState extends State<DmCodeEditor> {
     }
     // Always refresh theme: covers explicit override changes AND ambient theme
     // changes that arrive via didUpdateWidget (e.g. MaterialApp theme prop swap).
-    _controller.theme =
-        widget.theme ?? DmCodeEditorTheme.fromContext(context);
+    _controller.theme = widget.theme ?? DmCodeEditorTheme.fromContext(context);
   }
 
   void _handleStateChanged(EditorState state) {
