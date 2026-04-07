@@ -42,24 +42,53 @@ jobs:
 
       - name: Publish to pub.dev
         run: |
-          # Publish order respects dependency graph:
-          # 0. duskmoon_adaptive_scaffold, duskmoon_code_engine (independently versioned, no internal deps)
-          # 1. duskmoon_theme (no internal deps)
-          # 2. duskmoon_theme_bloc, duskmoon_widgets, duskmoon_settings, duskmoon_feedback (depend on theme)
-          # 3. duskmoon_form (depends on theme + widgets)
-          # 4. duskmoon_ui (depends on all above except theme_bloc and form)
+          # Build dependency-ordered publish list from all packages/ subdirectories.
+          # Tiers are resolved by counting internal deps (packages whose name
+          # appears in another package's pubspec.yaml dependencies block).
+          #
+          # Tier 0 — no internal deps (e.g. adaptive_scaffold, code_engine, theme)
+          # Tier 1 — depends only on tier-0 (e.g. theme_bloc, widgets, settings, feedback, visualization)
+          # Tier 2 — depends on tier-0 + tier-1 (e.g. form)
+          # Tier 3 — umbrella (e.g. ui)
+          #
+          # Within each tier packages are sorted alphabetically.
 
-          PUBLISH_ORDER=(
-            packages/duskmoon_adaptive_scaffold
-            packages/duskmoon_code_engine
-            packages/duskmoon_theme
-            packages/duskmoon_theme_bloc
-            packages/duskmoon_widgets
-            packages/duskmoon_settings
-            packages/duskmoon_feedback
-            packages/duskmoon_form
-            packages/duskmoon_ui
-          )
+          ALL_PKGS=()
+          for d in packages/*/; do
+            [ -f "$d/pubspec.yaml" ] && ALL_PKGS+=("${d%/}")
+          done
+
+          # Collect package names for internal-dep detection
+          PKG_NAMES=()
+          for pkg in "${ALL_PKGS[@]}"; do
+            PKG_NAMES+=("$(basename "$pkg")")
+          done
+
+          # Assign tier to each package based on how many internal deps it has
+          declare -A TIER
+          for pkg in "${ALL_PKGS[@]}"; do
+            name=$(basename "$pkg")
+            count=0
+            for dep in "${PKG_NAMES[@]}"; do
+              [ "$dep" = "$name" ] && continue
+              if grep -q "  $dep:" "$pkg/pubspec.yaml" 2>/dev/null; then
+                count=$((count + 1))
+              fi
+            done
+            TIER[$pkg]=$count
+          done
+
+          # Sort: by tier (ascending), then alphabetically within tier
+          PUBLISH_ORDER=($(
+            for pkg in "${ALL_PKGS[@]}"; do
+              echo "${TIER[$pkg]} $pkg"
+            done | sort -k1,1n -k2,2 | awk '{print $2}'
+          ))
+
+          echo "Publish order:"
+          for pkg in "${PUBLISH_ORDER[@]}"; do
+            echo "  [tier ${TIER[$pkg]}] $pkg"
+          done
 
           for pkg in "${PUBLISH_ORDER[@]}"; do
             echo "::group::Publishing $pkg"
