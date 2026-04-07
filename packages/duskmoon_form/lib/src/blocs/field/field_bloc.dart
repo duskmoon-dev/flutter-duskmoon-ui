@@ -16,6 +16,8 @@ import '../../utils.dart';
 
 part '../boolean_field/boolean_field_bloc.dart';
 part '../boolean_field/boolean_field_state.dart';
+part '../code_editor_field/code_editor_field_bloc.dart';
+part '../code_editor_field/code_editor_field_bloc_state.dart';
 part '../form/form_bloc_utils.dart';
 part '../group_field/group_field_bloc.dart';
 part '../input_field/input_field_bloc.dart';
