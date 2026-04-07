@@ -74,8 +74,8 @@ class _DmMarkdownFieldBlocBuilderState
       singleFieldBloc: widget.markdownFieldBloc,
       animateWhenCanShow: widget.animateWhenCanShow,
       builder: (context, __) {
-        return BlocBuilder<MarkdownFieldBloc<dynamic>,
-            MarkdownFieldBlocState<dynamic>>(
+        return BlocBuilder<MarkdownFieldBloc,
+            MarkdownFieldBlocState>(
           bloc: widget.markdownFieldBloc,
           builder: (context, state) {
             final isEnabled = fieldBlocIsEnabled(
