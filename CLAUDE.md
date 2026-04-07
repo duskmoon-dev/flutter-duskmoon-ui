@@ -101,7 +101,7 @@ Forked from `flutter_adaptive_scaffold`. `AdaptiveScaffold` implements M3 adapti
 - In `duskmoon_form`, BLoC classes keep original names (e.g., `FormBloc`); only UI widgets get `Dm` prefix
 - All packages use `publish_to: none` during development — the release workflow removes it, converts path deps to hosted deps, and publishes to pub.dev
 - Each package has its own MIT LICENSE file
-- `duskmoon_adaptive_scaffold` is independently versioned, excluded from version sync in release workflow
+- `duskmoon_adaptive_scaffold` is forked from `flutter_adaptive_scaffold`, versioned in sync with all other packages
 
 ## CI/CD
 
