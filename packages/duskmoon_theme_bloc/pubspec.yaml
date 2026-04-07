@@ -1,6 +1,6 @@
 name: duskmoon_theme_bloc
 description: BLoC for DuskMoon theme persistence (theme name + mode)
-version: 1.2.0
+version: 1.2.1
 homepage: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 repository: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 issue_tracker: https://github.com/duskmoon-dev/flutter_duskmoon_ui/issues
@@ -19,7 +19,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  duskmoon_theme: ^1.2.0
+  duskmoon_theme: ^1.2.1
   bloc: ^9.0.0
   flutter_bloc: ^9.0.0
   equatable: ^2.0.7

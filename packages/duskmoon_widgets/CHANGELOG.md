@@ -1,3 +1,7 @@
+## 1.2.1
+
+- Release 1.2.1 (2026-04-07)
+
 ## 1.0.0
 
 - First stable release
