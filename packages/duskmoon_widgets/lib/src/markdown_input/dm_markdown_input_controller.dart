@@ -23,7 +23,7 @@ class DmMarkdownInputController extends MarkdownEditingController {
     if (selected.startsWith(marker) && selected.endsWith(marker)) {
       final unwrapped =
           selected.substring(marker.length, selected.length - marker.length);
-      value = value.copyWith(
+      applyMutation(
         text: text.replaceRange(sel.start, sel.end, unwrapped),
         selection: TextSelection(
           baseOffset: sel.start,
@@ -42,7 +42,7 @@ class DmMarkdownInputController extends MarkdownEditingController {
       final newText = text.substring(0, sel.start - marker.length) +
           selected +
           text.substring(sel.end + marker.length);
-      value = value.copyWith(
+      applyMutation(
         text: newText,
         selection: TextSelection(
           baseOffset: sel.start - marker.length,
@@ -54,7 +54,7 @@ class DmMarkdownInputController extends MarkdownEditingController {
 
     // Wrap.
     final wrapped = '$marker$selected$marker';
-    value = value.copyWith(
+    applyMutation(
       text: text.replaceRange(sel.start, sel.end, wrapped),
       selection: TextSelection(
         baseOffset: sel.start + marker.length,
@@ -68,7 +68,7 @@ class DmMarkdownInputController extends MarkdownEditingController {
     final sel = selection;
     if (!sel.isValid) return;
 
-    value = value.copyWith(
+    applyMutation(
       text: text.replaceRange(sel.start, sel.end, content),
       selection: TextSelection.collapsed(
         offset: sel.start + content.length,
@@ -111,7 +111,7 @@ class DmMarkdownInputController extends MarkdownEditingController {
         (sel.start + (allPrefixed ? -prefix.length : prefix.length))
             .clamp(0, newText.length);
     final newEnd = (sel.end + totalDelta).clamp(newStart, newText.length);
-    value = value.copyWith(
+    applyMutation(
       text: newText,
       selection: TextSelection(
         baseOffset: newStart,
@@ -127,7 +127,7 @@ class DmMarkdownInputController extends MarkdownEditingController {
 
     final selected = sel.textInside(text);
     final replacement = '```$language\n$selected\n```';
-    value = value.copyWith(
+    applyMutation(
       text: text.replaceRange(sel.start, sel.end, replacement),
       selection: TextSelection.collapsed(
         offset: sel.start + 3 + language.length + 1, // after opening fence
@@ -143,7 +143,7 @@ class DmMarkdownInputController extends MarkdownEditingController {
     final selected = sel.textInside(text);
     final linkText = selected.isEmpty ? 'text' : selected;
     final replacement = '[$linkText]($url)';
-    value = value.copyWith(
+    applyMutation(
       text: text.replaceRange(sel.start, sel.end, replacement),
       selection: TextSelection(
         baseOffset: sel.start + linkText.length + 3,
@@ -155,7 +155,7 @@ class DmMarkdownInputController extends MarkdownEditingController {
   /// Appends markdown text at the end.
   void appendMarkdown(String markdown) {
     final newText = text.isEmpty ? markdown : '$text\n$markdown';
-    value = value.copyWith(
+    applyMutation(
       text: newText,
       selection: TextSelection.collapsed(offset: newText.length),
     );
