@@ -83,7 +83,7 @@ jobs:
 
       - name: Analyze
         run: |
-          for pkg in packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_form packages/duskmoon_ui; do
+          for pkg in packages/duskmoon_code_engine packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_form packages/duskmoon_ui; do
             echo "::group::Analyzing $pkg"
             (cd $pkg && dart analyze --fatal-infos)
             echo "::endgroup::"
@@ -91,7 +91,7 @@ jobs:
 
       - name: Test
         run: |
-          for pkg in packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_form packages/duskmoon_ui; do
+          for pkg in packages/duskmoon_code_engine packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_form packages/duskmoon_ui; do
             if [ -d "$pkg/test" ] && [ "$(ls -A $pkg/test)" ]; then
               echo "::group::Testing $pkg"
               (cd $pkg && flutter test)
