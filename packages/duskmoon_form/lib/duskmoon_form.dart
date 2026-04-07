@@ -49,6 +49,9 @@ export 'src/widgets/dm_text_field_bloc_builder.dart';
 // Markdown
 export 'src/widgets/dm_markdown_field_bloc_builder.dart';
 
+// Code editor
+export 'src/widgets/dm_code_editor_field_bloc_builder.dart';
+
 // Boolean
 export 'src/widgets/dm_checkbox_field_bloc_builder.dart';
 export 'src/widgets/dm_switch_field_bloc_builder.dart';
