@@ -31,7 +31,7 @@ class DmCodeEditorFieldBlocBuilder extends StatefulWidget {
     this.scrollPhysics,
   });
 
-  final CodeEditorFieldBloc codeEditorFieldBloc;
+  final CodeEditorFieldBloc<dynamic> codeEditorFieldBloc;
   final bool enableOnlyWhenFormBlocCanSubmit;
   final bool isEnabled;
   final FieldBlocErrorBuilder? errorBuilder;
