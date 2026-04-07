@@ -78,6 +78,18 @@ jobs:
             sed -i "s/^  duskmoon_adaptive_scaffold: \^.*$/  duskmoon_adaptive_scaffold: ^$SCAFFOLD_VER/" "$pubspec"
           done
 
+      - name: Update changelogs
+        run: |
+          VERSION="${{ inputs.version }}"
+          DATE=$(date +%Y-%m-%d)
+
+          for changelog in packages/*/CHANGELOG.md; do
+            ENTRY="## $VERSION\n\n- Release $VERSION ($DATE)\n"
+            # Prepend the new entry to the existing changelog
+            printf "%b\n" "$ENTRY" | cat - "$changelog" > tmp && mv tmp "$changelog"
+            echo "Updated $changelog"
+          done
+
       - name: Re-resolve dependencies
         run: dart pub get
 
@@ -108,7 +120,7 @@ jobs:
 
       - name: Commit version bump and create tag
         run: |
-          git add packages/*/pubspec.yaml
+          git add packages/*/pubspec.yaml packages/*/CHANGELOG.md
           git diff --staged --quiet && echo "No changes to commit" || git commit -m "chore(release): v${{ inputs.version }}"
           git tag "v${{ inputs.version }}"
           git push origin HEAD:${{ inputs.git_ref }}
