@@ -50,3 +50,8 @@ export 'src/markdown/dm_markdown_scroll_controller.dart';
 export 'src/markdown_input/dm_markdown_input.dart';
 export 'src/markdown_input/dm_markdown_input_controller.dart';
 export 'src/markdown_input/dm_markdown_tab.dart';
+
+// Code Editor (temporary — will be reorganized in Task 6)
+export 'src/code_editor/dm_code_editor_theme.dart';
+export 'package:duskmoon_code_engine/duskmoon_code_engine.dart'
+    show EditorViewController, EditorState, EditorTheme, CodeEditorWidget;
