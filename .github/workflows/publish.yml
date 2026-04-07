@@ -17,6 +17,7 @@ concurrency:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   publish:
@@ -38,11 +39,6 @@ jobs:
 
       - name: Install dependencies
         run: dart pub get
-
-      - name: Write pub credentials
-        run: |
-          mkdir -p "$HOME/.config/dart"
-          echo '${{ secrets.PUB_CREDENTIALS }}' > "$HOME/.config/dart/pub-credentials.json"
 
       - name: Publish to pub.dev
         run: |
@@ -70,8 +66,8 @@ jobs:
             (cd "$pkg" && dart pub publish --force) || echo "::warning::$pkg publish failed (may already exist)"
             echo "::endgroup::"
             # Wait between publishes to avoid pub.dev rate limits
-            echo "Waiting 60s before next publish..."
-            sleep 60
+            echo "Waiting 30s before next publish..."
+            sleep 30
           done
 
       - name: Create GitHub Release
