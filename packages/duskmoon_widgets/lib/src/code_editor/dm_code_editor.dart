@@ -76,7 +76,9 @@ class DmCodeEditor extends StatefulWidget {
     this.scrollPhysics,
   });
 
-  /// Initial document text. Ignored when [controller] is provided.
+  /// Initial document text. Ignored when [controller] is provided,
+  /// and also used when the widget transitions from an external controller
+  /// to no controller (the document resets to [initialDoc]).
   final String? initialDoc;
 
   /// Language identifier for syntax highlighting (e.g. `'dart'`, `'python'`).
@@ -131,6 +133,16 @@ class DmCodeEditor extends StatefulWidget {
 class _DmCodeEditorState extends State<DmCodeEditor> {
   EditorViewController? _internalController;
 
+  String? _resolvedLanguageKey;
+  LanguageSupport? _resolvedLanguage;
+
+  LanguageSupport? _getLanguage(String? language) {
+    if (language == _resolvedLanguageKey) return _resolvedLanguage;
+    _resolvedLanguageKey = language;
+    _resolvedLanguage = _resolveLanguage(language);
+    return _resolvedLanguage;
+  }
+
   EditorViewController get _controller =>
       widget.controller ?? _internalController!;
 
@@ -140,10 +152,10 @@ class _DmCodeEditorState extends State<DmCodeEditor> {
     if (widget.controller == null) {
       _internalController = EditorViewController(
         text: widget.initialDoc,
-        language: _resolveLanguage(widget.language),
+        language: _getLanguage(widget.language),
       );
     } else if (widget.language != null) {
-      widget.controller!.language = _resolveLanguage(widget.language);
+      widget.controller!.language = _getLanguage(widget.language);
     }
   }
 
@@ -167,17 +179,19 @@ class _DmCodeEditorState extends State<DmCodeEditor> {
       if (widget.controller == null) {
         _internalController = EditorViewController(
           text: widget.initialDoc,
-          language: _resolveLanguage(widget.language),
+          language: _getLanguage(widget.language),
         );
+      } else {
+        // External controller: push current language and theme
+        _controller.language = _getLanguage(widget.language);
       }
       _controller.theme =
           widget.theme ?? DmCodeEditorTheme.fromContext(context);
-      _controller.language = _resolveLanguage(widget.language);
       return;
     }
 
     if (widget.language != oldWidget.language) {
-      _controller.language = _resolveLanguage(widget.language);
+      _controller.language = _getLanguage(widget.language);
     }
     // Always refresh theme: covers explicit override changes AND ambient theme
     // changes that arrive via didUpdateWidget (e.g. MaterialApp theme prop swap).
