@@ -375,6 +375,7 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
           return SizedBox(
             height: _kLineHeight,
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(
                   width: _kGutterWidth,

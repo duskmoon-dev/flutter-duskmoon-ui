@@ -16,7 +16,7 @@ Add `duskmoon_ui` to your `pubspec.yaml` for access to all components in a singl
 
 ```yaml
 dependencies:
-  duskmoon_ui: ^1.1.1
+  duskmoon_ui: ^1.2.3
 ```
 
 ```dart
@@ -80,6 +80,8 @@ class HomePage extends StatelessWidget {
 | [`duskmoon_form`](form.md) | BLoC-based form state management with 13 widget builders |
 | [`duskmoon_visualization`](visualization.md) | Data visualization: line, bar, scatter, heatmap, network graph |
 | [`duskmoon_theme_bloc`](theme-bloc.md) | BLoC for persisting theme via SharedPreferences |
+| [`duskmoon_adaptive_scaffold`](adaptive-scaffold.md) | Responsive scaffold with M3 adaptive layout and breakpoints |
+| [`duskmoon_code_engine`](code-engine.md) | Pure Dart code editor engine with 19 language grammars |
 
 ### Individual installation
 
@@ -87,13 +89,15 @@ If you only need specific functionality:
 
 ```yaml
 dependencies:
-  duskmoon_theme: ^1.1.1      # Theme only
-  duskmoon_widgets: ^1.1.1    # Adaptive widgets
-  duskmoon_settings: ^1.1.1   # Settings UI
-  duskmoon_feedback: ^1.1.1   # Feedback helpers
-  duskmoon_form: ^1.1.1            # BLoC-based form management
-  duskmoon_visualization: ^0.1.0   # Data visualization charts
-  duskmoon_theme_bloc: ^1.1.1      # BLoC persistence (requires flutter_bloc, shared_preferences)
+  duskmoon_theme: ^1.2.3      # Theme only
+  duskmoon_widgets: ^1.2.3    # Adaptive widgets
+  duskmoon_settings: ^1.2.3   # Settings UI
+  duskmoon_feedback: ^1.2.3   # Feedback helpers
+  duskmoon_form: ^1.2.3            # BLoC-based form management
+  duskmoon_visualization: ^1.2.3   # Data visualization charts
+  duskmoon_theme_bloc: ^1.2.3      # BLoC persistence (requires flutter_bloc, shared_preferences)
+  duskmoon_adaptive_scaffold: ^1.2.3  # Responsive scaffold (standalone)
+  duskmoon_code_engine: ^1.2.3     # Code editor engine (standalone)
 ```
 
 ## Guides
@@ -105,4 +109,6 @@ dependencies:
 - [Form Management](form.md) — BLoC-based forms with validation and 13 widget builders
 - [Data Visualization](visualization.md) — Line, bar, scatter, heatmap, and network graph charts
 - [Theme BLoC](theme-bloc.md) — Persistent theme switching with BLoC pattern
+- [Adaptive Scaffold](adaptive-scaffold.md) — Responsive scaffold with breakpoints and slot-based layout
+- [Code Engine](code-engine.md) — Pure Dart code editor with syntax highlighting for 19 languages
 - [Architecture](architecture.md) — Package dependency graph, design decisions, and conventions

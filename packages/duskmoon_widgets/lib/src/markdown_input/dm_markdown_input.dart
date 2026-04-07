@@ -5,6 +5,7 @@ import '../markdown/dm_markdown_config.dart';
 import '_editor_pane.dart';
 import '_keyboard_shortcut_handler.dart';
 import '_preview_pane.dart';
+import '_shimmer_placeholder.dart';
 import 'dm_markdown_input_controller.dart';
 import 'dm_markdown_tab.dart';
 
@@ -96,6 +97,7 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
   late FocusNode _focusNode;
   bool _ownsController = false;
   List<md.Node> _previewNodes = [];
+  bool _previewReady = false;
 
   @override
   void initState() {
@@ -121,6 +123,11 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
 
     _controller.addListener(_onTextChanged);
     _previewNodes = _controller.cachedNodes;
+
+    // If starting on preview tab (e.g., readOnly), show content immediately.
+    if (_tabController.index == 1) {
+      _previewReady = true;
+    }
   }
 
   @override
@@ -164,7 +171,14 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
         _tabController.index == 0 ? DmMarkdownTab.write : DmMarkdownTab.preview;
     widget.onTabChanged?.call(tab);
     if (tab == DmMarkdownTab.preview) {
-      setState(() => _previewNodes = _controller.cachedNodes);
+      // Show shimmer immediately, then render after the frame.
+      setState(() {
+        _previewReady = false;
+        _previewNodes = _controller.cachedNodes;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() => _previewReady = true);
+      });
     }
   }
 
@@ -252,12 +266,20 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
                   ),
                 ),
                 // Preview tab.
-                SingleChildScrollView(
-                  child: PreviewPane(
-                    nodes: _previewNodes,
-                    config: widget.config,
-                    onLinkTap: widget.onLinkTap,
-                  ),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: _previewReady
+                      ? SingleChildScrollView(
+                          key: const ValueKey('preview'),
+                          child: PreviewPane(
+                            nodes: _previewNodes,
+                            config: widget.config,
+                            onLinkTap: widget.onLinkTap,
+                          ),
+                        )
+                      : const ShimmerPlaceholder(
+                          key: ValueKey('shimmer'),
+                        ),
                 ),
               ],
             ),

@@ -18,7 +18,7 @@ The `duskmoon_settings` package provides platform-aware settings pages with thre
 
 ```yaml
 dependencies:
-  duskmoon_settings: ^1.0.1
+  duskmoon_settings: ^1.2.3
 ```
 
 ```dart

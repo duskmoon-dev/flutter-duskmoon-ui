@@ -13,7 +13,7 @@ This document covers the package dependency graph, key design decisions, and con
 
 ```
 duskmoon_theme                  <-- Pure theme, zero external dependencies
-    |-- duskmoon_theme_bloc     <-- BLoC for theme persistence (NOT in umbrella)
+    |-- duskmoon_theme_bloc     <-- BLoC for theme persistence
     |-- duskmoon_widgets        <-- 18 adaptive widgets + markdown + code editor
     |       |-- duskmoon_code_engine (for DmCodeEditor)
     |-- duskmoon_settings       <-- Settings UI (Material/Cupertino/Fluent)
@@ -27,7 +27,7 @@ duskmoon_code_engine            <-- Pure Dart code editor (standalone)
 duskmoon_adaptive_scaffold      <-- Responsive scaffold (forked, independently versioned)
 ```
 
-All packages depend on `duskmoon_theme` for consistent color tokens and theme data. `duskmoon_form` additionally depends on `duskmoon_widgets`. `duskmoon_widgets` depends on `duskmoon_code_engine` for code editor functionality. `duskmoon_visualization` uses `DmColorExtension` for palette derivation. The umbrella `duskmoon_ui` re-exports all packages. `duskmoon_code_engine` and `duskmoon_adaptive_scaffold` are standalone packages with no DuskMoon theme dependency.
+All packages depend on `duskmoon_theme` for consistent color tokens and theme data. `duskmoon_form` additionally depends on `duskmoon_widgets`. `duskmoon_widgets` depends on `duskmoon_code_engine` for code editor functionality. `duskmoon_visualization` uses `DmColorExtension` for palette derivation. The umbrella `duskmoon_ui` re-exports all packages, including `duskmoon_theme_bloc` and `duskmoon_code_engine`. `duskmoon_code_engine` and `duskmoon_adaptive_scaffold` are standalone packages with no DuskMoon theme dependency.
 
 ## Design Decisions
 
@@ -64,6 +64,15 @@ The settings package uses a compositor pattern with three platform renderers:
 - **Fluent** — Windows
 
 `SettingsList`, `SettingsSection`, and `SettingsTile` detect the platform and delegate to the appropriate renderer. This allows the same code to produce native-looking settings on every platform.
+
+### DmEditorTheme vs DmCodeEditorTheme
+
+Two classes provide editor theme derivation at different abstraction levels:
+
+- **`DmEditorTheme`** (in `duskmoon_ui`) — derives an `EditorTheme` from a `ThemeData` object without requiring a `BuildContext`. Provides `DmEditorTheme.fromTheme(ThemeData)`, plus `DmEditorTheme.sunshine()` and `DmEditorTheme.moonlight()` static factories that use the pre-built DuskMoon theme data.
+- **`DmCodeEditorTheme`** (in `duskmoon_widgets`) — derives an `EditorTheme` from a `BuildContext` via `DmCodeEditorTheme.fromContext(context)`. This is more convenient inside widget `build()` methods where a context is available.
+
+Use `DmEditorTheme` when you have a `ThemeData` but no `BuildContext` (e.g., in tests, BLoC logic, or theme previews). Use `DmCodeEditorTheme` when building widget trees.
 
 ### Form BLoC naming convention
 

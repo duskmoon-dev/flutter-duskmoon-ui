@@ -48,15 +48,21 @@ class AstSpanVisitor {
     return ranges;
   }
 
+  /// Safe indexOf that clamps start to [0, source.length].
+  int _safeIndexOf(String pattern, int start) {
+    final clamped = start.clamp(0, source.length);
+    return source.indexOf(pattern, clamped);
+  }
+
   int _visitBlock(md.Node node, List<StyledRange> ranges, int offset) {
     if (node is md.Element) {
       return _visitElement(node, ranges, offset);
     }
     if (node is md.Text) {
       // Plain text — advance past it.
-      final idx = source.indexOf(node.text, offset);
-      if (idx >= 0) return idx + node.text.length;
-      return offset + node.text.length;
+      final idx = _safeIndexOf(node.text, offset);
+      if (idx >= 0) return (idx + node.text.length).clamp(0, source.length);
+      return (offset + node.text.length).clamp(0, source.length);
     }
     return offset;
   }
@@ -89,7 +95,7 @@ class AstSpanVisitor {
     // Find the heading marker (#, ##, etc.) in source.
     final level = int.tryParse(el.tag.substring(1)) ?? 1;
     final marker = '#' * level;
-    final markerIdx = source.indexOf(marker, offset);
+    final markerIdx = _safeIndexOf(marker, offset);
 
     if (markerIdx >= 0) {
       // Style the marker dimmed.
@@ -101,7 +107,7 @@ class AstSpanVisitor {
 
       // Style the heading content.
       final contentStart = markerIdx + marker.length;
-      final lineEnd = source.indexOf('\n', contentStart);
+      final lineEnd = _safeIndexOf('\n', contentStart);
       final end = lineEnd >= 0 ? lineEnd : source.length;
 
       ranges.add(StyledRange(
@@ -120,11 +126,11 @@ class AstSpanVisitor {
 
   int _visitCodeBlock(md.Element el, List<StyledRange> ranges, int offset) {
     // Find the opening ``` in source.
-    final fenceIdx = source.indexOf('```', offset);
+    final fenceIdx = _safeIndexOf('```', offset);
     if (fenceIdx < 0) return _visitChildren(el, ranges, offset);
 
     // Find the closing ```.
-    final closingIdx = source.indexOf('```', fenceIdx + 3);
+    final closingIdx = _safeIndexOf('```', fenceIdx + 3);
     final end = closingIdx >= 0 ? closingIdx + 3 : source.length;
 
     ranges.add(StyledRange(
@@ -140,10 +146,10 @@ class AstSpanVisitor {
   }
 
   int _visitMathBlock(md.Element el, List<StyledRange> ranges, int offset) {
-    final fenceIdx = source.indexOf(r'$$', offset);
+    final fenceIdx = _safeIndexOf(r'$$', offset);
     if (fenceIdx < 0) return offset;
 
-    final closingIdx = source.indexOf(r'$$', fenceIdx + 2);
+    final closingIdx = _safeIndexOf(r'$$', fenceIdx + 2);
     final end = closingIdx >= 0 ? closingIdx + 2 : source.length;
 
     ranges.add(StyledRange(
@@ -164,9 +170,11 @@ class AstSpanVisitor {
     TextStyle style,
   ) {
     final text = el.textContent;
-    final idx = source.indexOf(text, offset);
+    final idx = _safeIndexOf(text, offset);
 
     if (idx >= 0) {
+      final safeEnd = (idx + text.length).clamp(0, source.length);
+
       // Find the marker before the text.
       final marker = _markerForTag(el.tag);
       if (marker != null) {
@@ -182,7 +190,7 @@ class AstSpanVisitor {
         }
         // Closing marker.
         final closingMarker = _closingMarkerForTag(el.tag) ?? marker;
-        final closingIdx = source.indexOf(closingMarker, idx + text.length);
+        final closingIdx = _safeIndexOf(closingMarker, safeEnd);
         if (closingIdx >= 0) {
           ranges.add(StyledRange(
             closingIdx,
@@ -194,8 +202,8 @@ class AstSpanVisitor {
         }
       }
 
-      ranges.add(StyledRange(idx, idx + text.length, style));
-      return idx + text.length + (marker?.length ?? 0);
+      ranges.add(StyledRange(idx, safeEnd, style));
+      return safeEnd + (marker?.length ?? 0);
     }
 
     return _visitChildren(el, ranges, offset);

@@ -20,7 +20,7 @@ The `duskmoon_widgets` package provides 18 adaptive widgets plus Markdown and Co
 
 ```yaml
 dependencies:
-  duskmoon_widgets: ^1.0.1
+  duskmoon_widgets: ^1.2.3
 ```
 
 ```dart

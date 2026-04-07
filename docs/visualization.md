@@ -18,7 +18,7 @@ The `duskmoon_visualization` package provides five chart widgets that automatica
 
 ```yaml
 dependencies:
-  duskmoon_visualization: ^0.1.0
+  duskmoon_visualization: ^1.2.3
 ```
 
 ```dart
@@ -29,7 +29,7 @@ Or use the umbrella package which re-exports everything:
 
 ```yaml
 dependencies:
-  duskmoon_ui: ^1.0.3
+  duskmoon_ui: ^1.2.3
 ```
 
 > **Requirements:** Dart >= 3.5.0, Flutter >= 3.24.0

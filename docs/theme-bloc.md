@@ -1,6 +1,6 @@
 # Theme BLoC
 
-The `duskmoon_theme_bloc` package provides a BLoC for persisting theme selection and mode via SharedPreferences. It is **intentionally excluded from the umbrella `duskmoon_ui` package** and must be imported separately.
+The `duskmoon_theme_bloc` package provides a BLoC for persisting theme selection and mode via SharedPreferences. It is **included in the umbrella `duskmoon_ui` package** (re-exported automatically) but can also be imported separately for a lighter dependency footprint.
 
 ## Table of Contents
 
@@ -15,8 +15,8 @@ The `duskmoon_theme_bloc` package provides a BLoC for persisting theme selection
 
 ```yaml
 dependencies:
-  duskmoon_theme_bloc: ^1.0.1
-  duskmoon_theme: ^1.0.1
+  duskmoon_theme_bloc: ^1.2.3
+  duskmoon_theme: ^1.2.3
   flutter_bloc: ^9.0.0
   shared_preferences: ^2.3.0
 ```

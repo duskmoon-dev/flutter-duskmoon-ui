@@ -21,14 +21,14 @@ BLoC-based form state management with adaptive form widgets for the DuskMoon Des
 
 ```yaml
 dependencies:
-  duskmoon_form: ^1.0.0
+  duskmoon_form: ^1.2.3
 ```
 
 Or use the umbrella package:
 
 ```yaml
 dependencies:
-  duskmoon_ui: ^1.0.0
+  duskmoon_ui: ^1.2.3
 ```
 
 ```dart
