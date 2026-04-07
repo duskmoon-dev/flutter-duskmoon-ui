@@ -10,8 +10,7 @@ void main() {
     });
 
     test('initial state has tab = DmMarkdownTab.preview when specified', () {
-      final bloc =
-          MarkdownFieldBloc(initialTab: DmMarkdownTab.preview);
+      final bloc = MarkdownFieldBloc(initialTab: DmMarkdownTab.preview);
       expect(bloc.state.tab, DmMarkdownTab.preview);
       bloc.close();
     });

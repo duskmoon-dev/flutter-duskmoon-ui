@@ -42,8 +42,7 @@ void main() {
 
     testWidgets('updateTab causes DmMarkdownInput rebuild with new initialTab',
         (tester) async {
-      final bloc =
-          MarkdownFieldBloc(initialTab: DmMarkdownTab.write);
+      final bloc = MarkdownFieldBloc(initialTab: DmMarkdownTab.write);
       addTearDown(bloc.close);
       await tester.pumpWidget(
         _wrap(DmMarkdownFieldBlocBuilder(markdownFieldBloc: bloc)),

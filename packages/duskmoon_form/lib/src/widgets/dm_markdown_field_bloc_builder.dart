@@ -74,8 +74,7 @@ class _DmMarkdownFieldBlocBuilderState
       singleFieldBloc: widget.markdownFieldBloc,
       animateWhenCanShow: widget.animateWhenCanShow,
       builder: (context, __) {
-        return BlocBuilder<MarkdownFieldBloc,
-            MarkdownFieldBlocState>(
+        return BlocBuilder<MarkdownFieldBloc, MarkdownFieldBlocState>(
           bloc: widget.markdownFieldBloc,
           builder: (context, state) {
             final isEnabled = fieldBlocIsEnabled(
@@ -100,10 +99,8 @@ class _DmMarkdownFieldBlocBuilderState
                 controller: _controller,
                 config: widget.config,
                 initialTab: state.tab,
-                onChanged: (text) =>
-                    widget.markdownFieldBloc.changeValue(text),
-                onTabChanged: (tab) =>
-                    widget.markdownFieldBloc.updateTab(tab),
+                onChanged: (text) => widget.markdownFieldBloc.changeValue(text),
+                onTabChanged: (tab) => widget.markdownFieldBloc.updateTab(tab),
                 showLineNumbers: widget.showLineNumbers,
                 maxLines: widget.maxLines,
                 minLines: widget.minLines,
