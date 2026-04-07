@@ -2,10 +2,9 @@ name: duskmoon_code_engine
 description: >-
   Pure Dart code editor engine with incremental parsing —
   a ground-up port of the CodeMirror 6 architecture for Flutter.
-version: 0.1.0
+version: 1.1.1
 repository: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 issue_tracker: https://github.com/duskmoon-dev/flutter_duskmoon_ui/issues
-publish_to: none
 resolution: workspace
 topics:
   - code-editor
