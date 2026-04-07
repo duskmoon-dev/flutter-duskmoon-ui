@@ -41,10 +41,10 @@ dependencies:
 Detailed documentation is split by package:
 
 - [duskmoon_theme.md](duskmoon_theme.md) — Theme system, color schemes, text themes, extensions
-- [duskmoon_widgets.md](duskmoon_widgets.md) — 18 adaptive widgets with Material/Cupertino rendering
+- [duskmoon_widgets.md](duskmoon_widgets.md) — 18 adaptive widgets (Material/Cupertino) plus markdown rendering, markdown input, and code editor
 - [duskmoon_settings.md](duskmoon_settings.md) — Platform-aware settings UI (Material/Cupertino/Fluent)
 - [duskmoon_feedback.md](duskmoon_feedback.md) — Dialogs, snackbars, toasts, bottom sheets
-- [duskmoon_form.md](duskmoon_form.md) — BLoC-based form state management with 11 widget builders
+- [duskmoon_form.md](duskmoon_form.md) — BLoC-based form state management with 13 widget builders and 9 field BLoCs
 - [duskmoon_visualization.md](duskmoon_visualization.md) — Data visualization: line, bar, scatter, heatmap, network graph
 - [duskmoon_theme_bloc.md](duskmoon_theme_bloc.md) — BLoC for persisting theme via SharedPreferences
 
@@ -96,13 +96,17 @@ class HomePage extends StatelessWidget {
 ```
 duskmoon_theme              <- Pure theme, zero external deps
     +-- duskmoon_theme_bloc <- Opt-in BLoC for theme persistence (NOT in umbrella)
-    +-- duskmoon_widgets    <- 18 adaptive widgets (Material/Cupertino)
+    +-- duskmoon_widgets    <- 18 adaptive widgets + markdown + code editor
+    |       +-- duskmoon_code_engine (for DmCodeEditor)
     +-- duskmoon_settings   <- Settings UI (Material/Cupertino/Fluent)
     +-- duskmoon_feedback   <- Dialogs, snackbars, toasts, bottom sheets
     +-- duskmoon_form       <- BLoC-based form management (depends on theme + widgets)
     +-- duskmoon_visualization <- Data visualization charts (depends on theme)
             |
         duskmoon_ui         <- Umbrella: re-exports all packages
+
+duskmoon_code_engine        <- Pure Dart code editor (standalone)
+duskmoon_adaptive_scaffold  <- Responsive scaffold (forked, independently versioned)
 ```
 
 ## Conventions
@@ -111,3 +115,5 @@ duskmoon_theme              <- Pure theme, zero external deps
 - Factory classes are `abstract final` with static methods
 - Generated token files use `.g.dart` suffix in `src/generated/`
 - BLoC classes (user-subclassable) keep original names (e.g., `FormBloc`, `TextFieldBloc`); only UI widgets get `Dm` prefix
+- Platform resolution is 4-tier: widget `platformOverride` -> `DmPlatformOverride` InheritedWidget -> `DuskmoonApp` -> `Theme.of(context).platform`
+- `DmPlatformStyle` has 3 values: `material`, `cupertino`, `fluent`

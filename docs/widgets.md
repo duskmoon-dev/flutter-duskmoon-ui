@@ -1,6 +1,6 @@
 # Adaptive Widgets
 
-The `duskmoon_widgets` package provides 18 widgets that automatically render Material or Cupertino variants based on the current platform.
+The `duskmoon_widgets` package provides 18 adaptive widgets plus Markdown and Code Editor widgets. The adaptive widgets automatically render Material, Cupertino, or Fluent variants based on the current platform.
 
 ## Table of Contents
 
@@ -12,6 +12,8 @@ The `duskmoon_widgets` package provides 18 widgets that automatically render Mat
 - [Layout](#layout)
 - [Data Display](#data-display)
 - [Scaffold](#scaffold)
+- [Markdown](#markdown)
+- [Code Editor](#code-editor)
 - [Custom Adaptive Widgets](#custom-adaptive-widgets)
 
 ## Installation
@@ -29,17 +31,33 @@ Or use the umbrella `duskmoon_ui` package.
 
 ## Platform Resolution
 
-Widgets determine their rendering style using a three-tier priority system:
+Widgets determine their rendering style using a four-tier priority system:
 
 1. **Widget `platformOverride`** parameter — per-instance (highest priority)
 2. **`DmPlatformOverride` InheritedWidget** — subtree-level
-3. **`Theme.of(context).platform`** — theme default
+3. **`DuskmoonApp` ancestor** — app-level platform style
+4. **`Theme.of(context).platform`** — theme default
+
+Windows defaults to `fluent`.
 
 ### DmPlatformStyle
 
 ```dart
-enum DmPlatformStyle { material, cupertino }
+enum DmPlatformStyle { material, cupertino, fluent }
 ```
+
+### DuskmoonApp
+
+App-level InheritedWidget that sets the default platform style for all descendant Dm* widgets.
+
+```dart
+DuskmoonApp(
+  platformStyle: DmPlatformStyle.cupertino, // or null for auto-detect
+  child: MaterialApp(...),
+)
+```
+
+Static method: `DuskmoonApp.maybeStyleOf(context)` returns `DmPlatformStyle?`.
 
 ### Overriding platform for a subtree
 
@@ -332,6 +350,142 @@ DmActionList(
 
 When `hideDisabled` is `true` (default), disabled actions are removed entirely.
 
+## Markdown
+
+### DmMarkdown
+
+Read-only markdown renderer with GFM, KaTeX, Mermaid, and syntax highlighting support. Three input modes: `data` (String), `nodes` (List<md.Node>), and `stream` (Stream<String> for LLM output).
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `data` | `String?` | `null` | Markdown source string |
+| `nodes` | `List<md.Node>?` | `null` | Pre-parsed markdown nodes |
+| `stream` | `Stream<String>?` | `null` | Streaming markdown (e.g., LLM output) |
+| `config` | `DmMarkdownConfig?` | `null` | Rendering configuration |
+| `selectable` | `bool` | `false` | Whether text is selectable |
+| `shrinkWrap` | `bool` | `false` | Shrink-wrap the rendered content |
+| `physics` | `ScrollPhysics?` | `null` | Scroll physics |
+| `padding` | `EdgeInsetsGeometry?` | `null` | Content padding |
+| `themeData` | `MarkdownThemeData?` | `null` | Theme override |
+| `onLinkTap` | `ValueChanged<String>?` | `null` | Link tap callback |
+| `onImageTap` | `ValueChanged<String>?` | `null` | Image tap callback |
+
+```dart
+DmMarkdown(
+  data: '# Hello\n\nWorld',
+  selectable: true,
+  config: DmMarkdownConfig(enableGfm: true, enableKatex: true),
+  onLinkTap: (url) => launchUrl(Uri.parse(url)),
+)
+```
+
+### DmMarkdownConfig
+
+Configuration for markdown rendering features.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `enableGfm` | `bool` | `true` | GitHub Flavored Markdown |
+| `enableKatex` | `bool` | `true` | LaTeX math rendering |
+| `enableMermaid` | `bool` | `true` | Mermaid diagram rendering |
+| `enableCodeHighlight` | `bool` | `true` | Syntax highlighting in code blocks |
+| `codeTheme` | `CodeTheme?` | `null` | Code block theme |
+| `blockBuilders` | `Map?` | `null` | Custom block builders |
+| `inlineBuilders` | `Map?` | `null` | Custom inline builders |
+
+### DmMarkdownScrollController
+
+Controller for scroll-to-anchor navigation within rendered markdown content.
+
+### DmMarkdownInput
+
+Markdown editor with write/preview tabs.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `controller` | `DmMarkdownInputController?` | `null` | Editor controller |
+| `initialValue` | `String?` | `null` | Initial markdown content |
+| `config` | `DmMarkdownConfig?` | `null` | Markdown config for preview |
+| `initialTab` | `DmMarkdownTab` | `write` | Starting tab |
+| `onChanged` | `ValueChanged<String>?` | `null` | Content change callback |
+| `onTabChanged` | `ValueChanged<DmMarkdownTab>?` | `null` | Tab switch callback |
+| `showLineNumbers` | `bool` | `false` | Show line numbers |
+| `maxLines` | `int?` | `null` | Maximum lines |
+| `minLines` | `int?` | `null` | Minimum lines |
+| `readOnly` | `bool` | `false` | Read-only mode |
+| `enabled` | `bool` | `true` | Whether interactive |
+| `tabLabelWrite` | `String` | `'Write'` | Write tab label |
+| `tabLabelPreview` | `String` | `'Preview'` | Preview tab label |
+| `decoration` | `InputDecoration?` | `null` | Input decoration |
+
+```dart
+DmMarkdownInput(
+  initialValue: '# Draft',
+  initialTab: DmMarkdownTab.write,
+  onChanged: (value) => print(value),
+  showLineNumbers: true,
+  minLines: 5,
+)
+```
+
+### DmMarkdownInputController
+
+Controller for `DmMarkdownInput` with helper methods such as `wrapSelection()` for formatting selected text (bold, italic, etc.).
+
+### DmMarkdownTab
+
+Enum for the active tab: `DmMarkdownTab.write`, `DmMarkdownTab.preview`.
+
+## Code Editor
+
+### DmCodeEditor
+
+Code editor widget integrating `duskmoon_code_engine`. Supports 19 languages by name string.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `initialDoc` | `String` | `''` | Initial document content |
+| `language` | `String?` | `null` | Language name (e.g., `'dart'`, `'python'`) |
+| `theme` | `EditorTheme?` | `null` | Editor theme |
+| `readOnly` | `bool` | `false` | Read-only mode |
+| `lineNumbers` | `bool` | `true` | Show line numbers |
+| `highlightActiveLine` | `bool` | `true` | Highlight current line |
+| `onChanged` | `ValueChanged<String>?` | `null` | Document change callback |
+| `onStateChanged` | `ValueChanged<EditorState>?` | `null` | State change callback |
+| `controller` | `EditorViewController?` | `null` | Programmatic controller |
+| `focusNode` | `FocusNode?` | `null` | Focus node |
+| `autofocus` | `bool` | `false` | Auto-focus on mount |
+| `minHeight` | `double?` | `null` | Minimum height |
+| `maxHeight` | `double?` | `null` | Maximum height |
+| `padding` | `EdgeInsetsGeometry?` | `null` | Content padding |
+| `scrollPhysics` | `ScrollPhysics?` | `null` | Scroll physics |
+
+Supported languages: Dart, JavaScript, TypeScript, Python, HTML, CSS, JSON, Markdown, Rust, Go, YAML, C, C++, Elixir, Java, Kotlin, PHP, Ruby, Erlang, Swift, Zig.
+
+```dart
+DmCodeEditor(
+  initialDoc: 'void main() {\n  print("Hello");\n}',
+  language: 'dart',
+  theme: DmCodeEditorTheme.fromContext(context),
+  lineNumbers: true,
+  onChanged: (doc) => print(doc),
+)
+```
+
+### DmCodeEditorTheme
+
+`abstract final class` with a static factory for deriving an editor theme from the current build context.
+
+```dart
+final theme = DmCodeEditorTheme.fromContext(context); // returns EditorTheme
+```
+
+### Re-exports from duskmoon_code_engine
+
+- `EditorViewController` -- controller for programmatic editor manipulation
+- `EditorState` -- immutable editor state snapshot
+- `EditorTheme` -- theme data for the code editor
+
 ## Custom Adaptive Widgets
 
 Create your own adaptive widgets using the `AdaptiveWidget` mixin:
@@ -348,9 +502,10 @@ class MyWidget extends StatelessWidget with AdaptiveWidget {
     return switch (resolveStyle(context)) {
       DmPlatformStyle.material => const Text('Material'),
       DmPlatformStyle.cupertino => const Text('Cupertino'),
+      DmPlatformStyle.fluent => const Text('Fluent'),
     };
   }
 }
 ```
 
-The mixin provides `resolveStyle(context)` which handles the three-tier priority system automatically.
+The mixin provides `resolveStyle(context)` which handles the four-tier priority system automatically.

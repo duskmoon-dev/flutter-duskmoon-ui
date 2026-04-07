@@ -14,6 +14,7 @@ BLoC-based form state management with adaptive form widgets for the DuskMoon Des
 - [Multi-step Forms](#multi-step-forms)
 - [Theming](#theming)
 - [Scrollable Forms](#scrollable-forms)
+- [Re-exports](#re-exports)
 - [Complete Example](#complete-example)
 
 ## Installation
@@ -52,7 +53,7 @@ The package re-exports `flutter_bloc` — no separate import needed.
 
 ## Field BLoCs
 
-Seven field types cover all common form inputs:
+Nine field types cover all common form inputs:
 
 ### TextFieldBloc
 
@@ -160,6 +161,34 @@ phones.removeFieldBlocAt(0);
 | `insertFieldBloc(T, int)` | Insert at index |
 | `updateFieldBlocs(List<T>)` | Replace all fields |
 | `clearFieldBlocs()` | Remove all fields |
+
+### MarkdownFieldBloc
+
+Extends `InputFieldBloc` for markdown text with write/preview tab state.
+
+```dart
+final notes = MarkdownFieldBloc<dynamic>(
+  initialValue: '# Hello',
+);
+```
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `initialTab` | `DmMarkdownTab` | Default active tab (write or preview) |
+
+### CodeEditorFieldBloc
+
+Extends `InputFieldBloc` for source code with language/syntax highlighting state.
+
+```dart
+final code = CodeEditorFieldBloc<dynamic>(
+  initialValue: 'void main() {}',
+);
+```
+
+| Method | Description |
+|--------|-------------|
+| `updateLanguage(String?)` | Change syntax highlighting language at runtime |
 
 ### Common Field API
 
@@ -452,6 +481,41 @@ DmRadioButtonGroupFieldBlocBuilder<String>(
 )
 ```
 
+### DmMarkdownFieldBlocBuilder
+
+Markdown editor with write/preview tabs.
+
+```dart
+DmMarkdownFieldBlocBuilder(
+  markdownFieldBloc: formBloc.notes,
+  config: const DmMarkdownConfig(),
+  tabLabelWrite: 'Write',
+  tabLabelPreview: 'Preview',
+  showLineNumbers: false,
+  maxLines: null,
+  minLines: 10,
+  onLinkTap: (url, title) {},
+  decoration: const InputDecoration(labelText: 'Notes'),
+)
+```
+
+### DmCodeEditorFieldBlocBuilder
+
+Source code editor with syntax highlighting.
+
+```dart
+DmCodeEditorFieldBlocBuilder(
+  codeEditorFieldBloc: formBloc.code,
+  lineNumbers: true,
+  highlightActiveLine: true,
+  theme: null, // EditorTheme? — auto-derived from DmFormTheme or context
+  minHeight: null,
+  maxHeight: null,
+  editorPadding: null,
+  scrollPhysics: null,
+)
+```
+
 ### DmCanShowFieldBlocBuilder
 
 Conditionally shows or hides a field based on the field BLoC's `canShow` state, with optional animation:
@@ -566,6 +630,8 @@ Access the theme in any descendant: `DmFormTheme.of(context)`.
 | `ClearSuffixButtonTheme` | Clear button icon and color |
 | `ObscureSuffixButtonTheme` | Show/hide password button |
 | `ScrollableFormTheme` | Scroll animation duration, curve, alignment |
+| `MarkdownFieldTheme` | Markdown editor appearance |
+| `CodeEditorFieldTheme` | Code editor appearance |
 
 ## Scrollable Forms
 
@@ -588,6 +654,17 @@ ScrollableFormBlocManager(
   ),
 )
 ```
+
+## Re-exports
+
+The barrel file re-exports key types from `duskmoon_widgets` for convenience:
+
+```dart
+export 'package:duskmoon_widgets/duskmoon_widgets.dart'
+    show DmMarkdownTab, DmMarkdownConfig, EditorTheme;
+```
+
+These are needed when configuring `DmMarkdownFieldBlocBuilder` and `DmCodeEditorFieldBlocBuilder`.
 
 ## Complete Example
 

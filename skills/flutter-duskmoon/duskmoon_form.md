@@ -21,7 +21,7 @@ import 'package:duskmoon_ui/duskmoon_ui.dart';
 
 ## Field BLoCs
 
-7 field types for managing form input state:
+9 field types for managing form input state:
 
 ### TextFieldBloc
 
@@ -105,6 +105,30 @@ phoneNumbers.removeFieldBlocAt(0);
 ```
 
 Methods: `addFieldBloc()`, `addFieldBlocs()`, `removeFieldBlocAt()`, `removeFieldBloc()`, `insertFieldBloc()`, `updateFieldBlocs()`, `clearFieldBlocs()`.
+
+### MarkdownFieldBloc
+
+Extends `InputFieldBloc` for markdown text with write/preview tab state:
+
+```dart
+final notes = MarkdownFieldBloc<dynamic>(
+  initialValue: '# Hello',
+);
+```
+
+Has `initialTab` property (`DmMarkdownTab` enum) to control the default active tab.
+
+### CodeEditorFieldBloc
+
+Extends `InputFieldBloc` for source code with language/syntax highlighting state:
+
+```dart
+final code = CodeEditorFieldBloc<dynamic>(
+  initialValue: 'void main() {}',
+);
+```
+
+Methods: `updateLanguage(String?)` to change syntax highlighting language at runtime.
 
 ## FormBloc
 
@@ -350,6 +374,37 @@ DmRadioButtonGroupFieldBlocBuilder<String>(
 )
 ```
 
+### DmMarkdownFieldBlocBuilder
+
+```dart
+DmMarkdownFieldBlocBuilder(
+  markdownFieldBloc: formBloc.notes,
+  config: const DmMarkdownConfig(),
+  tabLabelWrite: 'Write',
+  tabLabelPreview: 'Preview',
+  showLineNumbers: false,
+  maxLines: null,
+  minLines: 10,
+  onLinkTap: (url, title) {},
+  decoration: const InputDecoration(labelText: 'Notes'),
+)
+```
+
+### DmCodeEditorFieldBlocBuilder
+
+```dart
+DmCodeEditorFieldBlocBuilder(
+  codeEditorFieldBloc: formBloc.code,
+  lineNumbers: true,
+  highlightActiveLine: true,
+  theme: null, // EditorTheme? — auto-derived from DmFormTheme or context
+  minHeight: null,
+  maxHeight: null,
+  editorPadding: null,
+  scrollPhysics: null,
+)
+```
+
 ### DmCanShowFieldBlocBuilder
 
 Conditionally shows or hides a field based on its `canShow` state:
@@ -437,6 +492,8 @@ DmFormThemeProvider(
     clearSuffixButtonTheme: const ClearSuffixButtonTheme(),
     obscureSuffixButtonTheme: const ObscureSuffixButtonTheme(),
     scrollableFormTheme: const ScrollableFormTheme(),
+    markdownTheme: const MarkdownFieldTheme(),
+    codeEditorTheme: const CodeEditorFieldTheme(),
   ),
   child: yourForm,
 )
@@ -444,7 +501,7 @@ DmFormThemeProvider(
 
 Access: `DmFormTheme.of(context)`.
 
-Field theme classes: `TextFieldTheme`, `CheckboxFieldTheme`, `SwitchFieldTheme`, `DropdownFieldTheme`, `SliderFieldTheme`, `DateTimeFieldTheme`, `ChoiceChipFieldTheme`, `FilterChipFieldTheme`, `RadioFieldTheme`, `ClearSuffixButtonTheme`, `ObscureSuffixButtonTheme`, `ScrollableFormTheme`.
+Field theme classes: `TextFieldTheme`, `CheckboxFieldTheme`, `SwitchFieldTheme`, `DropdownFieldTheme`, `SliderFieldTheme`, `DateTimeFieldTheme`, `ChoiceChipFieldTheme`, `FilterChipFieldTheme`, `RadioFieldTheme`, `ClearSuffixButtonTheme`, `ObscureSuffixButtonTheme`, `ScrollableFormTheme`, `MarkdownFieldTheme`, `CodeEditorFieldTheme`.
 
 ## Scrollable Form Support
 
@@ -524,6 +581,15 @@ BlocProvider(
     );
   }),
 )
+```
+
+## Re-exports
+
+The barrel file re-exports key types from `duskmoon_widgets`:
+
+```dart
+export 'package:duskmoon_widgets/duskmoon_widgets.dart'
+    show DmMarkdownTab, DmMarkdownConfig, EditorTheme;
 ```
 
 ## Typedefs

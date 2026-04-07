@@ -7,6 +7,8 @@ The `duskmoon_theme` package provides codegen-driven color schemes, a Material 3
 - [Installation](#installation)
 - [DmThemeData](#dmthemedata)
 - [DmThemeEntry](#dmthemeentry)
+- [DmTheme](#dmtheme)
+- [DmColors](#dmcolors)
 - [DmColorScheme](#dmcolorscheme)
 - [DmColorExtension](#dmcolorextension)
 - [DmTextTheme](#dmtexttheme)
@@ -17,7 +19,7 @@ The `duskmoon_theme` package provides codegen-driven color schemes, a Material 3
 
 ```yaml
 dependencies:
-  duskmoon_theme: ^1.0.1
+  duskmoon_theme: ^1.1.1
 ```
 
 ```dart
@@ -47,6 +49,17 @@ Component themes configured automatically:
 ```dart
 final themes = DmThemeData.themes;
 // Returns: [DmThemeEntry(name: 'sunshine', light: ..., dark: ...)]
+
+// Build from a DmTheme token container:
+final themeData = DmThemeData.fromDmTheme(DmTheme.sunshine);
+```
+
+### fromDmTheme factory
+
+`DmThemeData.fromDmTheme(DmTheme theme)` builds a complete `ThemeData` from a `DmTheme` token container. This is the bridge between the platform-agnostic token layer and Flutter's `ThemeData`.
+
+```dart
+final themeData = DmThemeData.fromDmTheme(DmTheme.sunshine);
 ```
 
 ## DmThemeEntry
@@ -59,6 +72,61 @@ for (final entry in DmThemeData.themes) {
   // entry.light — light ThemeData
   // entry.dark  — dark ThemeData
 }
+```
+
+## DmTheme
+
+Platform-agnostic token container that holds color tokens without coupling to Flutter's `ThemeData`. Use `DmTheme` when you need renderer-agnostic access to the design tokens, or pass it to `DmThemeData.fromDmTheme()` to produce a full `ThemeData`.
+
+| Member | Type | Description |
+|--------|------|-------------|
+| `name` | `String` | Human-readable theme name (`'sunshine'` or `'moonlight'`) |
+| `colors` | `DmColors` | Bundled color scheme and semantic extension tokens |
+| `DmTheme.sunshine` | `static final` | Pre-built light token set |
+| `DmTheme.moonlight` | `static final` | Pre-built dark token set |
+| `DmTheme.all` | `static List<DmTheme>` | Unmodifiable list containing both themes |
+
+### Usage
+
+```dart
+// Access pre-built token sets:
+final light = DmTheme.sunshine;
+final dark = DmTheme.moonlight;
+
+// Iterate all themes (useful for theme pickers):
+for (final theme in DmTheme.all) {
+  print(theme.name);                        // 'sunshine' or 'moonlight'
+  print(theme.colors.colorScheme.primary);   // Color
+  print(theme.colors.extension.accent);      // Color
+}
+
+// Build ThemeData from a DmTheme:
+final themeData = DmThemeData.fromDmTheme(DmTheme.sunshine);
+```
+
+## DmColors
+
+Immutable (`@immutable`) container that bundles a `ColorScheme` and a `DmColorExtension` into a single object. This is the color half of `DmTheme`.
+
+| Member | Type | Description |
+|--------|------|-------------|
+| `colorScheme` | `ColorScheme` | Standard Material 3 color roles |
+| `extension` | `DmColorExtension` | 20 DuskMoon semantic tokens |
+| `DmColors.sunshine()` | factory | Light color token bag |
+| `DmColors.moonlight()` | factory | Dark color token bag |
+
+### Usage
+
+```dart
+final colors = DmColors.sunshine();
+colors.colorScheme.primary    // Standard Material 3 color
+colors.extension.accent        // DuskMoon semantic token
+
+// Or construct a fully custom instance:
+final custom = DmColors(
+  colorScheme: myColorScheme,
+  extension: myDmColorExtension,
+);
 ```
 
 ## DmColorScheme

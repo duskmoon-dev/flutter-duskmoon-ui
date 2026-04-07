@@ -6,7 +6,7 @@ Codegen-driven theme package for Material 3 Flutter apps. Provides color schemes
 
 ```yaml
 dependencies:
-  duskmoon_theme: ^1.0.0
+  duskmoon_theme: ^1.1.1
 ```
 
 ```dart
@@ -28,6 +28,9 @@ MaterialApp(
 // List all available theme entries (name + light + dark)
 final themes = DmThemeData.themes;
 // Returns: [DmThemeEntry(name: 'sunshine', light: ..., dark: ...)]
+
+// Build from a DmTheme token container:
+final themeData = DmThemeData.fromDmTheme(DmTheme.sunshine);
 ```
 
 `DmThemeData` builds fully configured Material 3 `ThemeData` including:
@@ -49,6 +52,42 @@ class DmThemeEntry {
 for (final entry in DmThemeData.themes) {
   print('${entry.name}: light=${entry.light}, dark=${entry.dark}');
 }
+```
+
+### DmTheme — Platform-Agnostic Token Container
+
+Holds color tokens without coupling to Flutter's `ThemeData`. Use for renderer-agnostic access or to build ThemeData via `DmThemeData.fromDmTheme()`.
+
+```dart
+// Access pre-built token sets:
+final light = DmTheme.sunshine;
+final dark = DmTheme.moonlight;
+
+// Iterate all themes:
+for (final theme in DmTheme.all) {
+  print(theme.name);                    // 'sunshine' or 'moonlight'
+  print(theme.colors.colorScheme.primary); // Color
+  print(theme.colors.extension.accent);    // Color
+}
+
+// Build ThemeData from a DmTheme:
+final themeData = DmThemeData.fromDmTheme(DmTheme.sunshine);
+```
+
+### DmColors — Color Token Bag
+
+Bundles a `ColorScheme` and `DmColorExtension` into a single immutable container.
+
+```dart
+final colors = DmColors.sunshine();
+colors.colorScheme.primary   // Standard Material 3 color
+colors.extension.accent       // DuskMoon semantic token
+
+// Or construct custom:
+final custom = DmColors(
+  colorScheme: myColorScheme,
+  extension: myDmColorExtension,
+);
 ```
 
 ### DmColorScheme — ColorScheme Factory

@@ -13,17 +13,21 @@ This document covers the package dependency graph, key design decisions, and con
 
 ```
 duskmoon_theme                  <-- Pure theme, zero external dependencies
-    |-- duskmoon_theme_bloc     <-- BLoC for theme persistence
-    |-- duskmoon_widgets        <-- 18 adaptive widgets (Material/Cupertino)
+    |-- duskmoon_theme_bloc     <-- BLoC for theme persistence (NOT in umbrella)
+    |-- duskmoon_widgets        <-- 18 adaptive widgets + markdown + code editor
+    |       |-- duskmoon_code_engine (for DmCodeEditor)
     |-- duskmoon_settings       <-- Settings UI (Material/Cupertino/Fluent)
     |-- duskmoon_feedback       <-- Dialogs, snackbars, toasts, bottom sheets
     |-- duskmoon_form           <-- BLoC-based form management (depends on theme + widgets)
     |-- duskmoon_visualization  <-- Data visualization charts (depends on theme)
             |
         duskmoon_ui             <-- Umbrella: re-exports all packages
+
+duskmoon_code_engine            <-- Pure Dart code editor (standalone)
+duskmoon_adaptive_scaffold      <-- Responsive scaffold (forked, independently versioned)
 ```
 
-All packages depend on `duskmoon_theme` for consistent color tokens and theme data. `duskmoon_form` additionally depends on `duskmoon_widgets`. `duskmoon_visualization` uses `DmColorExtension` for palette derivation. The umbrella `duskmoon_ui` re-exports all packages.
+All packages depend on `duskmoon_theme` for consistent color tokens and theme data. `duskmoon_form` additionally depends on `duskmoon_widgets`. `duskmoon_widgets` depends on `duskmoon_code_engine` for code editor functionality. `duskmoon_visualization` uses `DmColorExtension` for palette derivation. The umbrella `duskmoon_ui` re-exports all packages. `duskmoon_code_engine` and `duskmoon_adaptive_scaffold` are standalone packages with no DuskMoon theme dependency.
 
 ## Design Decisions
 
@@ -38,15 +42,18 @@ Design tokens (external repo) --> codegen script --> *Tokens classes (.g.dart)
 
 This ensures exact color reproduction and eliminates runtime overhead. Token files live in `src/generated/` with the `.g.dart` suffix.
 
+The token container layer uses `DmTheme` and `DmColors` to provide a structured API over the raw generated token classes, making theme data easier to consume in widget code.
+
 ### Adaptive widget pattern
 
-Widgets use a three-tier platform resolution system:
+Widgets use a four-tier platform resolution system:
 
 1. **Widget `platformOverride`** — per-instance override (highest priority)
 2. **`DmPlatformOverride` InheritedWidget** — subtree-level override
-3. **`Theme.of(context).platform`** — default platform detection
+3. **`DuskmoonApp`** — app-level platform setting
+4. **`Theme.of(context).platform`** — default platform detection
 
-Each adaptive widget uses the `AdaptiveWidget` mixin and switches rendering between Material and Cupertino in its `build()` method.
+Each adaptive widget uses the `AdaptiveWidget` mixin and switches rendering in its `build()` method. `DmPlatformStyle` supports three values: `material`, `cupertino`, and `fluent`.
 
 ### Settings compositor pattern
 
