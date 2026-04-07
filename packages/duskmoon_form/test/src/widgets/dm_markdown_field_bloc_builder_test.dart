@@ -35,7 +35,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 20));
 
       // Simulate text change via entering text in the editor
-      await tester.enterText(find.byType(TextField), '# Hello');
+      await tester.enterText(find.byType(EditableText), '# Hello');
       await tester.pump();
       expect(bloc.state.value, '# Hello');
     });

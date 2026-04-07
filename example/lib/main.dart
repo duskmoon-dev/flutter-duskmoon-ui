@@ -65,8 +65,7 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
     NavigationDestination(icon: Icon(Icons.feedback), label: 'Feedback'),
     NavigationDestination(icon: Icon(Icons.dashboard), label: 'Scaffold'),
     NavigationDestination(icon: Icon(Icons.show_chart), label: 'Visualization'),
-    NavigationDestination(
-        icon: Icon(Icons.edit_document), label: 'Markdown'),
+    NavigationDestination(icon: Icon(Icons.edit_document), label: 'Markdown'),
     NavigationDestination(icon: Icon(Icons.code), label: 'Code Editor'),
   ];
 

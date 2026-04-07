@@ -43,10 +43,25 @@ class MarkdownEditingController extends TextEditingController {
   @override
   set value(TextEditingValue newValue) {
     final oldText = text;
-    super.value = newValue;
-    if (newValue.text != oldText) {
-      _onTextChanged(oldText, newValue.text);
+    final normalizedValue = _normalizeValue(newValue);
+    super.value = normalizedValue;
+    if (normalizedValue.text != oldText) {
+      _onTextChanged(oldText, normalizedValue.text);
     }
+  }
+
+  /// Applies a controller-managed text mutation and clears any stale IME
+  /// composing range that no longer matches the transformed text.
+  @protected
+  void applyMutation({
+    required String text,
+    required TextSelection selection,
+  }) {
+    value = value.copyWith(
+      text: text,
+      selection: selection,
+      composing: TextRange.empty,
+    );
   }
 
   void _onTextChanged(String oldText, String newText) {
@@ -70,6 +85,57 @@ class MarkdownEditingController extends TextEditingController {
       // Tier 2/3: keep last known good state.
       debugPrint('MarkdownEditingController parse error: $e');
     }
+  }
+
+  TextEditingValue _normalizeValue(TextEditingValue value) {
+    final textLength = value.text.length;
+    final normalizedSelection =
+        _normalizeSelection(value.selection, textLength);
+    final normalizedComposing =
+        _normalizeComposing(value.composing, textLength);
+
+    if (normalizedSelection == value.selection &&
+        normalizedComposing == value.composing) {
+      return value;
+    }
+
+    return value.copyWith(
+      selection: normalizedSelection,
+      composing: normalizedComposing,
+    );
+  }
+
+  TextSelection _normalizeSelection(TextSelection selection, int textLength) {
+    if (selection.start == -1 && selection.end == -1) {
+      return selection;
+    }
+
+    final baseOffset = selection.baseOffset.clamp(0, textLength);
+    final extentOffset = selection.extentOffset.clamp(0, textLength);
+
+    return TextSelection(
+      baseOffset: baseOffset,
+      extentOffset: extentOffset,
+      affinity: selection.affinity,
+      isDirectional: selection.isDirectional,
+    );
+  }
+
+  TextRange _normalizeComposing(TextRange composing, int textLength) {
+    if (composing.start == -1 && composing.end == -1) {
+      return TextRange.empty;
+    }
+
+    final hasNegativeOffset = composing.start < 0 || composing.end < 0;
+    final exceedsLength =
+        composing.start > textLength || composing.end > textLength;
+    final reversed = composing.start > composing.end;
+
+    if (hasNegativeOffset || exceedsLength || reversed) {
+      return TextRange.empty;
+    }
+
+    return composing;
   }
 
   ColorScheme? _colorScheme;

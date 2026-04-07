@@ -24,12 +24,20 @@ void main() {
 
       expect(find.text('DmViz Charts'), findsOneWidget);
 
-      await tester.scrollUntilVisible(find.text('Geographic'), 300);
+      // The adaptive scaffold adds navigation scrollables, so specify
+      // which scrollable to use for scrolling the content ListView.
+      final listScrollable = find.byType(Scrollable).last;
+      await tester.scrollUntilVisible(
+        find.text('Geographic'),
+        300,
+        scrollable: listScrollable,
+      );
       expect(find.text('Geographic'), findsOneWidget);
 
       await tester.scrollUntilVisible(
         find.text('Interactions & Utilities'),
         300,
+        scrollable: listScrollable,
       );
       expect(find.text('Interactions & Utilities'), findsOneWidget);
     });

@@ -87,5 +87,35 @@ void main() {
 
       expect(controller.cachedNodes, isEmpty);
     });
+
+    test('controller mutations clear stale composing ranges', () {
+      final controller = DmMarkdownInputController(text: 'hello **world**');
+      controller.value = controller.value.copyWith(
+        selection: const TextSelection(baseOffset: 6, extentOffset: 15),
+        composing: const TextRange(start: 6, end: 15),
+      );
+
+      controller.wrapSelection('**');
+
+      expect(controller.text, 'hello world');
+      expect(controller.value.composing, TextRange.empty);
+      expect(controller.selection,
+          const TextSelection(baseOffset: 6, extentOffset: 11));
+    });
+
+    test('value setter clamps invalid selection and composing ranges', () {
+      final controller = DmMarkdownInputController(text: 'hello');
+
+      controller.value = const TextEditingValue(
+        text: 'abc',
+        selection: TextSelection(baseOffset: 0, extentOffset: 8),
+        composing: TextRange(start: 1, end: 8),
+      );
+
+      expect(controller.text, 'abc');
+      expect(controller.selection,
+          const TextSelection(baseOffset: 0, extentOffset: 3));
+      expect(controller.value.composing, TextRange.empty);
+    });
   });
 }

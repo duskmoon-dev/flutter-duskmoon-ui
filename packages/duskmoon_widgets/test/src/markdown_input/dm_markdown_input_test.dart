@@ -73,7 +73,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Type into editor.
-      await tester.enterText(find.byType(TextField), 'New content');
+      await tester.enterText(find.byType(EditableText), 'New content');
       await tester.pumpAndSettle();
 
       expect(lastText, 'New content');
@@ -98,6 +98,29 @@ void main() {
       expect(find.text('External'), findsOneWidget);
 
       controller.dispose();
+    });
+
+    testWidgets('editor fills available height when line numbers are shown', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        buildApp(
+          initialValue: 'Line 1',
+          showLineNumbers: true,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.widget<EditableText>(find.byType(EditableText)).expands,
+        isTrue,
+      );
+      expect(
+        tester
+            .getSize(find.byKey(const ValueKey('dm-markdown-editor-surface')))
+            .height,
+        greaterThan(400),
+      );
     });
   });
 }
