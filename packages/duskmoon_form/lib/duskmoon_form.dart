@@ -88,5 +88,6 @@ export 'src/utils/style.dart';
 
 // ── Re-exports ──────────────────────────────────────────────────────────────
 
-export 'package:duskmoon_widgets/duskmoon_widgets.dart' show DmMarkdownTab;
+export 'package:duskmoon_widgets/duskmoon_widgets.dart'
+    show DmMarkdownTab, DmMarkdownConfig, EditorTheme;
 export 'package:flutter_bloc/flutter_bloc.dart';
