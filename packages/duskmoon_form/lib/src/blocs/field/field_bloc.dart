@@ -3,15 +3,16 @@ import 'dart:collection' show LinkedHashSet;
 
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
+import 'package:duskmoon_widgets/duskmoon_widgets.dart' show DmMarkdownTab;
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:uuid/uuid.dart';
+
 import 'field_bloc_utils.dart';
 import '../form/form_bloc.dart';
 import '../../extension/extension.dart';
 import '../../utils.dart';
-import 'package:duskmoon_widgets/duskmoon_widgets.dart' show DmMarkdownTab;
-import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:uuid/uuid.dart';
 
 part '../boolean_field/boolean_field_bloc.dart';
 part '../boolean_field/boolean_field_state.dart';
@@ -20,14 +21,14 @@ part '../group_field/group_field_bloc.dart';
 part '../input_field/input_field_bloc.dart';
 part '../input_field/input_field_state.dart';
 part '../list_field/list_field_bloc.dart';
+part '../markdown_field/markdown_field_bloc.dart';
+part '../markdown_field/markdown_field_bloc_state.dart';
 part '../multi_select_field/multi_select_field_bloc.dart';
 part '../multi_select_field/multi_select_field_state.dart';
 part '../select_field/select_field_bloc.dart';
 part '../select_field/select_field_state.dart';
 part '../text_field/text_field_bloc.dart';
 part '../text_field/text_field_state.dart';
-part '../markdown_field/markdown_field_bloc.dart';
-part '../markdown_field/markdown_field_bloc_state.dart';
 part 'field_state.dart';
 
 /// Signature for the [Validator] function which takes [value]

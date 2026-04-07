@@ -52,5 +52,13 @@ void main() {
       expect(bloc.state.hasError, isFalse);
       bloc.close();
     });
+
+    test('tab is preserved after changeValue', () {
+      final bloc = MarkdownFieldBloc();
+      bloc.updateTab(DmMarkdownTab.preview);
+      bloc.changeValue('# Test');
+      expect(bloc.state.tab, DmMarkdownTab.preview);
+      bloc.close();
+    });
   });
 }
