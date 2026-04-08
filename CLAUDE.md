@@ -45,12 +45,12 @@ duskmoon_adaptive_scaffold  ← Responsive scaffold (forked flutter_adaptive_sca
 
 **Codegen-driven, no runtime color generation.** Flow: design tokens → codegen → `*Tokens` classes → `DmColorScheme` → `DmThemeData`.
 
-- `DmThemeData` — static factories returning complete `ThemeData` (`.sunshine()`, `.moonlight()`)
-- `DmColorScheme` — static factories returning `ColorScheme`
-- `DmColorExtension` — `ThemeExtension` with 20 semantic tokens (info, success, warning, accent, neutral, base100-300)
+- `DmThemeData` — static factories returning complete `ThemeData` (`.sunshine()`, `.moonlight()`, `.forest()`, `.ocean()`)
+- `DmColorScheme` — static factories returning `ColorScheme` (4 themes: sunshine, moonlight, forest, ocean)
+- `DmColorExtension` — `ThemeExtension` with 24 semantic tokens (info/success/warning with containers, accent, neutral, surfaceVariant, base100-900)
 - `DmTextTheme` — Material 3 type scale
 - `ThemeModeExtension` — `fromString()`, `title`, `icon` helpers on `ThemeMode`
-- `DmThemeEntry` — bundles theme name with light/dark `ThemeData`
+- `DmThemeEntry` — bundles theme name with light/dark `ThemeData` (duskmoon + ecotone families)
 
 ### Adaptive Widget Pattern (`duskmoon_widgets`)
 
