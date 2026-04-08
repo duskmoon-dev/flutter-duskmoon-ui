@@ -9,15 +9,11 @@ class ButtonPage extends StatefulWidget {
 }
 
 class _ButtonPageState extends State<ButtonPage> {
-  DmPlatformStyle? _platformOverride;
-
   @override
   Widget build(BuildContext context) {
-    Widget body = ListView(
+    return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        _buildPlatformToggle(),
-        const SizedBox(height: 24),
         _buildButtonVariants(),
         const SizedBox(height: 24),
         _buildIconButtons(),
@@ -28,40 +24,6 @@ class _ButtonPageState extends State<ButtonPage> {
         const SizedBox(height: 24),
         _buildDataDisplayWidgets(),
       ],
-    );
-
-    if (_platformOverride != null) {
-      body = DmPlatformOverride(style: _platformOverride!, child: body);
-    }
-
-    return body;
-  }
-
-  Widget _buildPlatformToggle() {
-    return DmCard(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Platform Override',
-                style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 12),
-            SegmentedButton<DmPlatformStyle?>(
-              segments: const [
-                ButtonSegment(value: null, label: Text('Auto')),
-                ButtonSegment(
-                    value: DmPlatformStyle.material, label: Text('Material')),
-                ButtonSegment(
-                    value: DmPlatformStyle.cupertino, label: Text('Cupertino')),
-              ],
-              selected: {_platformOverride},
-              onSelectionChanged: (v) =>
-                  setState(() => _platformOverride = v.first),
-            ),
-          ],
-        ),
-      ),
     );
   }
 

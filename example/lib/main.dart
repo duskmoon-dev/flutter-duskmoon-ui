@@ -55,6 +55,7 @@ class ShowcaseHome extends StatefulWidget {
 
 class _ShowcaseHomeState extends State<ShowcaseHome> {
   int _selectedIndex = 0;
+  DmPlatformStyle? _platformStyle;
 
   static const _destinations = <NavigationDestination>[
     NavigationDestination(icon: Icon(Icons.palette), label: 'Theme'),
@@ -81,16 +82,60 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
     CodeEditorPage(),
   ];
 
+  IconData get _platformIcon => switch (_platformStyle) {
+        null => Icons.devices,
+        DmPlatformStyle.material => Icons.android,
+        DmPlatformStyle.cupertino => Icons.apple,
+        DmPlatformStyle.fluent => Icons.window,
+      };
+
   @override
   Widget build(BuildContext context) {
-    return DmScaffold(
+    Widget scaffold = DmScaffold(
       selectedIndex: _selectedIndex,
       onSelectedIndexChange: (i) => setState(() => _selectedIndex = i),
       destinations: _destinations,
       useDrawer: true,
-      appBar: const DmAppBar(title: Text('DuskMoon UI Showcase')),
+      appBar: DmAppBar(
+        title: const Text('DuskMoon UI Showcase'),
+        actions: [
+          PopupMenuButton<DmPlatformStyle?>(
+            icon: Icon(_platformIcon),
+            tooltip: 'Platform style',
+            onSelected: (v) => setState(() => _platformStyle = v),
+            itemBuilder: (_) => [
+              CheckedPopupMenuItem(
+                value: null,
+                checked: _platformStyle == null,
+                child: const Text('Auto'),
+              ),
+              CheckedPopupMenuItem(
+                value: DmPlatformStyle.material,
+                checked: _platformStyle == DmPlatformStyle.material,
+                child: const Text('Material'),
+              ),
+              CheckedPopupMenuItem(
+                value: DmPlatformStyle.cupertino,
+                checked: _platformStyle == DmPlatformStyle.cupertino,
+                child: const Text('Cupertino'),
+              ),
+              CheckedPopupMenuItem(
+                value: DmPlatformStyle.fluent,
+                checked: _platformStyle == DmPlatformStyle.fluent,
+                child: const Text('Fluent'),
+              ),
+            ],
+          ),
+        ],
+      ),
       appBarBreakpoint: Breakpoints.standard,
       body: (_) => _pages[_selectedIndex],
     );
+
+    if (_platformStyle != null) {
+      scaffold = DmPlatformOverride(style: _platformStyle!, child: scaffold);
+    }
+
+    return scaffold;
   }
 }
