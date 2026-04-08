@@ -1,3 +1,4 @@
+import 'package:duskmoon_widgets/duskmoon_widgets.dart' show DmSlider;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -116,11 +117,10 @@ class DmSliderFieldBlocBuilder extends StatelessWidget {
                 child: InputDecorator(
                   decoration: _buildDecoration(context, state, isEnabled),
                   isEmpty: false,
-                  child: Slider(
+                  child: DmSlider(
                     value: value,
                     min: min,
                     max: max,
-                    focusNode: focusNode,
                     divisions: divisions,
                     onChanged: fieldBlocBuilderOnChange<double>(
                       isEnabled: isEnabled,
@@ -128,10 +128,6 @@ class DmSliderFieldBlocBuilder extends StatelessWidget {
                       nextFocusNode: nextFocusNode,
                       onChanged: inputFieldBloc.changeValue,
                     ),
-                    label: labelBuilder?.call(context, value),
-                    activeColor: activeColor,
-                    inactiveColor: inactiveColor,
-                    mouseCursor: mouseCursor,
                   ),
                 ),
               );

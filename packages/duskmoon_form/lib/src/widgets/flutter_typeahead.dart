@@ -261,6 +261,10 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:duskmoon_widgets/duskmoon_widgets.dart'
+    show DmPlatformStyle, resolvePlatformStyle;
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -827,60 +831,173 @@ class _TypeAheadFieldState<T> extends State<TypeAheadField<T>>
     );
   }
 
+  void _onChanged(String value) {
+    if (widget.textFieldConfiguration.onChanged != null) {
+      widget.textFieldConfiguration.onChanged!(value);
+    }
+    _onChange();
+  }
+
+  Widget _buildMaterialTextField() {
+    return TextField(
+      focusNode: this._effectiveFocusNode,
+      controller: this._effectiveController,
+      autofillHints: widget.textFieldConfiguration.autofillHints,
+      decoration: widget.textFieldConfiguration.decoration,
+      style: widget.textFieldConfiguration.style,
+      textAlign: widget.textFieldConfiguration.textAlign,
+      enabled: widget.textFieldConfiguration.enabled,
+      keyboardType: widget.textFieldConfiguration.keyboardType,
+      autofocus: widget.textFieldConfiguration.autofocus,
+      inputFormatters: widget.textFieldConfiguration.inputFormatters,
+      autocorrect: widget.textFieldConfiguration.autocorrect,
+      minLines: widget.textFieldConfiguration.minLines,
+      maxLines: widget.textFieldConfiguration.maxLines,
+      maxLength: widget.textFieldConfiguration.maxLength,
+      maxLengthEnforcement:
+          widget.textFieldConfiguration.maxLengthEnforcement,
+      obscureText: widget.textFieldConfiguration.obscureText!,
+      onTap: widget.onTap,
+      onChanged: _onChanged,
+      onSubmitted: widget.textFieldConfiguration.onSubmitted,
+      onEditingComplete: widget.textFieldConfiguration.onEditingComplete,
+      scrollPadding: widget.textFieldConfiguration.scrollPadding,
+      textInputAction: widget.textFieldConfiguration.textInputAction,
+      textCapitalization: widget.textFieldConfiguration.textCapitalization,
+      keyboardAppearance: widget.textFieldConfiguration.keyboardAppearance,
+      cursorWidth: widget.textFieldConfiguration.cursorWidth,
+      cursorRadius: widget.textFieldConfiguration.cursorRadius,
+      cursorColor: widget.textFieldConfiguration.cursorColor,
+      textDirection: widget.textFieldConfiguration.textDirection,
+      buildCounter: widget.textFieldConfiguration.buildCounter,
+      dragStartBehavior: widget.textFieldConfiguration.dragStartBehavior!,
+      enableInteractiveSelection:
+          widget.textFieldConfiguration.enableInteractiveSelection!,
+      enableSuggestions: widget.textFieldConfiguration.enableSuggestions!,
+      expands: widget.textFieldConfiguration.expands!,
+      readOnly: widget.textFieldConfiguration.readOnly!,
+      scrollController: widget.textFieldConfiguration.scrollController,
+      scrollPhysics: widget.textFieldConfiguration.scrollPhysics,
+      showCursor: widget.textFieldConfiguration.showCursor,
+      strutStyle: widget.textFieldConfiguration.strutStyle,
+      textAlignVertical: widget.textFieldConfiguration.textAlignVertical,
+      // ignore: deprecated_member_use, deprecated_member_use_from_same_package
+      toolbarOptions: widget.textFieldConfiguration.toolbarOptions,
+    );
+  }
+
+  Widget? _wrapIconWithPadding(Widget? icon) {
+    if (icon == null) return null;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: icon,
+    );
+  }
+
+  Widget _buildCupertinoTextField() {
+    final config = widget.textFieldConfiguration;
+    return CupertinoTextField(
+      focusNode: this._effectiveFocusNode,
+      controller: this._effectiveController,
+      placeholder: config.decoration.hintText,
+      style: config.style,
+      textAlign: config.textAlign,
+      enabled: config.enabled,
+      keyboardType: config.keyboardType,
+      autofocus: config.autofocus,
+      inputFormatters: config.inputFormatters,
+      autocorrect: config.autocorrect,
+      minLines: config.minLines,
+      maxLines: config.maxLines,
+      maxLength: config.maxLength,
+      obscureText: config.obscureText!,
+      onChanged: _onChanged,
+      onSubmitted: config.onSubmitted,
+      onEditingComplete: config.onEditingComplete,
+      scrollPadding: config.scrollPadding,
+      textInputAction: config.textInputAction,
+      textCapitalization: config.textCapitalization,
+      keyboardAppearance: config.keyboardAppearance,
+      cursorWidth: config.cursorWidth,
+      cursorRadius: config.cursorRadius ?? const Radius.circular(2.0),
+      cursorColor: config.cursorColor,
+      textDirection: config.textDirection,
+      readOnly: config.readOnly!,
+      scrollController: config.scrollController,
+      scrollPhysics: config.scrollPhysics,
+      showCursor: config.showCursor,
+      strutStyle: config.strutStyle,
+      textAlignVertical: config.textAlignVertical,
+      prefix: _wrapIconWithPadding(config.decoration.prefixIcon),
+      suffix: _wrapIconWithPadding(config.decoration.suffixIcon),
+    );
+  }
+
+  Widget _buildFluentTextField(BuildContext context) {
+    final config = widget.textFieldConfiguration;
+    final colorScheme = Theme.of(context).colorScheme;
+    final brightness = Theme.of(context).brightness;
+    final fluentTheme = fluent.FluentThemeData(
+      brightness: brightness,
+      accentColor: fluent.AccentColor.swatch({
+        'normal': colorScheme.primary,
+      }),
+      scaffoldBackgroundColor: colorScheme.surface,
+    );
+
+    return Localizations.override(
+      context: context,
+      delegates: const [fluent.FluentLocalizations.delegate],
+      child: fluent.FluentTheme(
+        data: fluentTheme,
+        child: fluent.TextBox(
+          focusNode: this._effectiveFocusNode,
+          controller: this._effectiveController,
+          placeholder: config.decoration.hintText,
+          style: config.style,
+          textAlign: config.textAlign,
+          enabled: config.enabled,
+          keyboardType: config.keyboardType,
+          autofocus: config.autofocus,
+          inputFormatters: config.inputFormatters,
+          autocorrect: config.autocorrect,
+          minLines: config.minLines,
+          maxLines: config.maxLines,
+          maxLength: config.maxLength,
+          obscureText: config.obscureText!,
+          onChanged: _onChanged,
+          onSubmitted: config.onSubmitted,
+          onEditingComplete: config.onEditingComplete,
+          scrollPadding: config.scrollPadding,
+          textInputAction: config.textInputAction,
+          textCapitalization: config.textCapitalization,
+          keyboardAppearance: config.keyboardAppearance,
+          cursorWidth: config.cursorWidth,
+          cursorRadius: config.cursorRadius ?? const Radius.circular(2.0),
+          cursorColor: config.cursorColor,
+          readOnly: config.readOnly!,
+          scrollController: config.scrollController,
+          scrollPhysics: config.scrollPhysics,
+          showCursor: config.showCursor,
+          strutStyle: config.strutStyle,
+          prefix: _wrapIconWithPadding(config.decoration.prefixIcon),
+          suffix: _wrapIconWithPadding(config.decoration.suffixIcon),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final child = switch (resolvePlatformStyle(context)) {
+      DmPlatformStyle.material => _buildMaterialTextField(),
+      DmPlatformStyle.cupertino => _buildCupertinoTextField(),
+      DmPlatformStyle.fluent => _buildFluentTextField(context),
+    };
+
     return CompositedTransformTarget(
       link: this._layerLink,
-      child: TextField(
-        focusNode: this._effectiveFocusNode,
-        controller: this._effectiveController,
-        autofillHints: widget.textFieldConfiguration.autofillHints,
-        decoration: widget.textFieldConfiguration.decoration,
-        style: widget.textFieldConfiguration.style,
-        textAlign: widget.textFieldConfiguration.textAlign,
-        enabled: widget.textFieldConfiguration.enabled,
-        keyboardType: widget.textFieldConfiguration.keyboardType,
-        autofocus: widget.textFieldConfiguration.autofocus,
-        inputFormatters: widget.textFieldConfiguration.inputFormatters,
-        autocorrect: widget.textFieldConfiguration.autocorrect,
-        minLines: widget.textFieldConfiguration.minLines,
-        maxLines: widget.textFieldConfiguration.maxLines,
-        maxLength: widget.textFieldConfiguration.maxLength,
-        maxLengthEnforcement:
-            widget.textFieldConfiguration.maxLengthEnforcement,
-        obscureText: widget.textFieldConfiguration.obscureText!,
-        onTap: widget.onTap,
-        onChanged: (value) {
-          if (widget.textFieldConfiguration.onChanged != null) {
-            widget.textFieldConfiguration.onChanged!(value);
-          }
-          _onChange();
-        },
-        onSubmitted: widget.textFieldConfiguration.onSubmitted,
-        onEditingComplete: widget.textFieldConfiguration.onEditingComplete,
-        scrollPadding: widget.textFieldConfiguration.scrollPadding,
-        textInputAction: widget.textFieldConfiguration.textInputAction,
-        textCapitalization: widget.textFieldConfiguration.textCapitalization,
-        keyboardAppearance: widget.textFieldConfiguration.keyboardAppearance,
-        cursorWidth: widget.textFieldConfiguration.cursorWidth,
-        cursorRadius: widget.textFieldConfiguration.cursorRadius,
-        cursorColor: widget.textFieldConfiguration.cursorColor,
-        textDirection: widget.textFieldConfiguration.textDirection,
-        buildCounter: widget.textFieldConfiguration.buildCounter,
-        dragStartBehavior: widget.textFieldConfiguration.dragStartBehavior!,
-        enableInteractiveSelection:
-            widget.textFieldConfiguration.enableInteractiveSelection!,
-        enableSuggestions: widget.textFieldConfiguration.enableSuggestions!,
-        expands: widget.textFieldConfiguration.expands!,
-        readOnly: widget.textFieldConfiguration.readOnly!,
-        scrollController: widget.textFieldConfiguration.scrollController,
-        scrollPhysics: widget.textFieldConfiguration.scrollPhysics,
-        showCursor: widget.textFieldConfiguration.showCursor,
-        strutStyle: widget.textFieldConfiguration.strutStyle,
-        textAlignVertical: widget.textFieldConfiguration.textAlignVertical,
-        // ignore: deprecated_member_use, deprecated_member_use_from_same_package
-        toolbarOptions: widget.textFieldConfiguration.toolbarOptions,
-      ),
+      child: child,
     );
   }
 }

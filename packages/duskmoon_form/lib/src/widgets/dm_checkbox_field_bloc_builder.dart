@@ -1,3 +1,5 @@
+import 'package:duskmoon_widgets/duskmoon_widgets.dart'
+    show DmCheckbox, DmPlatformStyle, resolvePlatformStyle;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -124,66 +126,116 @@ class DmCheckboxFieldBlocBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     final fieldTheme = themeStyleOf(context);
 
-    return Theme(
-      data: Theme.of(context).copyWith(checkboxTheme: fieldTheme.checkboxTheme),
-      child: DmCanShowFieldBlocBuilder(
-        fieldBloc: booleanFieldBloc,
-        animate: animateWhenCanShow,
-        builder: (context0, __) {
-          return BlocBuilder<BooleanFieldBloc, BooleanFieldBlocState>(
-            bloc: booleanFieldBloc,
-            builder: (context, state) {
-              final isEnabled = fieldBlocIsEnabled(
-                isEnabled: this.isEnabled,
-                enableOnlyWhenFormBlocCanSubmit:
-                    enableOnlyWhenFormBlocCanSubmit,
-                fieldBlocState: state,
-              );
+    return DmCanShowFieldBlocBuilder(
+      fieldBloc: booleanFieldBloc,
+      animate: animateWhenCanShow,
+      builder: (context0, __) {
+        return BlocBuilder<BooleanFieldBloc, BooleanFieldBlocState>(
+          bloc: booleanFieldBloc,
+          builder: (context, state) {
+            final isEnabled = fieldBlocIsEnabled(
+              isEnabled: this.isEnabled,
+              enableOnlyWhenFormBlocCanSubmit:
+                  enableOnlyWhenFormBlocCanSubmit,
+              fieldBlocState: state,
+            );
 
+            final isMaterial = resolvePlatformStyle(context) ==
+                DmPlatformStyle.material;
+            final checkbox = _buildCheckbox(context, state);
+            final errorText = Style.getErrorText(
+              context: context,
+              errorBuilder: errorBuilder,
+              fieldBlocState: state,
+              fieldBloc: booleanFieldBloc,
+            );
+            final bodyWidget = DefaultTextStyle(
+              style: Style.resolveTextStyle(
+                isEnabled: isEnabled,
+                style: fieldTheme.textStyle!,
+                color: fieldTheme.textColor!,
+              ),
+              child: Container(
+                constraints: const BoxConstraints(
+                  minHeight: kMinInteractiveDimension,
+                ),
+                alignment: alignment,
+                child: body,
+              ),
+            );
+
+            if (isMaterial) {
               return DefaultFieldBlocBuilderPadding(
                 padding: padding,
-                child: InputDecorator(
-                  decoration: Style.inputDecorationWithoutBorder.copyWith(
-                    prefixIcon: fieldTheme.controlAffinity! ==
-                            FieldBlocBuilderControlAffinity.leading
-                        ? _buildCheckbox(context, state)
-                        : null,
-                    suffixIcon: fieldTheme.controlAffinity! ==
-                            FieldBlocBuilderControlAffinity.trailing
-                        ? _buildCheckbox(context, state)
-                        : null,
-                    errorText: Style.getErrorText(
-                      context: context,
-                      errorBuilder: errorBuilder,
-                      fieldBlocState: state,
-                      fieldBloc: booleanFieldBloc,
+                child: Theme(
+                  data: Theme.of(context)
+                      .copyWith(checkboxTheme: fieldTheme.checkboxTheme),
+                  child: InputDecorator(
+                    decoration:
+                        Style.inputDecorationWithoutBorder.copyWith(
+                      prefixIcon: fieldTheme.controlAffinity! ==
+                              FieldBlocBuilderControlAffinity.leading
+                          ? checkbox
+                          : null,
+                      suffixIcon: fieldTheme.controlAffinity! ==
+                              FieldBlocBuilderControlAffinity.trailing
+                          ? checkbox
+                          : null,
+                      errorText: errorText,
                     ),
-                  ),
-                  child: DefaultTextStyle(
-                    style: Style.resolveTextStyle(
-                      isEnabled: isEnabled,
-                      style: fieldTheme.textStyle!,
-                      color: fieldTheme.textColor!,
-                    ),
-                    child: Container(
-                      constraints: const BoxConstraints(
-                        minHeight: kMinInteractiveDimension,
-                      ),
-                      alignment: alignment,
-                      child: body,
-                    ),
+                    child: bodyWidget,
                   ),
                 ),
               );
-            },
-          );
-        },
-      ),
+            }
+
+            final isLeading = fieldTheme.controlAffinity! ==
+                FieldBlocBuilderControlAffinity.leading;
+            return DefaultFieldBlocBuilderPadding(
+              padding: padding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      if (isLeading)
+                        Padding(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 8),
+                          child: checkbox,
+                        ),
+                      Expanded(child: bodyWidget),
+                      if (!isLeading)
+                        Padding(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 8),
+                          child: checkbox,
+                        ),
+                    ],
+                  ),
+                  if (errorText != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        errorText,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
-  Checkbox _buildCheckbox(BuildContext context, BooleanFieldBlocState state) {
-    return Checkbox(
+  Widget _buildCheckbox(BuildContext context, BooleanFieldBlocState state) {
+    return DmCheckbox(
       value: state.value,
       onChanged: fieldBlocBuilderOnChange<bool?>(
         isEnabled: isEnabled,

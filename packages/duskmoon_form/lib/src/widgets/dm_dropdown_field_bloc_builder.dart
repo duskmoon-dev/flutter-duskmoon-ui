@@ -1,3 +1,5 @@
+import 'package:duskmoon_widgets/duskmoon_widgets.dart'
+    show DmDropdown, DmDropdownItem, DmPlatformStyle, resolvePlatformStyle;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -177,139 +179,73 @@ class DmDropdownFieldBlocBuilder<Value> extends StatelessWidget {
               isEnabled,
             );
 
+            final isMaterial = resolvePlatformStyle(context) ==
+                DmPlatformStyle.material;
+            final dropdown = DmDropdown<Value>(
+              value: fieldState.value,
+              isExpanded: isExpanded,
+              placeholder: decoration.hintText,
+              onChanged: fieldBlocBuilderOnChange<Value?>(
+                isEnabled: isEnabled,
+                nextFocusNode: nextFocusNode,
+                onChanged: (value) {
+                  selectFieldBloc.changeValue(value);
+                  onChanged?.call(value);
+                },
+              ),
+              items: fieldState.items.map((value) {
+                final fieldItem = itemBuilder(context, value);
+                return DmDropdownItem<Value>(
+                  value: value,
+                  child: fieldItem.child,
+                );
+              }).toList(),
+            );
+
+            if (isMaterial) {
+              return DefaultFieldBlocBuilderPadding(
+                padding: padding,
+                child: InputDecorator(
+                  decoration: decoration,
+                  textAlign: textAlign,
+                  isEmpty: fieldState.value == null &&
+                      decoration.hintText == null,
+                  child: dropdown,
+                ),
+              );
+            }
+
+            final errorText = Style.getErrorText(
+              context: context,
+              errorBuilder: errorBuilder,
+              fieldBlocState: fieldState,
+              fieldBloc: selectFieldBloc,
+            );
             return DefaultFieldBlocBuilderPadding(
               padding: padding,
-              child: InputDecorator(
-                decoration: decoration,
-                textAlign: textAlign,
-                isEmpty:
-                    fieldState.value == null && decoration.hintText == null,
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<Value>(
-                    value: fieldState.value,
-                    focusNode: focusNode,
-                    hint: hint,
-                    isExpanded: isExpanded,
-                    isDense: true,
-                    disabledHint: disabledHint ??
-                        (decoration.hintText != null
-                            ? DefaultTextStyle(
-                                style: Style.resolveTextStyle(
-                                  isEnabled: isEnabled,
-                                  style: decoration.hintStyle ??
-                                      fieldTheme.textStyle!,
-                                  color: fieldTheme.textColor!,
-                                ),
-                                child: Text(decoration.hintText!),
-                              )
-                            : null),
-                    onChanged: fieldBlocBuilderOnChange<Value?>(
-                      isEnabled: isEnabled,
-                      nextFocusNode: nextFocusNode,
-                      onChanged: (value) {
-                        selectFieldBloc.changeValue(value);
-                        onChanged?.call(value);
-                      },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  dropdown,
+                  if (errorText != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        errorText,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                          fontSize: 12,
+                        ),
+                      ),
                     ),
-                    items: _buildItems(
-                      context: context,
-                      fieldTheme: fieldTheme,
-                      items: fieldState.items,
-                      isEnabled: isEnabled,
-                      isSelected: false,
-                    ),
-                    selectedItemBuilder: (context) => _buildItems(
-                      context: context,
-                      fieldTheme: fieldTheme,
-                      items: fieldState.items,
-                      isEnabled: isEnabled,
-                      isSelected: true,
-                    ),
-                    icon: this.decoration.suffixIcon ??
-                        fieldTheme.moreIcon ??
-                        const Icon(Icons.arrow_drop_down),
-                  ),
-                ),
+                ],
               ),
             );
           },
         );
       },
     );
-  }
-
-  Widget _buildDefaultTextStyle({
-    required DropdownFieldTheme fieldTheme,
-    required bool isEnabled,
-    required bool isSelected,
-    required Widget child,
-  }) {
-    return DefaultTextStyle(
-      overflow: fieldTheme.textOverflow!,
-      maxLines: isSelected ? fieldTheme.selectedMaxLines : fieldTheme.maxLines,
-      style: Style.resolveTextStyle(
-        isEnabled: isEnabled,
-        style:
-            isSelected ? fieldTheme.selectedTextStyle! : fieldTheme.textStyle!,
-        color: fieldTheme.textColor!,
-      ),
-      child: child,
-    );
-  }
-
-  List<DropdownMenuItem<Value>> _buildItems({
-    required BuildContext context,
-    required DropdownFieldTheme fieldTheme,
-    required Iterable<Value> items,
-    required bool isSelected,
-    required bool isEnabled,
-  }) {
-    final builder =
-        (isSelected ? selectedItemBuilder : itemBuilder) ?? itemBuilder;
-
-    return [
-      if (showEmptyItem)
-        DropdownMenuItem<Value>(
-          value: null,
-          child: Text(
-            isSelected ? decoration.hintText ?? '' : emptyItemLabel,
-            style: isSelected
-                ? decoration.hintStyle
-                : Style.resolveTextStyle(
-                    isEnabled: isEnabled,
-                    style: fieldTheme.textStyle!,
-                    color: fieldTheme.textColor!,
-                  ),
-          ),
-        ),
-      ...items.map<DropdownMenuItem<Value>>((value) {
-        final fieldItem = builder(context, value);
-
-        if (fieldItem is! FieldItem) {
-          return DropdownMenuItem<Value>(
-            value: value,
-            child: _buildDefaultTextStyle(
-              fieldTheme: fieldTheme,
-              isEnabled: isEnabled,
-              isSelected: isSelected,
-              child: fieldItem,
-            ),
-          );
-        }
-        return DropdownMenuItem<Value>(
-          value: value,
-          enabled: fieldItem.isEnabled,
-          alignment: fieldItem.alignment,
-          onTap: fieldItem.onTap,
-          child: _buildDefaultTextStyle(
-            fieldTheme: fieldTheme,
-            isEnabled: fieldItem.isEnabled && isEnabled,
-            isSelected: isSelected,
-            child: fieldItem.child,
-          ),
-        );
-      }),
-    ];
   }
 
   InputDecoration _buildDecoration(

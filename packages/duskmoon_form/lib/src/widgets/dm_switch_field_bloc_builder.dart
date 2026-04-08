@@ -1,3 +1,5 @@
+import 'package:duskmoon_widgets/duskmoon_widgets.dart'
+    show DmPlatformStyle, DmSwitch, resolvePlatformStyle;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -133,78 +135,122 @@ class DmSwitchFieldBlocBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     final fieldTheme = themeStyleOf(context);
 
-    return Theme(
-      data: Theme.of(context).copyWith(switchTheme: fieldTheme.switchTheme!),
-      child: DmSimpleFieldBlocBuilder(
-        singleFieldBloc: booleanFieldBloc,
-        animateWhenCanShow: animateWhenCanShow,
-        builder: (context0, __) {
-          return BlocBuilder<BooleanFieldBloc, BooleanFieldBlocState>(
-            bloc: booleanFieldBloc,
-            builder: (context, state) {
-              final isEnabled = fieldBlocIsEnabled(
-                isEnabled: this.isEnabled,
-                enableOnlyWhenFormBlocCanSubmit:
-                    enableOnlyWhenFormBlocCanSubmit,
-                fieldBlocState: state,
-              );
+    return DmSimpleFieldBlocBuilder(
+      singleFieldBloc: booleanFieldBloc,
+      animateWhenCanShow: animateWhenCanShow,
+      builder: (context0, __) {
+        return BlocBuilder<BooleanFieldBloc, BooleanFieldBlocState>(
+          bloc: booleanFieldBloc,
+          builder: (context, state) {
+            final isEnabled = fieldBlocIsEnabled(
+              isEnabled: this.isEnabled,
+              enableOnlyWhenFormBlocCanSubmit:
+                  enableOnlyWhenFormBlocCanSubmit,
+              fieldBlocState: state,
+            );
 
+            final isMaterial = resolvePlatformStyle(context) ==
+                DmPlatformStyle.material;
+            final switchWidget = _buildSwitch(context, state);
+            final errorText = Style.getErrorText(
+              context: context,
+              errorBuilder: errorBuilder,
+              fieldBlocState: state,
+              fieldBloc: booleanFieldBloc,
+            );
+            final bodyWidget = DefaultTextStyle(
+              style: Style.resolveTextStyle(
+                isEnabled: isEnabled,
+                style: fieldTheme.textStyle!,
+                color: fieldTheme.textColor!,
+              ),
+              child: Container(
+                constraints: const BoxConstraints(
+                  minHeight: kMinInteractiveDimension,
+                ),
+                alignment: alignment,
+                child: body,
+              ),
+            );
+
+            if (isMaterial) {
               return DefaultFieldBlocBuilderPadding(
                 padding: padding,
-                child: InputDecorator(
-                  decoration: Style.inputDecorationWithoutBorder.copyWith(
-                    prefixIcon: fieldTheme.controlAffinity ==
-                            FieldBlocBuilderControlAffinity.leading
-                        ? _buildSwitch(context, state)
-                        : null,
-                    suffixIcon: fieldTheme.controlAffinity ==
-                            FieldBlocBuilderControlAffinity.trailing
-                        ? _buildSwitch(context, state)
-                        : null,
-                    errorText: Style.getErrorText(
-                      context: context,
-                      errorBuilder: errorBuilder,
-                      fieldBlocState: state,
-                      fieldBloc: booleanFieldBloc,
+                child: Theme(
+                  data: Theme.of(context)
+                      .copyWith(switchTheme: fieldTheme.switchTheme!),
+                  child: InputDecorator(
+                    decoration:
+                        Style.inputDecorationWithoutBorder.copyWith(
+                      prefixIcon: fieldTheme.controlAffinity ==
+                              FieldBlocBuilderControlAffinity.leading
+                          ? switchWidget
+                          : null,
+                      suffixIcon: fieldTheme.controlAffinity ==
+                              FieldBlocBuilderControlAffinity.trailing
+                          ? switchWidget
+                          : null,
+                      errorText: errorText,
                     ),
-                  ),
-                  child: DefaultTextStyle(
-                    style: Style.resolveTextStyle(
-                      isEnabled: isEnabled,
-                      style: fieldTheme.textStyle!,
-                      color: fieldTheme.textColor!,
-                    ),
-                    child: Container(
-                      constraints: const BoxConstraints(
-                        minHeight: kMinInteractiveDimension,
-                      ),
-                      alignment: alignment,
-                      child: body,
-                    ),
+                    child: bodyWidget,
                   ),
                 ),
               );
-            },
-          );
-        },
-      ),
+            }
+
+            final isLeading = fieldTheme.controlAffinity ==
+                FieldBlocBuilderControlAffinity.leading;
+            return DefaultFieldBlocBuilderPadding(
+              padding: padding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      if (isLeading)
+                        Padding(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 8),
+                          child: switchWidget,
+                        ),
+                      Expanded(child: bodyWidget),
+                      if (!isLeading)
+                        Padding(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 8),
+                          child: switchWidget,
+                        ),
+                    ],
+                  ),
+                  if (errorText != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        errorText,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
-  Switch _buildSwitch(BuildContext context, BooleanFieldBlocState state) {
-    return Switch.adaptive(
+  Widget _buildSwitch(BuildContext context, BooleanFieldBlocState state) {
+    return DmSwitch(
       value: state.value,
       onChanged: fieldBlocBuilderOnChange<bool>(
         isEnabled: isEnabled,
         nextFocusNode: nextFocusNode,
         onChanged: booleanFieldBloc.changeValue,
       ),
-      activeThumbImage: activeThumbImage,
-      autofocus: autofocus,
-      dragStartBehavior: dragStartBehavior,
-      focusNode: focusNode,
-      inactiveThumbImage: inactiveThumbImage,
-      materialTapTargetSize: materialTapTargetSize,
     );
   }
 }
