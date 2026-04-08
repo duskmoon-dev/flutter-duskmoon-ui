@@ -57,18 +57,22 @@ void main() {
 
     test('all themes have surface container variants', () {
       final light = DmColorScheme.sunshine();
-      expect(light.surfaceContainerLowest, SunshineTokens.surfaceContainerLowest);
+      expect(
+          light.surfaceContainerLowest, SunshineTokens.surfaceContainerLowest);
       expect(light.surfaceContainerLow, SunshineTokens.surfaceContainerLow);
       expect(light.surfaceContainer, SunshineTokens.surfaceContainer);
       expect(light.surfaceContainerHigh, SunshineTokens.surfaceContainerHigh);
-      expect(light.surfaceContainerHighest, SunshineTokens.surfaceContainerHighest);
+      expect(light.surfaceContainerHighest,
+          SunshineTokens.surfaceContainerHighest);
 
       final dark = DmColorScheme.moonlight();
-      expect(dark.surfaceContainerLowest, MoonlightTokens.surfaceContainerLowest);
+      expect(
+          dark.surfaceContainerLowest, MoonlightTokens.surfaceContainerLowest);
       expect(dark.surfaceContainerLow, MoonlightTokens.surfaceContainerLow);
       expect(dark.surfaceContainer, MoonlightTokens.surfaceContainer);
       expect(dark.surfaceContainerHigh, MoonlightTokens.surfaceContainerHigh);
-      expect(dark.surfaceContainerHighest, MoonlightTokens.surfaceContainerHighest);
+      expect(dark.surfaceContainerHighest,
+          MoonlightTokens.surfaceContainerHighest);
     });
   });
 
