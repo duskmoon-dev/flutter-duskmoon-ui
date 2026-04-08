@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -37,6 +38,23 @@ void main() {
           ),
         );
         expect(find.byType(CupertinoButton), findsOneWidget);
+      });
+    });
+
+    group('Fluent', () {
+      testWidgets('renders fluent.IconButton', (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: DmIconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () {},
+                platformOverride: DmPlatformStyle.fluent,
+              ),
+            ),
+          ),
+        );
+        expect(find.byType(fluent.IconButton), findsOneWidget);
       });
     });
   });

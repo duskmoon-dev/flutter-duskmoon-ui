@@ -1,7 +1,9 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../adaptive/adaptive_widget.dart';
+import '../adaptive/fluent_theme_bridge.dart';
 import '../adaptive/platform_resolver.dart';
 
 /// Visual style variants for [DmButton].
@@ -19,7 +21,7 @@ enum DmButtonVariant {
   tonal,
 }
 
-/// An adaptive button that renders Material or Cupertino styles.
+/// An adaptive button that renders Material, Cupertino, or Fluent styles.
 class DmButton extends StatelessWidget with AdaptiveWidget {
   /// Creates an adaptive button with the given [variant].
   const DmButton({
@@ -47,7 +49,7 @@ class DmButton extends StatelessWidget with AdaptiveWidget {
     return switch (resolveStyle(context)) {
       DmPlatformStyle.material => _buildMaterial(context),
       DmPlatformStyle.cupertino => _buildCupertino(context),
-      DmPlatformStyle.fluent => _buildMaterial(context),
+      DmPlatformStyle.fluent => _buildFluent(context),
     };
   }
 
@@ -64,9 +66,24 @@ class DmButton extends StatelessWidget with AdaptiveWidget {
   }
 
   Widget _buildCupertino(BuildContext context) {
-    return CupertinoButton(
-      onPressed: onPressed,
-      child: child,
-    );
+    return switch (variant) {
+      DmButtonVariant.filled =>
+        CupertinoButton.filled(onPressed: onPressed, child: child),
+      _ => CupertinoButton(onPressed: onPressed, child: child),
+    };
+  }
+
+  Widget _buildFluent(BuildContext context) {
+    final button = switch (variant) {
+      DmButtonVariant.filled =>
+        fluent.FilledButton(onPressed: onPressed, child: child),
+      DmButtonVariant.outlined =>
+        fluent.OutlinedButton(onPressed: onPressed, child: child),
+      DmButtonVariant.text =>
+        fluent.HyperlinkButton(onPressed: onPressed, child: child),
+      DmButtonVariant.tonal =>
+        fluent.Button(onPressed: onPressed, child: child),
+    };
+    return wrapWithFluentTheme(context, button);
   }
 }

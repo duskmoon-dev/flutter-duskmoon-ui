@@ -39,5 +39,23 @@ void main() {
         expect(find.byIcon(Icons.add), findsOneWidget);
       });
     });
+
+    group('Fluent', () {
+      testWidgets('falls back to Material FloatingActionButton',
+          (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: DmFab(
+                onPressed: () {},
+                platformOverride: DmPlatformStyle.fluent,
+                child: const Icon(Icons.add),
+              ),
+            ),
+          ),
+        );
+        expect(find.byType(FloatingActionButton), findsOneWidget);
+      });
+    });
   });
 }

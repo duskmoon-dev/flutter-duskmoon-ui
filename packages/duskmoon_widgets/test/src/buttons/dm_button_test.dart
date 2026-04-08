@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -41,19 +42,104 @@ void main() {
     });
 
     group('Cupertino', () {
-      testWidgets('renders CupertinoButton', (tester) async {
+      testWidgets('filled renders CupertinoButton.filled', (tester) async {
         await tester.pumpWidget(
           MaterialApp(
             theme: ThemeData(platform: TargetPlatform.iOS),
             home: Scaffold(
               body: DmButton(
                 onPressed: () {},
+                variant: DmButtonVariant.filled,
                 child: const Text('Tap'),
               ),
             ),
           ),
         );
         expect(find.byType(CupertinoButton), findsOneWidget);
+      });
+
+      testWidgets('outlined renders CupertinoButton', (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(platform: TargetPlatform.iOS),
+            home: Scaffold(
+              body: DmButton(
+                onPressed: () {},
+                variant: DmButtonVariant.outlined,
+                child: const Text('Tap'),
+              ),
+            ),
+          ),
+        );
+        expect(find.byType(CupertinoButton), findsOneWidget);
+      });
+    });
+
+    group('Fluent', () {
+      testWidgets('filled variant renders fluent.FilledButton', (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: DmButton(
+                onPressed: () {},
+                variant: DmButtonVariant.filled,
+                platformOverride: DmPlatformStyle.fluent,
+                child: const Text('Tap'),
+              ),
+            ),
+          ),
+        );
+        expect(find.byType(fluent.FilledButton), findsOneWidget);
+      });
+
+      testWidgets('outlined variant renders fluent.OutlinedButton',
+          (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: DmButton(
+                onPressed: () {},
+                variant: DmButtonVariant.outlined,
+                platformOverride: DmPlatformStyle.fluent,
+                child: const Text('Tap'),
+              ),
+            ),
+          ),
+        );
+        expect(find.byType(fluent.OutlinedButton), findsOneWidget);
+      });
+
+      testWidgets('text variant renders fluent.HyperlinkButton',
+          (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: DmButton(
+                onPressed: () {},
+                variant: DmButtonVariant.text,
+                platformOverride: DmPlatformStyle.fluent,
+                child: const Text('Tap'),
+              ),
+            ),
+          ),
+        );
+        expect(find.byType(fluent.HyperlinkButton), findsOneWidget);
+      });
+
+      testWidgets('tonal variant renders fluent.Button', (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: DmButton(
+                onPressed: () {},
+                variant: DmButtonVariant.tonal,
+                platformOverride: DmPlatformStyle.fluent,
+                child: const Text('Tap'),
+              ),
+            ),
+          ),
+        );
+        expect(find.byType(fluent.Button), findsOneWidget);
       });
     });
   });
