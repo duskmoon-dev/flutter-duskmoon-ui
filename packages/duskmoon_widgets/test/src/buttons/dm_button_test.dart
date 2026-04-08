@@ -58,7 +58,8 @@ void main() {
         expect(find.byType(CupertinoButton), findsOneWidget);
       });
 
-      testWidgets('outlined renders CupertinoButton', (tester) async {
+      testWidgets('outlined renders CupertinoButton with border',
+          (tester) async {
         await tester.pumpWidget(
           MaterialApp(
             theme: ThemeData(platform: TargetPlatform.iOS),
@@ -66,6 +67,49 @@ void main() {
               body: DmButton(
                 onPressed: () {},
                 variant: DmButtonVariant.outlined,
+                child: const Text('Tap'),
+              ),
+            ),
+          ),
+        );
+        expect(find.byType(CupertinoButton), findsOneWidget);
+        // Our DecoratedBox wraps the CupertinoButton with a border
+        final borderBox = find.ancestor(
+          of: find.byType(CupertinoButton),
+          matching: find.byWidgetPredicate(
+            (w) =>
+                w is DecoratedBox &&
+                w.decoration is BoxDecoration &&
+                (w.decoration as BoxDecoration).border != null,
+          ),
+        );
+        expect(borderBox, findsOneWidget);
+      });
+
+      testWidgets('text renders plain CupertinoButton', (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(platform: TargetPlatform.iOS),
+            home: Scaffold(
+              body: DmButton(
+                onPressed: () {},
+                variant: DmButtonVariant.text,
+                child: const Text('Tap'),
+              ),
+            ),
+          ),
+        );
+        expect(find.byType(CupertinoButton), findsOneWidget);
+      });
+
+      testWidgets('tonal renders CupertinoButton.tinted', (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(platform: TargetPlatform.iOS),
+            home: Scaffold(
+              body: DmButton(
+                onPressed: () {},
+                variant: DmButtonVariant.tonal,
                 child: const Text('Tap'),
               ),
             ),

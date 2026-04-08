@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,9 +12,7 @@ void main() {
         MaterialApp(
           theme: ThemeData(platform: TargetPlatform.android),
           home: const Scaffold(
-            body: DmTextField(
-              placeholder: 'Enter text',
-            ),
+            body: DmTextField(placeholder: 'Enter text'),
           ),
         ),
       );
@@ -25,13 +24,25 @@ void main() {
         MaterialApp(
           theme: ThemeData(platform: TargetPlatform.iOS),
           home: const Scaffold(
-            body: DmTextField(
-              placeholder: 'Enter text',
-            ),
+            body: DmTextField(placeholder: 'Enter text'),
           ),
         ),
       );
       expect(find.byType(CupertinoTextField), findsOneWidget);
+    });
+
+    testWidgets('Fluent renders fluent.TextBox', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: DmTextField(
+              placeholder: 'Enter text',
+              platformOverride: DmPlatformStyle.fluent,
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(fluent.TextBox), findsOneWidget);
     });
   });
 
@@ -41,10 +52,7 @@ void main() {
         MaterialApp(
           theme: ThemeData(platform: TargetPlatform.android),
           home: Scaffold(
-            body: DmCheckbox(
-              value: true,
-              onChanged: (_) {},
-            ),
+            body: DmCheckbox(value: true, onChanged: (_) {}),
           ),
         ),
       );
@@ -56,14 +64,26 @@ void main() {
         MaterialApp(
           theme: ThemeData(platform: TargetPlatform.iOS),
           home: Scaffold(
-            body: DmCheckbox(
-              value: true,
-              onChanged: (_) {},
-            ),
+            body: DmCheckbox(value: true, onChanged: (_) {}),
           ),
         ),
       );
       expect(find.byType(CupertinoCheckbox), findsOneWidget);
+    });
+
+    testWidgets('Fluent renders fluent.Checkbox', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: DmCheckbox(
+              value: true,
+              onChanged: (_) {},
+              platformOverride: DmPlatformStyle.fluent,
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(fluent.Checkbox), findsOneWidget);
     });
   });
 
@@ -73,10 +93,7 @@ void main() {
         MaterialApp(
           theme: ThemeData(platform: TargetPlatform.android),
           home: Scaffold(
-            body: DmSwitch(
-              value: false,
-              onChanged: (_) {},
-            ),
+            body: DmSwitch(value: false, onChanged: (_) {}),
           ),
         ),
       );
@@ -88,14 +105,26 @@ void main() {
         MaterialApp(
           theme: ThemeData(platform: TargetPlatform.iOS),
           home: Scaffold(
-            body: DmSwitch(
-              value: false,
-              onChanged: (_) {},
-            ),
+            body: DmSwitch(value: false, onChanged: (_) {}),
           ),
         ),
       );
       expect(find.byType(CupertinoSwitch), findsOneWidget);
+    });
+
+    testWidgets('Fluent renders fluent.ToggleSwitch', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: DmSwitch(
+              value: false,
+              onChanged: (_) {},
+              platformOverride: DmPlatformStyle.fluent,
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(fluent.ToggleSwitch), findsOneWidget);
     });
   });
 
@@ -105,10 +134,7 @@ void main() {
         MaterialApp(
           theme: ThemeData(platform: TargetPlatform.android),
           home: Scaffold(
-            body: DmSlider(
-              value: 0.5,
-              onChanged: (_) {},
-            ),
+            body: DmSlider(value: 0.5, onChanged: (_) {}),
           ),
         ),
       );
@@ -120,14 +146,82 @@ void main() {
         MaterialApp(
           theme: ThemeData(platform: TargetPlatform.iOS),
           home: Scaffold(
+            body: DmSlider(value: 0.5, onChanged: (_) {}),
+          ),
+        ),
+      );
+      expect(find.byType(CupertinoSlider), findsOneWidget);
+    });
+
+    testWidgets('Fluent renders fluent.Slider', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
             body: DmSlider(
               value: 0.5,
+              onChanged: (_) {},
+              platformOverride: DmPlatformStyle.fluent,
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(fluent.Slider), findsOneWidget);
+    });
+  });
+
+  group('DmDropdown', () {
+    final items = [
+      const DmDropdownItem<String>(value: 'a', child: Text('Alpha')),
+      const DmDropdownItem<String>(value: 'b', child: Text('Beta')),
+    ];
+
+    testWidgets('Material renders DropdownButton', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.android),
+          home: Scaffold(
+            body: DmDropdown<String>(
+              items: items,
+              value: 'a',
               onChanged: (_) {},
             ),
           ),
         ),
       );
-      expect(find.byType(CupertinoSlider), findsOneWidget);
+      expect(find.byType(DropdownButton<String>), findsOneWidget);
+    });
+
+    testWidgets('Cupertino renders picker trigger', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.iOS),
+          home: Scaffold(
+            body: DmDropdown<String>(
+              items: items,
+              value: 'a',
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      // The Cupertino variant uses a GestureDetector with chevron icon
+      expect(find.byIcon(CupertinoIcons.chevron_down), findsOneWidget);
+    });
+
+    testWidgets('Fluent renders fluent.ComboBox', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: DmDropdown<String>(
+              items: items,
+              value: 'a',
+              onChanged: (_) {},
+              platformOverride: DmPlatformStyle.fluent,
+            ),
+          ),
+        ),
+      );
+      expect(find.byType(fluent.ComboBox<String>), findsOneWidget);
     });
   });
 }
