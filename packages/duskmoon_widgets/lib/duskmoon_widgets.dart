@@ -8,6 +8,8 @@ library;
 export 'src/adaptive/adaptive_widget.dart';
 export 'src/adaptive/dm_platform_style.dart';
 export 'src/adaptive/duskmoon_app.dart';
+export 'src/adaptive/fluent_theme_bridge.dart'
+    show dmFluentLocalizationsDelegates;
 export 'src/adaptive/platform_override.dart';
 export 'src/adaptive/platform_resolver.dart';
 
@@ -22,6 +24,7 @@ export 'src/buttons/dm_icon_button.dart';
 
 // Inputs
 export 'src/inputs/dm_checkbox.dart';
+export 'src/inputs/dm_dropdown.dart';
 export 'src/inputs/dm_slider.dart';
 export 'src/inputs/dm_switch.dart';
 export 'src/inputs/dm_text_field.dart';
