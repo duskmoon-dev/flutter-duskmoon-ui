@@ -20,7 +20,7 @@ This package is a fork of `flutter_adaptive_scaffold`, versioned in sync with ot
 
 ```yaml
 dependencies:
-  duskmoon_adaptive_scaffold: ^1.2.3
+  duskmoon_adaptive_scaffold: ^1.3.0
 ```
 
 ```dart

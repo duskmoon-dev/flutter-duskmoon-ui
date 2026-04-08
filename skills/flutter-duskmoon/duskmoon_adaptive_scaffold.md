@@ -6,7 +6,7 @@ Responsive scaffold implementing Material Design 3 adaptive layout. Forked from 
 
 ```yaml
 dependencies:
-  duskmoon_adaptive_scaffold: ^1.2.3
+  duskmoon_adaptive_scaffold: ^1.3.0
 ```
 
 ```dart

@@ -15,8 +15,8 @@ The `duskmoon_theme_bloc` package provides a BLoC for persisting theme selection
 
 ```yaml
 dependencies:
-  duskmoon_theme_bloc: ^1.2.3
-  duskmoon_theme: ^1.2.3
+  duskmoon_theme_bloc: ^1.3.0
+  duskmoon_theme: ^1.3.0
   flutter_bloc: ^9.0.0
   shared_preferences: ^2.3.0
 ```
@@ -48,7 +48,7 @@ final themeBloc = DmThemeBloc(prefs: prefs);
 Change the active theme by name.
 
 ```dart
-context.read<DmThemeBloc>().add(const DmSetTheme('sunshine'));
+context.read<DmThemeBloc>().add(const DmSetTheme('duskmoon'));  // or 'ecotone'
 ```
 
 ### DmSetThemeMode

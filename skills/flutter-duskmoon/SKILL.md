@@ -16,7 +16,7 @@ Add `duskmoon_ui` to get theme + widgets + settings + feedback + forms in one im
 ```yaml
 # pubspec.yaml
 dependencies:
-  duskmoon_ui: ^1.2.3
+  duskmoon_ui: ^1.3.0
 ```
 
 ```dart
@@ -27,15 +27,15 @@ import 'package:duskmoon_ui/duskmoon_ui.dart';
 
 ```yaml
 dependencies:
-  duskmoon_theme: ^1.2.3           # Theme only
-  duskmoon_widgets: ^1.2.3         # Adaptive widgets
-  duskmoon_settings: ^1.2.3        # Settings UI
-  duskmoon_feedback: ^1.2.3        # Dialogs, toasts, snackbars
-  duskmoon_form: ^1.2.3            # BLoC-based form management
-  duskmoon_visualization: ^1.2.3   # Data visualization charts
-  duskmoon_theme_bloc: ^1.2.3      # BLoC persistence
-  duskmoon_adaptive_scaffold: ^1.2.3  # Responsive scaffold
-  duskmoon_code_engine: ^1.2.3     # Code editor engine
+  duskmoon_theme: ^1.3.0           # Theme only
+  duskmoon_widgets: ^1.3.0         # Adaptive widgets
+  duskmoon_settings: ^1.3.0        # Settings UI
+  duskmoon_feedback: ^1.3.0        # Dialogs, toasts, snackbars
+  duskmoon_form: ^1.3.0            # BLoC-based form management
+  duskmoon_visualization: ^1.3.0   # Data visualization charts
+  duskmoon_theme_bloc: ^1.3.0      # BLoC persistence
+  duskmoon_adaptive_scaffold: ^1.3.0  # Responsive scaffold
+  duskmoon_code_engine: ^1.3.0     # Code editor engine
 ```
 
 ## Skill Modules
