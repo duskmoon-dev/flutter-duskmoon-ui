@@ -37,5 +37,6 @@ abstract final class DmVisualization {
     'DmVizScatterChart',
     'DmVizHeatmap',
     'DmVizNetworkGraph',
+    'DmVizMapChart',
   ];
 }
