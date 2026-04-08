@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:duskmoon_settings/src/list/abstract_settings_list.dart';
 import 'package:duskmoon_settings/src/utils/platform_utils.dart';
 import 'package:duskmoon_settings/src/utils/settings_theme.dart';
@@ -33,7 +34,7 @@ class CupertinoSettingsList extends AbstractSettingsList {
     final backgroundColor = themeData.settingsListBackground ??
         CupertinoColors.systemGroupedBackground.resolveFrom(context);
 
-    return LayoutBuilder(
+    Widget list = LayoutBuilder(
       builder: (context, constraints) => Container(
         color: backgroundColor,
         width: constraints.maxWidth,
@@ -52,6 +53,16 @@ class CupertinoSettingsList extends AbstractSettingsList {
           ),
         ),
       ),
+    );
+
+    // Ensure a CupertinoTheme ancestor exists so that all child widgets
+    // calling CupertinoColors.*.resolveFrom(context) work correctly — even
+    // when the app root is a MaterialApp rather than a CupertinoApp.
+    return CupertinoTheme(
+      data: MaterialBasedCupertinoThemeData(
+        materialTheme: Theme.of(context),
+      ),
+      child: list,
     );
   }
 
