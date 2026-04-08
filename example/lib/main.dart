@@ -33,6 +33,7 @@ class DuskmoonShowcaseApp extends StatelessWidget {
             final entry = state.entry;
             return MaterialApp(
               title: 'DuskMoon UI Showcase',
+              debugShowCheckedModeBanner: false,
               theme: entry.light,
               darkTheme: entry.dark,
               themeMode: state.themeMode,
