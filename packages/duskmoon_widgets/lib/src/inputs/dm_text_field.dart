@@ -1,7 +1,9 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../adaptive/adaptive_widget.dart';
+import '../adaptive/fluent_theme_bridge.dart';
 import '../adaptive/platform_resolver.dart';
 
 /// An adaptive text input that renders Material or Cupertino styles.
@@ -89,20 +91,20 @@ class DmTextField extends StatelessWidget with AdaptiveWidget {
           prefix: prefix,
           suffix: suffix,
         ),
-      DmPlatformStyle.fluent => TextField(
-          controller: controller,
-          decoration: decoration ??
-              InputDecoration(
-                hintText: placeholder,
-                prefixIcon: prefix,
-                suffixIcon: suffix,
-              ),
-          obscureText: obscureText,
-          onChanged: onChanged,
-          onSubmitted: onSubmitted,
-          enabled: enabled,
-          keyboardType: keyboardType,
-          maxLines: maxLines,
+      DmPlatformStyle.fluent => wrapWithFluentTheme(
+          context,
+          fluent.TextBox(
+            controller: controller,
+            placeholder: placeholder,
+            obscureText: obscureText,
+            onChanged: onChanged,
+            onSubmitted: onSubmitted,
+            enabled: enabled,
+            keyboardType: keyboardType,
+            maxLines: maxLines,
+            prefix: prefix,
+            suffix: suffix,
+          ),
         ),
     };
   }

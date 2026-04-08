@@ -1,7 +1,9 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../adaptive/adaptive_widget.dart';
+import '../adaptive/fluent_theme_bridge.dart';
 import '../adaptive/platform_resolver.dart';
 
 /// An adaptive checkbox that renders Material or Cupertino styles.
@@ -34,9 +36,12 @@ class DmCheckbox extends StatelessWidget with AdaptiveWidget {
           value: value,
           onChanged: onChanged,
         ),
-      DmPlatformStyle.fluent => Checkbox(
-          value: value,
-          onChanged: onChanged,
+      DmPlatformStyle.fluent => wrapWithFluentTheme(
+          context,
+          fluent.Checkbox(
+            checked: value,
+            onChanged: onChanged,
+          ),
         ),
     };
   }

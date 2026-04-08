@@ -15,6 +15,8 @@ class DmAppBar extends StatelessWidget
     this.leading,
     this.actions,
     this.automaticallyImplyLeading = true,
+    this.backgroundColor,
+    this.foregroundColor,
     this.platformOverride,
   });
 
@@ -30,6 +32,12 @@ class DmAppBar extends StatelessWidget
   /// Whether to automatically show a back/close button when applicable.
   final bool automaticallyImplyLeading;
 
+  /// The background color of the app bar.
+  final Color? backgroundColor;
+
+  /// The foreground color for text and icons in the app bar.
+  final Color? foregroundColor;
+
   @override
   final DmPlatformStyle? platformOverride;
 
@@ -44,20 +52,45 @@ class DmAppBar extends StatelessWidget
           leading: leading,
           actions: actions,
           automaticallyImplyLeading: automaticallyImplyLeading,
+          backgroundColor: backgroundColor,
+          foregroundColor: foregroundColor,
+          iconTheme: foregroundColor != null
+              ? IconThemeData(color: foregroundColor)
+              : null,
         ),
       DmPlatformStyle.cupertino => CupertinoNavigationBar(
-          middle: title,
+          middle: title != null && foregroundColor != null
+              ? IconTheme(
+                  data: IconThemeData(color: foregroundColor),
+                  child: DefaultTextStyle(
+                    style: TextStyle(color: foregroundColor, fontSize: 17),
+                    child: title!,
+                  ),
+                )
+              : title,
           leading: leading,
           trailing: actions != null && actions!.isNotEmpty
-              ? Row(mainAxisSize: MainAxisSize.min, children: actions!)
+              ? IconTheme(
+                  data: IconThemeData(
+                      color: foregroundColor ??
+                          CupertinoTheme.of(context).primaryColor),
+                  child:
+                      Row(mainAxisSize: MainAxisSize.min, children: actions!),
+                )
               : null,
           automaticallyImplyLeading: automaticallyImplyLeading,
+          backgroundColor: backgroundColor,
         ),
       DmPlatformStyle.fluent => AppBar(
           title: title,
           leading: leading,
           actions: actions,
           automaticallyImplyLeading: automaticallyImplyLeading,
+          backgroundColor: backgroundColor,
+          foregroundColor: foregroundColor,
+          iconTheme: foregroundColor != null
+              ? IconThemeData(color: foregroundColor)
+              : null,
         ),
     };
   }

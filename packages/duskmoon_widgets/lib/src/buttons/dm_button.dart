@@ -66,11 +66,32 @@ class DmButton extends StatelessWidget with AdaptiveWidget {
   }
 
   Widget _buildCupertino(BuildContext context) {
+    const size = CupertinoButtonSize.medium;
     return switch (variant) {
-      DmButtonVariant.filled =>
-        CupertinoButton.filled(onPressed: onPressed, child: child),
-      _ => CupertinoButton(onPressed: onPressed, child: child),
+      DmButtonVariant.filled => CupertinoButton.filled(
+          sizeStyle: size, onPressed: onPressed, child: child),
+      DmButtonVariant.outlined => _buildCupertinoOutlined(context, size),
+      DmButtonVariant.text =>
+        CupertinoButton(sizeStyle: size, onPressed: onPressed, child: child),
+      DmButtonVariant.tonal => CupertinoButton.tinted(
+          sizeStyle: size, onPressed: onPressed, child: child),
     };
+  }
+
+  Widget _buildCupertinoOutlined(
+      BuildContext context, CupertinoButtonSize size) {
+    final theme = CupertinoTheme.of(context);
+    final color = onPressed != null
+        ? theme.primaryColor
+        : CupertinoColors.quaternarySystemFill;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border.all(color: color),
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+      ),
+      child: CupertinoButton(
+          sizeStyle: size, onPressed: onPressed, child: child),
+    );
   }
 
   Widget _buildFluent(BuildContext context) {
