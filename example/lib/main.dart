@@ -38,6 +38,7 @@ class DuskmoonShowcaseApp extends StatelessWidget {
               darkTheme: entry.dark,
               themeMode: state.themeMode,
               scaffoldMessengerKey: dmScaffoldMessengerKey,
+              localizationsDelegates: dmFluentLocalizationsDelegates,
               home: const ShowcaseHome(),
             );
           },
@@ -98,6 +99,8 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
       destinations: _destinations,
       useDrawer: true,
       appBar: DmAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text('DuskMoon UI Showcase'),
         actions: [
           PopupMenuButton<DmPlatformStyle?>(

@@ -17,6 +17,9 @@ workspace:
   - packages/duskmoon_adaptive_scaffold
   - example
 
+flutter:
+  uses-material-design: true
+
 dev_dependencies:
   melos: ^7.0.0
 

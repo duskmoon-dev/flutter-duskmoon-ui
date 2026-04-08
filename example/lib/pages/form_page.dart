@@ -110,7 +110,7 @@ class FormPage extends StatelessWidget {
                         final isSubmitting = state is FormBlocSubmitting;
                         return SizedBox(
                           width: double.infinity,
-                          child: FilledButton(
+                          child: DmButton(
                             onPressed: isSubmitting
                                 ? null
                                 : () =>
@@ -119,7 +119,8 @@ class FormPage extends StatelessWidget {
                                 ? const SizedBox(
                                     height: 20,
                                     width: 20,
-                                    child: CircularProgressIndicator(
+                                    child:
+                                        CircularProgressIndicator.adaptive(
                                       strokeWidth: 2,
                                     ),
                                   )
