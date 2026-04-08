@@ -8,18 +8,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   group('DmThemeState', () {
     test('props are themeName and themeMode', () {
-      const state = DmThemeState(themeName: 'sunshine');
-      expect(state.props, ['sunshine', ThemeMode.system]);
+      const state = DmThemeState(themeName: 'duskmoon');
+      expect(state.props, ['duskmoon', ThemeMode.system]);
     });
 
     test('default themeMode is system', () {
-      const state = DmThemeState(themeName: 'sunshine');
+      const state = DmThemeState(themeName: 'duskmoon');
       expect(state.themeMode, ThemeMode.system);
     });
 
     test('entry returns matching theme', () {
-      const state = DmThemeState(themeName: 'sunshine');
-      expect(state.entry.name, 'sunshine');
+      const state = DmThemeState(themeName: 'duskmoon');
+      expect(state.entry.name, 'duskmoon');
     });
 
     test('entry falls back to first theme for unknown name', () {
@@ -46,7 +46,7 @@ void main() {
     });
 
     test('resolveTheme follows platform brightness for ThemeMode.system', () {
-      const state = DmThemeState(themeName: 'sunshine');
+      const state = DmThemeState(themeName: 'duskmoon');
       expect(
         state.resolveTheme(Brightness.light).brightness,
         Brightness.light,
@@ -58,9 +58,9 @@ void main() {
     });
 
     test('copyWith creates new state with overrides', () {
-      const state = DmThemeState(themeName: 'sunshine');
+      const state = DmThemeState(themeName: 'duskmoon');
       final updated = state.copyWith(themeMode: ThemeMode.dark);
-      expect(updated.themeName, 'sunshine');
+      expect(updated.themeName, 'duskmoon');
       expect(updated.themeMode, ThemeMode.dark);
     });
 
@@ -132,12 +132,12 @@ void main() {
     blocTest<DmThemeBloc, DmThemeState>(
       'DmSetTheme updates themeName and persists',
       build: () => DmThemeBloc(prefs: prefs),
-      act: (bloc) => bloc.add(const DmSetTheme('sunshine')),
+      act: (bloc) => bloc.add(const DmSetTheme('duskmoon')),
       expect: () => [
-        const DmThemeState(themeName: 'sunshine'),
+        const DmThemeState(themeName: 'duskmoon'),
       ],
       verify: (_) {
-        expect(prefs.getString('dm_theme_name'), 'sunshine');
+        expect(prefs.getString('dm_theme_name'), 'duskmoon');
       },
     );
 
