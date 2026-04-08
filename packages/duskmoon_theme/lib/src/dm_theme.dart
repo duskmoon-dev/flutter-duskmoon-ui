@@ -15,7 +15,7 @@ class DmTheme {
     required this.colors,
   });
 
-  /// Display name of this theme ("sunshine" | "moonlight").
+  /// Display name of this theme.
   final String name;
 
   /// Resolved color tokens for this theme.
@@ -33,6 +33,19 @@ class DmTheme {
     colors: DmColors.moonlight(),
   );
 
+  /// Forest (light) token set.
+  static final DmTheme forest = DmTheme(
+    name: 'forest',
+    colors: DmColors.forest(),
+  );
+
+  /// Ocean (dark) token set.
+  static final DmTheme ocean = DmTheme(
+    name: 'ocean',
+    colors: DmColors.ocean(),
+  );
+
   /// All available themes.
-  static final List<DmTheme> all = List.unmodifiable([sunshine, moonlight]);
+  static final List<DmTheme> all =
+      List.unmodifiable([sunshine, moonlight, forest, ocean]);
 }

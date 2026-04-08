@@ -7,24 +7,36 @@ void main() {
     test('sunshine() has colorScheme matching DmColorScheme.sunshine()', () {
       final colors = DmColors.sunshine();
       expect(colors.colorScheme.brightness, Brightness.light);
-      expect(colors.colorScheme.primary, const Color(0xFF6750A4));
+      expect(colors.colorScheme.primary, SunshineTokens.primary);
     });
 
     test('moonlight() has colorScheme matching DmColorScheme.moonlight()', () {
       final colors = DmColors.moonlight();
       expect(colors.colorScheme.brightness, Brightness.dark);
-      expect(colors.colorScheme.primary, const Color(0xFFD0BCFF));
+      expect(colors.colorScheme.primary, MoonlightTokens.primary);
     });
 
     test('sunshine() extension matches DmColorExtension.sunshine()', () {
       final colors = DmColors.sunshine();
-      expect(colors.extension.accent, const Color(0xFF8B5CF6));
-      expect(colors.extension.info, const Color(0xFF2196F3));
+      expect(colors.extension.accent, SunshineTokens.accent);
+      expect(colors.extension.info, SunshineTokens.info);
     });
 
     test('moonlight() extension matches DmColorExtension.moonlight()', () {
       final colors = DmColors.moonlight();
-      expect(colors.extension.accent, const Color(0xFFA78BFA));
+      expect(colors.extension.accent, MoonlightTokens.accent);
+    });
+
+    test('forest() has colorScheme matching DmColorScheme.forest()', () {
+      final colors = DmColors.forest();
+      expect(colors.colorScheme.brightness, Brightness.light);
+      expect(colors.colorScheme.primary, ForestTokens.primary);
+    });
+
+    test('ocean() has colorScheme matching DmColorScheme.ocean()', () {
+      final colors = DmColors.ocean();
+      expect(colors.colorScheme.brightness, Brightness.dark);
+      expect(colors.colorScheme.primary, OceanTokens.primary);
     });
   });
 
@@ -37,13 +49,15 @@ void main() {
       expect(DmTheme.moonlight.name, 'moonlight');
     });
 
-    test('all has length 2', () {
-      expect(DmTheme.all.length, 2);
+    test('all has length 4', () {
+      expect(DmTheme.all.length, 4);
     });
 
-    test('all contains sunshine and moonlight', () {
+    test('all contains all themes', () {
       expect(DmTheme.all, contains(DmTheme.sunshine));
       expect(DmTheme.all, contains(DmTheme.moonlight));
+      expect(DmTheme.all, contains(DmTheme.forest));
+      expect(DmTheme.all, contains(DmTheme.ocean));
     });
 
     test('sunshine.colors.colorScheme.primary matches DmColorScheme.sunshine()',
@@ -74,7 +88,7 @@ void main() {
       final theme = DmThemeData.fromDmTheme(DmTheme.sunshine);
       final ext = theme.extension<DmColorExtension>();
       expect(ext, isNotNull);
-      expect(ext!.accent, const Color(0xFF8B5CF6));
+      expect(ext!.accent, SunshineTokens.accent);
     });
   });
 }

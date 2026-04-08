@@ -42,6 +42,18 @@ abstract final class DmThemeData {
         colorExtension: DmColorExtension.moonlight(),
       );
 
+  /// Returns a light [ThemeData] using the Forest color palette.
+  static ThemeData forest() => _buildThemeData(
+        colorScheme: DmColorScheme.forest(),
+        colorExtension: DmColorExtension.forest(),
+      );
+
+  /// Returns a dark [ThemeData] using the Ocean color palette.
+  static ThemeData ocean() => _buildThemeData(
+        colorScheme: DmColorScheme.ocean(),
+        colorExtension: DmColorExtension.ocean(),
+      );
+
   /// Build [ThemeData] from a [DmTheme] token container.
   static ThemeData fromDmTheme(DmTheme theme) => _buildThemeData(
         colorScheme: theme.colors.colorScheme,
@@ -51,9 +63,14 @@ abstract final class DmThemeData {
   /// Returns all available [DmThemeEntry] instances.
   static List<DmThemeEntry> get themes => [
         DmThemeEntry(
-          name: 'sunshine',
+          name: 'duskmoon',
           light: sunshine(),
           dark: moonlight(),
+        ),
+        DmThemeEntry(
+          name: 'ecotone',
+          light: forest(),
+          dark: ocean(),
         ),
       ];
 

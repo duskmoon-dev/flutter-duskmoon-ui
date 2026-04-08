@@ -32,4 +32,16 @@ class DmColors {
         colorScheme: DmColorScheme.moonlight(),
         extension: DmColorExtension.moonlight(),
       );
+
+  /// Returns the Forest (light) color tokens.
+  factory DmColors.forest() => DmColors(
+        colorScheme: DmColorScheme.forest(),
+        extension: DmColorExtension.forest(),
+      );
+
+  /// Returns the Ocean (dark) color tokens.
+  factory DmColors.ocean() => DmColors(
+        colorScheme: DmColorScheme.ocean(),
+        extension: DmColorExtension.ocean(),
+      );
 }

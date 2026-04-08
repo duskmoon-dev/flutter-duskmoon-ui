@@ -5,73 +5,91 @@ import 'dart:ui' show Color;
 
 abstract final class SunshineTokens {
   // Primary
-  static const Color primary = Color(0xFF6750A4);
+  static const Color primary = Color(0xFFE19100);
   static const Color primaryContent = Color(0xFFFFFFFF);
-  static const Color primaryContainer = Color(0xFFEADDFF);
-  static const Color onPrimaryContainer = Color(0xFF21005D);
+  static const Color primaryContainer = Color(0xFFF5EFD5);
+  static const Color onPrimaryContainer = Color(0xFF262210);
 
   // Secondary
-  static const Color secondary = Color(0xFF625B71);
+  static const Color secondary = Color(0xFFE14754);
   static const Color secondaryContent = Color(0xFFFFFFFF);
-  static const Color secondaryContainer = Color(0xFFE8DEF8);
-  static const Color onSecondaryContainer = Color(0xFF1D192B);
+  static const Color secondaryContainer = Color(0xFFFAEAC6);
+  static const Color onSecondaryContainer = Color(0xFF2C2001);
 
   // Tertiary
-  static const Color tertiary = Color(0xFF7D5260);
-  static const Color tertiaryContent = Color(0xFFFFFFFF);
-  static const Color tertiaryContainer = Color(0xFFFFD8E4);
-  static const Color onTertiaryContainer = Color(0xFF31111D);
+  static const Color tertiary = Color(0xFF86C7ED);
+  static const Color tertiaryContent = Color(0xFF0D1215);
+  static const Color tertiaryContainer = Color(0xFFD9F3FF);
+  static const Color onTertiaryContainer = Color(0xFF151C1F);
 
-  // Error
-  static const Color error = Color(0xFFB3261E);
-  static const Color errorContent = Color(0xFFFFFFFF);
-  static const Color errorContainer = Color(0xFFF9DEDC);
-  static const Color onErrorContainer = Color(0xFF410E0B);
+  // Accent
+  static const Color accent = Color(0xFFFFADFE);
+  static const Color accentContent = Color(0xFF793205);
+
+  // Neutral
+  static const Color neutral = Color(0xFF000000);
+  static const Color neutralContent = Color(0xFFC6BBB5);
+  static const Color neutralVariant = Color(0xFF5D646F);
 
   // Surface
-  static const Color surface = Color(0xFFFEF7FF);
-  static const Color surfaceDim = Color(0xFFDED8E1);
-  static const Color surfaceBright = Color(0xFFFEF7FF);
+  static const Color surface = Color(0xFFFFFFFF);
+  static const Color surfaceDim = Color(0xFFF5F1EA);
+  static const Color surfaceBright = Color(0xFFFFFFFF);
   static const Color surfaceContainerLowest = Color(0xFFFFFFFF);
-  static const Color surfaceContainerLow = Color(0xFFF7F2FA);
-  static const Color surfaceContainer = Color(0xFFF3EDF7);
-  static const Color surfaceContainerHigh = Color(0xFFECE6F0);
-  static const Color surfaceContainerHighest = Color(0xFFE6E0E9);
-  static const Color onSurface = Color(0xFF1D1B20);
-  static const Color onSurfaceVariant = Color(0xFF49454F);
+  static const Color surfaceContainerLow = Color(0xFFFFFBF4);
+  static const Color surfaceContainer = Color(0xFFF8F5EE);
+  static const Color surfaceContainerHigh = Color(0xFFF5F1EA);
+  static const Color surfaceContainerHighest = Color(0xFFEEEBE4);
+  static const Color surfaceVariant = Color(0xFFF1EADC);
+  static const Color onSurface = Color(0xFF212730);
+  static const Color onSurfaceVariant = Color(0xFF5D646F);
+
+  // Base Scale
+  static const Color base100 = Color(0xFFFDFFFF);
+  static const Color base200 = Color(0xFFEBEFF4);
+  static const Color base300 = Color(0xFFDADEE5);
+  static const Color base400 = Color(0xFF5A7394);
+  static const Color base500 = Color(0xFF425771);
+  static const Color base600 = Color(0xFF2C3C4F);
+  static const Color base700 = Color(0xFF182230);
+  static const Color base800 = Color(0xFF0C121A);
+  static const Color base900 = Color(0xFF040609);
+  static const Color baseContent = Color(0xFF030303);
 
   // Outline
-  static const Color outline = Color(0xFF79747E);
-  static const Color outlineVariant = Color(0xFFCAC4D0);
+  static const Color outline = Color(0xFFAAAEB4);
+  static const Color outlineVariant = Color(0xFFCACED4);
 
   // Inverse
-  static const Color inverseSurface = Color(0xFF322F35);
-  static const Color inverseOnSurface = Color(0xFFF5EFF7);
-  static const Color inversePrimary = Color(0xFFD0BCFF);
+  static const Color inverseSurface = Color(0xFF1C222B);
+  static const Color inverseOnSurface = Color(0xFFEBEFF5);
+  static const Color inversePrimary = Color(0xFFFFA460);
 
-  // Other
+  // Shadow
   static const Color shadow = Color(0xFF000000);
-  static const Color scrim = Color(0xFF000000);
+  static const Color scrim = Color(0x80000000);
 
-  // Extended (non-ColorScheme)
-  static const Color primaryFocus = Color(0xFF7965AF);
-  static const Color secondaryFocus = Color(0xFF756D84);
-  static const Color tertiaryFocus = Color(0xFF926574);
-  static const Color accent = Color(0xFF8B5CF6);
-  static const Color accentFocus = Color(0xFF9F75F8);
-  static const Color accentContent = Color(0xFFFFFFFF);
-  static const Color neutral = Color(0xFF79747E);
-  static const Color neutralFocus = Color(0xFF8E8A93);
-  static const Color neutralContent = Color(0xFFFFFFFF);
-  static const Color neutralVariant = Color(0xFF49454F);
-  static const Color info = Color(0xFF2196F3);
-  static const Color infoContent = Color(0xFFFFFFFF);
-  static const Color success = Color(0xFF4CAF50);
-  static const Color successContent = Color(0xFFFFFFFF);
-  static const Color warning = Color(0xFFFF9800);
-  static const Color warningContent = Color(0xFFFFFFFF);
-  static const Color base100 = Color(0xFFF5F5F5);
-  static const Color base200 = Color(0xFFEEEEEE);
-  static const Color base300 = Color(0xFFE0E0E0);
-  static const Color baseContent = Color(0xFF1D1B20);
+  // Semantic — Info
+  static const Color info = Color(0xFF184D89);
+  static const Color infoContent = Color(0xFFB0E8FF);
+  static const Color infoContainer = Color(0xFFDCF2FF);
+  static const Color onInfoContainer = Color(0xFF00405E);
+
+  // Semantic — Success
+  static const Color success = Color(0xFF62AD05);
+  static const Color successContent = Color(0xFF003500);
+  static const Color successContainer = Color(0xFFD6F0DA);
+  static const Color onSuccessContainer = Color(0xFF033816);
+
+  // Semantic — Warning
+  static const Color warning = Color(0xFFFA6104);
+  static const Color warningContent = Color(0xFF9E0000);
+  static const Color warningContainer = Color(0xFFFAE5C3);
+  static const Color onWarningContainer = Color(0xFF5E3A00);
+
+  // Semantic — Error
+  static const Color error = Color(0xFFF1201F);
+  static const Color errorContent = Color(0xFFFFD556);
+  static const Color errorContainer = Color(0xFFFFDEDB);
+  static const Color onErrorContainer = Color(0xFF5C1717);
 }

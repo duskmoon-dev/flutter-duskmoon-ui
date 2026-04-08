@@ -7,54 +7,68 @@ void main() {
     test('sunshine() returns light ColorScheme with correct token values', () {
       final cs = DmColorScheme.sunshine();
       expect(cs.brightness, Brightness.light);
-      expect(cs.primary, const Color(0xFF6750A4));
-      expect(cs.onPrimary, const Color(0xFFFFFFFF));
-      expect(cs.primaryContainer, const Color(0xFFEADDFF));
-      expect(cs.onPrimaryContainer, const Color(0xFF21005D));
-      expect(cs.secondary, const Color(0xFF625B71));
-      expect(cs.onSecondary, const Color(0xFFFFFFFF));
-      expect(cs.tertiary, const Color(0xFF7D5260));
-      expect(cs.onTertiary, const Color(0xFFFFFFFF));
-      expect(cs.error, const Color(0xFFB3261E));
-      expect(cs.onError, const Color(0xFFFFFFFF));
-      expect(cs.surface, const Color(0xFFFEF7FF));
-      expect(cs.onSurface, const Color(0xFF1D1B20));
-      expect(cs.outline, const Color(0xFF79747E));
-      expect(cs.outlineVariant, const Color(0xFFCAC4D0));
-      expect(cs.inverseSurface, const Color(0xFF322F35));
-      expect(cs.onInverseSurface, const Color(0xFFF5EFF7));
-      expect(cs.inversePrimary, const Color(0xFFD0BCFF));
-      expect(cs.shadow, const Color(0xFF000000));
-      expect(cs.scrim, const Color(0xFF000000));
+      expect(cs.primary, SunshineTokens.primary);
+      expect(cs.onPrimary, SunshineTokens.primaryContent);
+      expect(cs.primaryContainer, SunshineTokens.primaryContainer);
+      expect(cs.onPrimaryContainer, SunshineTokens.onPrimaryContainer);
+      expect(cs.secondary, SunshineTokens.secondary);
+      expect(cs.onSecondary, SunshineTokens.secondaryContent);
+      expect(cs.tertiary, SunshineTokens.tertiary);
+      expect(cs.onTertiary, SunshineTokens.tertiaryContent);
+      expect(cs.error, SunshineTokens.error);
+      expect(cs.onError, SunshineTokens.errorContent);
+      expect(cs.surface, SunshineTokens.surface);
+      expect(cs.onSurface, SunshineTokens.onSurface);
+      expect(cs.outline, SunshineTokens.outline);
+      expect(cs.outlineVariant, SunshineTokens.outlineVariant);
+      expect(cs.inverseSurface, SunshineTokens.inverseSurface);
+      expect(cs.onInverseSurface, SunshineTokens.inverseOnSurface);
+      expect(cs.inversePrimary, SunshineTokens.inversePrimary);
+      expect(cs.shadow, SunshineTokens.shadow);
+      expect(cs.scrim, SunshineTokens.scrim);
     });
 
     test('moonlight() returns dark ColorScheme with correct token values', () {
       final cs = DmColorScheme.moonlight();
       expect(cs.brightness, Brightness.dark);
-      expect(cs.primary, const Color(0xFFD0BCFF));
-      expect(cs.onPrimary, const Color(0xFF381E72));
-      expect(cs.primaryContainer, const Color(0xFF4F378B));
-      expect(cs.secondary, const Color(0xFFCCC2DC));
-      expect(cs.tertiary, const Color(0xFFEFB8C8));
-      expect(cs.error, const Color(0xFFF2B8B5));
-      expect(cs.surface, const Color(0xFF141218));
-      expect(cs.onSurface, const Color(0xFFE6E0E9));
+      expect(cs.primary, MoonlightTokens.primary);
+      expect(cs.onPrimary, MoonlightTokens.primaryContent);
+      expect(cs.primaryContainer, MoonlightTokens.primaryContainer);
+      expect(cs.secondary, MoonlightTokens.secondary);
+      expect(cs.tertiary, MoonlightTokens.tertiary);
+      expect(cs.error, MoonlightTokens.error);
+      expect(cs.surface, MoonlightTokens.surface);
+      expect(cs.onSurface, MoonlightTokens.onSurface);
     });
 
-    test('sunshine() and moonlight() have all surface container variants', () {
+    test('forest() returns light ColorScheme', () {
+      final cs = DmColorScheme.forest();
+      expect(cs.brightness, Brightness.light);
+      expect(cs.primary, ForestTokens.primary);
+      expect(cs.surface, ForestTokens.surface);
+    });
+
+    test('ocean() returns dark ColorScheme', () {
+      final cs = DmColorScheme.ocean();
+      expect(cs.brightness, Brightness.dark);
+      expect(cs.primary, OceanTokens.primary);
+      expect(cs.surface, OceanTokens.surface);
+    });
+
+    test('all themes have surface container variants', () {
       final light = DmColorScheme.sunshine();
-      expect(light.surfaceContainerLowest, const Color(0xFFFFFFFF));
-      expect(light.surfaceContainerLow, const Color(0xFFF7F2FA));
-      expect(light.surfaceContainer, const Color(0xFFF3EDF7));
-      expect(light.surfaceContainerHigh, const Color(0xFFECE6F0));
-      expect(light.surfaceContainerHighest, const Color(0xFFE6E0E9));
+      expect(light.surfaceContainerLowest, SunshineTokens.surfaceContainerLowest);
+      expect(light.surfaceContainerLow, SunshineTokens.surfaceContainerLow);
+      expect(light.surfaceContainer, SunshineTokens.surfaceContainer);
+      expect(light.surfaceContainerHigh, SunshineTokens.surfaceContainerHigh);
+      expect(light.surfaceContainerHighest, SunshineTokens.surfaceContainerHighest);
 
       final dark = DmColorScheme.moonlight();
-      expect(dark.surfaceContainerLowest, const Color(0xFF0F0D13));
-      expect(dark.surfaceContainerLow, const Color(0xFF1D1B20));
-      expect(dark.surfaceContainer, const Color(0xFF211F26));
-      expect(dark.surfaceContainerHigh, const Color(0xFF2B2930));
-      expect(dark.surfaceContainerHighest, const Color(0xFF36343B));
+      expect(dark.surfaceContainerLowest, MoonlightTokens.surfaceContainerLowest);
+      expect(dark.surfaceContainerLow, MoonlightTokens.surfaceContainerLow);
+      expect(dark.surfaceContainer, MoonlightTokens.surfaceContainer);
+      expect(dark.surfaceContainerHigh, MoonlightTokens.surfaceContainerHigh);
+      expect(dark.surfaceContainerHighest, MoonlightTokens.surfaceContainerHighest);
     });
   });
 
@@ -63,63 +77,80 @@ void main() {
       final theme = DmThemeData.sunshine();
       expect(theme.useMaterial3, isTrue);
       expect(theme.colorScheme.brightness, Brightness.light);
-      expect(theme.colorScheme.primary, const Color(0xFF6750A4));
+      expect(theme.colorScheme.primary, SunshineTokens.primary);
     });
 
     test('moonlight() produces valid ThemeData', () {
       final theme = DmThemeData.moonlight();
       expect(theme.useMaterial3, isTrue);
       expect(theme.colorScheme.brightness, Brightness.dark);
-      expect(theme.colorScheme.primary, const Color(0xFFD0BCFF));
+      expect(theme.colorScheme.primary, MoonlightTokens.primary);
+    });
+
+    test('forest() produces valid ThemeData', () {
+      final theme = DmThemeData.forest();
+      expect(theme.useMaterial3, isTrue);
+      expect(theme.colorScheme.brightness, Brightness.light);
+      expect(theme.colorScheme.primary, ForestTokens.primary);
+    });
+
+    test('ocean() produces valid ThemeData', () {
+      final theme = DmThemeData.ocean();
+      expect(theme.useMaterial3, isTrue);
+      expect(theme.colorScheme.brightness, Brightness.dark);
+      expect(theme.colorScheme.primary, OceanTokens.primary);
     });
 
     test('sunshine() includes DmColorExtension', () {
       final theme = DmThemeData.sunshine();
       final ext = theme.extension<DmColorExtension>();
       expect(ext, isNotNull);
-      expect(ext!.accent, const Color(0xFF8B5CF6));
-      expect(ext.info, const Color(0xFF2196F3));
-      expect(ext.success, const Color(0xFF4CAF50));
-      expect(ext.warning, const Color(0xFFFF9800));
+      expect(ext!.accent, SunshineTokens.accent);
+      expect(ext.info, SunshineTokens.info);
+      expect(ext.success, SunshineTokens.success);
+      expect(ext.warning, SunshineTokens.warning);
     });
 
     test('moonlight() includes DmColorExtension', () {
       final theme = DmThemeData.moonlight();
       final ext = theme.extension<DmColorExtension>();
       expect(ext, isNotNull);
-      expect(ext!.accent, const Color(0xFFA78BFA));
-      expect(ext.info, const Color(0xFF64B5F6));
-      expect(ext.success, const Color(0xFF81C784));
-      expect(ext.warning, const Color(0xFFFFB74D));
+      expect(ext!.accent, MoonlightTokens.accent);
+      expect(ext.info, MoonlightTokens.info);
+      expect(ext.success, MoonlightTokens.success);
+      expect(ext.warning, MoonlightTokens.warning);
     });
 
     test('sunshine() has AppBar styling from tokens', () {
       final theme = DmThemeData.sunshine();
-      expect(theme.appBarTheme.backgroundColor, const Color(0xFFFEF7FF));
-      expect(theme.appBarTheme.foregroundColor, const Color(0xFF1D1B20));
+      expect(theme.appBarTheme.backgroundColor, SunshineTokens.surface);
+      expect(theme.appBarTheme.foregroundColor, SunshineTokens.onSurface);
       expect(theme.appBarTheme.elevation, 0);
     });
 
     test('sunshine() has NavigationRail styling from tokens', () {
       final theme = DmThemeData.sunshine();
       final rail = theme.navigationRailTheme;
-      expect(rail.backgroundColor, const Color(0xFFF7F2FA));
-      expect(rail.indicatorColor, const Color(0xFFE8DEF8));
+      expect(rail.backgroundColor, SunshineTokens.surfaceContainerLow);
+      expect(rail.indicatorColor, SunshineTokens.secondaryContainer);
     });
 
     test('sunshine() has NavigationBar styling from tokens', () {
       final theme = DmThemeData.sunshine();
       final nav = theme.navigationBarTheme;
-      expect(nav.backgroundColor, const Color(0xFFF3EDF7));
-      expect(nav.indicatorColor, const Color(0xFFE8DEF8));
+      expect(nav.backgroundColor, SunshineTokens.surfaceContainer);
+      expect(nav.indicatorColor, SunshineTokens.secondaryContainer);
     });
 
-    test('themes returns list with sunshine entry', () {
+    test('themes returns list with duskmoon and ecotone entries', () {
       final themes = DmThemeData.themes;
-      expect(themes, isNotEmpty);
-      expect(themes.first.name, 'sunshine');
-      expect(themes.first.light.colorScheme.brightness, Brightness.light);
-      expect(themes.first.dark.colorScheme.brightness, Brightness.dark);
+      expect(themes.length, 2);
+      expect(themes[0].name, 'duskmoon');
+      expect(themes[0].light.colorScheme.brightness, Brightness.light);
+      expect(themes[0].dark.colorScheme.brightness, Brightness.dark);
+      expect(themes[1].name, 'ecotone');
+      expect(themes[1].light.colorScheme.brightness, Brightness.light);
+      expect(themes[1].dark.colorScheme.brightness, Brightness.dark);
     });
 
     test('moonlight() has card elevation 0 for dark theme', () {
@@ -134,28 +165,36 @@ void main() {
   });
 
   group('DmColorExtension', () {
-    test('sunshine() has all 20 extended color tokens', () {
+    test('sunshine() has all extended color tokens', () {
       final ext = DmColorExtension.sunshine();
-      expect(ext.primaryFocus, const Color(0xFF7965AF));
-      expect(ext.secondaryFocus, const Color(0xFF756D84));
-      expect(ext.tertiaryFocus, const Color(0xFF926574));
-      expect(ext.accent, const Color(0xFF8B5CF6));
-      expect(ext.accentFocus, const Color(0xFF9F75F8));
-      expect(ext.accentContent, const Color(0xFFFFFFFF));
-      expect(ext.neutral, const Color(0xFF79747E));
-      expect(ext.neutralFocus, const Color(0xFF8E8A93));
-      expect(ext.neutralContent, const Color(0xFFFFFFFF));
-      expect(ext.neutralVariant, const Color(0xFF49454F));
-      expect(ext.info, const Color(0xFF2196F3));
-      expect(ext.infoContent, const Color(0xFFFFFFFF));
-      expect(ext.success, const Color(0xFF4CAF50));
-      expect(ext.successContent, const Color(0xFFFFFFFF));
-      expect(ext.warning, const Color(0xFFFF9800));
-      expect(ext.warningContent, const Color(0xFFFFFFFF));
-      expect(ext.base100, const Color(0xFFF5F5F5));
-      expect(ext.base200, const Color(0xFFEEEEEE));
-      expect(ext.base300, const Color(0xFFE0E0E0));
-      expect(ext.baseContent, const Color(0xFF1D1B20));
+      expect(ext.accent, SunshineTokens.accent);
+      expect(ext.accentContent, SunshineTokens.accentContent);
+      expect(ext.neutral, SunshineTokens.neutral);
+      expect(ext.neutralContent, SunshineTokens.neutralContent);
+      expect(ext.neutralVariant, SunshineTokens.neutralVariant);
+      expect(ext.surfaceVariant, SunshineTokens.surfaceVariant);
+      expect(ext.info, SunshineTokens.info);
+      expect(ext.infoContent, SunshineTokens.infoContent);
+      expect(ext.infoContainer, SunshineTokens.infoContainer);
+      expect(ext.onInfoContainer, SunshineTokens.onInfoContainer);
+      expect(ext.success, SunshineTokens.success);
+      expect(ext.successContent, SunshineTokens.successContent);
+      expect(ext.successContainer, SunshineTokens.successContainer);
+      expect(ext.onSuccessContainer, SunshineTokens.onSuccessContainer);
+      expect(ext.warning, SunshineTokens.warning);
+      expect(ext.warningContent, SunshineTokens.warningContent);
+      expect(ext.warningContainer, SunshineTokens.warningContainer);
+      expect(ext.onWarningContainer, SunshineTokens.onWarningContainer);
+      expect(ext.base100, SunshineTokens.base100);
+      expect(ext.base200, SunshineTokens.base200);
+      expect(ext.base300, SunshineTokens.base300);
+      expect(ext.base400, SunshineTokens.base400);
+      expect(ext.base500, SunshineTokens.base500);
+      expect(ext.base600, SunshineTokens.base600);
+      expect(ext.base700, SunshineTokens.base700);
+      expect(ext.base800, SunshineTokens.base800);
+      expect(ext.base900, SunshineTokens.base900);
+      expect(ext.baseContent, SunshineTokens.baseContent);
     });
 
     test('copyWith returns new instance with overridden values', () {
@@ -253,11 +292,11 @@ void main() {
 
       final context = tester.element(find.text('Test'));
       final theme = Theme.of(context);
-      expect(theme.colorScheme.primary, const Color(0xFF6750A4));
+      expect(theme.colorScheme.primary, SunshineTokens.primary);
 
       final ext = theme.extension<DmColorExtension>();
       expect(ext, isNotNull);
-      expect(ext!.accent, const Color(0xFF8B5CF6));
+      expect(ext!.accent, SunshineTokens.accent);
     });
 
     testWidgets('MaterialApp renders with moonlight theme', (tester) async {
@@ -272,7 +311,37 @@ void main() {
 
       final context = tester.element(find.text('Test'));
       final theme = Theme.of(context);
-      expect(theme.colorScheme.primary, const Color(0xFFD0BCFF));
+      expect(theme.colorScheme.primary, MoonlightTokens.primary);
+    });
+
+    testWidgets('MaterialApp renders with forest theme', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: DmThemeData.forest(),
+          home: const Scaffold(
+            body: Text('Test'),
+          ),
+        ),
+      );
+
+      final context = tester.element(find.text('Test'));
+      final theme = Theme.of(context);
+      expect(theme.colorScheme.primary, ForestTokens.primary);
+    });
+
+    testWidgets('MaterialApp renders with ocean theme', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: DmThemeData.ocean(),
+          home: const Scaffold(
+            body: Text('Test'),
+          ),
+        ),
+      );
+
+      final context = tester.element(find.text('Test'));
+      final theme = Theme.of(context);
+      expect(theme.colorScheme.primary, OceanTokens.primary);
     });
 
     testWidgets('theme switching works with ThemeMode.system', (tester) async {

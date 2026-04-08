@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'generated/forest_tokens.g.dart';
 import 'generated/moonlight_tokens.g.dart';
+import 'generated/ocean_tokens.g.dart';
 import 'generated/sunshine_tokens.g.dart';
 
 /// Factory for building DuskMoon [ColorScheme] instances from generated tokens.
@@ -82,6 +84,86 @@ abstract final class DmColorScheme {
       inversePrimary: MoonlightTokens.inversePrimary,
       shadow: MoonlightTokens.shadow,
       scrim: MoonlightTokens.scrim,
+    );
+  }
+
+  /// Returns a light [ColorScheme] using the Forest design tokens.
+  static ColorScheme forest() {
+    return const ColorScheme(
+      brightness: Brightness.light,
+      primary: ForestTokens.primary,
+      onPrimary: ForestTokens.primaryContent,
+      primaryContainer: ForestTokens.primaryContainer,
+      onPrimaryContainer: ForestTokens.onPrimaryContainer,
+      secondary: ForestTokens.secondary,
+      onSecondary: ForestTokens.secondaryContent,
+      secondaryContainer: ForestTokens.secondaryContainer,
+      onSecondaryContainer: ForestTokens.onSecondaryContainer,
+      tertiary: ForestTokens.tertiary,
+      onTertiary: ForestTokens.tertiaryContent,
+      tertiaryContainer: ForestTokens.tertiaryContainer,
+      onTertiaryContainer: ForestTokens.onTertiaryContainer,
+      error: ForestTokens.error,
+      onError: ForestTokens.errorContent,
+      errorContainer: ForestTokens.errorContainer,
+      onErrorContainer: ForestTokens.onErrorContainer,
+      surface: ForestTokens.surface,
+      onSurface: ForestTokens.onSurface,
+      onSurfaceVariant: ForestTokens.onSurfaceVariant,
+      surfaceDim: ForestTokens.surfaceDim,
+      surfaceBright: ForestTokens.surfaceBright,
+      surfaceContainerLowest: ForestTokens.surfaceContainerLowest,
+      surfaceContainerLow: ForestTokens.surfaceContainerLow,
+      surfaceContainer: ForestTokens.surfaceContainer,
+      surfaceContainerHigh: ForestTokens.surfaceContainerHigh,
+      surfaceContainerHighest: ForestTokens.surfaceContainerHighest,
+      outline: ForestTokens.outline,
+      outlineVariant: ForestTokens.outlineVariant,
+      inverseSurface: ForestTokens.inverseSurface,
+      onInverseSurface: ForestTokens.inverseOnSurface,
+      inversePrimary: ForestTokens.inversePrimary,
+      shadow: ForestTokens.shadow,
+      scrim: ForestTokens.scrim,
+    );
+  }
+
+  /// Returns a dark [ColorScheme] using the Ocean design tokens.
+  static ColorScheme ocean() {
+    return const ColorScheme(
+      brightness: Brightness.dark,
+      primary: OceanTokens.primary,
+      onPrimary: OceanTokens.primaryContent,
+      primaryContainer: OceanTokens.primaryContainer,
+      onPrimaryContainer: OceanTokens.onPrimaryContainer,
+      secondary: OceanTokens.secondary,
+      onSecondary: OceanTokens.secondaryContent,
+      secondaryContainer: OceanTokens.secondaryContainer,
+      onSecondaryContainer: OceanTokens.onSecondaryContainer,
+      tertiary: OceanTokens.tertiary,
+      onTertiary: OceanTokens.tertiaryContent,
+      tertiaryContainer: OceanTokens.tertiaryContainer,
+      onTertiaryContainer: OceanTokens.onTertiaryContainer,
+      error: OceanTokens.error,
+      onError: OceanTokens.errorContent,
+      errorContainer: OceanTokens.errorContainer,
+      onErrorContainer: OceanTokens.onErrorContainer,
+      surface: OceanTokens.surface,
+      onSurface: OceanTokens.onSurface,
+      onSurfaceVariant: OceanTokens.onSurfaceVariant,
+      surfaceDim: OceanTokens.surfaceDim,
+      surfaceBright: OceanTokens.surfaceBright,
+      surfaceContainerLowest: OceanTokens.surfaceContainerLowest,
+      surfaceContainerLow: OceanTokens.surfaceContainerLow,
+      surfaceContainer: OceanTokens.surfaceContainer,
+      surfaceContainerHigh: OceanTokens.surfaceContainerHigh,
+      surfaceContainerHighest: OceanTokens.surfaceContainerHighest,
+      outline: OceanTokens.outline,
+      outlineVariant: OceanTokens.outlineVariant,
+      inverseSurface: OceanTokens.inverseSurface,
+      onInverseSurface: OceanTokens.inverseOnSurface,
+      inversePrimary: OceanTokens.inversePrimary,
+      shadow: OceanTokens.shadow,
+      scrim: OceanTokens.scrim,
     );
   }
 }

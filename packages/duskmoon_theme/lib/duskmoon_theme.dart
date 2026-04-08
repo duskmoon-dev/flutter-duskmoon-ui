@@ -20,3 +20,5 @@ export 'src/theme_mode_extension.dart' show ThemeModeExtension;
 // Generated tokens (direct access)
 export 'src/generated/sunshine_tokens.g.dart' show SunshineTokens;
 export 'src/generated/moonlight_tokens.g.dart' show MoonlightTokens;
+export 'src/generated/forest_tokens.g.dart' show ForestTokens;
+export 'src/generated/ocean_tokens.g.dart' show OceanTokens;
