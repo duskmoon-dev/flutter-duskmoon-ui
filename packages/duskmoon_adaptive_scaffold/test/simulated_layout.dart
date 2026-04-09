@@ -70,7 +70,7 @@ class TestScaffoldState extends State<TestScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveScaffold(
+    return DmAdaptiveScaffold(
       selectedIndex: index,
       onSelectedIndexChange: (int index) {
         setState(() {

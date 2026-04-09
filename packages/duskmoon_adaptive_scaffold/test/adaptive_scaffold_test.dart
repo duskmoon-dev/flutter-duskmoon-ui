@@ -246,7 +246,7 @@ void main() {
       MaterialApp(
         home: MediaQuery(
           data: const MediaQueryData(size: Size(500, 800)),
-          child: AdaptiveScaffold(
+          child: DmAdaptiveScaffold(
             drawerBreakpoint: TestBreakpoint0(),
             internalAnimations: false,
             destinations: const <NavigationDestination>[
@@ -294,8 +294,8 @@ void main() {
     });
   });
 
-  /// Verify that selectedIndex of [AdaptiveScaffold.standardNavigationRail]
-  /// and [AdaptiveScaffold] can be set to null
+  /// Verify that selectedIndex of [DmAdaptiveScaffold.standardNavigationRail]
+  /// and [DmAdaptiveScaffold] can be set to null
   testWidgets('adaptive scaffold selectedIndex can be set to null', (
     WidgetTester tester,
   ) async {
@@ -333,13 +333,13 @@ void main() {
       MaterialApp(
         home: MediaQuery(
           data: const MediaQueryData(size: Size(700, 900)),
-          child: AdaptiveScaffold(destinations: destinations),
+          child: DmAdaptiveScaffold(destinations: destinations),
         ),
       ),
     );
 
     final Finder fNavigationRail = find.descendant(
-      of: find.byType(AdaptiveScaffold),
+      of: find.byType(DmAdaptiveScaffold),
       matching: find.byType(NavigationRail),
     );
     final NavigationRail navigationRail = tester.firstWidget(fNavigationRail);
@@ -431,7 +431,7 @@ void main() {
                 BuildContext context,
                 void Function(void Function()) setState,
               ) {
-                return AdaptiveScaffold(
+                return DmAdaptiveScaffold(
                   destinations: destinations,
                   selectedIndex: selectedDestination,
                   onSelectedIndexChange: (int value) {
@@ -607,7 +607,7 @@ void main() {
               BuildContext context,
               void Function(void Function()) setState,
             ) {
-              return AdaptiveScaffold(
+              return DmAdaptiveScaffold(
                 destinations: destinations,
                 selectedIndex: selectedDestination,
                 smallBreakpoint: TestBreakpoint400(),
@@ -657,11 +657,11 @@ void main() {
     expect(state.isDrawerOpen, isFalse);
   });
 
-  // This test checks whether AdaptiveScaffold.standardNavigationRail function
+  // This test checks whether DmAdaptiveScaffold.standardNavigationRail function
   // creates a NavigationRail widget as expected with groupAlignment provided,
   // and checks whether the NavigationRail's groupAlignment matches the expected value.
   testWidgets(
-    'groupAligment parameter of AdaptiveScaffold.standardNavigationRail works correctly',
+    'groupAligment parameter of DmAdaptiveScaffold.standardNavigationRail works correctly',
     (WidgetTester tester) async {
       const List<NavigationRailDestination> destinations =
           <NavigationRailDestination>[
@@ -686,7 +686,7 @@ void main() {
           home: Scaffold(
             body: Builder(
               builder: (BuildContext context) {
-                return AdaptiveScaffold.standardNavigationRail(
+                return DmAdaptiveScaffold.standardNavigationRail(
                   destinations: destinations,
                   groupAlignment: groupAlignment,
                 );
@@ -713,7 +713,7 @@ void main() {
         home: Scaffold(
           body: Directionality(
             textDirection: TextDirection.rtl,
-            child: AdaptiveScaffold(
+            child: DmAdaptiveScaffold(
               destinations: destinations,
               body: (BuildContext context) {
                 return const SizedBox.shrink();
@@ -777,7 +777,7 @@ void main() {
         MaterialApp(
           home: MediaQuery(
             data: const MediaQueryData(size: Size(700, 900)),
-            child: AdaptiveScaffold(destinations: destinations),
+            child: DmAdaptiveScaffold(destinations: destinations),
           ),
         ),
       ),
@@ -808,7 +808,7 @@ void main() {
       MaterialApp(
         home: MediaQuery(
           data: const MediaQueryData(size: Size(800, 600)),
-          child: AdaptiveScaffold(
+          child: DmAdaptiveScaffold(
             destinations: destinations,
             navigationRailDestinationBuilder: customMapping,
           ),
@@ -838,7 +838,7 @@ void main() {
         ),
         home: MediaQuery(
           data: const MediaQueryData(size: Size(800, 600)),
-          child: AdaptiveScaffold(destinations: destinations),
+          child: DmAdaptiveScaffold(destinations: destinations),
         ),
       ),
     );
@@ -855,7 +855,7 @@ void main() {
       // without navigation rail padding specified
       await tester.pumpWidget(
         MaterialApp(
-          home: AdaptiveScaffold(
+          home: DmAdaptiveScaffold(
             destinations: const <NavigationDestination>[
               NavigationDestination(icon: Icon(Icons.inbox), label: 'Inbox'),
               NavigationDestination(
@@ -871,7 +871,7 @@ void main() {
       // with navigation rail padding specified
       await tester.pumpWidget(
         MaterialApp(
-          home: AdaptiveScaffold(
+          home: DmAdaptiveScaffold(
             destinations: const <NavigationDestination>[
               NavigationDestination(icon: Icon(Icons.inbox), label: 'Inbox'),
               NavigationDestination(
@@ -889,7 +889,7 @@ void main() {
 }
 
 /// An empty widget that implements [PreferredSizeWidget] to ensure that
-/// [PreferredSizeWidget] is used as [AdaptiveScaffold.appBar] parameter instead
+/// [PreferredSizeWidget] is used as [DmAdaptiveScaffold.appBar] parameter instead
 /// of [AppBar].
 class PreferredSizeWidgetImpl extends StatelessWidget
     implements PreferredSizeWidget {

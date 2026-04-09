@@ -11,7 +11,7 @@ import '../duskmoon_adaptive_scaffold.dart';
 ///
 /// See also:
 ///
-///  * [AdaptiveScaffold], which uses some of these Breakpoints as defaults.
+///  * [DmAdaptiveScaffold], which uses some of these Breakpoints as defaults.
 class Breakpoints {
   /// This is a standard breakpoint that can be used as a fallthrough in the
   /// case that no other breakpoint is active.

@@ -4,7 +4,7 @@ Adaptive scaffold widgets for the DuskMoon Design System, forked from `flutter_a
 
 ## Features
 
-- `AdaptiveScaffold` — adaptive layout that adjusts to screen size using Material 3 navigation patterns
+- `DmAdaptiveScaffold` — adaptive layout that adjusts to screen size using Material 3 navigation patterns
 - `AdaptiveLayout` — low-level adaptive layout primitive
 - `SlotLayout` — slot-based layout composition
 
@@ -20,7 +20,7 @@ dependencies:
 ```dart
 import 'package:duskmoon_adaptive_scaffold/duskmoon_adaptive_scaffold.dart';
 
-AdaptiveScaffold(
+DmAdaptiveScaffold(
   destinations: const [
     NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
     NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),

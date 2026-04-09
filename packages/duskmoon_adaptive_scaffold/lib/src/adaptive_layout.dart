@@ -56,12 +56,12 @@ enum _SlotIds {
 ///       Breakpoints.medium: SlotLayout.from(
 ///         inAnimation: leftOutIn,
 ///         key: const Key('Primary Navigation Medium'),
-///         builder: (_) => AdaptiveScaffold.toNavigationRail(destinations: destinations),
+///         builder: (_) => DmAdaptiveScaffold.toNavigationRail(destinations: destinations),
 ///       ),
 ///       Breakpoints.mediumLarge: SlotLayout.from(
 ///         key: const Key('Primary Navigation MediumLarge'),
 ///         inAnimation: leftOutIn,
-///         builder: (_) => AdaptiveScaffold.toNavigationRail(extended: true, destinations: destinations),
+///         builder: (_) => DmAdaptiveScaffold.toNavigationRail(extended: true, destinations: destinations),
 ///       ),
 ///     },
 ///   ),
@@ -88,7 +88,7 @@ enum _SlotIds {
 ///       Breakpoints.small: SlotLayout.from(
 ///         key: const Key('Bottom Navigation Small'),
 ///         inAnimation: bottomToTop,
-///         builder: (_) => AdaptiveScaffold.toBottomNavigationBar(destinations: destinations),
+///         builder: (_) => DmAdaptiveScaffold.toBottomNavigationBar(destinations: destinations),
 ///       ),
 ///     },
 ///   ),
@@ -102,7 +102,7 @@ enum _SlotIds {
 ///  * [SlotLayout.from], which holds information regarding the actual Widgets
 ///    and the desired way to animate between switches. Often used within
 ///    [SlotLayout].
-///  * [AdaptiveScaffold], which provides a more friendly API with less
+///  * [DmAdaptiveScaffold], which provides a more friendly API with less
 ///    customizability. and holds a preset of animations and helper builders.
 ///  * [Design Doc](https://flutter.dev/go/adaptive-layout-foldables).
 ///  * [Material Design 3 Specifications](https://m3.material.io/foundations/adaptive-design/overview).
@@ -129,7 +129,7 @@ class AdaptiveLayout extends StatefulWidget {
   ///
   /// If the content is a flexibly sized Widget like [Container], wrap the
   /// content in a [SizedBox] or limit its size (width and height) by another
-  /// method. See the builder in [AdaptiveScaffold.standardNavigationRail] for
+  /// method. See the builder in [DmAdaptiveScaffold.standardNavigationRail] for
   /// an example.
   final SlotLayout? primaryNavigation;
 
@@ -140,7 +140,7 @@ class AdaptiveLayout extends StatefulWidget {
   ///
   /// If the content is a flexibly sized Widget like [Container], wrap the
   /// content in a [SizedBox] or limit its size (width and height) by another
-  /// method. See the builder in [AdaptiveScaffold.standardNavigationRail] for
+  /// method. See the builder in [DmAdaptiveScaffold.standardNavigationRail] for
   /// an example.
   final SlotLayout? secondaryNavigation;
 
@@ -148,7 +148,7 @@ class AdaptiveLayout extends StatefulWidget {
   ///
   /// If the content is a flexibly sized Widget like [Container], wrap the
   /// content in a [SizedBox] or limit its size (width and height) by another
-  /// method. See the builder in [AdaptiveScaffold.standardNavigationRail] for
+  /// method. See the builder in [DmAdaptiveScaffold.standardNavigationRail] for
   /// an example.
   final SlotLayout? topNavigation;
 
@@ -156,7 +156,7 @@ class AdaptiveLayout extends StatefulWidget {
   ///
   /// If the content is a flexibly sized Widget like [Container], wrap the
   /// content in a [SizedBox] or limit its size (width and height) by another
-  /// method. See the builder in [AdaptiveScaffold.standardNavigationRail] for
+  /// method. See the builder in [DmAdaptiveScaffold.standardNavigationRail] for
   /// an example.
   final SlotLayout? bottomNavigation;
 

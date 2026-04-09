@@ -93,11 +93,12 @@ class _ShowcaseHomeState extends State<ShowcaseHome> {
 
   @override
   Widget build(BuildContext context) {
-    Widget scaffold = DmScaffold(
+    Widget scaffold = DmAdaptiveScaffold(
       selectedIndex: _selectedIndex,
       onSelectedIndexChange: (i) => setState(() => _selectedIndex = i),
       destinations: _destinations,
       useDrawer: true,
+      transitionDuration: Duration.zero,
       appBar: DmAppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
