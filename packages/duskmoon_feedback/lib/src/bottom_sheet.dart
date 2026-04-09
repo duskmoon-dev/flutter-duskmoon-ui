@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:duskmoon_theme/duskmoon_theme.dart'
+    show DmPlatformStyle, resolvePlatformStyle;
 
 /// An action item for [showDmBottomSheetActionList].
 class DmBottomSheetAction {
@@ -38,6 +41,9 @@ void showDmBottomSheetActionList({
       maxHeight: double.infinity,
     ),
     builder: (context) {
+      final colorScheme = Theme.of(context).colorScheme;
+      final style = resolvePlatformStyle(context);
+
       return GestureDetector(
         onTap: showBackdrop ? () => Navigator.of(context).pop() : null,
         child: Container(
@@ -45,9 +51,7 @@ void showDmBottomSheetActionList({
           height: double.infinity,
           decoration: showBackdrop
               ? BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.onSurface.withValues(alpha: 0.2),
+                  color: colorScheme.onSurface.withValues(alpha: 0.2),
                 )
               : null,
           padding: EdgeInsets.only(
@@ -63,20 +67,11 @@ void showDmBottomSheetActionList({
                 for (final action in actions)
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: spacingSize),
-                    child: ElevatedButton(
-                      style: action.style ??
-                          ElevatedButton.styleFrom(
-                            foregroundColor:
-                                Theme.of(context).colorScheme.onPrimary,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            minimumSize: const Size.fromHeight(50),
-                          ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        action.onTap();
-                      },
-                      child: Center(child: action.title),
+                    child: _buildButton(
+                      context: context,
+                      action: action,
+                      colorScheme: colorScheme,
+                      style: style,
                     ),
                   ),
                 SizedBox(width: double.infinity, height: spacingSize),
@@ -87,4 +82,34 @@ void showDmBottomSheetActionList({
       );
     },
   );
+}
+
+Widget _buildButton({
+  required BuildContext context,
+  required DmBottomSheetAction action,
+  required ColorScheme colorScheme,
+  required DmPlatformStyle style,
+}) {
+  return switch (style) {
+    DmPlatformStyle.cupertino => CupertinoButton.filled(
+        onPressed: () {
+          Navigator.of(context).pop();
+          action.onTap();
+        },
+        child: action.title,
+      ),
+    _ => ElevatedButton(
+        style: action.style ??
+            ElevatedButton.styleFrom(
+              foregroundColor: colorScheme.onPrimary,
+              backgroundColor: colorScheme.primary,
+              minimumSize: const Size.fromHeight(50),
+            ),
+        onPressed: () {
+          Navigator.of(context).pop();
+          action.onTap();
+        },
+        child: Center(child: action.title),
+      ),
+  };
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:duskmoon_theme/duskmoon_theme.dart'
+    show DmPlatformStyle, resolvePlatformStyle;
 import 'package:duskmoon_settings/src/tiles/abstract_settings_tile.dart';
 import 'package:duskmoon_settings/src/tiles/platforms/cupertino_settings_tile.dart';
 import 'package:duskmoon_settings/src/tiles/platforms/fluent_settings_tile.dart';
@@ -581,92 +583,67 @@ class SettingsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = SettingsTheme.of(context);
 
+    // First, get the platform from SettingsTheme (used by tests)
+    final DmPlatformStyle settingsThemeStyle;
     switch (theme.platform) {
-      case DevicePlatform.android:
-      case DevicePlatform.fuchsia:
-      case DevicePlatform.linux:
-      case DevicePlatform.web:
-      case DevicePlatform.custom:
-        return MaterialSettingsTile(
-          description: description,
-          onPressed: onPressed,
-          onToggle: onToggle,
-          tileType: tileType,
-          value: value,
-          leading: leading,
-          title: title,
-          enabled: enabled,
-          activeSwitchColor: activeSwitchColor,
-          initialValue: initialValue ?? false,
-          trailing: addCheckedTrailing(context),
-          // New tile properties
-          inputValue: inputValue,
-          onInputChanged: onInputChanged,
-          inputHint: inputHint,
-          inputKeyboardType: inputKeyboardType,
-          inputMaxLength: inputMaxLength,
-          sliderValue: sliderValue,
-          onSliderChanged: onSliderChanged,
-          sliderMin: sliderMin,
-          sliderMax: sliderMax,
-          sliderDivisions: sliderDivisions,
-          selectOptions: selectOptions,
-          selectValue: selectValue,
-          onSelectChanged: onSelectChanged,
-          textareaValue: textareaValue,
-          onTextareaChanged: onTextareaChanged,
-          textareaHint: textareaHint,
-          textareaMaxLines: textareaMaxLines,
-          textareaMaxLength: textareaMaxLength,
-          radioOptions: radioOptions,
-          radioValue: radioValue,
-          onRadioChanged: onRadioChanged,
-          checkboxOptions: checkboxOptions,
-          checkboxValues: checkboxValues,
-          onCheckboxChanged: onCheckboxChanged,
-        );
       case DevicePlatform.iOS:
       case DevicePlatform.macOS:
-        return CupertinoSettingsTile(
-          description: description,
-          onPressed: onPressed,
-          onToggle: onToggle,
-          tileType: tileType,
-          value: value,
-          leading: leading,
-          title: title,
-          trailing: addCheckedTrailing(context),
-          enabled: enabled,
-          activeSwitchColor: activeSwitchColor,
-          initialValue: initialValue ?? false,
-          // New tile properties
-          inputValue: inputValue,
-          onInputChanged: onInputChanged,
-          inputHint: inputHint,
-          inputKeyboardType: inputKeyboardType,
-          inputMaxLength: inputMaxLength,
-          sliderValue: sliderValue,
-          onSliderChanged: onSliderChanged,
-          sliderMin: sliderMin,
-          sliderMax: sliderMax,
-          sliderDivisions: sliderDivisions,
-          selectOptions: selectOptions,
-          selectValue: selectValue,
-          onSelectChanged: onSelectChanged,
-          textareaValue: textareaValue,
-          onTextareaChanged: onTextareaChanged,
-          textareaHint: textareaHint,
-          textareaMaxLines: textareaMaxLines,
-          textareaMaxLength: textareaMaxLength,
-          radioOptions: radioOptions,
-          radioValue: radioValue,
-          onRadioChanged: onRadioChanged,
-          checkboxOptions: checkboxOptions,
-          checkboxValues: checkboxValues,
-          onCheckboxChanged: onCheckboxChanged,
-        );
+        settingsThemeStyle = DmPlatformStyle.cupertino;
       case DevicePlatform.windows:
-        return FluentSettingsTile(
+        settingsThemeStyle = DmPlatformStyle.fluent;
+      default:
+        settingsThemeStyle = DmPlatformStyle.material;
+    }
+
+    // Then check if DuskmoonApp is providing an override
+    final resolvedStyle = resolvePlatformStyle(context);
+
+    // Use resolved style if it's NOT material (which is the default),
+    // otherwise use SettingsTheme's style for backward compatibility
+    final finalStyle = resolvedStyle != DmPlatformStyle.material
+        ? resolvedStyle
+        : settingsThemeStyle;
+
+    return switch (finalStyle) {
+      DmPlatformStyle.cupertino => CupertinoSettingsTile(
+          description: description,
+          onPressed: onPressed,
+          onToggle: onToggle,
+          tileType: tileType,
+          value: value,
+          leading: leading,
+          title: title,
+          trailing: addCheckedTrailing(context),
+          enabled: enabled,
+          activeSwitchColor: activeSwitchColor,
+          initialValue: initialValue ?? false,
+          // New tile properties
+          inputValue: inputValue,
+          onInputChanged: onInputChanged,
+          inputHint: inputHint,
+          inputKeyboardType: inputKeyboardType,
+          inputMaxLength: inputMaxLength,
+          sliderValue: sliderValue,
+          onSliderChanged: onSliderChanged,
+          sliderMin: sliderMin,
+          sliderMax: sliderMax,
+          sliderDivisions: sliderDivisions,
+          selectOptions: selectOptions,
+          selectValue: selectValue,
+          onSelectChanged: onSelectChanged,
+          textareaValue: textareaValue,
+          onTextareaChanged: onTextareaChanged,
+          textareaHint: textareaHint,
+          textareaMaxLines: textareaMaxLines,
+          textareaMaxLength: textareaMaxLength,
+          radioOptions: radioOptions,
+          radioValue: radioValue,
+          onRadioChanged: onRadioChanged,
+          checkboxOptions: checkboxOptions,
+          checkboxValues: checkboxValues,
+          onCheckboxChanged: onCheckboxChanged,
+        ),
+      DmPlatformStyle.fluent => FluentSettingsTile(
           description: description,
           onPressed: onPressed,
           onToggle: onToggle,
@@ -703,7 +680,45 @@ class SettingsTile extends StatelessWidget {
           checkboxOptions: checkboxOptions,
           checkboxValues: checkboxValues,
           onCheckboxChanged: onCheckboxChanged,
-        );
-    }
+        ),
+      _ => MaterialSettingsTile(
+          description: description,
+          onPressed: onPressed,
+          onToggle: onToggle,
+          tileType: tileType,
+          value: value,
+          leading: leading,
+          title: title,
+          enabled: enabled,
+          activeSwitchColor: activeSwitchColor,
+          initialValue: initialValue ?? false,
+          trailing: addCheckedTrailing(context),
+          // New tile properties
+          inputValue: inputValue,
+          onInputChanged: onInputChanged,
+          inputHint: inputHint,
+          inputKeyboardType: inputKeyboardType,
+          inputMaxLength: inputMaxLength,
+          sliderValue: sliderValue,
+          onSliderChanged: onSliderChanged,
+          sliderMin: sliderMin,
+          sliderMax: sliderMax,
+          sliderDivisions: sliderDivisions,
+          selectOptions: selectOptions,
+          selectValue: selectValue,
+          onSelectChanged: onSelectChanged,
+          textareaValue: textareaValue,
+          onTextareaChanged: onTextareaChanged,
+          textareaHint: textareaHint,
+          textareaMaxLines: textareaMaxLines,
+          textareaMaxLength: textareaMaxLength,
+          radioOptions: radioOptions,
+          radioValue: radioValue,
+          onRadioChanged: onRadioChanged,
+          checkboxOptions: checkboxOptions,
+          checkboxValues: checkboxValues,
+          onCheckboxChanged: onCheckboxChanged,
+        ),
+    };
   }
 }
