@@ -1,8 +1,13 @@
+import 'package:duskmoon_theme/duskmoon_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// Adaptive dialog action that renders as [TextButton] on Material platforms
 /// and [CupertinoDialogAction] on Apple platforms.
+///
+/// Uses the DuskMoon platform resolution chain ([DuskmoonApp],
+/// [DmPlatformOverride]) instead of the raw OS platform, so it responds
+/// to the global platform style switcher.
 class DmDialogAction extends StatelessWidget {
   /// Creates an adaptive dialog action button.
   const DmDialogAction({super.key, this.onPressed, required this.child});
@@ -23,34 +28,40 @@ class DmDialogAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    switch (theme.platform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        return TextButton(onPressed: _onPressed(context), child: child);
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        return CupertinoDialogAction(
+    final style = resolvePlatformStyle(context);
+    return switch (style) {
+      DmPlatformStyle.cupertino => CupertinoDialogAction(
           onPressed: _onPressed(context),
           child: child,
-        );
-    }
+        ),
+      _ => TextButton(onPressed: _onPressed(context), child: child),
+    };
   }
 }
 
-/// Shows an adaptive dialog using [AlertDialog.adaptive].
+/// Shows an adaptive dialog that respects the DuskMoon platform resolution
+/// chain ([DuskmoonApp], [DmPlatformOverride]).
+///
+/// Renders [CupertinoAlertDialog] when the resolved style is
+/// [DmPlatformStyle.cupertino], and [AlertDialog] otherwise.
 Future<T?> showDmDialog<T>({
   required BuildContext context,
   required Widget title,
   required Widget content,
   List<Widget>? actions,
 }) {
+  final style = resolvePlatformStyle(context);
   return showDialog<T>(
     context: context,
     builder: (context) {
-      return AlertDialog.adaptive(
+      if (style == DmPlatformStyle.cupertino) {
+        return CupertinoAlertDialog(
+          title: title,
+          content: content,
+          actions: actions ?? const [],
+        );
+      }
+      return AlertDialog(
         title: title,
         content: content,
         actions: actions,
