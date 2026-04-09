@@ -6,6 +6,8 @@ import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:duskmoon_visualization/duskmoon_visualization_compat.dart'
     as dv;
 
+import '../../destination.dart';
+
 class InteractiveChartPage extends StatefulWidget {
   const InteractiveChartPage({super.key});
 
@@ -29,9 +31,20 @@ class _InteractiveChartPageState extends State<InteractiveChartPage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Interactive Hover Demo')),
-      body: ListView(
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key('Visualization')),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
+      appBar: DmAppBar(
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        title: const Text('Interactive Hover Demo'),
+        leading: const BackButton(),
+      ),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => ListView(
         padding: const EdgeInsets.all(16),
         children: [
           Text(

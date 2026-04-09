@@ -2,14 +2,27 @@ import 'package:flutter/material.dart';
 
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 
+import '../../destination.dart';
+
 class ChartGalleryPage extends StatelessWidget {
   const ChartGalleryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Curated Charts')),
-      body: ListView(
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key('Visualization')),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
+      appBar: DmAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const Text('Curated Charts'),
+        leading: const BackButton(),
+      ),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => ListView(
         padding: const EdgeInsets.all(16),
         children: [
           Text(

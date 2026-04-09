@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 
+import '../../destination.dart';
+
 class RadialPage extends StatelessWidget {
   const RadialPage({super.key});
 
@@ -11,9 +13,20 @@ class RadialPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Radial Charts')),
-      body: ListView(
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key('Visualization')),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
+      appBar: DmAppBar(
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        title: const Text('Radial Charts'),
+        leading: const BackButton(),
+      ),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => ListView(
         padding: const EdgeInsets.all(16),
         children: [
           _ChartCard(

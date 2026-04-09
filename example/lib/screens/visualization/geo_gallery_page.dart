@@ -4,14 +4,27 @@ import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:duskmoon_visualization/duskmoon_visualization_compat.dart'
     as dv;
 
+import '../../destination.dart';
+
 class GeoGalleryPage extends StatelessWidget {
   const GeoGalleryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Geographic Visualizations')),
-      body: ListView(
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key('Visualization')),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
+      appBar: DmAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const Text('Geographic Visualizations'),
+        leading: const BackButton(),
+      ),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => ListView(
         padding: const EdgeInsets.all(16),
         children: const [
           _GeoCard(
