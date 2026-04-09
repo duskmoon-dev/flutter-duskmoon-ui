@@ -157,11 +157,12 @@ class MarkdownEditingController extends TextEditingController {
     TextStyle? style,
     required bool withComposing,
   }) {
-    // Update color scheme from context.
+    // Update color scheme from context and re-parse so styled ranges use
+    // the correct theme colors (fixes invisible text when switching themes).
     final cs = Theme.of(context).colorScheme;
     if (_colorScheme != cs) {
       _colorScheme = cs;
-      if (text.isNotEmpty && _cachedRanges.isEmpty) {
+      if (text.isNotEmpty) {
         _parse(text);
       }
     }

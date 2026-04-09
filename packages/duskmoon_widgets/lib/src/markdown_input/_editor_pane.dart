@@ -104,14 +104,24 @@ class _EditorPaneState extends State<EditorPane> {
       textScaler: textScaler,
     )..layout(maxWidth: maxWidth > 0 ? maxWidth : double.infinity);
 
-    final lineMetrics = tp.computeLineMetrics();
+    var lineMetrics = tp.computeLineMetrics();
     if (lineMetrics.isEmpty) {
-      return _ParagraphLayoutMetrics(
-        lineMetrics: const [
-          LogicalLineMetric(top: 0.0, baseline: 0.0, height: 0.0)
-        ],
-        lineHeight: tp.preferredLineHeight,
-      );
+      // Empty text — measure a space to get correct baseline alignment.
+      final sampleTp = TextPainter(
+        text: TextSpan(text: ' ', style: style),
+        strutStyle: strutStyle,
+        textDirection: TextDirection.ltr,
+        textScaler: textScaler,
+      )..layout(maxWidth: maxWidth > 0 ? maxWidth : double.infinity);
+      lineMetrics = sampleTp.computeLineMetrics();
+      if (lineMetrics.isEmpty) {
+        return _ParagraphLayoutMetrics(
+          lineMetrics: const [
+            LogicalLineMetric(top: 0.0, baseline: 0.0, height: 0.0)
+          ],
+          lineHeight: tp.preferredLineHeight,
+        );
+      }
     }
 
     final metrics = <LogicalLineMetric>[];

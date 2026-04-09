@@ -268,6 +268,15 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
                 // Preview tab.
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
+                  layoutBuilder: (currentChild, previousChildren) {
+                    return Stack(
+                      alignment: Alignment.topLeft,
+                      children: [
+                        ...previousChildren,
+                        if (currentChild != null) currentChild,
+                      ],
+                    );
+                  },
                   child: _previewReady
                       ? SingleChildScrollView(
                           key: const ValueKey('preview'),
