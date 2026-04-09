@@ -28,6 +28,7 @@ class InteractionsPage extends StatelessWidget {
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text('Chart Interactions'),
         leading: const BackButton(),
+        actions: const [PlatformSwitchAction()],
       ),
       appBarBreakpoint: Breakpoints.standard,
       body: (_) => ListView(

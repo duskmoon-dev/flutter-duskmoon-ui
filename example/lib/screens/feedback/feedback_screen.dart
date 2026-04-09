@@ -21,6 +21,7 @@ class FeedbackScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text('Feedback'),
+        actions: const [PlatformSwitchAction()],
       ),
       appBarBreakpoint: Breakpoints.standard,
       body: (_) => const _FeedbackBody(),

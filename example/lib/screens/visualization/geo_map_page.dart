@@ -40,6 +40,7 @@ class _GeoMapPageState extends State<GeoMapPage> {
         foregroundColor: colorScheme.onPrimary,
         title: const Text('Geo Projection Lab'),
         leading: const BackButton(),
+        actions: const [PlatformSwitchAction()],
       ),
       appBarBreakpoint: Breakpoints.standard,
       body: (_) => ListView(

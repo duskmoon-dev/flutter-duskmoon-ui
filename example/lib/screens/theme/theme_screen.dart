@@ -21,6 +21,7 @@ class ThemeScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text('Theme'),
+        actions: const [PlatformSwitchAction()],
       ),
       appBarBreakpoint: Breakpoints.standard,
       body: (_) => _ThemeBody(),

@@ -21,6 +21,7 @@ class ScaffoldScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text('Scaffold & Layout'),
+        actions: const [PlatformSwitchAction()],
       ),
       appBarBreakpoint: Breakpoints.standard,
       body: (_) => const _ScaffoldBody(),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+export 'platform_style_state.dart' show PlatformSwitchAction;
+
 import 'screens/button/button_screen.dart';
 import 'screens/code_editor/code_editor_screen.dart';
 import 'screens/feedback/feedback_screen.dart';

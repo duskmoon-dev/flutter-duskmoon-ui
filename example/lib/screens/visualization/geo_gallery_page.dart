@@ -22,6 +22,7 @@ class GeoGalleryPage extends StatelessWidget {
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text('Geographic Visualizations'),
         leading: const BackButton(),
+        actions: const [PlatformSwitchAction()],
       ),
       appBarBreakpoint: Breakpoints.standard,
       body: (_) => ListView(

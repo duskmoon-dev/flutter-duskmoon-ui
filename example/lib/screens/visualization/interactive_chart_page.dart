@@ -42,6 +42,7 @@ class _InteractiveChartPageState extends State<InteractiveChartPage> {
         foregroundColor: colorScheme.onPrimary,
         title: const Text('Interactive Hover Demo'),
         leading: const BackButton(),
+        actions: const [PlatformSwitchAction()],
       ),
       appBarBreakpoint: Breakpoints.standard,
       body: (_) => ListView(

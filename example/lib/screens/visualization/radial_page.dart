@@ -24,6 +24,7 @@ class RadialPage extends StatelessWidget {
         foregroundColor: colorScheme.onPrimary,
         title: const Text('Radial Charts'),
         leading: const BackButton(),
+        actions: const [PlatformSwitchAction()],
       ),
       appBarBreakpoint: Breakpoints.standard,
       body: (_) => ListView(

@@ -28,6 +28,7 @@ class ScatterNetworkPage extends StatelessWidget {
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text('Scatter & Network Charts'),
         leading: const BackButton(),
+        actions: const [PlatformSwitchAction()],
       ),
       appBarBreakpoint: Breakpoints.standard,
       body: (_) => ListView(

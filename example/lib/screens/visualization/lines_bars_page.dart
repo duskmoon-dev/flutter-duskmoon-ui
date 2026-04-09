@@ -26,6 +26,7 @@ class LinesBarsPage extends StatelessWidget {
         foregroundColor: colorScheme.onPrimary,
         title: const Text('Lines & Bars'),
         leading: const BackButton(),
+        actions: const [PlatformSwitchAction()],
       ),
       appBarBreakpoint: Breakpoints.standard,
       body: (_) => ListView(
