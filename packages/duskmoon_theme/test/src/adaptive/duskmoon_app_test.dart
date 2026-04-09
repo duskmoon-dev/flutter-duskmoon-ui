@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:duskmoon_widgets/duskmoon_widgets.dart';
+import 'package:duskmoon_theme/duskmoon_theme.dart';
 
 void main() {
   group('DuskmoonApp', () {

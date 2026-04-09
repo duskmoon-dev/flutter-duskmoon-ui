@@ -17,6 +17,13 @@ export 'src/dm_colors.dart' show DmColors;
 export 'src/extensions.dart' show DmColorExtension;
 export 'src/theme_mode_extension.dart' show ThemeModeExtension;
 
+// Platform resolution
+export 'src/adaptive/adaptive_widget.dart';
+export 'src/adaptive/dm_platform_style.dart';
+export 'src/adaptive/duskmoon_app.dart';
+export 'src/adaptive/platform_override.dart';
+export 'src/adaptive/platform_resolver.dart';
+
 // Generated tokens (direct access)
 export 'src/generated/sunshine_tokens.g.dart' show SunshineTokens;
 export 'src/generated/moonlight_tokens.g.dart' show MoonlightTokens;

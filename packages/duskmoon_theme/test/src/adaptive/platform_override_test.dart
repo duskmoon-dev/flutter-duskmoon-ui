@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:duskmoon_widgets/duskmoon_widgets.dart';
+import 'package:duskmoon_theme/duskmoon_theme.dart';
 
 void main() {
   group('DmPlatformOverride', () {
@@ -44,26 +43,27 @@ void main() {
       expect(result, DmPlatformStyle.cupertino);
     });
 
-    testWidgets('override forces child widgets to use specified platform',
+    testWidgets('override forces resolvePlatformStyle to return overridden style',
         (tester) async {
       // Use an Android theme but override to cupertino.
-      // DmButton on cupertino should render CupertinoButton.
+      DmPlatformStyle? resolved;
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(platform: TargetPlatform.android),
           home: Scaffold(
             body: DmPlatformOverride(
               style: DmPlatformStyle.cupertino,
-              child: DmButton(
-                onPressed: () {},
-                child: const Text('Tap'),
+              child: Builder(
+                builder: (context) {
+                  resolved = resolvePlatformStyle(context);
+                  return const SizedBox.shrink();
+                },
               ),
             ),
           ),
         ),
       );
-      expect(find.byType(CupertinoButton), findsOneWidget);
-      expect(find.byType(FilledButton), findsNothing);
+      expect(resolved, DmPlatformStyle.cupertino);
     });
   });
 }

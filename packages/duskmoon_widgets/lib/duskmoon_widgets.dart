@@ -4,14 +4,16 @@
 /// variants based on the current platform or an explicit override.
 library;
 
-// Adaptive infrastructure
-export 'src/adaptive/adaptive_widget.dart';
-export 'src/adaptive/dm_platform_style.dart';
-export 'src/adaptive/duskmoon_app.dart';
+// Adaptive infrastructure (re-exported from duskmoon_theme)
+export 'package:duskmoon_theme/duskmoon_theme.dart'
+    show
+        AdaptiveWidget,
+        DmPlatformStyle,
+        DmPlatformOverride,
+        DuskmoonApp,
+        resolvePlatformStyle;
 export 'src/adaptive/fluent_theme_bridge.dart'
     show dmFluentLocalizationsDelegates;
-export 'src/adaptive/platform_override.dart';
-export 'src/adaptive/platform_resolver.dart';
 
 // Scaffold
 export 'src/scaffold/dm_action_list.dart';

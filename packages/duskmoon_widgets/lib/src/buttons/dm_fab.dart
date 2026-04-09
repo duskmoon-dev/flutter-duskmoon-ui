@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../adaptive/adaptive_widget.dart';
-import '../adaptive/platform_resolver.dart';
+import 'package:duskmoon_theme/duskmoon_theme.dart';
 
 /// An adaptive floating action button (Material FAB / Cupertino filled).
 class DmFab extends StatelessWidget with AdaptiveWidget {
