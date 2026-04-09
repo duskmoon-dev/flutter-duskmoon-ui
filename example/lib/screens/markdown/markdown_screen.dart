@@ -1,17 +1,44 @@
 import 'dart:async';
 
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:duskmoon_widgets/duskmoon_widgets.dart';
 import 'package:flutter/material.dart';
 
-/// Showcase page demonstrating DmMarkdown and DmMarkdownInput.
-class MarkdownPage extends StatefulWidget {
-  const MarkdownPage({super.key});
+import '../../destination.dart';
+
+class MarkdownScreen extends StatelessWidget {
+  static const name = 'Markdown';
+  static const path = '/markdown';
+
+  const MarkdownScreen({super.key});
 
   @override
-  State<MarkdownPage> createState() => _MarkdownPageState();
+  Widget build(BuildContext context) {
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key(name)),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
+      appBar: DmAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const Text('Markdown'),
+      ),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => const _MarkdownBody(),
+    );
+  }
 }
 
-class _MarkdownPageState extends State<MarkdownPage>
+class _MarkdownBody extends StatefulWidget {
+  const _MarkdownBody();
+
+  @override
+  State<_MarkdownBody> createState() => _MarkdownBodyState();
+}
+
+class _MarkdownBodyState extends State<_MarkdownBody>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   final _inputController = DmMarkdownInputController();
@@ -66,10 +93,10 @@ def fibonacci(n):
 
 | Feature | Status | Priority |
 |---------|--------|----------|
-| GFM | ✅ Done | High |
-| KaTeX | ✅ Done | High |
-| Mermaid | 🔲 Planned | Medium |
-| Streaming | ✅ Done | High |
+| GFM | Done | High |
+| KaTeX | Done | High |
+| Mermaid | Planned | Medium |
+| Streaming | Done | High |
 
 ## Math (KaTeX)
 
@@ -131,7 +158,8 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
     _streamKey = UniqueKey();
     var index = 0;
     setState(() {});
-    _streamTimer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
+    _streamTimer =
+        Timer.periodic(const Duration(milliseconds: 200), (timer) {
       if (index < _streamingText.length) {
         _streamController!.add(_streamingText[index]);
         index++;
@@ -148,7 +176,6 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
 
     return Column(
       children: [
-        // Section tabs.
         Container(
           color: colorScheme.surfaceContainer,
           child: TabBar(
@@ -160,7 +187,6 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
             ],
           ),
         ),
-        // Tab content.
         Expanded(
           child: TabBarView(
             controller: _tabController,
@@ -220,7 +246,8 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
               : Center(
                   child: Text(
                     'Press "Start Stream" to begin',
-                    style: TextStyle(color: colorScheme.onSurfaceVariant),
+                    style:
+                        TextStyle(color: colorScheme.onSurfaceVariant),
                   ),
                 ),
         ),

@@ -1,8 +1,35 @@
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 
-class FeedbackPage extends StatelessWidget {
-  const FeedbackPage({super.key});
+import '../../destination.dart';
+
+class FeedbackScreen extends StatelessWidget {
+  static const name = 'Feedback';
+  static const path = '/feedback';
+
+  const FeedbackScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key(name)),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
+      appBar: DmAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const Text('Feedback'),
+      ),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => const _FeedbackBody(),
+    );
+  }
+}
+
+class _FeedbackBody extends StatelessWidget {
+  const _FeedbackBody();
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +190,8 @@ class FeedbackPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Bottom Sheet', style: Theme.of(context).textTheme.titleLarge),
+            Text('Bottom Sheet',
+                style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
             DmButton(
               onPressed: () => showDmBottomSheetActionList(
@@ -207,7 +235,8 @@ class FeedbackPage extends StatelessWidget {
                         const SizedBox(width: 12),
                         Text('Delete',
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.error)),
+                                color:
+                                    Theme.of(context).colorScheme.error)),
                       ],
                     ),
                     onTap: () => Navigator.of(context).pop(),
@@ -241,7 +270,8 @@ class FeedbackPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.fullscreen,
-                          size: 64, color: Theme.of(ctx).colorScheme.primary),
+                          size: 64,
+                          color: Theme.of(ctx).colorScheme.primary),
                       const SizedBox(height: 16),
                       Text(
                         'This is a fullscreen dialog',

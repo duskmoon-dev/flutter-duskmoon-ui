@@ -1,8 +1,35 @@
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 
-class FormPage extends StatelessWidget {
-  const FormPage({super.key});
+import '../../destination.dart';
+
+class FormScreen extends StatelessWidget {
+  static const name = 'Form';
+  static const path = '/form';
+
+  const FormScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key(name)),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
+      appBar: DmAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const Text('Form'),
+      ),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => const _FormBody(),
+    );
+  }
+}
+
+class _FormBody extends StatelessWidget {
+  const _FormBody();
 
   @override
   Widget build(BuildContext context) {
@@ -182,10 +209,6 @@ class FormPage extends StatelessWidget {
     );
   }
 }
-
-// ---------------------------------------------------------------------------
-// Form BLoCs
-// ---------------------------------------------------------------------------
 
 class _ContactFormBloc extends FormBloc<String, String> {
   final name = TextFieldBloc(

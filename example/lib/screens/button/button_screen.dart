@@ -1,14 +1,41 @@
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 
-class ButtonPage extends StatefulWidget {
-  const ButtonPage({super.key});
+import '../../destination.dart';
+
+class ButtonScreen extends StatelessWidget {
+  static const name = 'Buttons';
+  static const path = '/buttons';
+
+  const ButtonScreen({super.key});
 
   @override
-  State<ButtonPage> createState() => _ButtonPageState();
+  Widget build(BuildContext context) {
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key(name)),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
+      appBar: DmAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const Text('Buttons & Inputs'),
+      ),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => const _ButtonBody(),
+    );
+  }
 }
 
-class _ButtonPageState extends State<ButtonPage> {
+class _ButtonBody extends StatefulWidget {
+  const _ButtonBody();
+
+  @override
+  State<_ButtonBody> createState() => _ButtonBodyState();
+}
+
+class _ButtonBodyState extends State<_ButtonBody> {
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -77,7 +104,8 @@ class _ButtonPageState extends State<ButtonPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('DmIconButton', style: Theme.of(context).textTheme.titleLarge),
+            Text('DmIconButton',
+                style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,
@@ -145,9 +173,7 @@ class _ButtonPageState extends State<ButtonPage> {
   }
 
   Widget _buildInputWidgets() {
-    return _InputWidgetsSection(
-      onMessage: _showMessage,
-    );
+    return _InputWidgetsSection(onMessage: _showMessage);
   }
 
   Widget _buildDataDisplayWidgets() {
@@ -157,10 +183,9 @@ class _ButtonPageState extends State<ButtonPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Data Display', style: Theme.of(context).textTheme.titleLarge),
+            Text('Data Display',
+                style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
-
-            // Avatars
             Text('DmAvatar', style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             const Wrap(
@@ -175,8 +200,6 @@ class _ButtonPageState extends State<ButtonPage> {
               ],
             ),
             const SizedBox(height: 16),
-
-            // Badges
             Text('DmBadge', style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             Wrap(
@@ -195,8 +218,6 @@ class _ButtonPageState extends State<ButtonPage> {
               ],
             ),
             const SizedBox(height: 16),
-
-            // Chips
             Text('DmChip', style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             Wrap(
@@ -260,9 +281,8 @@ class _InputWidgetsSectionState extends State<_InputWidgetsSection> {
             Text('Input Widgets',
                 style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
-
-            // TextField
-            Text('DmTextField', style: Theme.of(context).textTheme.titleSmall),
+            Text('DmTextField',
+                style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             DmTextField(
               placeholder: 'Enter text...',
@@ -274,23 +294,21 @@ class _InputWidgetsSectionState extends State<_InputWidgetsSection> {
               enabled: false,
             ),
             const SizedBox(height: 16),
-
-            // Checkbox
-            Text('DmCheckbox', style: Theme.of(context).textTheme.titleSmall),
+            Text('DmCheckbox',
+                style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             Row(
               children: [
                 DmCheckbox(
                   value: _checkboxValue,
-                  onChanged: (v) => setState(() => _checkboxValue = v ?? false),
+                  onChanged: (v) =>
+                      setState(() => _checkboxValue = v ?? false),
                 ),
                 const SizedBox(width: 8),
                 Text(_checkboxValue ? 'Checked' : 'Unchecked'),
               ],
             ),
             const SizedBox(height: 16),
-
-            // Switch
             Text('DmSwitch', style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             Row(
@@ -304,8 +322,6 @@ class _InputWidgetsSectionState extends State<_InputWidgetsSection> {
               ],
             ),
             const SizedBox(height: 16),
-
-            // Slider
             Text('DmSlider', style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             Row(

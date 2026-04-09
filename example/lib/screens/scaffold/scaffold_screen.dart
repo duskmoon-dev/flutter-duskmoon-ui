@@ -1,8 +1,35 @@
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 
-class ScaffoldPage extends StatelessWidget {
-  const ScaffoldPage({super.key});
+import '../../destination.dart';
+
+class ScaffoldScreen extends StatelessWidget {
+  static const name = 'Scaffold';
+  static const path = '/scaffold';
+
+  const ScaffoldScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key(name)),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
+      appBar: DmAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const Text('Scaffold & Layout'),
+      ),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => const _ScaffoldBody(),
+    );
+  }
+}
+
+class _ScaffoldBody extends StatelessWidget {
+  const _ScaffoldBody();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +58,8 @@ class ScaffoldPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('DmActionList', style: Theme.of(context).textTheme.titleLarge),
+            Text('DmActionList',
+                style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 4),
             Text(
                 'Renders as popup (small), icon buttons (medium), or text buttons (large)',
@@ -156,7 +184,8 @@ class ScaffoldPage extends StatelessWidget {
                             child: Text(
                               'DmDrawer',
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
+                                color:
+                                    Theme.of(context).colorScheme.onPrimary,
                                 fontSize: 24,
                               ),
                             ),
@@ -257,7 +286,8 @@ class ScaffoldPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('DmScaffold', style: Theme.of(context).textTheme.titleLarge),
+            Text('DmScaffold',
+                style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 4),
             Text(
               'Responsive scaffold: NavigationRail (desktop) / BottomNav (mobile)',
@@ -266,7 +296,8 @@ class ScaffoldPage extends StatelessWidget {
             const SizedBox(height: 12),
             DmButton(
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const _ScaffoldDemoPage()),
+                MaterialPageRoute(
+                    builder: (_) => const _ScaffoldDemoPage()),
               ),
               child: const Text('Open DmScaffold Demo'),
             ),

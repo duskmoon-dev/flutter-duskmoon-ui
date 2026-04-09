@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:example/main.dart';
-import 'package:example/pages/visualization/chart_gallery_page.dart';
-import 'package:example/pages/visualization/geo_map_page.dart';
-import 'package:example/pages/visualization/interactive_chart_page.dart';
-import 'package:example/pages/visualization_page.dart';
+import 'package:example/screens/visualization/chart_gallery_page.dart';
+import 'package:example/screens/visualization/geo_map_page.dart';
+import 'package:example/screens/visualization/interactive_chart_page.dart';
+import 'package:example/screens/visualization/visualization_screen.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -24,8 +25,6 @@ void main() {
 
       expect(find.text('DmViz Charts'), findsOneWidget);
 
-      // The adaptive scaffold adds navigation scrollables, so specify
-      // which scrollable to use for scrolling the content ListView.
       final listScrollable = find.byType(Scrollable).last;
       await tester.scrollUntilVisible(
         find.text('Geographic'),
@@ -45,17 +44,33 @@ void main() {
     testWidgets('visualization module page renders migrated cards', (
       tester,
     ) async {
-      await tester.pumpWidget(const MaterialApp(home: VisualizationPage()));
+      final router = GoRouter(
+        initialLocation: '/',
+        routes: [
+          GoRoute(
+            path: '/',
+            builder: (context, state) => const VisualizationScreen(),
+          ),
+        ],
+      );
+
+      await tester.pumpWidget(MaterialApp.router(routerConfig: router));
       await tester.pumpAndSettle();
 
       expect(find.text('DmViz Charts'), findsOneWidget);
 
-      await tester.scrollUntilVisible(find.text('Geographic'), 300);
+      final listScrollable = find.byType(Scrollable).last;
+      await tester.scrollUntilVisible(
+        find.text('Geographic'),
+        300,
+        scrollable: listScrollable,
+      );
       expect(find.text('Geographic'), findsOneWidget);
 
       await tester.scrollUntilVisible(
         find.text('Interactions & Utilities'),
         300,
+        scrollable: listScrollable,
       );
       expect(find.text('Interactions & Utilities'), findsOneWidget);
     });
@@ -79,7 +94,8 @@ void main() {
       await tester.pumpWidget(const MaterialApp(home: GeoMapPage()));
       await tester.pumpAndSettle();
 
-      expect(find.widgetWithText(AppBar, 'Geo Projection Lab'), findsOneWidget);
+      expect(
+          find.widgetWithText(AppBar, 'Geo Projection Lab'), findsOneWidget);
       expect(find.text('Projection'), findsOneWidget);
       expect(find.textContaining('Tap a country'), findsOneWidget);
     });

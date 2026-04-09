@@ -1,20 +1,41 @@
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 
-import 'package:duskmoon_ui/duskmoon_ui.dart';
+import '../../destination.dart';
+import 'chart_gallery_page.dart';
+import 'geo_gallery_page.dart';
+import 'interactions_page.dart';
+import 'lines_bars_page.dart';
+import 'radial_page.dart';
+import 'scatter_network_page.dart';
 
-import 'visualization/chart_gallery_page.dart';
-import 'visualization/geo_gallery_page.dart';
-import 'visualization/interactions_page.dart';
-import 'visualization/lines_bars_page.dart';
-import 'visualization/radial_page.dart';
-import 'visualization/scatter_network_page.dart';
+class VisualizationScreen extends StatelessWidget {
+  static const name = 'Visualization';
+  static const path = '/visualization';
 
-// ---------------------------------------------------------------------------
-// VisualizationPage
-// ---------------------------------------------------------------------------
+  const VisualizationScreen({super.key});
 
-class VisualizationPage extends StatelessWidget {
-  const VisualizationPage({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key(name)),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
+      appBar: DmAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const Text('Visualization'),
+      ),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => const _VisualizationBody(),
+    );
+  }
+}
+
+class _VisualizationBody extends StatelessWidget {
+  const _VisualizationBody();
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +90,8 @@ class VisualizationPage extends StatelessWidget {
         const _VisualizationModuleCard(
           icon: Icons.public_outlined,
           title: 'Geographic',
-          description: 'World map projections, animated globe, regional focus.',
+          description:
+              'World map projections, animated globe, regional focus.',
           tags: ['Mercator', 'Globe', 'Regions'],
           destination: GeoGalleryPage(),
         ),
@@ -86,10 +108,6 @@ class VisualizationPage extends StatelessWidget {
     );
   }
 }
-
-// ---------------------------------------------------------------------------
-// _VisualizationModuleCard  (unchanged API, updated implementation)
-// ---------------------------------------------------------------------------
 
 class _VisualizationModuleCard extends StatelessWidget {
   const _VisualizationModuleCard({
@@ -124,7 +142,8 @@ class _VisualizationModuleCard extends StatelessWidget {
                     color: colorScheme.primaryContainer,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Icon(icon, color: colorScheme.onPrimaryContainer),
+                  child:
+                      Icon(icon, color: colorScheme.onPrimaryContainer),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -136,7 +155,8 @@ class _VisualizationModuleCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            Text(description, style: Theme.of(context).textTheme.bodyMedium),
+            Text(description,
+                style: Theme.of(context).textTheme.bodyMedium),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,

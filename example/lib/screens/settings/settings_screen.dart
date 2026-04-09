@@ -1,36 +1,48 @@
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+import '../../destination.dart';
+
+class SettingsScreen extends StatelessWidget {
+  static const name = 'Settings';
+  static const path = '/settings';
+
+  const SettingsScreen({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  Widget build(BuildContext context) {
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key(name)),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
+      appBar: DmAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const Text('Settings'),
+      ),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => const _SettingsBody(),
+    );
+  }
 }
 
-class _SettingsPageState extends State<SettingsPage> {
-  // Switch tile state
+class _SettingsBody extends StatefulWidget {
+  const _SettingsBody();
+
+  @override
+  State<_SettingsBody> createState() => _SettingsBodyState();
+}
+
+class _SettingsBodyState extends State<_SettingsBody> {
   bool _switchValue = true;
-
-  // Check tile state
   bool _checkValue = false;
-
-  // Input tile state
   String _inputValue = '';
-
-  // Slider tile state
   double _sliderValue = 0.3;
-
-  // Select tile state
   String? _selectValue = 'option1';
-
-  // Textarea tile state
   String _textareaValue = '';
-
-  // Radio group state
   String? _radioValue = 'small';
-
-  // Checkbox group state
   Set<String> _checkboxGroupValues = {'email'};
 
   @override
@@ -40,15 +52,12 @@ class _SettingsPageState extends State<SettingsPage> {
         SettingsSection(
           title: const Text('Basic Tiles'),
           tiles: [
-            // 1. Simple tile
             SettingsTile(
               leading: const Icon(Icons.info),
               title: const Text('Simple Tile'),
               value: const Text('Displays information'),
               onPressed: (ctx) => _showMessage('Simple tile tapped'),
             ),
-
-            // 2. Navigation tile
             SettingsTile.navigation(
               leading: const Icon(Icons.language),
               title: const Text('Navigation Tile'),
@@ -60,7 +69,6 @@ class _SettingsPageState extends State<SettingsPage> {
         SettingsSection(
           title: const Text('Toggle Tiles'),
           tiles: [
-            // 3. Switch tile
             SettingsTile.switchTile(
               leading: const Icon(Icons.dark_mode),
               title: const Text('Switch Tile'),
@@ -68,8 +76,6 @@ class _SettingsPageState extends State<SettingsPage> {
               initialValue: _switchValue,
               onToggle: (v) => setState(() => _switchValue = v),
             ),
-
-            // 4. Check tile
             SettingsTile.checkTile(
               leading: const Icon(Icons.check_circle),
               title: const Text('Check Tile'),
@@ -82,7 +88,6 @@ class _SettingsPageState extends State<SettingsPage> {
         SettingsSection(
           title: const Text('Input Tiles'),
           tiles: [
-            // 5. Input tile
             SettingsTile.input(
               leading: const Icon(Icons.edit),
               title: const Text('Input Tile'),
@@ -91,8 +96,6 @@ class _SettingsPageState extends State<SettingsPage> {
               onInputChanged: (v) => setState(() => _inputValue = v),
               inputHint: 'Enter a value...',
             ),
-
-            // 6. Textarea tile
             SettingsTile.textarea(
               leading: const Icon(Icons.notes),
               title: const Text('Textarea Tile'),
@@ -107,17 +110,15 @@ class _SettingsPageState extends State<SettingsPage> {
         SettingsSection(
           title: const Text('Selection Tiles'),
           tiles: [
-            // 7. Slider tile
             SettingsTile.slider(
               leading: const Icon(Icons.volume_up),
               title: const Text('Slider Tile'),
-              description: Text('Value: ${_sliderValue.toStringAsFixed(2)}'),
+              description:
+                  Text('Value: ${_sliderValue.toStringAsFixed(2)}'),
               sliderValue: _sliderValue,
               onSliderChanged: (v) => setState(() => _sliderValue = v),
               sliderDivisions: 10,
             ),
-
-            // 8. Select tile
             SettingsTile.select(
               leading: const Icon(Icons.list),
               title: const Text('Select Tile'),
@@ -135,7 +136,6 @@ class _SettingsPageState extends State<SettingsPage> {
         SettingsSection(
           title: const Text('Group Tiles'),
           tiles: [
-            // 9. Radio group tile
             SettingsTile.radioGroup(
               leading: const Icon(Icons.radio_button_checked),
               title: const Text('Radio Group'),
@@ -148,8 +148,6 @@ class _SettingsPageState extends State<SettingsPage> {
               radioValue: _radioValue,
               onRadioChanged: (v) => setState(() => _radioValue = v),
             ),
-
-            // 10. Checkbox group tile
             SettingsTile.checkboxGroup(
               leading: const Icon(Icons.checklist),
               title: const Text('Checkbox Group'),

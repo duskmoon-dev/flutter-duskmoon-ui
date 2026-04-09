@@ -1,14 +1,41 @@
-import 'package:duskmoon_code_engine/duskmoon_code_engine.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 
-class CodeEditorPage extends StatefulWidget {
-  const CodeEditorPage({super.key});
+import '../../destination.dart';
+
+class CodeEditorScreen extends StatelessWidget {
+  static const name = 'Code Editor';
+  static const path = '/code-editor';
+
+  const CodeEditorScreen({super.key});
 
   @override
-  State<CodeEditorPage> createState() => _CodeEditorPageState();
+  Widget build(BuildContext context) {
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key(name)),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
+      appBar: DmAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const Text('Code Editor'),
+      ),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => const _CodeEditorBody(),
+    );
+  }
 }
 
-class _CodeEditorPageState extends State<CodeEditorPage> {
+class _CodeEditorBody extends StatefulWidget {
+  const _CodeEditorBody();
+
+  @override
+  State<_CodeEditorBody> createState() => _CodeEditorBodyState();
+}
+
+class _CodeEditorBodyState extends State<_CodeEditorBody> {
   late EditorViewController _controller;
   String _selectedLanguage = 'dart';
 
@@ -73,33 +100,39 @@ class _CodeEditorPageState extends State<CodeEditorPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Code Editor'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: DropdownButton<String>(
-              value: _selectedLanguage,
-              underline: const SizedBox.shrink(),
-              items: _languages.keys
-                  .map(
-                    (lang) => DropdownMenuItem(value: lang, child: Text(lang)),
-                  )
-                  .toList(),
-              onChanged: (lang) {
-                if (lang != null) _switchLanguage(lang);
-              },
-            ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            children: [
+              Text('Language:', style: Theme.of(context).textTheme.bodyMedium),
+              const SizedBox(width: 8),
+              DropdownButton<String>(
+                value: _selectedLanguage,
+                underline: const SizedBox.shrink(),
+                items: _languages.keys
+                    .map(
+                      (lang) =>
+                          DropdownMenuItem(value: lang, child: Text(lang)),
+                    )
+                    .toList(),
+                onChanged: (lang) {
+                  if (lang != null) _switchLanguage(lang);
+                },
+              ),
+            ],
           ),
-        ],
-      ),
-      body: CodeEditorWidget(
-        controller: _controller,
-        theme: isDark ? EditorTheme.dark() : EditorTheme.light(),
-        lineNumbers: true,
-        highlightActiveLine: true,
-      ),
+        ),
+        Expanded(
+          child: CodeEditorWidget(
+            controller: _controller,
+            theme: isDark ? EditorTheme.dark() : EditorTheme.light(),
+            lineNumbers: true,
+            highlightActiveLine: true,
+          ),
+        ),
+      ],
     );
   }
 }

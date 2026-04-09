@@ -1,9 +1,34 @@
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 
-class ThemePage extends StatelessWidget {
-  const ThemePage({super.key});
+import '../../destination.dart';
 
+class ThemeScreen extends StatelessWidget {
+  static const name = 'Theme';
+  static const path = '/';
+
+  const ThemeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key(name)),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
+      appBar: DmAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const Text('Theme'),
+      ),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => _ThemeBody(),
+    );
+  }
+}
+
+class _ThemeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DmThemeBloc, DmThemeState>(
@@ -206,7 +231,8 @@ class ThemePage extends StatelessWidget {
                     '#${entry.value.toARGB32().toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}',
                     style: TextStyle(
                       fontSize: 9,
-                      color: luminance > 0.5 ? Colors.black54 : Colors.white70,
+                      color:
+                          luminance > 0.5 ? Colors.black54 : Colors.white70,
                     ),
                   ),
                 ],
