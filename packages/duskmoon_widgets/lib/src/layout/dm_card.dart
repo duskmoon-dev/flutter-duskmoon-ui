@@ -1,6 +1,8 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 
 import '../adaptive/adaptive_widget.dart';
+import '../adaptive/fluent_theme_bridge.dart';
 import '../adaptive/platform_resolver.dart';
 
 /// An adaptive card container that renders Material or Cupertino styles.
@@ -55,10 +57,13 @@ class DmCard extends StatelessWidget with AdaptiveWidget {
           ),
           child: content,
         ),
-      DmPlatformStyle.fluent => Card(
-          elevation: elevation,
-          margin: margin,
-          child: content,
+      DmPlatformStyle.fluent => wrapWithFluentTheme(
+          context,
+          fluent.Card(
+            padding: padding ?? const EdgeInsets.all(12),
+            margin: margin ?? EdgeInsets.zero,
+            child: child ?? const SizedBox.shrink(),
+          ),
         ),
     };
   }

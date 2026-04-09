@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -109,6 +110,38 @@ void main() {
       );
       expect(badgeStack, findsOneWidget);
     });
+
+    testWidgets('renders InfoBadge on Fluent platform', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: DmBadge(
+              label: '7',
+              platformOverride: DmPlatformStyle.fluent,
+              child: Icon(Icons.mail),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(fluent.InfoBadge), findsOneWidget);
+      expect(find.text('7'), findsOneWidget);
+    });
+
+    testWidgets('renders dot InfoBadge without label on Fluent', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: DmBadge(
+              platformOverride: DmPlatformStyle.fluent,
+              child: Icon(Icons.mail),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(fluent.InfoBadge), findsOneWidget);
+    });
   });
 
   group('DmChip', () {
@@ -186,6 +219,56 @@ void main() {
 
       expect(find.byType(Chip), findsOneWidget);
       expect(find.byIcon(Icons.person), findsOneWidget);
+    });
+
+    testWidgets('renders Cupertino styled chip', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: DmChip(
+              label: Text('iOS Tag'),
+              platformOverride: DmPlatformStyle.cupertino,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(Chip), findsNothing);
+      expect(find.byType(FilterChip), findsNothing);
+      expect(find.text('iOS Tag'), findsOneWidget);
+    });
+
+    testWidgets('renders ToggleButton on Fluent when selectable', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: DmChip(
+              label: const Text('Fluent'),
+              platformOverride: DmPlatformStyle.fluent,
+              onSelected: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(fluent.ToggleButton), findsOneWidget);
+      expect(find.text('Fluent'), findsOneWidget);
+    });
+
+    testWidgets('renders Button on Fluent when not selectable', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: DmChip(
+              label: Text('Static'),
+              platformOverride: DmPlatformStyle.fluent,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(fluent.Button), findsOneWidget);
+      expect(find.text('Static'), findsOneWidget);
     });
   });
 
@@ -276,6 +359,25 @@ void main() {
 
       final avatar = tester.widget<CircleAvatar>(find.byType(CircleAvatar));
       expect(avatar.backgroundColor, theme.colorScheme.primaryContainer);
+    });
+
+    testWidgets('renders CircleAvatar with Fluent theme on Fluent platform',
+        (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: DmAvatar(
+              platformOverride: DmPlatformStyle.fluent,
+              child: Text('FL'),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(CircleAvatar), findsOneWidget);
+      expect(find.text('FL'), findsOneWidget);
+      // Verify FluentTheme is in the tree
+      expect(find.byType(fluent.FluentTheme), findsOneWidget);
     });
   });
 }

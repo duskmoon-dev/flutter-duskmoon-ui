@@ -3,7 +3,7 @@ import 'package:duskmoon_adaptive_scaffold/duskmoon_adaptive_scaffold.dart';
 
 export 'package:duskmoon_adaptive_scaffold/duskmoon_adaptive_scaffold.dart';
 
-/// A convenience wrapper around [AdaptiveScaffold] that exposes named
+/// A convenience wrapper around [DmAdaptiveScaffold] that exposes named
 /// breakpoint constants and shorter parameter names for breakpoints.
 class DmScaffold extends StatelessWidget {
   /// Breakpoint constant aliases for common screen sizes.
@@ -132,7 +132,7 @@ class DmScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveScaffold(
+    return DmAdaptiveScaffold(
       destinations: destinations,
       selectedIndex: selectedIndex,
       leadingUnextendedNavRail: leadingUnextendedNavRail,

@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -86,6 +87,28 @@ void main() {
       expect(find.byType(CupertinoNavigationBar), findsOneWidget);
       expect(find.byType(AppBar), findsNothing);
     });
+
+    testWidgets('renders Fluent-styled bar on Fluent platform', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                DmAppBar(
+                  title: Text('Fluent Title'),
+                  platformOverride: DmPlatformStyle.fluent,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      // Fluent renders a custom Container, not Material AppBar
+      expect(find.byType(AppBar), findsNothing);
+      expect(find.text('Fluent Title'), findsOneWidget);
+      expect(find.byType(fluent.FluentTheme), findsOneWidget);
+    });
   });
 
   group('DmBottomNav', () {
@@ -158,6 +181,27 @@ void main() {
       await tester.tap(find.text('Settings'));
       expect(tappedIndex, 1);
     });
+
+    testWidgets('renders Fluent-themed NavigationBar on Fluent platform',
+        (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: const SizedBox(),
+            bottomNavigationBar: DmBottomNav(
+              destinations: destinations,
+              selectedIndex: 0,
+              onDestinationSelected: (_) {},
+              platformOverride: DmPlatformStyle.fluent,
+            ),
+          ),
+        ),
+      );
+
+      // Still a NavigationBar but wrapped with FluentTheme
+      expect(find.byType(NavigationBar), findsOneWidget);
+      expect(find.byType(fluent.FluentTheme), findsOneWidget);
+    });
   });
 
   group('DmTabBar', () {
@@ -222,6 +266,22 @@ void main() {
 
       await tester.tap(find.text('Tab 2'));
       expect(changedIndex, 1);
+    });
+
+    testWidgets('renders fluent.TabView on Fluent platform', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: DmTabBar(
+              tabs: tabs,
+              platformOverride: DmPlatformStyle.fluent,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(fluent.TabView), findsOneWidget);
+      expect(find.byType(TabBar), findsNothing);
     });
   });
 
@@ -303,6 +363,28 @@ void main() {
       );
 
       expect(find.byType(Drawer), findsNothing);
+    });
+
+    testWidgets('renders Fluent-styled container on Fluent platform',
+        (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 400,
+              height: 600,
+              child: DmDrawer(
+                platformOverride: DmPlatformStyle.fluent,
+                child: Text('Fluent drawer'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(Drawer), findsNothing);
+      expect(find.text('Fluent drawer'), findsOneWidget);
+      expect(find.byType(fluent.FluentTheme), findsOneWidget);
     });
   });
 }

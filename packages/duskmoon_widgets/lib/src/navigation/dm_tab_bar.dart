@@ -1,7 +1,9 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../adaptive/adaptive_widget.dart';
+import '../adaptive/fluent_theme_bridge.dart';
 import '../adaptive/platform_resolver.dart';
 
 /// An adaptive tab bar (Material TabBar / Cupertino segmented control).
@@ -51,15 +53,31 @@ class DmTabBar extends StatelessWidget with AdaptiveWidget {
               ),
           },
         ),
-      DmPlatformStyle.fluent => DefaultTabController(
-          length: tabs.length,
-          initialIndex: selectedIndex,
-          child: TabBar(
-            onTap: onChanged,
-            tabs: tabs.map((t) => Tab(text: t.label, icon: t.icon)).toList(),
-          ),
-        ),
+      DmPlatformStyle.fluent => _buildFluent(context),
     };
+  }
+
+  Widget _buildFluent(BuildContext context) {
+    return wrapWithFluentTheme(
+      context,
+      SizedBox(
+        height: 40,
+        child: fluent.TabView(
+          currentIndex: selectedIndex,
+          onChanged: onChanged ?? (_) {},
+          tabWidthBehavior: fluent.TabWidthBehavior.sizeToContent,
+          closeButtonVisibility: fluent.CloseButtonVisibilityMode.never,
+          showScrollButtons: false,
+          tabs: tabs
+              .map((t) => fluent.Tab(
+                    text: Text(t.label),
+                    icon: t.icon,
+                    body: const SizedBox.shrink(),
+                  ))
+              .toList(),
+        ),
+      ),
+    );
   }
 }
 

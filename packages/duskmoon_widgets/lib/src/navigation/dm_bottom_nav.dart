@@ -1,7 +1,9 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../adaptive/adaptive_widget.dart';
+import '../adaptive/fluent_theme_bridge.dart';
 import '../adaptive/platform_resolver.dart';
 
 /// An adaptive bottom navigation bar (Material NavigationBar / Cupertino tab bar).
@@ -48,16 +50,34 @@ class DmBottomNav extends StatelessWidget with AdaptiveWidget {
               )
               .toList(),
         ),
-      DmPlatformStyle.fluent => NavigationBar(
-          selectedIndex: selectedIndex,
-          onDestinationSelected: onDestinationSelected,
-          destinations: destinations
-              .map(
-                (d) => NavigationDestination(icon: d.icon, label: d.label),
-              )
-              .toList(),
-        ),
+      DmPlatformStyle.fluent => _buildFluent(context),
     };
+  }
+
+  Widget _buildFluent(BuildContext context) {
+    return wrapWithFluentTheme(
+      context,
+      Builder(builder: (context) {
+        final fluentTheme = fluent.FluentTheme.of(context);
+        return Theme(
+          data: Theme.of(context).copyWith(
+            navigationBarTheme: NavigationBarThemeData(
+              backgroundColor: fluentTheme.micaBackgroundColor,
+              indicatorColor: fluentTheme.accentColor,
+            ),
+          ),
+          child: NavigationBar(
+            selectedIndex: selectedIndex,
+            onDestinationSelected: onDestinationSelected,
+            destinations: destinations
+                .map(
+                  (d) => NavigationDestination(icon: d.icon, label: d.label),
+                )
+                .toList(),
+          ),
+        );
+      }),
+    );
   }
 }
 

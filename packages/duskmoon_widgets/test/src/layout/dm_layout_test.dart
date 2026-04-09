@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -76,6 +77,23 @@ void main() {
       // Should render Cupertino style despite Android platform
       expect(find.byType(Card), findsNothing);
     });
+
+    testWidgets('renders fluent.Card on Fluent platform', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: DmCard(
+              platformOverride: DmPlatformStyle.fluent,
+              child: Text('fluent card'),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(fluent.Card), findsOneWidget);
+      expect(find.byType(Card), findsNothing);
+      expect(find.text('fluent card'), findsOneWidget);
+    });
   });
 
   group('DmDivider', () {
@@ -146,6 +164,24 @@ void main() {
       );
 
       expect(find.byType(Divider), findsNothing);
+    });
+
+    testWidgets('renders fluent.Divider on Fluent platform', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: DmDivider(
+              platformOverride: DmPlatformStyle.fluent,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(fluent.Divider), findsOneWidget);
+      expect(
+        find.byType(Divider),
+        findsNothing,
+      );
     });
   });
 }

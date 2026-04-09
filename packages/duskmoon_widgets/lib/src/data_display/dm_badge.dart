@@ -1,6 +1,8 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 
 import '../adaptive/adaptive_widget.dart';
+import '../adaptive/fluent_theme_bridge.dart';
 import '../adaptive/platform_resolver.dart';
 
 /// An adaptive badge indicator that renders Material or Cupertino styles.
@@ -69,12 +71,28 @@ class DmBadge extends StatelessWidget with AdaptiveWidget {
               ),
           ],
         ),
-      DmPlatformStyle.fluent => Badge(
-          label: label != null ? Text(label!) : null,
-          backgroundColor: backgroundColor,
-          textColor: textColor,
-          child: child,
-        ),
+      DmPlatformStyle.fluent => _buildFluent(context),
     };
+  }
+
+  Widget _buildFluent(BuildContext context) {
+    final badge = fluent.InfoBadge(
+      source: label != null ? Text(label!) : null,
+      color: backgroundColor,
+      foregroundColor: textColor,
+    );
+    if (child == null) {
+      return wrapWithFluentTheme(context, badge);
+    }
+    return wrapWithFluentTheme(
+      context,
+      Stack(
+        clipBehavior: Clip.none,
+        children: [
+          child!,
+          Positioned(right: -4, top: -4, child: badge),
+        ],
+      ),
+    );
   }
 }

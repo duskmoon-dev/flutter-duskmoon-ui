@@ -1,6 +1,8 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 
 import '../adaptive/adaptive_widget.dart';
+import '../adaptive/fluent_theme_bridge.dart';
 import '../adaptive/platform_resolver.dart';
 
 /// An adaptive side drawer that renders Material [Drawer] or Cupertino panel.
@@ -41,7 +43,21 @@ class DmDrawer extends StatelessWidget with AdaptiveWidget {
             child: child,
           ),
         ),
-      DmPlatformStyle.fluent => Drawer(width: width, child: child),
+      DmPlatformStyle.fluent => _buildFluent(context),
     };
+  }
+
+  Widget _buildFluent(BuildContext context) {
+    return wrapWithFluentTheme(
+      context,
+      Builder(builder: (context) {
+        final fluentTheme = fluent.FluentTheme.of(context);
+        return Container(
+          width: width ?? 320,
+          color: fluentTheme.micaBackgroundColor,
+          child: child,
+        );
+      }),
+    );
   }
 }

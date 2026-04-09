@@ -1,7 +1,9 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../adaptive/adaptive_widget.dart';
+import '../adaptive/fluent_theme_bridge.dart';
 import '../adaptive/platform_resolver.dart';
 
 /// An adaptive app bar that renders Material [AppBar] or Cupertino navigation bar.
@@ -81,17 +83,56 @@ class DmAppBar extends StatelessWidget
           automaticallyImplyLeading: automaticallyImplyLeading,
           backgroundColor: backgroundColor,
         ),
-      DmPlatformStyle.fluent => AppBar(
-          title: title,
-          leading: leading,
-          actions: actions,
-          automaticallyImplyLeading: automaticallyImplyLeading,
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
-          iconTheme: foregroundColor != null
-              ? IconThemeData(color: foregroundColor)
-              : null,
-        ),
+      DmPlatformStyle.fluent => _buildFluent(context),
     };
+  }
+
+  Widget _buildFluent(BuildContext context) {
+    return wrapWithFluentTheme(
+      context,
+      Builder(builder: (context) {
+        final fluentTheme = fluent.FluentTheme.of(context);
+        final bgColor = backgroundColor ?? fluentTheme.micaBackgroundColor;
+        final fgColor = foregroundColor ??
+            fluentTheme.typography.body?.color ??
+            Colors.black;
+        return Container(
+          height: kToolbarHeight,
+          color: bgColor,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Row(
+            children: [
+              if (leading != null)
+                IconTheme(
+                    data: IconThemeData(color: fgColor), child: leading!)
+              else if (automaticallyImplyLeading &&
+                  Navigator.of(context).canPop())
+                fluent.IconButton(
+                  icon:
+                      Icon(fluent.FluentIcons.back, color: fgColor, size: 16),
+                  onPressed: () => Navigator.of(context).maybePop(),
+                ),
+              if (title != null)
+                Expanded(
+                  child: DefaultTextStyle(
+                    style:
+                        (fluentTheme.typography.subtitle ?? const TextStyle())
+                            .copyWith(color: fgColor),
+                    child: title!,
+                  ),
+                )
+              else
+                const Spacer(),
+              if (actions != null)
+                IconTheme(
+                  data: IconThemeData(color: fgColor),
+                  child:
+                      Row(mainAxisSize: MainAxisSize.min, children: actions!),
+                ),
+            ],
+          ),
+        );
+      }),
+    );
   }
 }

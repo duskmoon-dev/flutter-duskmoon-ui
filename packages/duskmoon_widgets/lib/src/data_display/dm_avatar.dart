@@ -1,6 +1,8 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 
 import '../adaptive/adaptive_widget.dart';
+import '../adaptive/fluent_theme_bridge.dart';
 import '../adaptive/platform_resolver.dart';
 
 /// An adaptive circular avatar that renders Material or Cupertino styles.
@@ -46,12 +48,22 @@ class DmAvatar extends StatelessWidget with AdaptiveWidget {
           radius: radius,
           child: child,
         ),
-      DmPlatformStyle.fluent => CircleAvatar(
+      DmPlatformStyle.fluent => _buildFluent(context),
+    };
+  }
+
+  Widget _buildFluent(BuildContext context) {
+    return wrapWithFluentTheme(
+      context,
+      Builder(builder: (context) {
+        final fluentTheme = fluent.FluentTheme.of(context);
+        return CircleAvatar(
           backgroundImage: backgroundImage,
-          backgroundColor: backgroundColor,
+          backgroundColor: backgroundColor ?? fluentTheme.accentColor,
           radius: radius,
           child: child,
-        ),
-    };
+        );
+      }),
+    );
   }
 }

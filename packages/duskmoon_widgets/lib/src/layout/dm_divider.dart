@@ -1,6 +1,8 @@
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 
 import '../adaptive/adaptive_widget.dart';
+import '../adaptive/fluent_theme_bridge.dart';
 import '../adaptive/platform_resolver.dart';
 
 /// An adaptive horizontal divider that renders Material or Cupertino styles.
@@ -56,12 +58,26 @@ class DmDivider extends StatelessWidget with AdaptiveWidget {
             color: color ?? Theme.of(context).colorScheme.outlineVariant,
           ),
         ),
-      DmPlatformStyle.fluent => Divider(
-          height: height,
-          thickness: thickness,
-          indent: indent,
-          endIndent: endIndent,
-          color: color,
+      DmPlatformStyle.fluent => wrapWithFluentTheme(
+          context,
+          Padding(
+            padding: EdgeInsetsDirectional.only(
+              start: indent ?? 0,
+              end: endIndent ?? 0,
+            ),
+            child: SizedBox(
+              height: height ?? 16,
+              child: Center(
+                child: fluent.Divider(
+                  style: fluent.DividerThemeData(
+                    thickness: thickness,
+                    decoration:
+                        color != null ? BoxDecoration(color: color) : null,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
     };
   }
