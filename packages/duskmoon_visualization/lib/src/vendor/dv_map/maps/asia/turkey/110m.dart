@@ -2,7 +2,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'dart:convert';
-import 'dart:io';
+import 'package:archive/archive.dart';
 import 'package:flutter/widgets.dart';
 import 'package:duskmoon_visualization/src/vendor/dv_geo_core/dv_geo_core.dart';
 import 'package:duskmoon_visualization/src/vendor/dv_point/dv_point.dart';
@@ -24,7 +24,7 @@ GeoJsonFeatureCollection get asiaTurkey110m {
 
   // Decode base64 and decompress
   final compressed = base64Decode(_kCompressedData);
-  final decompressed = gzip.decode(compressed);
+  final decompressed = GZipDecoder().decodeBytes(compressed);
   final jsonString = utf8.decode(decompressed);
 
   // Parse GeoJSON

@@ -20,6 +20,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  archive: ^3.6.1
   duskmoon_theme: ^1.4.0
   vector_math: ^2.2.0
 
