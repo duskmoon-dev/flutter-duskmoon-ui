@@ -618,7 +618,7 @@ class _ZoomPanChartState extends State<_ZoomPanChart> {
 
   double _scale = 1.0;
   Offset _translate = Offset.zero;
-  Offset? _lastPanPos;
+  double _lastScaleValue = 1.0;
 
   final List<dv.Point> _points = List.generate(50, (i) {
     final rng = math.Random(i + 200);
@@ -677,22 +677,15 @@ class _ZoomPanChartState extends State<_ZoomPanChart> {
               final size = Size(constraints.maxWidth, constraints.maxHeight);
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onPanStart: (d) => _lastPanPos = d.localPosition,
-                onPanUpdate: (d) {
-                  setState(() {
-                    if (_lastPanPos != null) {
-                      _translate += d.localPosition - _lastPanPos!;
-                    }
-                    _lastPanPos = d.localPosition;
-                  });
-                },
-                onPanEnd: (_) => _lastPanPos = null,
+                onScaleStart: (d) => _lastScaleValue = 1.0,
                 onScaleUpdate: (d) {
-                  if (d.scale != 1.0) {
-                    setState(() {
-                      _scale = (_scale * d.scale).clamp(0.5, 6.0);
-                    });
-                  }
+                  setState(() {
+                    _translate += d.focalPointDelta;
+                    final newScale = (_scale * (d.scale / _lastScaleValue))
+                        .clamp(0.5, 6.0);
+                    _scale = newScale;
+                    _lastScaleValue = d.scale;
+                  });
                 },
                 child: CustomPaint(
                   size: size,

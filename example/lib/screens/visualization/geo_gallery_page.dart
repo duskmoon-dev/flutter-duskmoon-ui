@@ -1,3 +1,5 @@
+import 'dart:math' show min;
+
 import 'package:flutter/material.dart';
 
 import 'package:duskmoon_ui/duskmoon_ui.dart';
@@ -297,46 +299,55 @@ class _GlobeDemoState extends State<_GlobeDemo>
 
           return LayoutBuilder(
             builder: (context, constraints) {
-              final size = Size(constraints.maxWidth, constraints.maxHeight);
-              final center = dv.Point(size.width / 2, size.height / 2);
-              final scale = size.width / 2.2;
+              // The globe must be circular, so diameter = min(width, height).
+              final scale = min(constraints.maxWidth, constraints.maxHeight) / 2;
+              final globeCenter = dv.Point(scale, scale);
 
               final projection = dv.geoOrthographic(
                 center: (0, 0),
                 scale: scale,
-                translate: center,
+                translate: globeCenter,
                 rotate: (totalRotation, -15, 0),
               );
 
-              return Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Ocean circle
-                  Container(
-                    width: scale * 2,
-                    height: scale * 2,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: const Color(0xFFB0D8F0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: colorScheme.shadow.withValues(alpha: 0.2),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4),
+              // Outer container provides the drop shadow; inner ClipOval
+              // hard-clips ALL drawing (ocean + land) to the globe circle.
+              return Center(
+                child: Container(
+                  width: scale * 2,
+                  height: scale * 2,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorScheme.shadow.withValues(alpha: 0.2),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: ClipOval(
+                    clipBehavior: Clip.hardEdge,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        // Ocean background fills the globe circle
+                        const ColoredBox(color: Color(0xFFB0D8F0)),
+                        // Land masses — back-hemisphere paths are clipped away
+                        dv.World110mWidget(
+                          projection: projection,
+                          fillColor:
+                              dmColors?.success.withValues(alpha: 0.65) ??
+                                  Colors.green.withValues(alpha: 0.6),
+                          strokeColor:
+                              dmColors?.success.withValues(alpha: 0.9) ??
+                                  Colors.green.withValues(alpha: 0.9),
+                          strokeWidth: 0.6,
                         ),
                       ],
                     ),
                   ),
-                  // Land masses
-                  dv.World110mWidget(
-                    projection: projection,
-                    fillColor: dmColors?.success.withValues(alpha: 0.65) ??
-                        Colors.green.withValues(alpha: 0.6),
-                    strokeColor: dmColors?.success.withValues(alpha: 0.9) ??
-                        Colors.green.withValues(alpha: 0.9),
-                    strokeWidth: 0.6,
-                  ),
-                ],
+                ),
               );
             },
           );
