@@ -37,6 +37,7 @@ class DmMarkdownInput extends StatefulWidget {
     this.enabled = true,
     this.tabLabelWrite = 'Write',
     this.tabLabelPreview = 'Preview',
+    this.showPreview = true,
     this.onLinkTap,
     this.decoration,
   });
@@ -79,6 +80,9 @@ class DmMarkdownInput extends StatefulWidget {
 
   /// Label for the preview tab.
   final String tabLabelPreview;
+
+  /// Whether to show the preview tab. When false, only the editor is shown.
+  final bool showPreview;
 
   /// Link tap callback in preview mode.
   final void Function(String url, String? title)? onLinkTap;
@@ -185,6 +189,30 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
+    if (!widget.showPreview) {
+      return Container(
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          border: Border.all(color: colorScheme.outlineVariant, width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: KeyboardShortcutHandler(
+          controller: _controller,
+          focusNode: _focusNode,
+          enabled: widget.enabled && !widget.readOnly,
+          child: EditorPane(
+            controller: _controller,
+            focusNode: _focusNode,
+            showLineNumbers: widget.showLineNumbers,
+            maxLines: widget.maxLines,
+            minLines: widget.minLines,
+            readOnly: widget.readOnly || !widget.enabled,
+            decoration: widget.decoration,
+          ),
+        ),
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
