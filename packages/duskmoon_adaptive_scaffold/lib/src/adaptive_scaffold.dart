@@ -678,13 +678,20 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
         ? widget.extendedNavigationRailWidth
         : widget.navigationRailWidth;
 
+    final bool isDrawerMode =
+        widget.drawerBreakpoint.isActive(context) && widget.useDrawer;
+    final bool showAppBar =
+        isDrawerMode || (widget.appBarBreakpoint?.isActive(context) ?? false);
+
     return Scaffold(
       key: _scaffoldKey,
-      appBar: widget.drawerBreakpoint.isActive(context) && widget.useDrawer ||
-              (widget.appBarBreakpoint?.isActive(context) ?? false)
-          ? widget.appBar ?? AppBar()
+      appBar: showAppBar
+          ? _AppBarProxy(
+              key: ValueKey(isDrawerMode),
+              child: widget.appBar ?? AppBar(),
+            )
           : null,
-      drawer: widget.drawerBreakpoint.isActive(context) && widget.useDrawer
+      drawer: isDrawerMode
           ? Drawer(
               child: NavigationRail(
                 extended: true,
@@ -788,7 +795,7 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
           },
         ),
         bottomNavigation:
-            !widget.drawerBreakpoint.isActive(context) || !widget.useDrawer
+            !isDrawerMode
                 ? SlotLayout(
                     config: <Breakpoint, SlotLayoutConfig>{
                       widget.smallBreakpoint: SlotLayout.from(
@@ -934,6 +941,29 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
     }
     widget.onSelectedIndexChange?.call(index);
   }
+}
+
+/// Thin [PreferredSizeWidget] wrapper used to force a fresh [DmAppBar] build
+/// when the drawer mode changes.
+///
+/// Flutter's element-update optimisation skips rebuilding a child when the
+/// widget instance is identical. By keying this proxy on [isDrawerMode],
+/// [_DmAdaptiveScaffoldState] can change the key (and therefore the element)
+/// whenever drawer mode toggles, guaranteeing the inner appBar re-evaluates
+/// its leading widget via [Scaffold.maybeOf].
+class _AppBarProxy extends StatelessWidget implements PreferredSizeWidget {
+  const _AppBarProxy({
+    required super.key,
+    required this.child,
+  });
+
+  final PreferredSizeWidget child;
+
+  @override
+  Size get preferredSize => child.preferredSize;
+
+  @override
+  Widget build(BuildContext context) => child;
 }
 
 class _BrickLayout extends StatelessWidget {

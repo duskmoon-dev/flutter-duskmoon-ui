@@ -52,6 +52,20 @@ class DmAppBar extends StatelessWidget
   Widget? _resolveLeading(BuildContext context, DmPlatformStyle style) {
     if (leading != null) return leading;
     if (!automaticallyImplyLeading) return null;
+
+    // If the nearest Scaffold has a drawer, show a trigger button regardless
+    // of platform style. CupertinoNavigationBar has no built-in drawer concept,
+    // so we must handle this explicitly.
+    final scaffold = Scaffold.maybeOf(context);
+    if (scaffold != null && scaffold.hasDrawer) {
+      final color = foregroundColor;
+      return IconButton(
+        icon: Icon(Icons.menu, color: color),
+        onPressed: () => Scaffold.of(context).openDrawer(),
+        tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+      );
+    }
+
     if (!Navigator.of(context).canPop()) return null;
 
     final color = foregroundColor;
