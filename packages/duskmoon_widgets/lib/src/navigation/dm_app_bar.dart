@@ -45,14 +45,45 @@ class DmAppBar extends StatelessWidget
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
+  /// Builds an explicit back button when [automaticallyImplyLeading] is true,
+  /// [leading] is null, and the navigator can pop. This is more reliable than
+  /// relying solely on each platform widget's own imply-leading logic,
+  /// especially with go_router's push navigation.
+  Widget? _resolveLeading(BuildContext context, DmPlatformStyle style) {
+    if (leading != null) return leading;
+    if (!automaticallyImplyLeading) return null;
+    if (!Navigator.of(context).canPop()) return null;
+
+    final color = foregroundColor;
+    return switch (style) {
+      DmPlatformStyle.material => BackButton(color: color),
+      DmPlatformStyle.cupertino => CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => Navigator.of(context).maybePop(),
+          child: Icon(
+            CupertinoIcons.chevron_back,
+            size: 28,
+            color: color ?? CupertinoTheme.of(context).primaryColor,
+          ),
+        ),
+      DmPlatformStyle.fluent => IconButton(
+          icon: Icon(Icons.arrow_back, color: color),
+          onPressed: () => Navigator.of(context).maybePop(),
+        ),
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
-    return switch (resolveStyle(context)) {
+    final style = resolveStyle(context);
+    final effectiveLeading = _resolveLeading(context, style);
+
+    return switch (style) {
       DmPlatformStyle.material => AppBar(
           title: title,
-          leading: leading,
+          leading: effectiveLeading,
           actions: actions,
-          automaticallyImplyLeading: automaticallyImplyLeading,
+          automaticallyImplyLeading: effectiveLeading == null && automaticallyImplyLeading,
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
           iconTheme: foregroundColor != null
@@ -69,7 +100,7 @@ class DmAppBar extends StatelessWidget
                   ),
                 )
               : title,
-          leading: leading,
+          leading: effectiveLeading,
           trailing: actions != null && actions!.isNotEmpty
               ? IconTheme(
                   data: IconThemeData(
@@ -79,14 +110,14 @@ class DmAppBar extends StatelessWidget
                       Row(mainAxisSize: MainAxisSize.min, children: actions!),
                 )
               : null,
-          automaticallyImplyLeading: automaticallyImplyLeading,
+          automaticallyImplyLeading: effectiveLeading == null && automaticallyImplyLeading,
           backgroundColor: backgroundColor,
         ),
-      DmPlatformStyle.fluent => _buildFluent(context),
+      DmPlatformStyle.fluent => _buildFluent(context, effectiveLeading),
     };
   }
 
-  Widget _buildFluent(BuildContext context) {
+  Widget _buildFluent(BuildContext context, Widget? effectiveLeading) {
     return wrapWithFluentTheme(
       context,
       Builder(builder: (context) {
@@ -101,9 +132,9 @@ class DmAppBar extends StatelessWidget
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
             children: [
-              if (leading != null)
+              if (effectiveLeading != null)
                 IconTheme(
-                    data: IconThemeData(color: fgColor), child: leading!)
+                    data: IconThemeData(color: fgColor), child: effectiveLeading)
               else if (automaticallyImplyLeading &&
                   Navigator.of(context).canPop())
                 fluent.IconButton(
