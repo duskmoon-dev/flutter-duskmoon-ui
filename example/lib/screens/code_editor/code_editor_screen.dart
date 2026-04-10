@@ -11,20 +11,14 @@ class CodeEditorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DmAdaptiveScaffold(
-      selectedIndex: Destinations.indexOf(const Key(name)),
-      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
-      destinations: Destinations.navs,
-      useDrawer: true,
-      transitionDuration: Duration.zero,
+    return Scaffold(
       appBar: DmAppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text('Code Editor'),
         actions: const [PlatformSwitchAction()],
       ),
-      appBarBreakpoint: Breakpoints.standard,
-      body: (_) => const _CodeEditorBody(),
+      body: const _CodeEditorBody(),
     );
   }
 }

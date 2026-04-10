@@ -10,6 +10,7 @@ import 'screens/scaffold/scaffold_screen.dart';
 import 'screens/settings/settings_screen.dart';
 import 'screens/theme/theme_screen.dart';
 import 'screens/visualization/visualization_screen.dart';
+import 'screens/widgets/widgets_screen.dart';
 
 class AppRouter {
   static final GlobalKey<NavigatorState> key = GlobalKey<NavigatorState>(
@@ -32,19 +33,19 @@ class AppRouter {
       ),
     ),
     GoRoute(
+      name: WidgetsScreen.name,
+      path: WidgetsScreen.path,
+      pageBuilder: (context, state) => NoTransitionPage<void>(
+        key: state.pageKey,
+        child: const WidgetsScreen(),
+      ),
+    ),
+    GoRoute(
       name: FormScreen.name,
       path: FormScreen.path,
       pageBuilder: (context, state) => NoTransitionPage<void>(
         key: state.pageKey,
         child: const FormScreen(),
-      ),
-    ),
-    GoRoute(
-      name: ButtonScreen.name,
-      path: ButtonScreen.path,
-      pageBuilder: (context, state) => NoTransitionPage<void>(
-        key: state.pageKey,
-        child: const ButtonScreen(),
       ),
     ),
     GoRoute(
@@ -56,22 +57,6 @@ class AppRouter {
       ),
     ),
     GoRoute(
-      name: FeedbackScreen.name,
-      path: FeedbackScreen.path,
-      pageBuilder: (context, state) => NoTransitionPage<void>(
-        key: state.pageKey,
-        child: const FeedbackScreen(),
-      ),
-    ),
-    GoRoute(
-      name: ScaffoldScreen.name,
-      path: ScaffoldScreen.path,
-      pageBuilder: (context, state) => NoTransitionPage<void>(
-        key: state.pageKey,
-        child: const ScaffoldScreen(),
-      ),
-    ),
-    GoRoute(
       name: VisualizationScreen.name,
       path: VisualizationScreen.path,
       pageBuilder: (context, state) => NoTransitionPage<void>(
@@ -79,10 +64,35 @@ class AppRouter {
         child: const VisualizationScreen(),
       ),
     ),
+    // Widget sub-screens (pushed from WidgetsScreen)
+    GoRoute(
+      name: ButtonScreen.name,
+      path: ButtonScreen.path,
+      pageBuilder: (context, state) => MaterialPage<void>(
+        key: state.pageKey,
+        child: const ButtonScreen(),
+      ),
+    ),
+    GoRoute(
+      name: FeedbackScreen.name,
+      path: FeedbackScreen.path,
+      pageBuilder: (context, state) => MaterialPage<void>(
+        key: state.pageKey,
+        child: const FeedbackScreen(),
+      ),
+    ),
+    GoRoute(
+      name: ScaffoldScreen.name,
+      path: ScaffoldScreen.path,
+      pageBuilder: (context, state) => MaterialPage<void>(
+        key: state.pageKey,
+        child: const ScaffoldScreen(),
+      ),
+    ),
     GoRoute(
       name: MarkdownScreen.name,
       path: MarkdownScreen.path,
-      pageBuilder: (context, state) => NoTransitionPage<void>(
+      pageBuilder: (context, state) => MaterialPage<void>(
         key: state.pageKey,
         child: const MarkdownScreen(),
       ),
@@ -90,7 +100,7 @@ class AppRouter {
     GoRoute(
       name: CodeEditorScreen.name,
       path: CodeEditorScreen.path,
-      pageBuilder: (context, state) => NoTransitionPage<void>(
+      pageBuilder: (context, state) => MaterialPage<void>(
         key: state.pageKey,
         child: const CodeEditorScreen(),
       ),

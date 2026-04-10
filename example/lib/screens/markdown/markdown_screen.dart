@@ -14,20 +14,14 @@ class MarkdownScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DmAdaptiveScaffold(
-      selectedIndex: Destinations.indexOf(const Key(name)),
-      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
-      destinations: Destinations.navs,
-      useDrawer: true,
-      transitionDuration: Duration.zero,
+    return Scaffold(
       appBar: DmAppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text('Markdown'),
         actions: const [PlatformSwitchAction()],
       ),
-      appBarBreakpoint: Breakpoints.standard,
-      body: (_) => const _MarkdownBody(),
+      body: const _MarkdownBody(),
     );
   }
 }
@@ -43,6 +37,7 @@ class _MarkdownBodyState extends State<_MarkdownBody>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   final _inputController = DmMarkdownInputController();
+  bool _showPreview = true;
   StreamController<String>? _streamController;
   Timer? _streamTimer;
   Key _streamKey = UniqueKey();
@@ -257,10 +252,37 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
   }
 
   Widget _buildEditorDemo() {
-    return DmMarkdownInput(
-      controller: _inputController,
-      showLineNumbers: true,
-      config: const DmMarkdownConfig(enableKatex: true),
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          color: colorScheme.surfaceContainer,
+          child: Row(
+            children: [
+              Text(
+                'Show Preview Tab',
+                style: TextStyle(color: colorScheme.onSurfaceVariant),
+              ),
+              const Spacer(),
+              Switch(
+                value: _showPreview,
+                onChanged: (v) => setState(() => _showPreview = v),
+              ),
+            ],
+          ),
+        ),
+        const Divider(height: 1),
+        Expanded(
+          child: DmMarkdownInput(
+            controller: _inputController,
+            showLineNumbers: true,
+            showPreview: _showPreview,
+            config: const DmMarkdownConfig(enableKatex: true),
+          ),
+        ),
+      ],
     );
   }
 }
