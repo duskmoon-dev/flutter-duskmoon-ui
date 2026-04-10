@@ -1,6 +1,5 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:duskmoon_settings/src/tiles/abstract_settings_tile.dart';
 import 'package:duskmoon_settings/src/tiles/checkbox_group/cupertino_checkbox_group_tile.dart';
@@ -241,7 +240,7 @@ class _CupertinoSettingsTileState extends State<CupertinoSettingsTile> {
     required CupertinoSettingsTileAdditionalInfo additionalInfo,
   }) {
     Widget content = buildTileContent(context, theme, additionalInfo);
-    if (!Platform.isIOS) {
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
       content = Material(color: Colors.transparent, child: content);
     }
 

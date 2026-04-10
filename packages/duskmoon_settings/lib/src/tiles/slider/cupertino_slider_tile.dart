@@ -1,6 +1,5 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:duskmoon_settings/src/tiles/platforms/cupertino_settings_tile.dart';
 import 'package:duskmoon_settings/src/utils/settings_theme.dart';
@@ -118,7 +117,7 @@ class CupertinoSliderTile extends StatelessWidget {
       ),
     );
 
-    if (!Platform.isIOS) {
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
       content = Material(color: Colors.transparent, child: content);
     }
 
