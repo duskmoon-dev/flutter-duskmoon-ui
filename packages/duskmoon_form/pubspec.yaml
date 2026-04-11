@@ -1,6 +1,6 @@
 name: duskmoon_form
 description: Form state management and adaptive form widgets for DuskMoon Design System
-version: 1.4.1
+version: 1.4.2
 homepage: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 repository: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 issue_tracker: https://github.com/duskmoon-dev/flutter_duskmoon_ui/issues
@@ -20,8 +20,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  duskmoon_theme: ^1.4.1
-  duskmoon_widgets: ^1.4.1
+  duskmoon_theme: ^1.4.2
+  duskmoon_widgets: ^1.4.2
   fluent_ui: ">=4.9.1"
   bloc: ^9.0.0
   flutter_bloc: ^9.0.0
@@ -37,7 +37,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  duskmoon_code_engine: ^1.4.1
+  duskmoon_code_engine: ^1.4.2
 
 flutter:
   uses-material-design: true
