@@ -185,6 +185,7 @@ class IncrementalParser {
 
   List<md.Node> _parseLines(List<String> lines) {
     final doc = md.Document(
+      encodeHtml: false,
       extensionSet: enableGfm ? md.ExtensionSet.gitHubFlavored : null,
       blockSyntaxes: enableKatex ? dmBlockSyntaxes() : [],
       inlineSyntaxes: enableKatex ? dmInlineSyntaxes() : [],
