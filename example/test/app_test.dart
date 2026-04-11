@@ -81,7 +81,12 @@ void main() {
 
       expect(find.widgetWithText(AppBar, 'Curated Charts'), findsOneWidget);
       expect(find.text('Line chart'), findsOneWidget);
-      await tester.scrollUntilVisible(find.text('Network graph'), 300);
+      final listScrollable = find.byType(Scrollable).last;
+      await tester.scrollUntilVisible(
+        find.text('Network graph'),
+        300,
+        scrollable: listScrollable,
+      );
       expect(find.text('Network graph'), findsOneWidget);
     });
 
@@ -94,8 +99,7 @@ void main() {
       await tester.pumpWidget(const MaterialApp(home: GeoMapPage()));
       await tester.pumpAndSettle();
 
-      expect(
-          find.widgetWithText(AppBar, 'Geo Projection Lab'), findsOneWidget);
+      expect(find.widgetWithText(AppBar, 'Geo Projection Lab'), findsOneWidget);
       expect(find.text('Projection'), findsOneWidget);
       expect(find.textContaining('Tap a country'), findsOneWidget);
     });

@@ -11,12 +11,18 @@ const _fontFallbacks = ['NotoSansMath', 'NotoSansSymbols2'];
 ThemeData _withFontFallbacks(ThemeData theme) {
   TextTheme applyFallback(TextTheme tt) {
     return tt.copyWith(
-      displayLarge: tt.displayLarge?.copyWith(fontFamilyFallback: _fontFallbacks),
-      displayMedium: tt.displayMedium?.copyWith(fontFamilyFallback: _fontFallbacks),
-      displaySmall: tt.displaySmall?.copyWith(fontFamilyFallback: _fontFallbacks),
-      headlineLarge: tt.headlineLarge?.copyWith(fontFamilyFallback: _fontFallbacks),
-      headlineMedium: tt.headlineMedium?.copyWith(fontFamilyFallback: _fontFallbacks),
-      headlineSmall: tt.headlineSmall?.copyWith(fontFamilyFallback: _fontFallbacks),
+      displayLarge:
+          tt.displayLarge?.copyWith(fontFamilyFallback: _fontFallbacks),
+      displayMedium:
+          tt.displayMedium?.copyWith(fontFamilyFallback: _fontFallbacks),
+      displaySmall:
+          tt.displaySmall?.copyWith(fontFamilyFallback: _fontFallbacks),
+      headlineLarge:
+          tt.headlineLarge?.copyWith(fontFamilyFallback: _fontFallbacks),
+      headlineMedium:
+          tt.headlineMedium?.copyWith(fontFamilyFallback: _fontFallbacks),
+      headlineSmall:
+          tt.headlineSmall?.copyWith(fontFamilyFallback: _fontFallbacks),
       titleLarge: tt.titleLarge?.copyWith(fontFamilyFallback: _fontFallbacks),
       titleMedium: tt.titleMedium?.copyWith(fontFamilyFallback: _fontFallbacks),
       titleSmall: tt.titleSmall?.copyWith(fontFamilyFallback: _fontFallbacks),

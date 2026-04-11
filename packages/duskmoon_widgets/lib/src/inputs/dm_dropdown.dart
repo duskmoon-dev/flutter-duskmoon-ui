@@ -117,8 +117,9 @@ class DmDropdown<T> extends StatelessWidget with AdaptiveWidget {
   }
 
   void _showCupertinoPicker(BuildContext context) {
-    final selectedIndex =
-        items.indexWhere((item) => item.value == value).clamp(0, items.length - 1);
+    final selectedIndex = items
+        .indexWhere((item) => item.value == value)
+        .clamp(0, items.length - 1);
 
     showCupertinoModalPopup<void>(
       context: context,
@@ -203,8 +204,9 @@ class _CupertinoPickerSheetState<T> extends State<_CupertinoPickerSheet<T>> {
                   FixedExtentScrollController(initialItem: _selectedIndex),
               itemExtent: 32,
               onSelectedItemChanged: (index) => _selectedIndex = index,
-              children:
-                  widget.items.map((item) => Center(child: item.child)).toList(),
+              children: widget.items
+                  .map((item) => Center(child: item.child))
+                  .toList(),
             ),
           ),
         ],

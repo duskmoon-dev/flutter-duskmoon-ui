@@ -97,7 +97,8 @@ class DmAppBar extends StatelessWidget
           title: title,
           leading: effectiveLeading,
           actions: actions,
-          automaticallyImplyLeading: effectiveLeading == null && automaticallyImplyLeading,
+          automaticallyImplyLeading:
+              effectiveLeading == null && automaticallyImplyLeading,
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
           iconTheme: foregroundColor != null
@@ -124,7 +125,8 @@ class DmAppBar extends StatelessWidget
                       Row(mainAxisSize: MainAxisSize.min, children: actions!),
                 )
               : null,
-          automaticallyImplyLeading: effectiveLeading == null && automaticallyImplyLeading,
+          automaticallyImplyLeading:
+              effectiveLeading == null && automaticallyImplyLeading,
           backgroundColor: backgroundColor,
         ),
       DmPlatformStyle.fluent => _buildFluent(context, effectiveLeading),
@@ -148,12 +150,12 @@ class DmAppBar extends StatelessWidget
             children: [
               if (effectiveLeading != null)
                 IconTheme(
-                    data: IconThemeData(color: fgColor), child: effectiveLeading)
+                    data: IconThemeData(color: fgColor),
+                    child: effectiveLeading)
               else if (automaticallyImplyLeading &&
                   Navigator.of(context).canPop())
                 fluent.IconButton(
-                  icon:
-                      Icon(fluent.FluentIcons.back, color: fgColor, size: 16),
+                  icon: Icon(fluent.FluentIcons.back, color: fgColor, size: 16),
                   onPressed: () => Navigator.of(context).maybePop(),
                 ),
               if (title != null)

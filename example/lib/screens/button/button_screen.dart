@@ -99,8 +99,7 @@ class _ButtonBodyState extends State<_ButtonBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('DmIconButton',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text('DmIconButton', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,
@@ -178,8 +177,7 @@ class _ButtonBodyState extends State<_ButtonBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Data Display',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text('Data Display', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
             Text('DmAvatar', style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
@@ -276,8 +274,7 @@ class _InputWidgetsSectionState extends State<_InputWidgetsSection> {
             Text('Input Widgets',
                 style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
-            Text('DmTextField',
-                style: Theme.of(context).textTheme.titleSmall),
+            Text('DmTextField', style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             DmTextField(
               placeholder: 'Enter text...',
@@ -289,15 +286,13 @@ class _InputWidgetsSectionState extends State<_InputWidgetsSection> {
               enabled: false,
             ),
             const SizedBox(height: 16),
-            Text('DmCheckbox',
-                style: Theme.of(context).textTheme.titleSmall),
+            Text('DmCheckbox', style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             Row(
               children: [
                 DmCheckbox(
                   value: _checkboxValue,
-                  onChanged: (v) =>
-                      setState(() => _checkboxValue = v ?? false),
+                  onChanged: (v) => setState(() => _checkboxValue = v ?? false),
                 ),
                 const SizedBox(width: 8),
                 Text(_checkboxValue ? 'Checked' : 'Unchecked'),

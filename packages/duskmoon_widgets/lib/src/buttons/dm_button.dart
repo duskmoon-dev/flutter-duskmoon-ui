@@ -88,8 +88,8 @@ class DmButton extends StatelessWidget with AdaptiveWidget {
         border: Border.all(color: color),
         borderRadius: const BorderRadius.all(Radius.circular(8)),
       ),
-      child: CupertinoButton(
-          sizeStyle: size, onPressed: onPressed, child: child),
+      child:
+          CupertinoButton(sizeStyle: size, onPressed: onPressed, child: child),
     );
   }
 

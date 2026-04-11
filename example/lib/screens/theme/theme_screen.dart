@@ -232,8 +232,7 @@ class _ThemeBody extends StatelessWidget {
                     '#${entry.value.toARGB32().toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}',
                     style: TextStyle(
                       fontSize: 9,
-                      color:
-                          luminance > 0.5 ? Colors.black54 : Colors.white70,
+                      color: luminance > 0.5 ? Colors.black54 : Colors.white70,
                     ),
                   ),
                 ],

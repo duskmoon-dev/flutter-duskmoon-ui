@@ -179,8 +179,8 @@ class DmDropdownFieldBlocBuilder<Value> extends StatelessWidget {
               isEnabled,
             );
 
-            final isMaterial = resolvePlatformStyle(context) ==
-                DmPlatformStyle.material;
+            final isMaterial =
+                resolvePlatformStyle(context) == DmPlatformStyle.material;
             final dropdown = DmDropdown<Value>(
               value: fieldState.value,
               isExpanded: isExpanded,
@@ -208,8 +208,8 @@ class DmDropdownFieldBlocBuilder<Value> extends StatelessWidget {
                 child: InputDecorator(
                   decoration: decoration,
                   textAlign: textAlign,
-                  isEmpty: fieldState.value == null &&
-                      decoration.hintText == null,
+                  isEmpty:
+                      fieldState.value == null && decoration.hintText == null,
                   child: dropdown,
                 ),
               );

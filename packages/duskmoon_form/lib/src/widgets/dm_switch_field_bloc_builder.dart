@@ -144,13 +144,12 @@ class DmSwitchFieldBlocBuilder extends StatelessWidget {
           builder: (context, state) {
             final isEnabled = fieldBlocIsEnabled(
               isEnabled: this.isEnabled,
-              enableOnlyWhenFormBlocCanSubmit:
-                  enableOnlyWhenFormBlocCanSubmit,
+              enableOnlyWhenFormBlocCanSubmit: enableOnlyWhenFormBlocCanSubmit,
               fieldBlocState: state,
             );
 
-            final isMaterial = resolvePlatformStyle(context) ==
-                DmPlatformStyle.material;
+            final isMaterial =
+                resolvePlatformStyle(context) == DmPlatformStyle.material;
             final switchWidget = _buildSwitch(context, state);
             final errorText = Style.getErrorText(
               context: context,
@@ -180,8 +179,7 @@ class DmSwitchFieldBlocBuilder extends StatelessWidget {
                   data: Theme.of(context)
                       .copyWith(switchTheme: fieldTheme.switchTheme!),
                   child: InputDecorator(
-                    decoration:
-                        Style.inputDecorationWithoutBorder.copyWith(
+                    decoration: Style.inputDecorationWithoutBorder.copyWith(
                       prefixIcon: fieldTheme.controlAffinity ==
                               FieldBlocBuilderControlAffinity.leading
                           ? switchWidget
@@ -210,15 +208,13 @@ class DmSwitchFieldBlocBuilder extends StatelessWidget {
                     children: [
                       if (isLeading)
                         Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: switchWidget,
                         ),
                       Expanded(child: bodyWidget),
                       if (!isLeading)
                         Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: switchWidget,
                         ),
                     ],

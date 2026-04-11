@@ -681,8 +681,8 @@ class _ZoomPanChartState extends State<_ZoomPanChart> {
                 onScaleUpdate: (d) {
                   setState(() {
                     _translate += d.focalPointDelta;
-                    final newScale = (_scale * (d.scale / _lastScaleValue))
-                        .clamp(0.5, 6.0);
+                    final newScale =
+                        (_scale * (d.scale / _lastScaleValue)).clamp(0.5, 6.0);
                     _scale = newScale;
                     _lastScaleValue = d.scale;
                   });

@@ -114,8 +114,7 @@ class _SettingsBodyState extends State<_SettingsBody> {
             SettingsTile.slider(
               leading: const Icon(Icons.volume_up),
               title: const Text('Slider Tile'),
-              description:
-                  Text('Value: ${_sliderValue.toStringAsFixed(2)}'),
+              description: Text('Value: ${_sliderValue.toStringAsFixed(2)}'),
               sliderValue: _sliderValue,
               onSliderChanged: (v) => setState(() => _sliderValue = v),
               sliderDivisions: 10,
