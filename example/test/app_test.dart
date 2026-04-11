@@ -81,7 +81,12 @@ void main() {
 
       expect(find.widgetWithText(AppBar, 'Curated Charts'), findsOneWidget);
       expect(find.text('Line chart'), findsOneWidget);
-      await tester.scrollUntilVisible(find.text('Network graph'), 300);
+      final listScrollable = find.byType(Scrollable).last;
+      await tester.scrollUntilVisible(
+        find.text('Network graph'),
+        300,
+        scrollable: listScrollable,
+      );
       expect(find.text('Network graph'), findsOneWidget);
     });
 
