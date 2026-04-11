@@ -135,13 +135,12 @@ class DmCheckboxFieldBlocBuilder extends StatelessWidget {
           builder: (context, state) {
             final isEnabled = fieldBlocIsEnabled(
               isEnabled: this.isEnabled,
-              enableOnlyWhenFormBlocCanSubmit:
-                  enableOnlyWhenFormBlocCanSubmit,
+              enableOnlyWhenFormBlocCanSubmit: enableOnlyWhenFormBlocCanSubmit,
               fieldBlocState: state,
             );
 
-            final isMaterial = resolvePlatformStyle(context) ==
-                DmPlatformStyle.material;
+            final isMaterial =
+                resolvePlatformStyle(context) == DmPlatformStyle.material;
             final checkbox = _buildCheckbox(context, state);
             final errorText = Style.getErrorText(
               context: context,
@@ -171,8 +170,7 @@ class DmCheckboxFieldBlocBuilder extends StatelessWidget {
                   data: Theme.of(context)
                       .copyWith(checkboxTheme: fieldTheme.checkboxTheme),
                   child: InputDecorator(
-                    decoration:
-                        Style.inputDecorationWithoutBorder.copyWith(
+                    decoration: Style.inputDecorationWithoutBorder.copyWith(
                       prefixIcon: fieldTheme.controlAffinity! ==
                               FieldBlocBuilderControlAffinity.leading
                           ? checkbox
@@ -201,15 +199,13 @@ class DmCheckboxFieldBlocBuilder extends StatelessWidget {
                     children: [
                       if (isLeading)
                         Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: checkbox,
                         ),
                       Expanded(child: bodyWidget),
                       if (!isLeading)
                         Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: checkbox,
                         ),
                     ],

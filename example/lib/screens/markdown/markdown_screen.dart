@@ -154,8 +154,7 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
     _streamKey = UniqueKey();
     var index = 0;
     setState(() {});
-    _streamTimer =
-        Timer.periodic(const Duration(milliseconds: 200), (timer) {
+    _streamTimer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
       if (index < _streamingText.length) {
         _streamController!.add(_streamingText[index]);
         index++;
@@ -242,8 +241,7 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
               : Center(
                   child: Text(
                     'Press "Start Stream" to begin',
-                    style:
-                        TextStyle(color: colorScheme.onSurfaceVariant),
+                    style: TextStyle(color: colorScheme.onSurfaceVariant),
                   ),
                 ),
         ),

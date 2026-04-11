@@ -128,7 +128,8 @@ void main() {
       expect(find.text('7'), findsOneWidget);
     });
 
-    testWidgets('renders dot InfoBadge without label on Fluent', (tester) async {
+    testWidgets('renders dot InfoBadge without label on Fluent',
+        (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -238,7 +239,8 @@ void main() {
       expect(find.text('iOS Tag'), findsOneWidget);
     });
 
-    testWidgets('renders ToggleButton on Fluent when selectable', (tester) async {
+    testWidgets('renders ToggleButton on Fluent when selectable',
+        (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

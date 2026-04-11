@@ -91,8 +91,7 @@ class _VisualizationBody extends StatelessWidget {
         const _VisualizationModuleCard(
           icon: Icons.public_outlined,
           title: 'Geographic',
-          description:
-              'World map projections, animated globe, regional focus.',
+          description: 'World map projections, animated globe, regional focus.',
           tags: ['Mercator', 'Globe', 'Regions'],
           destination: GeoGalleryPage(),
         ),
@@ -143,8 +142,7 @@ class _VisualizationModuleCard extends StatelessWidget {
                     color: colorScheme.primaryContainer,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child:
-                      Icon(icon, color: colorScheme.onPrimaryContainer),
+                  child: Icon(icon, color: colorScheme.onPrimaryContainer),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -156,8 +154,7 @@ class _VisualizationModuleCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            Text(description,
-                style: Theme.of(context).textTheme.bodyMedium),
+            Text(description, style: Theme.of(context).textTheme.bodyMedium),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,

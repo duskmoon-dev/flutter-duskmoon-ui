@@ -43,7 +43,8 @@ void main() {
       expect(result, DmPlatformStyle.cupertino);
     });
 
-    testWidgets('override forces resolvePlatformStyle to return overridden style',
+    testWidgets(
+        'override forces resolvePlatformStyle to return overridden style',
         (tester) async {
       // Use an Android theme but override to cupertino.
       DmPlatformStyle? resolved;

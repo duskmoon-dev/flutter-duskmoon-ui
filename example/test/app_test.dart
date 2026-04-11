@@ -94,8 +94,7 @@ void main() {
       await tester.pumpWidget(const MaterialApp(home: GeoMapPage()));
       await tester.pumpAndSettle();
 
-      expect(
-          find.widgetWithText(AppBar, 'Geo Projection Lab'), findsOneWidget);
+      expect(find.widgetWithText(AppBar, 'Geo Projection Lab'), findsOneWidget);
       expect(find.text('Projection'), findsOneWidget);
       expect(find.textContaining('Tap a country'), findsOneWidget);
     });

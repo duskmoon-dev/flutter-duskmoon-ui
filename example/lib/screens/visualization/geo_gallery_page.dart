@@ -300,7 +300,8 @@ class _GlobeDemoState extends State<_GlobeDemo>
           return LayoutBuilder(
             builder: (context, constraints) {
               // The globe must be circular, so diameter = min(width, height).
-              final scale = min(constraints.maxWidth, constraints.maxHeight) / 2;
+              final scale =
+                  min(constraints.maxWidth, constraints.maxHeight) / 2;
               final globeCenter = dv.Point(scale, scale);
 
               final projection = dv.geoOrthographic(

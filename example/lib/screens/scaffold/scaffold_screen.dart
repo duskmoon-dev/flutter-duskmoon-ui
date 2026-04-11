@@ -53,8 +53,7 @@ class _ScaffoldBody extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('DmActionList',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text('DmActionList', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 4),
             Text(
                 'Renders as popup (small), icon buttons (medium), or text buttons (large)',
@@ -179,8 +178,7 @@ class _ScaffoldBody extends StatelessWidget {
                             child: Text(
                               'DmDrawer',
                               style: TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.onPrimary,
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 fontSize: 24,
                               ),
                             ),
@@ -281,8 +279,7 @@ class _ScaffoldBody extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('DmScaffold',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text('DmScaffold', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 4),
             Text(
               'Responsive scaffold: NavigationRail (desktop) / BottomNav (mobile)',
@@ -291,8 +288,7 @@ class _ScaffoldBody extends StatelessWidget {
             const SizedBox(height: 12),
             DmButton(
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (_) => const _ScaffoldDemoPage()),
+                MaterialPageRoute(builder: (_) => const _ScaffoldDemoPage()),
               ),
               child: const Text('Open DmScaffold Demo'),
             ),
