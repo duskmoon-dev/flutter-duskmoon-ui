@@ -6,7 +6,7 @@ Platform-aware settings UI with 3 design system renderers: Material, Cupertino, 
 
 ```yaml
 dependencies:
-  duskmoon_settings: ^1.3.0
+  duskmoon_settings: ^1.4.0
 ```
 
 ```dart

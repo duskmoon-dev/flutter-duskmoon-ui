@@ -1,6 +1,6 @@
 # Adaptive Widgets
 
-The `duskmoon_widgets` package provides 18 adaptive widgets plus Markdown and Code Editor widgets. The adaptive widgets automatically render Material, Cupertino, or Fluent variants based on the current platform.
+The `duskmoon_widgets` package provides 19 adaptive widgets plus Markdown and Code Editor widgets. The adaptive widgets automatically render Material, Cupertino, or Fluent variants based on the current platform.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ The `duskmoon_widgets` package provides 18 adaptive widgets plus Markdown and Co
 
 ```yaml
 dependencies:
-  duskmoon_widgets: ^1.3.0
+  duskmoon_widgets: ^1.4.0
 ```
 
 ```dart
@@ -184,6 +184,35 @@ Material: `Checkbox`. Cupertino: `CupertinoCheckbox`.
 | `divisions` | `int?` | `null` | Number of discrete divisions |
 
 Material: `Slider`. Cupertino: `CupertinoSlider`.
+
+### DmDropdown
+
+Adaptive dropdown that renders platform-appropriate selection UI. Generic over the value type `T`.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `items` | `List<DmDropdownItem<T>>` | required | Selectable items |
+| `onChanged` | `ValueChanged<T?>?` | required | Selection callback |
+| `value` | `T?` | `null` | Currently selected value |
+| `placeholder` | `String?` | `null` | Placeholder text when no item is selected |
+| `isExpanded` | `bool` | `true` | Whether the dropdown expands to fill its parent width |
+| `platformOverride` | `DmPlatformStyle?` | `null` | Per-widget platform override |
+
+`DmDropdownItem<T>` has `value` (required `T`) and `child` (required `Widget`).
+
+```dart
+DmDropdown<String>(
+  items: [
+    DmDropdownItem(value: 'a', child: Text('Option A')),
+    DmDropdownItem(value: 'b', child: Text('Option B')),
+  ],
+  value: 'a',
+  onChanged: (value) {},
+  placeholder: 'Select an option',
+)
+```
+
+Material: `DropdownButton`. Cupertino: button that opens a `CupertinoPicker` modal. Fluent: `ComboBox`.
 
 ## Navigation
 
@@ -416,7 +445,9 @@ Markdown editor with write/preview tabs.
 | `enabled` | `bool` | `true` | Whether interactive |
 | `tabLabelWrite` | `String` | `'Write'` | Write tab label |
 | `tabLabelPreview` | `String` | `'Preview'` | Preview tab label |
-| `decoration` | `InputDecoration?` | `null` | Input decoration |
+| `showPreview` | `bool` | `true` | Whether to show the preview tab; when false, only the editor is shown |
+| `onLinkTap` | `void Function(String url, String? title)?` | `null` | Link tap callback in preview mode |
+| `decoration` | `InputDecoration?` | `null` | Custom input decoration for the editor field |
 
 ```dart
 DmMarkdownInput(

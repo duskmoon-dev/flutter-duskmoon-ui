@@ -14,7 +14,7 @@ This document covers the package dependency graph, key design decisions, and con
 ```
 duskmoon_theme                  <-- Pure theme, zero external dependencies
     |-- duskmoon_theme_bloc     <-- BLoC for theme persistence
-    |-- duskmoon_widgets        <-- 18 adaptive widgets + markdown + code editor
+    |-- duskmoon_widgets        <-- 19 adaptive widgets + markdown + code editor
     |       |-- duskmoon_code_engine (for DmCodeEditor)
     |-- duskmoon_settings       <-- Settings UI (Material/Cupertino/Fluent)
     |-- duskmoon_feedback       <-- Dialogs, snackbars, toasts, bottom sheets
@@ -69,7 +69,7 @@ The settings package uses a compositor pattern with three platform renderers:
 
 Two classes provide editor theme derivation at different abstraction levels:
 
-- **`DmEditorTheme`** (in `duskmoon_ui`) — derives an `EditorTheme` from a `ThemeData` object without requiring a `BuildContext`. Provides `DmEditorTheme.fromTheme(ThemeData)`, plus static factories for each theme: `DmEditorTheme.sunshine()`, `DmEditorTheme.moonlight()`, `DmEditorTheme.forest()`, and `DmEditorTheme.ocean()`.
+- **`DmEditorTheme`** (in `duskmoon_ui`) — derives an `EditorTheme` from a `ThemeData` object without requiring a `BuildContext`. Provides `DmEditorTheme.fromTheme(ThemeData)`, plus static factories `DmEditorTheme.sunshine()` and `DmEditorTheme.moonlight()`.
 - **`DmCodeEditorTheme`** (in `duskmoon_widgets`) — derives an `EditorTheme` from a `BuildContext` via `DmCodeEditorTheme.fromContext(context)`. This is more convenient inside widget `build()` methods where a context is available.
 
 Use `DmEditorTheme` when you have a `ThemeData` but no `BuildContext` (e.g., in tests, BLoC logic, or theme previews). Use `DmCodeEditorTheme` when building widget trees.

@@ -27,7 +27,7 @@ cd packages/duskmoon_theme && dart analyze --fatal-infos
 ```
 duskmoon_theme              ← Pure theme, zero external deps
     ├── duskmoon_theme_bloc ← BLoC for theme persistence
-    ├── duskmoon_widgets    ← 18 adaptive widgets (Material/Cupertino)
+    ├── duskmoon_widgets    ← 19 adaptive widgets (Material/Cupertino)
     ├── duskmoon_settings   ← Settings UI (Material/Cupertino/Fluent)
     ├── duskmoon_feedback   ← Dialogs, snackbars, toasts, bottom sheets
     └── duskmoon_form       ← BLoC-based form management (depends on theme + widgets)
@@ -47,7 +47,7 @@ duskmoon_adaptive_scaffold  ← Responsive scaffold (forked flutter_adaptive_sca
 
 - `DmThemeData` — static factories returning complete `ThemeData` (`.sunshine()`, `.moonlight()`, `.forest()`, `.ocean()`)
 - `DmColorScheme` — static factories returning `ColorScheme` (4 themes: sunshine, moonlight, forest, ocean)
-- `DmColorExtension` — `ThemeExtension` with 24 semantic tokens (info/success/warning with containers, accent, neutral, surfaceVariant, base100-900)
+- `DmColorExtension` — `ThemeExtension` with 28 semantic tokens (info/success/warning with containers and onContainer variants, accent, neutral, surfaceVariant, base100-900)
 - `DmTextTheme` — Material 3 type scale
 - `ThemeModeExtension` — `fromString()`, `title`, `icon` helpers on `ThemeMode`
 - `DmThemeEntry` — bundles theme name with light/dark `ThemeData` (duskmoon + ecotone families)

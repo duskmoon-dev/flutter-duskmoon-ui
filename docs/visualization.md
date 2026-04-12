@@ -1,6 +1,6 @@
 # Data Visualization
 
-The `duskmoon_visualization` package provides five chart widgets that automatically integrate with the DuskMoon theme system. Colors are derived from `DmColorExtension` and the Material 3 color scheme — no manual theming required.
+The `duskmoon_visualization` package provides six chart widgets that automatically integrate with the DuskMoon theme system. Colors are derived from `DmColorExtension` and the Material 3 color scheme — no manual theming required.
 
 ## Table of Contents
 
@@ -11,6 +11,7 @@ The `duskmoon_visualization` package provides five chart widgets that automatica
 - [Scatter Chart](#scatter-chart)
 - [Heatmap](#heatmap)
 - [Network Graph](#network-graph)
+- [Map Chart](#map-chart)
 - [Theming with DmChartPalette](#theming-with-dmchartpalette)
 - [Compatibility Import](#compatibility-import)
 
@@ -18,7 +19,7 @@ The `duskmoon_visualization` package provides five chart widgets that automatica
 
 ```yaml
 dependencies:
-  duskmoon_visualization: ^1.3.0
+  duskmoon_visualization: ^1.4.0
 ```
 
 ```dart
@@ -29,7 +30,7 @@ Or use the umbrella package which re-exports everything:
 
 ```yaml
 dependencies:
-  duskmoon_ui: ^1.3.0
+  duskmoon_ui: ^1.4.0
 ```
 
 > **Requirements:** Dart >= 3.5.0, Flutter >= 3.24.0
@@ -248,6 +249,43 @@ DmVizNetworkGraph(
 ```dart
 enum DmVizNetworkNodeShape { circle, square, diamond, triangle, hexagon }
 enum DmVizNetworkLinkStyle { straight, curved, dashed }
+```
+
+## Map Chart
+
+`DmVizMapChart` renders geographic map visualizations from GeoJSON data using configurable projections. It is theme-aware via `DmChartPalette` and automatically derives fill and stroke colors from the current theme when not explicitly provided.
+
+```dart
+DmVizMapChart(
+  geoJson: myFeatureCollection,
+  projection: MercatorProjection()
+    ..center = (0, 20)
+    ..scale = 120,
+  fillColor: Colors.blue.withOpacity(0.15),
+  strokeColor: Colors.blue,
+  strokeWidth: 1.0,
+  antiAlias: true,
+  onFeatureTap: (feature, position) {
+    print(feature.properties['name']);
+  },
+)
+```
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `geoJson` | `GeoJsonFeatureCollection` | required | GeoJSON feature collection to render |
+| `projection` | `Projection` | required | Geographic projection (e.g., `MercatorProjection`) |
+| `fillColor` | `Color?` | translucent primary | Fill color for rendered features |
+| `strokeColor` | `Color?` | palette primary | Stroke color for feature outlines |
+| `strokeWidth` | `double` | `1.0` | Outline width in logical pixels |
+| `antiAlias` | `bool` | `true` | Enable anti-aliasing for rendered shapes |
+| `onFeatureTap` | `void Function(GeoJsonFeature, Point)?` | `null` | Callback when a feature is tapped |
+| `palette` | `DmChartPalette?` | auto | Custom color palette |
+
+The geographic types (`GeoJsonFeatureCollection`, `GeoJsonFeature`, `Projection`, `MercatorProjection`, `Point`) are available via the compatibility import:
+
+```dart
+import 'package:duskmoon_visualization/duskmoon_visualization_compat.dart';
 ```
 
 ## Theming with DmChartPalette

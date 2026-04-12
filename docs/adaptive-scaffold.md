@@ -8,7 +8,7 @@ This package is a fork of `flutter_adaptive_scaffold`, versioned in sync with ot
 
 - [Installation](#installation)
 - [Quick Start](#quick-start)
-- [AdaptiveScaffold](#adaptivescaffold)
+- [DmAdaptiveScaffold](#adaptivescaffold)
 - [Breakpoints](#breakpoints)
 - [AdaptiveLayout](#adaptivelayout)
 - [SlotLayout](#slotlayout)
@@ -20,7 +20,7 @@ This package is a fork of `flutter_adaptive_scaffold`, versioned in sync with ot
 
 ```yaml
 dependencies:
-  duskmoon_adaptive_scaffold: ^1.3.0
+  duskmoon_adaptive_scaffold: ^1.4.0
 ```
 
 ```dart
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveScaffold(
+    return DmAdaptiveScaffold(
       destinations: const [
         NavigationDestination(icon: Icon(Icons.inbox), label: 'Inbox'),
         NavigationDestination(icon: Icon(Icons.article), label: 'Articles'),
@@ -68,16 +68,16 @@ This automatically renders:
 - An **extended NavigationRail** (icons + labels) on desktops (840+ dp)
 - A **Drawer** on small desktop windows (< 600 dp on desktop platforms)
 
-## AdaptiveScaffold
+## DmAdaptiveScaffold
 
-`AdaptiveScaffold` is the high-level API. It wraps `AdaptiveLayout` with sensible defaults for navigation and body content at each breakpoint.
+`DmAdaptiveScaffold` is the high-level API. It wraps `AdaptiveLayout` with sensible defaults for navigation and body content at each breakpoint.
 
 ### Body Builders Per Breakpoint
 
 Provide different layouts for different screen sizes. If a breakpoint-specific body is not set, the default `body` is used.
 
 ```dart
-AdaptiveScaffold(
+DmAdaptiveScaffold(
   destinations: destinations,
   selectedIndex: _selectedIndex,
   onSelectedIndexChange: (i) => setState(() => _selectedIndex = i),
@@ -107,7 +107,7 @@ AdaptiveScaffold(
 Use `secondaryBody` for a detail pane that appears alongside the body on larger screens.
 
 ```dart
-AdaptiveScaffold(
+DmAdaptiveScaffold(
   destinations: destinations,
   selectedIndex: _selectedIndex,
   onSelectedIndexChange: (i) => setState(() => _selectedIndex = i),
@@ -122,7 +122,7 @@ The `bodyOrientation` parameter controls whether body and secondaryBody are laid
 ### Navigation Rail Customization
 
 ```dart
-AdaptiveScaffold(
+DmAdaptiveScaffold(
   destinations: destinations,
   selectedIndex: _selectedIndex,
   onSelectedIndexChange: (i) => setState(() => _selectedIndex = i),
@@ -154,10 +154,10 @@ AdaptiveScaffold(
 
 ### Drawer Behavior
 
-On desktop platforms at small widths, `AdaptiveScaffold` uses a `Drawer` instead of a `BottomNavigationBar` by default. Control this with:
+On desktop platforms at small widths, `DmAdaptiveScaffold` uses a `Drawer` instead of a `BottomNavigationBar` by default. Control this with:
 
 ```dart
-AdaptiveScaffold(
+DmAdaptiveScaffold(
   destinations: destinations,
   useDrawer: true,                         // default: true
   drawerBreakpoint: Breakpoints.smallDesktop, // when to show drawer
@@ -172,7 +172,7 @@ AdaptiveScaffold(
 Replace the default breakpoints with custom ones:
 
 ```dart
-AdaptiveScaffold(
+DmAdaptiveScaffold(
   destinations: destinations,
   smallBreakpoint: const Breakpoint(beginWidth: 0, endWidth: 500),
   mediumBreakpoint: const Breakpoint(beginWidth: 500, endWidth: 800),
@@ -239,7 +239,7 @@ bp.between(Breakpoints.medium, Breakpoints.large) // true if in range
 
 ## AdaptiveLayout
 
-`AdaptiveLayout` is the lower-level widget that `AdaptiveScaffold` is built on. Use it when you need full control over every slot.
+`AdaptiveLayout` is the lower-level widget that `DmAdaptiveScaffold` is built on. Use it when you need full control over every slot.
 
 It provides 6 layout slots:
 - `topNavigation` -- full width at the top
@@ -257,8 +257,8 @@ AdaptiveLayout(
     config: {
       Breakpoints.medium: SlotLayout.from(
         key: const Key('nav-medium'),
-        inAnimation: AdaptiveScaffold.leftOutIn,
-        builder: (_) => AdaptiveScaffold.standardNavigationRail(
+        inAnimation: DmAdaptiveScaffold.leftOutIn,
+        builder: (_) => DmAdaptiveScaffold.standardNavigationRail(
           destinations: railDestinations,
           selectedIndex: selectedIndex,
           onDestinationSelected: onChanged,
@@ -266,8 +266,8 @@ AdaptiveLayout(
       ),
       Breakpoints.mediumLargeAndUp: SlotLayout.from(
         key: const Key('nav-large'),
-        inAnimation: AdaptiveScaffold.leftOutIn,
-        builder: (_) => AdaptiveScaffold.standardNavigationRail(
+        inAnimation: DmAdaptiveScaffold.leftOutIn,
+        builder: (_) => DmAdaptiveScaffold.standardNavigationRail(
           destinations: railDestinations,
           selectedIndex: selectedIndex,
           extended: true,
@@ -288,8 +288,8 @@ AdaptiveLayout(
     config: {
       Breakpoints.small: SlotLayout.from(
         key: const Key('bottom-nav'),
-        inAnimation: AdaptiveScaffold.bottomToTop,
-        builder: (_) => AdaptiveScaffold.standardBottomNavigationBar(
+        inAnimation: DmAdaptiveScaffold.bottomToTop,
+        builder: (_) => DmAdaptiveScaffold.standardBottomNavigationBar(
           destinations: destinations,
           currentIndex: selectedIndex,
           onDestinationSelected: onChanged,
@@ -314,8 +314,8 @@ SlotLayout(
     Breakpoints.small: SlotLayout.from(
       key: const Key('content-small'),
       builder: (_) => const MobileView(),
-      inAnimation: AdaptiveScaffold.fadeIn,
-      outAnimation: AdaptiveScaffold.fadeOut,
+      inAnimation: DmAdaptiveScaffold.fadeIn,
+      outAnimation: DmAdaptiveScaffold.fadeOut,
       inDuration: const Duration(milliseconds: 500),
       outDuration: const Duration(milliseconds: 300),
       inCurve: Curves.easeOut,
@@ -343,7 +343,7 @@ final config = SlotLayout.pickWidget(context, {
 
 ## Animations
 
-`AdaptiveScaffold` provides static animation builders for use with `SlotLayout.from`:
+`DmAdaptiveScaffold` provides static animation builders for use with `SlotLayout.from`:
 
 | Animation | Effect |
 |---|---|
@@ -362,8 +362,8 @@ Usage:
 SlotLayout.from(
   key: const Key('nav'),
   builder: (_) => const MyNavRail(),
-  inAnimation: AdaptiveScaffold.leftOutIn,
-  outAnimation: AdaptiveScaffold.leftInOut,
+  inAnimation: DmAdaptiveScaffold.leftOutIn,
+  outAnimation: DmAdaptiveScaffold.leftInOut,
 )
 ```
 
@@ -378,7 +378,7 @@ class _MyHomeState extends State<MyHome> {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveScaffold(
+    return DmAdaptiveScaffold(
       destinations: destinations,
       selectedIndex: _selectedIndex,
       onSelectedIndexChange: (i) => setState(() => _selectedIndex = i),
@@ -425,8 +425,8 @@ SlotLayout(
   },
 )
 
-// Use as AdaptiveScaffold override
-AdaptiveScaffold(
+// Use as DmAdaptiveScaffold override
+DmAdaptiveScaffold(
   mediumBreakpoint: tabletLandscape,
   // ...
 )

@@ -6,8 +6,8 @@ BLoC for persisting theme selection and mode via SharedPreferences. Included in 
 
 ```yaml
 dependencies:
-  duskmoon_theme_bloc: ^1.3.0
-  duskmoon_theme: ^1.3.0
+  duskmoon_theme_bloc: ^1.4.0
+  duskmoon_theme: ^1.4.0
   flutter_bloc: ^9.0.0
   shared_preferences: ^2.3.0
 ```

@@ -16,7 +16,7 @@ The `duskmoon_feedback` package provides adaptive dialogs, snackbars, toasts, bo
 
 ```yaml
 dependencies:
-  duskmoon_feedback: ^1.3.0
+  duskmoon_feedback: ^1.4.0
 ```
 
 ```dart

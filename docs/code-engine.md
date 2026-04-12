@@ -22,7 +22,7 @@ The `duskmoon_code_engine` package is a pure Dart code editor engine -- a ground
 
 ```yaml
 dependencies:
-  duskmoon_code_engine: ^1.3.0
+  duskmoon_code_engine: ^1.4.0
 ```
 
 ```dart

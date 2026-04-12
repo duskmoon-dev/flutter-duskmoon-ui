@@ -13,13 +13,14 @@ The `duskmoon_theme` package provides codegen-driven color schemes, a Material 3
 - [DmColorExtension](#dmcolorextension)
 - [DmTextTheme](#dmtexttheme)
 - [ThemeModeExtension](#thememodeextension)
+- [Adaptive Platform System](#adaptive-platform-system)
 - [Generated Tokens](#generated-tokens)
 
 ## Installation
 
 ```yaml
 dependencies:
-  duskmoon_theme: ^1.3.0
+  duskmoon_theme: ^1.4.0
 ```
 
 ```dart
@@ -125,7 +126,7 @@ Immutable (`@immutable`) container that bundles a `ColorScheme` and a `DmColorEx
 | Member | Type | Description |
 |--------|------|-------------|
 | `colorScheme` | `ColorScheme` | Standard Material 3 color roles |
-| `extension` | `DmColorExtension` | 24 DuskMoon semantic tokens |
+| `extension` | `DmColorExtension` | 28 DuskMoon semantic tokens |
 | `DmColors.sunshine()` | factory | Light color token bag (duskmoon) |
 | `DmColors.moonlight()` | factory | Dark color token bag (duskmoon) |
 | `DmColors.forest()` | factory | Light color token bag (ecotone) |
@@ -160,7 +161,7 @@ All standard Material 3 color roles are populated: `primary`, `onPrimary`, `prim
 
 ## DmColorExtension
 
-A `ThemeExtension` carrying 24 semantic color tokens not covered by the standard `ColorScheme`. Access it from any widget:
+A `ThemeExtension` carrying 28 semantic color tokens not covered by the standard `ColorScheme`. Access it from any widget:
 
 ```dart
 final dm = Theme.of(context).extension<DmColorExtension>()!;
@@ -207,13 +208,13 @@ DmColorExtension.forest()     // Light tokens (ecotone family)
 DmColorExtension.ocean()      // Dark tokens (ecotone family)
 ```
 
-You can also construct a fully custom instance by passing all 24 required color parameters:
+You can also construct a fully custom instance by passing all 28 required color parameters:
 
 ```dart
 const DmColorExtension(
   accent: Color(0xFF...),
   accentContent: Color(0xFF...),
-  // ... all 24 parameters required
+  // ... all 28 parameters required
 )
 ```
 
@@ -275,6 +276,115 @@ ThemeMode.system.title         // 'System'
 ThemeMode.dark.icon            // Icon(Icons.dark_mode)
 ThemeMode.light.iconOutlined   // Icon(Icons.light_mode_outlined)
 ThemeMode.system.icon          // Icon(Icons.brightness_auto)
+```
+
+## Adaptive Platform System
+
+The theme package exports a platform resolution system used by `duskmoon_widgets` and other adaptive packages. It determines whether a widget should render in Material, Cupertino, or Fluent style based on a four-level priority chain.
+
+### DmPlatformStyle
+
+An enum representing the three supported rendering styles:
+
+| Value | Description |
+|-------|-------------|
+| `DmPlatformStyle.material` | Google Material Design |
+| `DmPlatformStyle.cupertino` | Apple Cupertino |
+| `DmPlatformStyle.fluent` | Microsoft Fluent Design |
+
+### DuskmoonApp
+
+An `InheritedWidget` that declares a default `DmPlatformStyle` for the entire widget tree. Place it above `MaterialApp` or `CupertinoApp`.
+
+```dart
+DuskmoonApp(
+  platformStyle: DmPlatformStyle.cupertino,
+  child: MaterialApp(home: MyHome()),
+);
+```
+
+When `platformStyle` is null (or `DuskmoonApp` is absent), adaptive widgets fall through to platform-default detection. Query the current value from any descendant with `DuskmoonApp.maybeStyleOf(context)`.
+
+### DmPlatformOverride
+
+An `InheritedWidget` that overrides the platform style for a subtree. This takes priority over `DuskmoonApp` but is overridden by a widget's own `platformOverride` parameter.
+
+```dart
+// Force Material rendering in this subtree, regardless of DuskmoonApp setting:
+DmPlatformOverride(
+  style: DmPlatformStyle.material,
+  child: MyWidgetSubtree(),
+);
+```
+
+Query with `DmPlatformOverride.maybeOf(context)`.
+
+### AdaptiveWidget mixin
+
+A mixin on `StatelessWidget` that provides the `resolveStyle(BuildContext context)` method. Widgets using this mixin call `resolveStyle` in their `build()` method to determine which rendering path to take.
+
+The mixin exposes a `platformOverride` getter (defaults to null) that subclasses can override to accept a per-widget platform parameter.
+
+```dart
+class MyButton extends StatelessWidget with AdaptiveWidget {
+  const MyButton({super.key, this.platformOverride});
+
+  @override
+  final DmPlatformStyle? platformOverride;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (resolveStyle(context)) {
+      case DmPlatformStyle.material:
+        return ElevatedButton(onPressed: () {}, child: Text('Material'));
+      case DmPlatformStyle.cupertino:
+        return CupertinoButton.filled(onPressed: () {}, child: Text('Cupertino'));
+      case DmPlatformStyle.fluent:
+        return ElevatedButton(onPressed: () {}, child: Text('Fluent'));
+    }
+  }
+}
+```
+
+### resolvePlatformStyle function
+
+The standalone function that implements the resolution chain. `AdaptiveWidget.resolveStyle` delegates to this function.
+
+```dart
+DmPlatformStyle resolvePlatformStyle(
+  BuildContext context, {
+  DmPlatformStyle? widgetOverride,
+})
+```
+
+Resolution order:
+
+1. **widgetOverride** -- per-widget parameter (highest priority)
+2. **DmPlatformOverride** -- nearest ancestor `InheritedWidget`
+3. **DuskmoonApp** -- app-level `InheritedWidget`
+4. **Platform default** -- derived from `Theme.of(context).platform`: iOS/macOS maps to `cupertino`, Windows maps to `fluent`, all others map to `material`
+
+### Example: mixed platforms in one app
+
+```dart
+DuskmoonApp(
+  platformStyle: DmPlatformStyle.cupertino,
+  child: MaterialApp(
+    home: Column(children: [
+      // Uses cupertino (from DuskmoonApp)
+      MyButton(),
+
+      // Uses material (DmPlatformOverride overrides DuskmoonApp)
+      DmPlatformOverride(
+        style: DmPlatformStyle.material,
+        child: MyButton(),
+      ),
+
+      // Uses fluent (per-widget override overrides everything)
+      MyButton(platformOverride: DmPlatformStyle.fluent),
+    ]),
+  ),
+);
 ```
 
 ## Generated Tokens
