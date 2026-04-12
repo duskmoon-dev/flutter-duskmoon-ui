@@ -35,7 +35,16 @@ ThemeData _withFontFallbacks(ThemeData theme) {
     );
   }
 
-  return theme.copyWith(textTheme: applyFallback(theme.textTheme));
+  final cs = theme.colorScheme;
+  return theme.copyWith(
+    textTheme: applyFallback(theme.textTheme),
+    navigationRailTheme: theme.navigationRailTheme.copyWith(
+      backgroundColor: cs.secondaryContainer,
+      indicatorColor: cs.secondary,
+      selectedIconTheme: IconThemeData(color: cs.onSecondary),
+      selectedLabelTextStyle: TextStyle(color: cs.onSecondaryContainer),
+    ),
+  );
 }
 
 class App extends StatelessWidget {

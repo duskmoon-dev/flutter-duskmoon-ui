@@ -147,11 +147,14 @@ abstract final class DmThemeData {
         ),
         filled: true,
         fillColor: colorScheme.surfaceContainerHighest,
+        floatingLabelStyle: TextStyle(color: colorScheme.primary),
       ),
       chipTheme: ChipThemeData(
         backgroundColor: colorScheme.surfaceContainerLow,
         selectedColor: colorScheme.secondaryContainer,
-        labelStyle: textTheme.labelLarge,
+        labelStyle: textTheme.labelLarge?.copyWith(
+          color: colorScheme.onSurface,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
