@@ -8,20 +8,27 @@ import '../../destination.dart';
 
 class MarkdownScreen extends StatelessWidget {
   static const name = 'Markdown';
-  static const path = '/markdown';
+  static const path = 'markdown';
 
   const MarkdownScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key('Widgets')),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
       appBar: DmAppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        leading: const BackButton(),
         title: const Text('Markdown'),
         actions: const [PlatformSwitchAction()],
       ),
-      body: const _MarkdownBody(),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => const _MarkdownBody(),
     );
   }
 }

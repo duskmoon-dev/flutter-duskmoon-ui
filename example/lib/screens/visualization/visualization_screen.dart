@@ -1,5 +1,6 @@
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../destination.dart';
 import 'chart_gallery_page.dart';
@@ -59,7 +60,7 @@ class _VisualizationBody extends StatelessWidget {
           description:
               'DuskMoon-native curated chart wrappers (line, bar, scatter, heatmap, network).',
           tags: ['DmViz', 'Theme-aware', '5 types'],
-          destination: ChartGalleryPage(),
+          routeName: ChartGalleryPage.name,
         ),
         const SizedBox(height: 12),
         const _VisualizationModuleCard(
@@ -68,7 +69,7 @@ class _VisualizationBody extends StatelessWidget {
           description:
               'Line, area, bar, stacked, horizontal, streamgraph charts.',
           tags: ['Line', 'Bar', 'Area', 'Stream'],
-          destination: LinesBarsPage(),
+          routeName: LinesBarsPage.name,
         ),
         const SizedBox(height: 12),
         const _VisualizationModuleCard(
@@ -76,7 +77,7 @@ class _VisualizationBody extends StatelessWidget {
           title: 'Radial & Hierarchy',
           description: 'Pie, radar, radial bar, and box plot charts.',
           tags: ['Pie', 'Radar', 'Radial', 'BoxPlot'],
-          destination: RadialPage(),
+          routeName: RadialPage.name,
         ),
         const SizedBox(height: 12),
         const _VisualizationModuleCard(
@@ -85,7 +86,7 @@ class _VisualizationBody extends StatelessWidget {
           description:
               'Scatter, heatmap, force-directed networks, chord, sankey.',
           tags: ['Scatter', 'Network', 'Chord', 'Sankey'],
-          destination: ScatterNetworkPage(),
+          routeName: ScatterNetworkPage.name,
         ),
         const SizedBox(height: 12),
         const _VisualizationModuleCard(
@@ -93,7 +94,7 @@ class _VisualizationBody extends StatelessWidget {
           title: 'Geographic',
           description: 'World map projections, animated globe, regional focus.',
           tags: ['Mercator', 'Globe', 'Regions'],
-          destination: GeoGalleryPage(),
+          routeName: GeoGalleryPage.name,
         ),
         const SizedBox(height: 12),
         const _VisualizationModuleCard(
@@ -102,7 +103,7 @@ class _VisualizationBody extends StatelessWidget {
           description:
               'Hover, brush selection, zoom/pan, scale types, wordcloud.',
           tags: ['Interactive', 'Brush', 'Zoom'],
-          destination: InteractionsPage(),
+          routeName: InteractionsPage.name,
         ),
       ],
     );
@@ -115,14 +116,14 @@ class _VisualizationModuleCard extends StatelessWidget {
     required this.title,
     required this.description,
     required this.tags,
-    required this.destination,
+    required this.routeName,
   });
 
   final IconData icon;
   final String title;
   final String description;
   final List<String> tags;
-  final Widget destination;
+  final String routeName;
 
   @override
   Widget build(BuildContext context) {
@@ -171,11 +172,7 @@ class _VisualizationModuleCard extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: FilledButton.icon(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(builder: (_) => destination),
-                  );
-                },
+                onPressed: () => context.goNamed(routeName),
                 icon: const Icon(Icons.arrow_forward),
                 label: const Text('Open module'),
               ),

@@ -9,6 +9,9 @@ import 'package:duskmoon_visualization/duskmoon_visualization_compat.dart'
 import '../../destination.dart';
 
 class LinesBarsPage extends StatelessWidget {
+  static const name = 'Lines & Bars';
+  static const path = 'lines-bars';
+
   const LinesBarsPage({super.key});
 
   @override

@@ -9,6 +9,14 @@ import 'screens/markdown/markdown_screen.dart';
 import 'screens/scaffold/scaffold_screen.dart';
 import 'screens/settings/settings_screen.dart';
 import 'screens/theme/theme_screen.dart';
+import 'screens/visualization/chart_gallery_page.dart';
+import 'screens/visualization/geo_gallery_page.dart';
+import 'screens/visualization/geo_map_page.dart';
+import 'screens/visualization/interactive_chart_page.dart';
+import 'screens/visualization/interactions_page.dart';
+import 'screens/visualization/lines_bars_page.dart';
+import 'screens/visualization/radial_page.dart';
+import 'screens/visualization/scatter_network_page.dart';
 import 'screens/visualization/visualization_screen.dart';
 import 'screens/widgets/widgets_screen.dart';
 
@@ -39,6 +47,48 @@ class AppRouter {
         key: state.pageKey,
         child: const WidgetsScreen(),
       ),
+      routes: [
+        GoRoute(
+          name: ButtonScreen.name,
+          path: ButtonScreen.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const ButtonScreen(),
+          ),
+        ),
+        GoRoute(
+          name: FeedbackScreen.name,
+          path: FeedbackScreen.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const FeedbackScreen(),
+          ),
+        ),
+        GoRoute(
+          name: ScaffoldScreen.name,
+          path: ScaffoldScreen.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const ScaffoldScreen(),
+          ),
+        ),
+        GoRoute(
+          name: MarkdownScreen.name,
+          path: MarkdownScreen.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const MarkdownScreen(),
+          ),
+        ),
+        GoRoute(
+          name: CodeEditorScreen.name,
+          path: CodeEditorScreen.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const CodeEditorScreen(),
+          ),
+        ),
+      ],
     ),
     GoRoute(
       name: FormScreen.name,
@@ -63,47 +113,72 @@ class AppRouter {
         key: state.pageKey,
         child: const VisualizationScreen(),
       ),
-    ),
-    // Widget sub-screens (pushed from WidgetsScreen)
-    GoRoute(
-      name: ButtonScreen.name,
-      path: ButtonScreen.path,
-      pageBuilder: (context, state) => MaterialPage<void>(
-        key: state.pageKey,
-        child: const ButtonScreen(),
-      ),
-    ),
-    GoRoute(
-      name: FeedbackScreen.name,
-      path: FeedbackScreen.path,
-      pageBuilder: (context, state) => MaterialPage<void>(
-        key: state.pageKey,
-        child: const FeedbackScreen(),
-      ),
-    ),
-    GoRoute(
-      name: ScaffoldScreen.name,
-      path: ScaffoldScreen.path,
-      pageBuilder: (context, state) => MaterialPage<void>(
-        key: state.pageKey,
-        child: const ScaffoldScreen(),
-      ),
-    ),
-    GoRoute(
-      name: MarkdownScreen.name,
-      path: MarkdownScreen.path,
-      pageBuilder: (context, state) => MaterialPage<void>(
-        key: state.pageKey,
-        child: const MarkdownScreen(),
-      ),
-    ),
-    GoRoute(
-      name: CodeEditorScreen.name,
-      path: CodeEditorScreen.path,
-      pageBuilder: (context, state) => MaterialPage<void>(
-        key: state.pageKey,
-        child: const CodeEditorScreen(),
-      ),
+      routes: [
+        GoRoute(
+          name: ChartGalleryPage.name,
+          path: ChartGalleryPage.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const ChartGalleryPage(),
+          ),
+        ),
+        GoRoute(
+          name: LinesBarsPage.name,
+          path: LinesBarsPage.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const LinesBarsPage(),
+          ),
+        ),
+        GoRoute(
+          name: RadialPage.name,
+          path: RadialPage.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const RadialPage(),
+          ),
+        ),
+        GoRoute(
+          name: ScatterNetworkPage.name,
+          path: ScatterNetworkPage.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const ScatterNetworkPage(),
+          ),
+        ),
+        GoRoute(
+          name: GeoGalleryPage.name,
+          path: GeoGalleryPage.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const GeoGalleryPage(),
+          ),
+        ),
+        GoRoute(
+          name: GeoMapPage.name,
+          path: GeoMapPage.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const GeoMapPage(),
+          ),
+        ),
+        GoRoute(
+          name: InteractionsPage.name,
+          path: InteractionsPage.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const InteractionsPage(),
+          ),
+        ),
+        GoRoute(
+          name: InteractiveChartPage.name,
+          path: InteractiveChartPage.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const InteractiveChartPage(),
+          ),
+        ),
+      ],
     ),
   ];
 }

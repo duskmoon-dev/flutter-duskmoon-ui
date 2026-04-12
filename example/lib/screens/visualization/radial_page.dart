@@ -7,6 +7,9 @@ import 'package:duskmoon_ui/duskmoon_ui.dart';
 import '../../destination.dart';
 
 class RadialPage extends StatelessWidget {
+  static const name = 'Radial & Hierarchy';
+  static const path = 'radial';
+
   const RadialPage({super.key});
 
   @override

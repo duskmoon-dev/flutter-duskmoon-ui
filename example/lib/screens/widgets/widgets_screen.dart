@@ -40,31 +40,31 @@ class _WidgetsBody extends StatelessWidget {
 
   static const _items = [
     _WidgetMenuItem(
-      path: ButtonScreen.path,
+      routeName: ButtonScreen.name,
       title: 'Buttons & Inputs',
       subtitle: 'DmButton, DmTextField, DmCheckbox, DmSlider, DmChip…',
       icon: Icons.smart_button,
     ),
     _WidgetMenuItem(
-      path: FeedbackScreen.path,
+      routeName: FeedbackScreen.name,
       title: 'Feedback',
       subtitle: 'Dialogs, snackbars, toasts, bottom sheets',
       icon: Icons.feedback_outlined,
     ),
     _WidgetMenuItem(
-      path: ScaffoldScreen.path,
+      routeName: ScaffoldScreen.name,
       title: 'Scaffold & Layout',
       subtitle: 'DmAppBar, DmDrawer, DmTabBar, DmCard, DmDivider…',
       icon: Icons.dashboard_outlined,
     ),
     _WidgetMenuItem(
-      path: MarkdownScreen.path,
+      routeName: MarkdownScreen.name,
       title: 'Markdown',
       subtitle: 'DmMarkdown viewer and DmMarkdownInput editor',
       icon: Icons.edit_document,
     ),
     _WidgetMenuItem(
-      path: CodeEditorScreen.path,
+      routeName: CodeEditorScreen.name,
       title: 'Code Editor',
       subtitle: '19-language editor with syntax highlighting',
       icon: Icons.code,
@@ -88,13 +88,13 @@ class _WidgetsBody extends StatelessWidget {
 }
 
 class _WidgetMenuItem {
-  final String path;
+  final String routeName;
   final String title;
   final String subtitle;
   final IconData icon;
 
   const _WidgetMenuItem({
-    required this.path,
+    required this.routeName,
     required this.title,
     required this.subtitle,
     required this.icon,
@@ -104,7 +104,7 @@ class _WidgetMenuItem {
     final colorScheme = Theme.of(context).colorScheme;
     return DmCard(
       child: InkWell(
-        onTap: () => context.push(path),
+        onTap: () => context.goNamed(routeName),
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(16),

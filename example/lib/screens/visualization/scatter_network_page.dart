@@ -13,6 +13,9 @@ import '../../destination.dart';
 // ---------------------------------------------------------------------------
 
 class ScatterNetworkPage extends StatelessWidget {
+  static const name = 'Scatter & Network';
+  static const path = 'scatter-network';
+
   const ScatterNetworkPage({super.key});
 
   @override

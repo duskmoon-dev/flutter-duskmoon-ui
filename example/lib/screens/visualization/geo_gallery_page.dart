@@ -9,6 +9,9 @@ import 'package:duskmoon_visualization/duskmoon_visualization_compat.dart'
 import '../../destination.dart';
 
 class GeoGalleryPage extends StatelessWidget {
+  static const name = 'Geographic';
+  static const path = 'geo';
+
   const GeoGalleryPage({super.key});
 
   @override

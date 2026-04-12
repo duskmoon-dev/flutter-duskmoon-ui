@@ -5,6 +5,9 @@ import 'package:duskmoon_ui/duskmoon_ui.dart';
 import '../../destination.dart';
 
 class ChartGalleryPage extends StatelessWidget {
+  static const name = 'Chart Gallery';
+  static const path = 'charts';
+
   const ChartGalleryPage({super.key});
 
   @override

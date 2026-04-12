@@ -9,6 +9,9 @@ import 'package:duskmoon_visualization/duskmoon_visualization_compat.dart'
 import '../../destination.dart';
 
 class InteractiveChartPage extends StatefulWidget {
+  static const name = 'Interactive Chart';
+  static const path = 'interactive-chart';
+
   const InteractiveChartPage({super.key});
 
   @override

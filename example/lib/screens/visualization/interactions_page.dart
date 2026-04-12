@@ -13,6 +13,9 @@ import '../../destination.dart';
 // ---------------------------------------------------------------------------
 
 class InteractionsPage extends StatelessWidget {
+  static const name = 'Interactions';
+  static const path = 'interactions';
+
   const InteractionsPage({super.key});
 
   @override

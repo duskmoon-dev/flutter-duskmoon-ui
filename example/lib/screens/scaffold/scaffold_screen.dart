@@ -5,20 +5,27 @@ import '../../destination.dart';
 
 class ScaffoldScreen extends StatelessWidget {
   static const name = 'Scaffold';
-  static const path = '/scaffold';
+  static const path = 'scaffold';
 
   const ScaffoldScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DmAdaptiveScaffold(
+      selectedIndex: Destinations.indexOf(const Key('Widgets')),
+      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
+      destinations: Destinations.navs,
+      useDrawer: true,
+      transitionDuration: Duration.zero,
       appBar: DmAppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        leading: const BackButton(),
         title: const Text('Scaffold & Layout'),
         actions: const [PlatformSwitchAction()],
       ),
-      body: const _ScaffoldBody(),
+      appBarBreakpoint: Breakpoints.standard,
+      body: (_) => const _ScaffoldBody(),
     );
   }
 }

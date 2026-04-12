@@ -7,6 +7,9 @@ import 'package:duskmoon_visualization/duskmoon_visualization_compat.dart'
 import '../../destination.dart';
 
 class GeoMapPage extends StatefulWidget {
+  static const name = 'Geo Map';
+  static const path = 'geo-map';
+
   const GeoMapPage({super.key});
 
   @override
