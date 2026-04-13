@@ -1,6 +1,6 @@
 name: duskmoon_visualization
 description: Data visualization foundation package for the DuskMoon Design System
-version: 1.4.4
+version: 1.5.0
 homepage: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 repository: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 issue_tracker: https://github.com/duskmoon-dev/flutter_duskmoon_ui/issues
@@ -21,7 +21,7 @@ dependencies:
   flutter:
     sdk: flutter
   archive: ">=3.6.1 <5.0.0"
-  duskmoon_theme: ^1.4.4
+  duskmoon_theme: ^1.5.0
   vector_math: ^2.2.0
 
 dev_dependencies:
