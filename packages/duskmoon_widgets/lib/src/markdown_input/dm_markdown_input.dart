@@ -40,6 +40,9 @@ class DmMarkdownInput extends StatefulWidget {
     this.showPreview = true,
     this.onLinkTap,
     this.decoration,
+    this.bottom,
+    this.bottomLeft,
+    this.bottomRight,
   });
 
   /// External controller. If null, creates an internal one.
@@ -89,6 +92,16 @@ class DmMarkdownInput extends StatefulWidget {
 
   /// Custom input decoration for the editor field.
   final InputDecoration? decoration;
+
+  /// A fully custom bottom bar widget. When set, [bottomLeft] and
+  /// [bottomRight] are ignored.
+  final Widget? bottom;
+
+  /// Widget placed on the left side of the bottom bar.
+  final Widget? bottomLeft;
+
+  /// Widget placed on the right side of the bottom bar.
+  final Widget? bottomRight;
 
   @override
   State<DmMarkdownInput> createState() => _DmMarkdownInputState();
@@ -186,31 +199,64 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
     }
   }
 
+  bool get _hasBottomBar =>
+      widget.bottom != null ||
+      widget.bottomLeft != null ||
+      widget.bottomRight != null;
+
+  Widget _buildBottomBar(ColorScheme colorScheme) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(color: colorScheme.outlineVariant, width: 1),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: widget.bottom ??
+          Row(
+            children: [
+              if (widget.bottomLeft != null) widget.bottomLeft!,
+              const Spacer(),
+              if (widget.bottomRight != null) widget.bottomRight!,
+            ],
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     if (!widget.showPreview) {
+      final editor = KeyboardShortcutHandler(
+        controller: _controller,
+        focusNode: _focusNode,
+        enabled: widget.enabled && !widget.readOnly,
+        child: EditorPane(
+          controller: _controller,
+          focusNode: _focusNode,
+          showLineNumbers: widget.showLineNumbers,
+          maxLines: widget.maxLines,
+          minLines: widget.minLines,
+          readOnly: widget.readOnly || !widget.enabled,
+          decoration: widget.decoration,
+        ),
+      );
+
       return Container(
         decoration: BoxDecoration(
           color: colorScheme.surface,
           border: Border.all(color: colorScheme.outlineVariant, width: 1),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: KeyboardShortcutHandler(
-          controller: _controller,
-          focusNode: _focusNode,
-          enabled: widget.enabled && !widget.readOnly,
-          child: EditorPane(
-            controller: _controller,
-            focusNode: _focusNode,
-            showLineNumbers: widget.showLineNumbers,
-            maxLines: widget.maxLines,
-            minLines: widget.minLines,
-            readOnly: widget.readOnly || !widget.enabled,
-            decoration: widget.decoration,
-          ),
-        ),
+        child: _hasBottomBar
+            ? Column(
+                children: [
+                  Expanded(child: editor),
+                  _buildBottomBar(colorScheme),
+                ],
+              )
+            : editor,
       );
     }
 
@@ -322,6 +368,7 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
             ),
           ),
         ),
+        if (_hasBottomBar) _buildBottomBar(colorScheme),
       ],
     );
   }

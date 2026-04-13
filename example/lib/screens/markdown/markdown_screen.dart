@@ -44,6 +44,7 @@ class _MarkdownBodyState extends State<_MarkdownBody>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   final _inputController = DmMarkdownInputController();
+  final _chatInputController = DmMarkdownInputController();
   bool _showPreview = true;
   StreamController<String>? _streamController;
   Timer? _streamTimer;
@@ -140,15 +141,17 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _inputController.text =
         '# Write your markdown here\n\nTry using **bold** or *italic* text!';
+    _chatInputController.text = 'var data = new Data()';
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     _inputController.dispose();
+    _chatInputController.dispose();
     _streamTimer?.cancel();
     _streamController?.close();
     super.dispose();
@@ -186,6 +189,7 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
               Tab(icon: Icon(Icons.article), text: 'Renderer'),
               Tab(icon: Icon(Icons.stream), text: 'Streaming'),
               Tab(icon: Icon(Icons.edit_note), text: 'Editor'),
+              Tab(icon: Icon(Icons.chat), text: 'Chat Input'),
             ],
           ),
         ),
@@ -196,6 +200,7 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
               _buildRendererDemo(),
               _buildStreamingDemo(),
               _buildEditorDemo(),
+              _buildChatInputDemo(),
             ],
           ),
         ),
@@ -288,6 +293,52 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildChatInputDemo() {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: DmMarkdownInput(
+        controller: _chatInputController,
+        showPreview: false,
+        minLines: 3,
+        bottomLeft: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.add, size: 20),
+              onPressed: () {},
+              tooltip: 'Attach',
+            ),
+            IconButton(
+              icon: const Icon(Icons.image_outlined, size: 20),
+              onPressed: () {},
+              tooltip: 'Image',
+            ),
+          ],
+        ),
+        bottomRight: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Markdown',
+              style: TextStyle(
+                color: colorScheme.onSurfaceVariant,
+                fontSize: 13,
+              ),
+            ),
+            const SizedBox(width: 8),
+            IconButton.filled(
+              icon: const Icon(Icons.send, size: 18),
+              onPressed: () {},
+              tooltip: 'Send',
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
