@@ -103,7 +103,8 @@ void main() {
       expect(find.byType(DmCodeEditorStatusBar), findsNothing);
     });
 
-    testWidgets('title is ignored when custom topBar is provided', (tester) async {
+    testWidgets('title is ignored when custom topBar is provided',
+        (tester) async {
       await tester.pumpWidget(const MaterialApp(
         home: Scaffold(
           body: DmCodeEditor(
@@ -146,7 +147,8 @@ void main() {
       expect(inner.readOnly, isTrue);
     });
 
-    testWidgets('passes through language name to default status bar', (tester) async {
+    testWidgets('passes through language name to default status bar',
+        (tester) async {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: DmCodeEditor(

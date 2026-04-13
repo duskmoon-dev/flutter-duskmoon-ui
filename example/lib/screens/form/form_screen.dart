@@ -229,7 +229,8 @@ class _FormBody extends StatelessWidget {
             const SizedBox(height: 4),
             DmChoiceChipFieldBlocBuilder<String>(
               selectFieldBloc: bloc.priority,
-              itemBuilder: (context, value) => ChipFieldItem(label: Text(value)),
+              itemBuilder: (context, value) =>
+                  ChipFieldItem(label: Text(value)),
             ),
             const SizedBox(height: 12),
             Text(
@@ -239,7 +240,8 @@ class _FormBody extends StatelessWidget {
             const SizedBox(height: 4),
             DmFilterChipFieldBlocBuilder<String>(
               multiSelectFieldBloc: bloc.skills,
-              itemBuilder: (context, value) => ChipFieldItem(label: Text(value)),
+              itemBuilder: (context, value) =>
+                  ChipFieldItem(label: Text(value)),
             ),
           ],
         ),
@@ -539,8 +541,7 @@ class _AllFieldsFormBloc extends FormBloc<String, String> {
   void onSubmitting() async {
     await Future<void>.delayed(const Duration(seconds: 1));
     emitSuccess(
-      successResponse:
-          'All 17 fields submitted successfully!',
+      successResponse: 'All 17 fields submitted successfully!',
     );
   }
 }

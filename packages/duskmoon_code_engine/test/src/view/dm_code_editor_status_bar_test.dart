@@ -70,7 +70,8 @@ void main() {
       expect(find.textContaining('Col 3'), findsOneWidget);
     });
 
-    testWidgets('shows selection count when selection is non-empty', (tester) async {
+    testWidgets('shows selection count when selection is non-empty',
+        (tester) async {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: DmCodeEditorStatusBar(controller: controller),
@@ -84,7 +85,8 @@ void main() {
       expect(find.textContaining('5 selected'), findsOneWidget);
     });
 
-    testWidgets('hides selection count when selection is empty', (tester) async {
+    testWidgets('hides selection count when selection is empty',
+        (tester) async {
       controller.setSelection(EditorSelection.range(anchor: 0, head: 5));
 
       await tester.pumpWidget(MaterialApp(

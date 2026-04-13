@@ -79,7 +79,8 @@ void main() {
       expect(pressed, isTrue);
     });
 
-    testWidgets('disabled action button does not respond to tap', (tester) async {
+    testWidgets('disabled action button does not respond to tap',
+        (tester) async {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: DmCodeEditorToolbar(
