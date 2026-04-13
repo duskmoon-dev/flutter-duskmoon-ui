@@ -1,6 +1,6 @@
 name: duskmoon_adaptive_scaffold
 description: Adaptive scaffold widgets for DuskMoon Design System, forked from flutter_adaptive_scaffold.
-version: 1.4.3
+version: 1.4.4
 homepage: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 repository: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 issue_tracker: https://github.com/duskmoon-dev/flutter_duskmoon_ui/issues

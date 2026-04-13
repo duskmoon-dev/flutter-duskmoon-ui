@@ -1,6 +1,6 @@
 name: duskmoon_feedback
 description: Adaptive feedback widgets — dialogs, snackbars, toasts, bottom sheets
-version: 1.4.3
+version: 1.4.4
 homepage: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 repository: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 issue_tracker: https://github.com/duskmoon-dev/flutter_duskmoon_ui/issues
@@ -20,7 +20,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  duskmoon_theme: ^1.4.3
+  duskmoon_theme: ^1.4.4
 
 dev_dependencies:
   flutter_test:
