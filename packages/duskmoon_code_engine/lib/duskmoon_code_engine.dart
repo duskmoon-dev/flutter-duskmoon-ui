@@ -119,6 +119,7 @@ export 'src/view/selection_painter.dart' show SelectionPainter;
 export 'src/view/code_editor_widget.dart' show CodeEditorWidget;
 export 'src/view/dm_editor_action.dart' show DmEditorAction;
 export 'src/view/dm_code_editor_toolbar.dart' show DmCodeEditorToolbar;
+export 'src/view/dm_code_editor_status_bar.dart' show DmCodeEditorStatusBar;
 export 'src/view/search_panel.dart' show SearchPanel;
 
 // Commands

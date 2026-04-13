@@ -44,6 +44,11 @@ class EditorSelection {
         ranges: [SelectionRange(anchor: anchor, head: head)],
       );
 
+  factory EditorSelection.range({required int anchor, required int head}) =>
+      EditorSelection(
+        ranges: [SelectionRange(anchor: anchor, head: head)],
+      );
+
   final List<SelectionRange> ranges;
   final int mainIndex;
 
