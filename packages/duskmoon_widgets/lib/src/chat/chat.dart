@@ -4,3 +4,6 @@
 library;
 
 // Exports are added as each task ships.
+
+// Models
+export 'models/dm_chat_message.dart';
