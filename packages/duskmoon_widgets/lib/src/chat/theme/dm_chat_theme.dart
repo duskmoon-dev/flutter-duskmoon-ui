@@ -264,9 +264,8 @@ class DmChatTheme extends ThemeExtension<DmChatTheme> {
   DmChatTheme lerp(covariant DmChatTheme? other, double t) {
     if (other == null) return this;
     return DmChatTheme(
-      userBubbleColor:
-          Color.lerp(userBubbleColor, other.userBubbleColor, t) ??
-              userBubbleColor,
+      userBubbleColor: Color.lerp(userBubbleColor, other.userBubbleColor, t) ??
+          userBubbleColor,
       userBubbleOnColor:
           Color.lerp(userBubbleOnColor, other.userBubbleOnColor, t) ??
               userBubbleOnColor,
@@ -278,9 +277,8 @@ class DmChatTheme extends ThemeExtension<DmChatTheme> {
       userBubbleRadius:
           BorderRadius.lerp(userBubbleRadius, other.userBubbleRadius, t) ??
               userBubbleRadius,
-      bubblePadding:
-          EdgeInsets.lerp(bubblePadding, other.bubblePadding, t) ??
-              bubblePadding,
+      bubblePadding: EdgeInsets.lerp(bubblePadding, other.bubblePadding, t) ??
+          bubblePadding,
       userBubbleMaxWidthFraction: _lerpDouble(
         userBubbleMaxWidthFraction,
         other.userBubbleMaxWidthFraction,
@@ -290,9 +288,8 @@ class DmChatTheme extends ThemeExtension<DmChatTheme> {
       thinkingForeground:
           Color.lerp(thinkingForeground, other.thinkingForeground, t) ??
               thinkingForeground,
-      thinkingSurface:
-          Color.lerp(thinkingSurface, other.thinkingSurface, t) ??
-              thinkingSurface,
+      thinkingSurface: Color.lerp(thinkingSurface, other.thinkingSurface, t) ??
+          thinkingSurface,
       thinkingTextStyle:
           TextStyle.lerp(thinkingTextStyle, other.thinkingTextStyle, t) ??
               thinkingTextStyle,

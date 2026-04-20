@@ -56,7 +56,8 @@ void main() {
       expect(aligns.any((a) => a.alignment == Alignment.center), isTrue);
     });
 
-    testWidgets('renders avatar and header slots when provided', (tester) async {
+    testWidgets('renders avatar and header slots when provided',
+        (tester) async {
       await pumpThemed(
         tester,
         const DmChatBubble(

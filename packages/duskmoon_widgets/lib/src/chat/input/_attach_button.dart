@@ -21,7 +21,8 @@ class AttachButton extends StatelessWidget {
     for (final f in result.files) {
       attachments.add(
         DmChatAttachment(
-          id: f.identifier ?? '${f.name}:${DateTime.now().microsecondsSinceEpoch}',
+          id: f.identifier ??
+              '${f.name}:${DateTime.now().microsecondsSinceEpoch}',
           name: f.name,
           sizeBytes: f.size,
           mimeType: _mimeFromExtension(f.extension),

@@ -112,8 +112,8 @@ class _ChatScreenState extends State<ChatScreen> {
             _isStreaming = false;
             final idx = _messages.indexWhere((m) => m.id == id);
             if (idx >= 0) {
-              _messages[idx] = _messages[idx]
-                  .copyWith(status: DmChatMessageStatus.complete);
+              _messages[idx] =
+                  _messages[idx].copyWith(status: DmChatMessageStatus.complete);
             }
           });
         },

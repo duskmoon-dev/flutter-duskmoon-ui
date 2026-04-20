@@ -23,7 +23,6 @@ class BubbleStreamScope extends InheritedNotifier<BubbleStreamCoordinator> {
     required super.child,
   }) : super(notifier: coordinator);
 
-  static BubbleStreamCoordinator? maybeOf(BuildContext context) => context
-      .dependOnInheritedWidgetOfExactType<BubbleStreamScope>()
-      ?.notifier;
+  static BubbleStreamCoordinator? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<BubbleStreamScope>()?.notifier;
 }

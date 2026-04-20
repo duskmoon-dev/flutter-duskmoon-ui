@@ -77,7 +77,8 @@ void main() {
       expect(bar.value, 0.4);
     });
 
-    testWidgets('error state shows retry button calling onRetry', (tester) async {
+    testWidgets('error state shows retry button calling onRetry',
+        (tester) async {
       var retries = 0;
       await pumpThemed(
         tester,

@@ -7,7 +7,8 @@ import 'helpers/chat_test_harness.dart';
 
 void main() {
   group('DmChatInput', () {
-    testWidgets('renders send button; tap submits current text', (tester) async {
+    testWidgets('renders send button; tap submits current text',
+        (tester) async {
       String? sent;
       await pumpThemed(
         tester,
@@ -21,7 +22,8 @@ void main() {
       expect(sent, 'hello');
     });
 
-    testWidgets('submitShortcut=enter submits on Enter, Shift+Enter inserts newline',
+    testWidgets(
+        'submitShortcut=enter submits on Enter, Shift+Enter inserts newline',
         (tester) async {
       final submissions = <String>[];
       await pumpThemed(
