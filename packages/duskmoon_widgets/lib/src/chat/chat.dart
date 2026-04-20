@@ -20,3 +20,7 @@ export 'bubble/blocks/_tool_call_block_view.dart';
 
 // Bubble
 export 'bubble/dm_chat_bubble.dart';
+
+// Input
+export 'input/dm_chat_input.dart';
+export 'input/dm_chat_submit_shortcut.dart';
