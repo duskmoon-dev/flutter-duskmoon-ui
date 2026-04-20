@@ -9,3 +9,6 @@ library;
 export 'models/dm_chat_attachment.dart';
 export 'models/dm_chat_block.dart';
 export 'models/dm_chat_message.dart';
+
+// Theme
+export 'theme/dm_chat_theme.dart';
