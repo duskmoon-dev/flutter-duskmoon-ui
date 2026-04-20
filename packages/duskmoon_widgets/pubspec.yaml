@@ -28,6 +28,7 @@ dependencies:
   flutter_math_fork: ^0.7.4
   url_launcher: ^6.3.0
   fluent_ui: ^4.15.1
+  file_picker: ^8.1.2
 
 dev_dependencies:
   flutter_test:

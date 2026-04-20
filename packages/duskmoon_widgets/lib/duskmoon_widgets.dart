@@ -61,3 +61,6 @@ export 'src/code_editor/dm_code_editor.dart';
 export 'src/code_editor/dm_code_editor_theme.dart';
 export 'package:duskmoon_code_engine/duskmoon_code_engine.dart'
     show EditorViewController, EditorState, EditorTheme;
+
+// Chat
+export 'src/chat/chat.dart';
