@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 export 'platform_style_state.dart' show PlatformSwitchAction;
 
+import 'screens/chat/chat_screen.dart';
 import 'screens/form/form_screen.dart';
 import 'screens/settings/settings_screen.dart';
 import 'screens/theme/theme_screen.dart';
@@ -14,6 +15,7 @@ class Destinations {
     ThemeScreen.name,
     WidgetsScreen.name,
     FormScreen.name,
+    ChatScreen.name,
     SettingsScreen.name,
     VisualizationScreen.name,
   ];
@@ -33,6 +35,11 @@ class Destinations {
       key: Key(FormScreen.name),
       icon: Icon(Icons.dynamic_form_outlined),
       label: 'Form',
+    ),
+    NavigationDestination(
+      key: Key(ChatScreen.name),
+      icon: Icon(Icons.chat_outlined),
+      label: 'Chat',
     ),
     NavigationDestination(
       key: Key(SettingsScreen.name),
