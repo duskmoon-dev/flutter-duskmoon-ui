@@ -6,4 +6,6 @@ library;
 // Exports are added as each task ships.
 
 // Models
+export 'models/dm_chat_attachment.dart';
+export 'models/dm_chat_block.dart';
 export 'models/dm_chat_message.dart';
