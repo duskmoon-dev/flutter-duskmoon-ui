@@ -24,3 +24,6 @@ export 'bubble/dm_chat_bubble.dart';
 // Input
 export 'input/dm_chat_input.dart';
 export 'input/dm_chat_submit_shortcut.dart';
+
+// View
+export 'view/dm_chat_view.dart';
