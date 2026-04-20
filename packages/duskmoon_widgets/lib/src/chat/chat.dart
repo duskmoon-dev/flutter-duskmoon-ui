@@ -14,5 +14,6 @@ export 'models/dm_chat_message.dart';
 export 'theme/dm_chat_theme.dart';
 
 // Block views
+export 'bubble/blocks/_attachment_block_view.dart';
 export 'bubble/blocks/_thinking_block_view.dart';
 export 'bubble/blocks/_tool_call_block_view.dart';
