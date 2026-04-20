@@ -12,3 +12,6 @@ export 'models/dm_chat_message.dart';
 
 // Theme
 export 'theme/dm_chat_theme.dart';
+
+// Block views
+export 'bubble/blocks/_thinking_block_view.dart';
