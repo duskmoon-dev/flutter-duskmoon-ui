@@ -14,7 +14,8 @@ flutter pub add duskmoon_chat
 import 'package:duskmoon_chat/duskmoon_chat.dart';
 ```
 
-Components will be exported from the package barrel as they are added.
+Use `DmChatView` for a composed chat surface, or build custom chat layouts
+from the exported message models, block renderers, and `DmChatBubble`.
 
 ## License
 
