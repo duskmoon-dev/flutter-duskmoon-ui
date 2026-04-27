@@ -8,10 +8,14 @@ class DmChatTextBlockView extends StatelessWidget {
     super.key,
     required this.block,
     this.config = const DmMarkdownConfig(),
+    this.themeData,
+    this.markdownPadding,
   });
 
   final DmChatTextBlock block;
   final DmMarkdownConfig config;
+  final ThemeData? themeData;
+  final EdgeInsets? markdownPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +23,8 @@ class DmChatTextBlockView extends StatelessWidget {
       return DmMarkdown(
         data: block.text,
         config: config,
+        themeData: themeData,
+        padding: markdownPadding,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
       );
@@ -27,6 +33,8 @@ class DmChatTextBlockView extends StatelessWidget {
     return DmMarkdown(
       stream: block.stream,
       config: config,
+      themeData: themeData,
+      padding: markdownPadding,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
     );

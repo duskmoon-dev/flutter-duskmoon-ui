@@ -10,12 +10,16 @@ class DmChatThinkingBlockView extends StatefulWidget {
     super.key,
     required this.block,
     this.config = const DmMarkdownConfig(),
+    this.themeData,
+    this.markdownPadding,
   });
 
   static const headerKey = ValueKey<String>('dm-chat-thinking-block-header');
 
   final DmChatThinkingBlock block;
   final DmMarkdownConfig config;
+  final ThemeData? themeData;
+  final EdgeInsets? markdownPadding;
 
   @override
   State<DmChatThinkingBlockView> createState() =>
@@ -115,6 +119,8 @@ class _DmChatThinkingBlockViewState extends State<DmChatThinkingBlockView> {
                   DmMarkdown(
                     data: widget.block.text ?? _streamText,
                     config: widget.config,
+                    themeData: widget.themeData,
+                    padding: widget.markdownPadding,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                   ),

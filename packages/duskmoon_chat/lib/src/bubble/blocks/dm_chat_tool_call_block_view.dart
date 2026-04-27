@@ -11,12 +11,16 @@ class DmChatToolCallBlockView extends StatefulWidget {
     super.key,
     required this.block,
     this.config = const DmMarkdownConfig(),
+    this.themeData,
+    this.markdownPadding,
   });
 
   static const headerKey = ValueKey<String>('dm-chat-tool-call-block-header');
 
   final DmChatToolCallBlock block;
   final DmMarkdownConfig config;
+  final ThemeData? themeData;
+  final EdgeInsets? markdownPadding;
 
   @override
   State<DmChatToolCallBlockView> createState() =>
@@ -62,6 +66,8 @@ class _DmChatToolCallBlockViewState extends State<DmChatToolCallBlockView> {
                 DmMarkdown(
                   data: '```json\n$_formattedInput\n```',
                   config: widget.config,
+                  themeData: widget.themeData,
+                  padding: widget.markdownPadding,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                 ),
@@ -72,6 +78,8 @@ class _DmChatToolCallBlockViewState extends State<DmChatToolCallBlockView> {
                   DmMarkdown(
                     data: widget.block.output,
                     config: widget.config,
+                    themeData: widget.themeData,
+                    padding: widget.markdownPadding,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                   ),
