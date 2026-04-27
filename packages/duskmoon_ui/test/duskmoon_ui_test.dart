@@ -8,5 +8,6 @@ void main() {
     expect(DmThemeBloc, isNotNull);
     expect(DmVisualization.packageName, 'duskmoon_visualization');
     expect(DmTextFieldBlocBuilder, isNotNull);
+    expect(DmChatView, isNotNull);
   });
 }

@@ -25,6 +25,7 @@ dependencies:
   duskmoon_widgets: ^1.5.0
   duskmoon_settings: ^1.5.0
   duskmoon_feedback: ^1.5.0
+  duskmoon_chat: ^1.5.0
   duskmoon_visualization: ^1.5.0
   duskmoon_form: ^1.5.0
   duskmoon_code_engine: ^1.5.0
@@ -33,3 +34,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

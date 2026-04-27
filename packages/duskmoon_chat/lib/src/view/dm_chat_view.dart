@@ -14,6 +14,7 @@ class DmChatView extends StatefulWidget {
     this.onStop,
     this.markdownConfig = const DmMarkdownConfig(),
     this.assistantAvatar,
+    this.scrollController,
   });
 
   final List<DmChatMessage> messages;
@@ -21,23 +22,37 @@ class DmChatView extends StatefulWidget {
   final VoidCallback? onStop;
   final DmMarkdownConfig markdownConfig;
   final Widget? assistantAvatar;
+  final ScrollController? scrollController;
 
   @override
   State<DmChatView> createState() => _DmChatViewState();
 }
 
 class _DmChatViewState extends State<DmChatView> {
+  static const _bottomScrollTolerance = 48.0;
+
   late DmMarkdownInputController _inputController;
+  late ScrollController _scrollController;
+  late bool _ownsScrollController;
+  bool _wasPinnedToBottom = true;
 
   @override
   void initState() {
     super.initState();
     _inputController = _createInputController();
+    _setUpScrollController();
   }
 
   @override
   void didUpdateWidget(DmChatView oldWidget) {
     super.didUpdateWidget(oldWidget);
+    final shouldAutoScroll = _wasPinnedToBottom;
+
+    if (oldWidget.scrollController != widget.scrollController) {
+      _tearDownScrollController();
+      _setUpScrollController();
+    }
+
     if (_markdownParsingConfigChanged(
       oldWidget.markdownConfig,
       widget.markdownConfig,
@@ -51,10 +66,15 @@ class _DmChatViewState extends State<DmChatView> {
         extentOffset: selection.extentOffset.clamp(0, text.length),
       );
     }
+
+    if (oldWidget.messages != widget.messages && shouldAutoScroll) {
+      _scheduleScrollToBottom();
+    }
   }
 
   @override
   void dispose() {
+    _tearDownScrollController();
     _inputController.dispose();
     super.dispose();
   }
@@ -85,6 +105,42 @@ class _DmChatViewState extends State<DmChatView> {
         oldConfig.enableKatex != newConfig.enableKatex;
   }
 
+  void _setUpScrollController() {
+    _ownsScrollController = widget.scrollController == null;
+    _scrollController = widget.scrollController ?? ScrollController();
+    _scrollController.addListener(_handleScroll);
+  }
+
+  void _tearDownScrollController() {
+    _scrollController.removeListener(_handleScroll);
+    if (_ownsScrollController) {
+      _scrollController.dispose();
+    }
+  }
+
+  void _handleScroll() {
+    if (!_scrollController.hasClients) {
+      _wasPinnedToBottom = true;
+      return;
+    }
+
+    _wasPinnedToBottom = _scrollController.offset <= _bottomScrollTolerance;
+  }
+
+  void _scheduleScrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_scrollController.hasClients) {
+        return;
+      }
+
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOutCubic,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final reversedMessages = widget.messages.reversed.toList();
@@ -106,6 +162,7 @@ class _DmChatViewState extends State<DmChatView> {
           children: [
             Expanded(
               child: ListView.separated(
+                controller: _scrollController,
                 reverse: true,
                 padding: const EdgeInsets.all(16),
                 itemCount: reversedMessages.length,
@@ -115,7 +172,7 @@ class _DmChatViewState extends State<DmChatView> {
                   final message = reversedMessages[index];
 
                   return DmChatBubble(
-                    key: ValueKey<String>(message.id),
+                    key: ValueKey<Object>(_messageKey(message)),
                     message: message,
                     markdownConfig: widget.markdownConfig,
                     avatar: widget.assistantAvatar,
@@ -180,5 +237,13 @@ class _DmChatViewState extends State<DmChatView> {
     final desiredHeight = (maxHeight * 0.35).clamp(96.0, 220.0).toDouble();
 
     return math.min(availableHeight, desiredHeight);
+  }
+
+  (String, bool, bool) _messageKey(DmChatMessage message) {
+    return (
+      message.id,
+      widget.markdownConfig.enableGfm,
+      widget.markdownConfig.enableKatex,
+    );
   }
 }

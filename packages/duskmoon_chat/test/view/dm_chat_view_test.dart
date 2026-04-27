@@ -233,7 +233,8 @@ void main() {
     expect(find.byTooltip('Stop response'), findsOneWidget);
   });
 
-  testWidgets('DmChatView keys bubbles by message id', (tester) async {
+  testWidgets('DmChatView keys bubbles by message id and parser config',
+      (tester) async {
     final msgs = [
       DmChatMessage(
         id: 'older',
@@ -246,6 +247,7 @@ void main() {
         blocks: [DmChatTextBlock(text: 'Newer')],
       ),
     ];
+    const config = DmMarkdownConfig(enableGfm: false);
 
     await tester.pumpWidget(
       MaterialApp(
@@ -253,13 +255,41 @@ void main() {
           body: DmChatView(
             messages: msgs,
             onSend: (_) {},
+            markdownConfig: config,
           ),
         ),
       ),
     );
 
-    expect(find.byKey(const ValueKey<String>('older')), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('newer')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey<Object>(('older', false, true))),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey<Object>(('newer', false, true))),
+      findsOneWidget,
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: DmChatView(
+            messages: msgs,
+            onSend: (_) {},
+            markdownConfig: const DmMarkdownConfig(enableGfm: true),
+          ),
+        ),
+      ),
+    );
+
+    expect(
+      find.byKey(const ValueKey<Object>(('older', false, true))),
+      findsNothing,
+    );
+    expect(
+      find.byKey(const ValueKey<Object>(('older', true, true))),
+      findsOneWidget,
+    );
   });
 
   testWidgets('DmChatView places newest chronological message by composer',
@@ -286,10 +316,8 @@ void main() {
       ),
     );
 
-    final olderBottom =
-        tester.getBottomLeft(find.byKey(const ValueKey<String>('older'))).dy;
-    final newerBottom =
-        tester.getBottomLeft(find.byKey(const ValueKey<String>('newer'))).dy;
+    final olderBottom = tester.getBottomLeft(find.text('Older').last).dy;
+    final newerBottom = tester.getBottomLeft(find.text('Newer').last).dy;
     final composerTop = tester.getTopLeft(find.byType(DmMarkdownInput)).dy;
 
     expect(newerBottom, greaterThan(olderBottom));
@@ -349,5 +377,55 @@ void main() {
       find.byKey(const ValueKey<String>('assistant-avatar')),
       findsOneWidget,
     );
+  });
+
+  testWidgets('DmChatView keeps pinned chats at the bottom on append',
+      (tester) async {
+    final scrollController = ScrollController();
+    var messages = [
+      DmChatMessage(
+        id: '1',
+        role: DmChatRole.assistant,
+        blocks: [DmChatTextBlock(text: 'One')],
+      ),
+    ];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: DmChatView(
+            messages: messages,
+            onSend: (_) {},
+            scrollController: scrollController,
+          ),
+        ),
+      ),
+    );
+
+    expect(scrollController.offset, 0);
+
+    messages = [
+      ...messages,
+      DmChatMessage(
+        id: '2',
+        role: DmChatRole.assistant,
+        blocks: [DmChatTextBlock(text: 'Two')],
+      ),
+    ];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: DmChatView(
+            messages: messages,
+            onSend: (_) {},
+            scrollController: scrollController,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(scrollController.offset, 0);
   });
 }
