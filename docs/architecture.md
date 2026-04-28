@@ -14,7 +14,7 @@ This document covers the package dependency graph, key design decisions, and con
 ```
 duskmoon_theme                  <-- Pure theme, zero external dependencies
     |-- duskmoon_theme_bloc     <-- BLoC for theme persistence
-    |-- duskmoon_widgets        <-- 19 adaptive widgets + markdown + code editor
+    |-- duskmoon_widgets        <-- Adaptive widgets + markdown + chat + code editor
     |       |-- duskmoon_code_engine (for DmCodeEditor)
     |-- duskmoon_settings       <-- Settings UI (Material/Cupertino/Fluent)
     |-- duskmoon_feedback       <-- Dialogs, snackbars, toasts, bottom sheets

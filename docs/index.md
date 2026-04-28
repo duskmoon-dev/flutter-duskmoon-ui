@@ -12,11 +12,11 @@ A Flutter component library providing codegen-driven theming, adaptive widgets, 
 
 ### Install the umbrella package
 
-Add `duskmoon_ui` to your `pubspec.yaml` for access to all components in a single import:
+Add `duskmoon_ui` to your `pubspec.yaml` for access to the primary DuskMoon packages in a single import:
 
 ```yaml
 dependencies:
-  duskmoon_ui: ^1.4.0
+  duskmoon_ui: ^1.6.0
 ```
 
 ```dart
@@ -72,15 +72,15 @@ class HomePage extends StatelessWidget {
 
 | Package | Description |
 |---------|-------------|
-| [`duskmoon_ui`](https://pub.dev/packages/duskmoon_ui) | Umbrella — re-exports all packages below |
+| [`duskmoon_ui`](ui.md) | Umbrella — re-exports theme, widgets, settings, feedback, forms, visualization, theme BLoC, and code-engine primitives |
 | [`duskmoon_theme`](theme.md) | Codegen-driven color schemes, text themes, and ThemeData factories |
-| [`duskmoon_widgets`](widgets.md) | 19 adaptive widgets (Material / Cupertino) plus markdown rendering, markdown input, and code editor |
+| [`duskmoon_widgets`](widgets.md) | Adaptive widgets (Material / Cupertino / Fluent) plus markdown rendering, markdown input, chat, and code editor |
 | [`duskmoon_settings`](settings.md) | Platform-aware settings UI (Material / Cupertino / Fluent) |
 | [`duskmoon_feedback`](feedback.md) | Dialogs, snackbars, toasts, and bottom sheets |
-| [`duskmoon_form`](form.md) | BLoC-based form state management with 13 widget builders |
+| [`duskmoon_form`](form.md) | BLoC-based form state management with adaptive field builders |
 | [`duskmoon_visualization`](visualization.md) | Data visualization: line, bar, scatter, heatmap, network graph, map chart |
 | [`duskmoon_theme_bloc`](theme-bloc.md) | BLoC for persisting theme via SharedPreferences |
-| [`duskmoon_adaptive_scaffold`](adaptive-scaffold.md) | Responsive scaffold with M3 adaptive layout and breakpoints |
+| [`duskmoon_adaptive_scaffold`](adaptive-scaffold.md) | Responsive scaffold with M3 adaptive layout and breakpoints; import directly |
 | [`duskmoon_code_engine`](code-engine.md) | Pure Dart code editor engine with 19 language grammars |
 
 ### Individual installation
@@ -89,24 +89,25 @@ If you only need specific functionality:
 
 ```yaml
 dependencies:
-  duskmoon_theme: ^1.4.0      # Theme only
-  duskmoon_widgets: ^1.4.0    # Adaptive widgets
-  duskmoon_settings: ^1.4.0   # Settings UI
-  duskmoon_feedback: ^1.4.0   # Feedback helpers
-  duskmoon_form: ^1.4.0            # BLoC-based form management
-  duskmoon_visualization: ^1.4.0   # Data visualization charts
-  duskmoon_theme_bloc: ^1.4.0      # BLoC persistence (requires flutter_bloc, shared_preferences)
-  duskmoon_adaptive_scaffold: ^1.4.0  # Responsive scaffold (standalone)
-  duskmoon_code_engine: ^1.4.0     # Code editor engine (standalone)
+  duskmoon_theme: ^1.6.0      # Theme only
+  duskmoon_widgets: ^1.6.0    # Adaptive widgets, markdown, chat
+  duskmoon_settings: ^1.6.0   # Settings UI
+  duskmoon_feedback: ^1.6.0   # Feedback helpers
+  duskmoon_form: ^1.6.0            # BLoC-based form management
+  duskmoon_visualization: ^1.6.0   # Data visualization charts
+  duskmoon_theme_bloc: ^1.6.0      # BLoC persistence (requires flutter_bloc, shared_preferences)
+  duskmoon_adaptive_scaffold: ^1.6.0  # Responsive scaffold (standalone)
+  duskmoon_code_engine: ^1.6.0     # Code editor engine (standalone)
 ```
 
 ## Guides
 
 - [Theme System](theme.md) — Color schemes, text themes, semantic color tokens, ThemeMode helpers
-- [Adaptive Widgets](widgets.md) — Platform-aware buttons, inputs, navigation, layout, and data display
+- [Umbrella Package](ui.md) — Single-import package exports and `DmEditorTheme`
+- [Adaptive Widgets](widgets.md) — Platform-aware buttons, inputs, navigation, layout, chat, and data display
 - [Settings UI](settings.md) — Cross-platform settings pages with 10 tile types
 - [Feedback Helpers](feedback.md) — Adaptive dialogs, snackbars, toasts, and bottom sheets
-- [Form Management](form.md) — BLoC-based forms with validation and 13 widget builders
+- [Form Management](form.md) — BLoC-based forms with validation and adaptive field builders
 - [Data Visualization](visualization.md) — Line, bar, scatter, heatmap, and network graph charts
 - [Theme BLoC](theme-bloc.md) — Persistent theme switching with BLoC pattern
 - [Adaptive Scaffold](adaptive-scaffold.md) — Responsive scaffold with breakpoints and slot-based layout

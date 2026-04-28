@@ -12,6 +12,7 @@ The `duskmoon_visualization` package provides six chart widgets that automatical
 - [Heatmap](#heatmap)
 - [Network Graph](#network-graph)
 - [Map Chart](#map-chart)
+- [Package Metadata](#package-metadata)
 - [Theming with DmChartPalette](#theming-with-dmchartpalette)
 - [Compatibility Import](#compatibility-import)
 
@@ -19,7 +20,7 @@ The `duskmoon_visualization` package provides six chart widgets that automatical
 
 ```yaml
 dependencies:
-  duskmoon_visualization: ^1.4.0
+  duskmoon_visualization: ^1.6.0
 ```
 
 ```dart
@@ -30,10 +31,12 @@ Or use the umbrella package which re-exports everything:
 
 ```yaml
 dependencies:
-  duskmoon_ui: ^1.4.0
+  duskmoon_ui: ^1.6.0
 ```
 
 > **Requirements:** Dart >= 3.5.0, Flutter >= 3.24.0
+
+The package depends on `duskmoon_theme`, `archive`, and `vector_math`.
 
 ## Quick Start
 
@@ -231,6 +234,7 @@ DmVizNetworkGraph(
 | `fixed` | `bool` | `false` | Lock position during simulation |
 | `radius` | `double` | `10` | Node size |
 | `color` | `Color?` | palette.primary | Override color (takes priority over group) |
+| `metadata` | `Map<String, dynamic>?` | `null` | Custom data forwarded to the raw model |
 
 ### DmVizNetworkEdge parameters
 
@@ -243,6 +247,7 @@ DmVizNetworkGraph(
 | `color` | `Color?` | palette.grid | Edge color |
 | `width` | `double` | `1` | Stroke width |
 | `directed` | `bool` | `false` | Render arrow head |
+| `metadata` | `Map<String, dynamic>?` | `null` | Custom data forwarded to the raw model |
 
 ### Enums
 
@@ -282,11 +287,39 @@ DmVizMapChart(
 | `onFeatureTap` | `void Function(GeoJsonFeature, Point)?` | `null` | Callback when a feature is tapped |
 | `palette` | `DmChartPalette?` | auto | Custom color palette |
 
-The geographic types (`GeoJsonFeatureCollection`, `GeoJsonFeature`, `Projection`, `MercatorProjection`, `Point`) are available via the compatibility import:
+The geographic types are exported by the default `duskmoon_visualization.dart` barrel:
 
 ```dart
-import 'package:duskmoon_visualization/duskmoon_visualization_compat.dart';
+GeoJsonFeatureCollection;
+GeoJsonFeature;
+GeoJsonGeometry;
+GeoJsonPoint;
+GeoJsonMultiPoint;
+GeoJsonLineString;
+GeoJsonMultiLineString;
+GeoJsonPolygon;
+GeoJsonMultiPolygon;
+GeoJsonGeometryCollection;
+Projection;
+MercatorProjection;
+EquirectangularProjection;
+AlbersProjection;
+OrthographicProjection;
+Point;
 ```
+
+## Package Metadata
+
+`DmVisualization` exposes metadata constants for package-level tooling:
+
+| Constant | Value / Description |
+|----------|---------------------|
+| `packageName` | `'duskmoon_visualization'` |
+| `isScaffold` | `false` |
+| `plannedDomains` | `core`, `scales`, `geometry`, `charts`, `interaction`, `theming` |
+| `compatImportPath` | `package:duskmoon_visualization/duskmoon_visualization_compat.dart` |
+| `curatedModels` | Public curated model names |
+| `curatedWrappers` | `DmVizLineChart`, `DmVizBarChart`, `DmVizScatterChart`, `DmVizHeatmap`, `DmVizNetworkGraph`, `DmVizMapChart` |
 
 ## Theming with DmChartPalette
 
@@ -325,6 +358,8 @@ DmVizPoint(
   metadata: {'key': 'val'}, // Optional custom data
 )
 ```
+
+`DmVizPoint`, `DmVizHeatmapCell`, `DmVizNetworkNode`, and `DmVizNetworkEdge` expose `toRaw()` for interop with the vendored chart primitives. Enum extensions `DmVizMarkerShapeRaw`, `DmVizNetworkNodeShapeRaw`, and `DmVizNetworkLinkStyleRaw` convert DuskMoon enums to raw chart enums.
 
 ## Compatibility Import
 

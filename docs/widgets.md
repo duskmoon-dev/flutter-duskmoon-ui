@@ -1,6 +1,6 @@
 # Adaptive Widgets
 
-The `duskmoon_widgets` package provides 19 adaptive widgets plus Markdown and Code Editor widgets. The adaptive widgets automatically render Material, Cupertino, or Fluent variants based on the current platform.
+The `duskmoon_widgets` package provides adaptive widgets plus Markdown, Chat, and Code Editor widgets. The adaptive widgets automatically render Material, Cupertino, or Fluent variants based on the current platform.
 
 ## Table of Contents
 
@@ -13,6 +13,7 @@ The `duskmoon_widgets` package provides 19 adaptive widgets plus Markdown and Co
 - [Data Display](#data-display)
 - [Scaffold](#scaffold)
 - [Markdown](#markdown)
+- [Chat](#chat)
 - [Code Editor](#code-editor)
 - [Custom Adaptive Widgets](#custom-adaptive-widgets)
 
@@ -20,7 +21,7 @@ The `duskmoon_widgets` package provides 19 adaptive widgets plus Markdown and Co
 
 ```yaml
 dependencies:
-  duskmoon_widgets: ^1.4.0
+  duskmoon_widgets: ^1.6.0
 ```
 
 ```dart
@@ -383,21 +384,23 @@ When `hideDisabled` is `true` (default), disabled actions are removed entirely.
 
 ### DmMarkdown
 
-Read-only markdown renderer with GFM, KaTeX, Mermaid, and syntax highlighting support. Three input modes: `data` (String), `nodes` (List<md.Node>), and `stream` (Stream<String> for LLM output).
+Read-only markdown renderer with GFM, KaTeX, optional Mermaid, and syntax highlighting support. Three input modes: `data` (String), `nodes` (`List<md.Node>`), and `stream` (`Stream<String>` for LLM output).
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `data` | `String?` | `null` | Markdown source string |
 | `nodes` | `List<md.Node>?` | `null` | Pre-parsed markdown nodes |
 | `stream` | `Stream<String>?` | `null` | Streaming markdown (e.g., LLM output) |
-| `config` | `DmMarkdownConfig?` | `null` | Rendering configuration |
-| `selectable` | `bool` | `false` | Whether text is selectable |
+| `config` | `DmMarkdownConfig` | `const DmMarkdownConfig()` | Rendering configuration |
+| `controller` | `ScrollController?` | `null` | Internal list controller; use `DmMarkdownScrollController` for anchor navigation |
+| `selectable` | `bool` | `true` | Whether text is selectable |
 | `shrinkWrap` | `bool` | `false` | Shrink-wrap the rendered content |
 | `physics` | `ScrollPhysics?` | `null` | Scroll physics |
 | `padding` | `EdgeInsetsGeometry?` | `null` | Content padding |
-| `themeData` | `MarkdownThemeData?` | `null` | Theme override |
-| `onLinkTap` | `ValueChanged<String>?` | `null` | Link tap callback |
-| `onImageTap` | `ValueChanged<String>?` | `null` | Image tap callback |
+| `themeData` | `ThemeData?` | `null` | Theme override |
+| `onLinkTap` | `void Function(String url, String? title)?` | `null` | Link tap callback; defaults to `url_launcher` |
+| `onImageTap` | `void Function(String src, String? alt)?` | `null` | Image tap callback |
+| `imageErrorBuilder` | `Widget Function(String src, String? alt)?` | `null` | Custom image failure widget |
 
 ```dart
 DmMarkdown(
@@ -416,9 +419,9 @@ Configuration for markdown rendering features.
 |-----------|------|---------|-------------|
 | `enableGfm` | `bool` | `true` | GitHub Flavored Markdown |
 | `enableKatex` | `bool` | `true` | LaTeX math rendering |
-| `enableMermaid` | `bool` | `true` | Mermaid diagram rendering |
+| `enableMermaid` | `bool` | `false` | Mermaid diagram rendering; when disabled, Mermaid blocks render as code |
 | `enableCodeHighlight` | `bool` | `true` | Syntax highlighting in code blocks |
-| `codeTheme` | `CodeTheme?` | `null` | Code block theme |
+| `codeTheme` | `String?` | `null` | Highlight theme name; when `null`, selected from brightness |
 | `blockBuilders` | `Map?` | `null` | Custom block builders |
 | `inlineBuilders` | `Map?` | `null` | Custom inline builders |
 
@@ -440,7 +443,7 @@ Markdown editor with write/preview tabs.
 | `onTabChanged` | `ValueChanged<DmMarkdownTab>?` | `null` | Tab switch callback |
 | `showLineNumbers` | `bool` | `false` | Show line numbers |
 | `maxLines` | `int?` | `null` | Maximum lines |
-| `minLines` | `int?` | `null` | Minimum lines |
+| `minLines` | `int` | `10` | Minimum lines |
 | `readOnly` | `bool` | `false` | Read-only mode |
 | `enabled` | `bool` | `true` | Whether interactive |
 | `tabLabelWrite` | `String` | `'Write'` | Write tab label |
@@ -448,6 +451,9 @@ Markdown editor with write/preview tabs.
 | `showPreview` | `bool` | `true` | Whether to show the preview tab; when false, only the editor is shown |
 | `onLinkTap` | `void Function(String url, String? title)?` | `null` | Link tap callback in preview mode |
 | `decoration` | `InputDecoration?` | `null` | Custom input decoration for the editor field |
+| `bottom` | `Widget?` | `null` | Fully custom bottom bar; overrides `bottomLeft` and `bottomRight` |
+| `bottomLeft` | `Widget?` | `null` | Widget placed on the left side of the built-in bottom bar |
+| `bottomRight` | `Widget?` | `null` | Widget placed on the right side of the built-in bottom bar |
 
 ```dart
 DmMarkdownInput(
@@ -455,17 +461,177 @@ DmMarkdownInput(
   initialTab: DmMarkdownTab.write,
   onChanged: (value) => print(value),
   showLineNumbers: true,
-  minLines: 5,
+  minLines: 10,
+  bottomLeft: const Text('Markdown'),
+  bottomRight: IconButton(
+    icon: const Icon(Icons.send),
+    onPressed: () {},
+  ),
 )
 ```
 
 ### DmMarkdownInputController
 
-Controller for `DmMarkdownInput` with helper methods such as `wrapSelection()` for formatting selected text (bold, italic, etc.).
+Controller for `DmMarkdownInput` with helpers for formatting and insertion:
+
+| Method | Description |
+|--------|-------------|
+| `wrapSelection(String marker)` | Toggle wrapping the selection, such as `**bold**` |
+| `insertAtCursor(String content)` | Replace the current selection with content |
+| `toggleLinePrefix(String prefix)` | Toggle line prefixes such as `# `, `> `, or `- ` |
+| `insertCodeFence({String language = ''})` | Insert a fenced code block |
+| `insertLink({String url = 'url'})` | Insert a markdown link |
+| `appendMarkdown(String markdown)` | Append markdown at the end |
 
 ### DmMarkdownTab
 
 Enum for the active tab: `DmMarkdownTab.write`, `DmMarkdownTab.preview`.
+
+## Chat
+
+The chat module provides LLM-style message models, markdown-rendered bubbles, attachment chips, tool-call blocks, a markdown composer, and a composed `DmChatView`.
+
+### DmChatView
+
+`DmChatView` renders a reverse chat list with pinned-to-bottom auto-scroll, an optional jump-to-bottom button, and a `DmChatInput` composer.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `messages` | `List<DmChatMessage>` | required | Ordered conversation messages |
+| `onSend` | `DmChatSendCallback?` | `null` | Called with markdown and ready attachments |
+| `onStop` | `VoidCallback?` | `null` | Called by the stop button while streaming |
+| `onAttach` | `ValueChanged<List<DmChatAttachment>>?` | `null` | Enables the file picker and receives picked attachments |
+| `onRetry` | `DmChatRetryCallback?` | `null` | Message-level retry callback |
+| `uploadAdapter` | `DmChatUploadAdapter?` | `null` | Consumer-provided upload adapter type |
+| `isStreaming` | `bool` | `false` | Toggles send/stop state |
+| `inputController` | `DmMarkdownInputController?` | `null` | Composer controller |
+| `inputPlaceholder` | `String` | `'Message…'` | Composer placeholder |
+| `inputLeading` / `inputTrailing` | `Widget?` | `null` | Bottom-bar slots around attach/send controls |
+| `inputMinLines` / `inputMaxLines` | `int` | `1` / `8` | Composer line limits |
+| `submitShortcut` | `DmChatSubmitShortcut` | `cmdEnter` | Keyboard submit mode |
+| `markdownConfig` | `DmMarkdownConfig` | `const DmMarkdownConfig()` | Markdown config for messages |
+| `emptyBuilder` | `WidgetBuilder?` | `null` | Empty-state builder |
+| `avatarBuilder` / `headerBuilder` | callback | `null` | Per-message avatar/header slots |
+| `showJumpToBottom` | `bool` | `true` | Show jump button when unpinned |
+| `autoScroll` | `bool` | `true` | Auto-scroll when pinned |
+| `reverse` | `bool` | `true` | Reverse list behavior |
+| `padding` | `EdgeInsets?` | `null` | Message list padding |
+| `theme` | `DmChatTheme?` | `null` | Chat theme override |
+| `pendingAttachments` | `List<DmChatAttachment>` | `const []` | Composer attachment chips |
+| `onRemoveAttachment` | `ValueChanged<DmChatAttachment>?` | `null` | Remove/cancel/retry callback for pending chips |
+
+```dart
+DmChatView(
+  messages: messages,
+  inputPlaceholder: 'Ask about this file...',
+  onAttach: (attachments) => setState(() => pending = attachments),
+  pendingAttachments: pending,
+  inputLeading: DropdownButton<String>(
+    value: model,
+    items: const [
+      DropdownMenuItem(value: 'fast', child: Text('Fast')),
+      DropdownMenuItem(value: 'deep', child: Text('Deep')),
+    ],
+    onChanged: (value) => setState(() => model = value!),
+  ),
+  avatarBuilder: (context, message) => switch (message.role) {
+    DmChatRole.user => const DmAvatar(child: Text('U')),
+    DmChatRole.assistant => const DmAvatar(child: Icon(Icons.auto_awesome)),
+    DmChatRole.system => null,
+  },
+  headerBuilder: (context, message) => Text(message.role.name),
+  onSend: (markdown, attachments) {},
+)
+```
+
+### Message Models
+
+```dart
+const DmChatMessage(
+  id: 'u1',
+  role: DmChatRole.user,
+  blocks: [
+    DmChatTextBlock(text: 'Summarize this **markdown**.'),
+  ],
+)
+```
+
+| Type | Constructor / Values |
+|------|----------------------|
+| `DmChatRole` | `user`, `assistant`, `system` |
+| `DmChatMessageStatus` | `pending`, `streaming`, `complete`, `error` |
+| `DmChatMessage` | `id`, `role`, `blocks`, optional `status`, `error`, `createdAt`; includes `copyWith()` |
+| `DmChatBlock` | Sealed base for all content blocks |
+| `DmChatTextBlock` | `text` or `stream`; exactly one is required |
+| `DmChatThinkingBlock` | `text` or `stream`, optional `elapsed`; collapsible reasoning content |
+| `DmChatToolCallBlock` | `id`, `name`, optional `input`, `output`, `status`, `errorMessage`; includes `copyWith()` |
+| `DmChatToolCallStatus` | `pending`, `running`, `done`, `error` |
+| `DmChatAttachmentBlock` | One or more `DmChatAttachment` values |
+| `DmChatCustomBlock` | `kind` plus optional `data`; rendered through `DmChatTheme.customBuilders` |
+
+### Attachments
+
+```dart
+DmChatAttachment(
+  id: 'file-1',
+  name: 'notes.md',
+  sizeBytes: 2048,
+  mimeType: 'text/markdown',
+  status: DmChatAttachmentStatus.done,
+)
+```
+
+| Type | Description |
+|------|-------------|
+| `DmChatAttachmentStatus` | `idle`, `uploading`, `done`, `error` |
+| `DmChatAttachment` | `id`, `name`, optional `sizeBytes`, `mimeType`, `url`, `bytes`, `status`, `uploadProgress`, `errorMessage`; includes `copyWith()` |
+| `DmChatUploadAdapter` | Consumer interface with `upload(DmChatAttachment local)` and `cancel(String attachmentId)` |
+
+`DmChatInput`'s attach button returns picked files through `onAttach`; applications own upload state and pass current chips back through `pendingAttachments`.
+
+### DmChatInput
+
+Markdown composer built on `DmMarkdownInput`.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `onSend` | `DmChatSendCallback` | required | Sends current markdown plus `done` attachments |
+| `onStop` | `VoidCallback?` | `null` | Stop callback while streaming |
+| `onAttach` | `ValueChanged<List<DmChatAttachment>>?` | `null` | Shows file picker when non-null |
+| `uploadAdapter` | `DmChatUploadAdapter?` | `null` | Upload adapter type available to consumers |
+| `controller` | `DmMarkdownInputController?` | `null` | Composer controller |
+| `isStreaming` | `bool` | `false` | Shows stop action and disables send |
+| `pendingAttachments` | `List<DmChatAttachment>` | `const []` | Attachment chips above the editor |
+| `onRemoveAttachment` | `ValueChanged<DmChatAttachment>?` | `null` | Remove/cancel/retry callback |
+| `placeholder` | `String?` | `null` | Input hint |
+| `leading` / `trailing` | `Widget?` | `null` | Bottom-bar slots |
+| `minLines` / `maxLines` | `int` | `1` / `8` | Markdown input line limits |
+| `submitShortcut` | `DmChatSubmitShortcut` | `cmdEnter` | Keyboard submit mode |
+
+`DmChatSubmitShortcut.cmdEnter` uses Cmd+Enter on macOS/iOS and Ctrl+Enter elsewhere. `DmChatSubmitShortcut.enter` submits on Enter and leaves Shift+Enter for new lines.
+
+### Block Views And Theme
+
+Public block renderers are available when you need to compose custom bubbles:
+
+- `DmChatThinkingBlockView(block, config)`
+- `DmChatToolCallBlockView(block, config)`
+- `DmChatAttachmentBlockView(block, onTap, onRetry, onCancel)`
+
+`DmChatTheme` is a `ThemeExtension` covering bubble colors, thinking/tool-call surfaces, attachment chip styles, composer surface, custom block builders, and fallback avatars.
+
+```dart
+Theme(
+  data: Theme.of(context).copyWith(
+    extensions: [
+      DmChatTheme.withContext(context).copyWith(
+        userBubbleMaxWidthFraction: 0.72,
+      ),
+    ],
+  ),
+  child: DmChatView(messages: messages),
+)
+```
 
 ## Code Editor
 

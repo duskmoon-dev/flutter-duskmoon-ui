@@ -18,7 +18,7 @@ The `duskmoon_settings` package provides platform-aware settings pages with thre
 
 ```yaml
 dependencies:
-  duskmoon_settings: ^1.4.0
+  duskmoon_settings: ^1.6.0
 ```
 
 ```dart
@@ -27,11 +27,11 @@ import 'package:duskmoon_settings/duskmoon_settings.dart';
 
 Or use the umbrella `duskmoon_ui` package.
 
-> This package depends on `duskmoon_theme` for color integration.
+> This package depends on `duskmoon_theme` for color integration and `duskmoon_widgets` for shared platform resolution.
 
 ## Overview
 
-The settings UI uses a compositor pattern. Each widget auto-detects the platform and delegates to the correct renderer:
+The settings UI uses a compositor pattern. `SettingsList` converts explicit `DevicePlatform` overrides to `DmPlatformStyle`; when no override is provided, it honors the shared DuskMoon resolution chain (`DmPlatformOverride`, `DuskmoonApp`, then `Theme.of(context).platform`).
 
 | Platform | Renderer |
 |----------|----------|
@@ -73,7 +73,7 @@ Groups tiles under an optional title widget.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `tiles` | `List<AbstractSettingsTile>` | The tiles in this section |
+| `tiles` | `List<Widget>` | The tiles/widgets in this section |
 | `title` | `Widget?` | Section header |
 | `margin` | `EdgeInsetsDirectional?` | Section margin |
 
@@ -271,7 +271,7 @@ SettingsOption(
 
 ## Platform Detection
 
-The platform is auto-detected from the build context. Override it to force a specific look:
+The platform is auto-detected through the shared DuskMoon platform resolver. Override it with `DevicePlatform` to force a specific settings renderer:
 
 ```dart
 SettingsList(
@@ -280,7 +280,9 @@ SettingsList(
 )
 ```
 
-Available values: `android`, `iOS`, `macOS`, `windows`, `linux`, `web`, `fuchsia`, `custom`.
+Available `DevicePlatform` values: `android`, `iOS`, `macOS`, `windows`, `linux`, `web`, `fuchsia`, `custom`.
+
+When `platform` is null, `SettingsList` honors `DmPlatformOverride` and `DuskmoonApp`.
 
 ## Theming
 
@@ -292,6 +294,22 @@ final themeData = SettingsThemeData.withContext(context, platform);
 
 // From a ColorScheme directly:
 final themeData = SettingsThemeData.withColorScheme(colorScheme, platform);
+```
+
+Additional theming APIs:
+
+```dart
+SettingsTheme(
+  themeData: themeData,
+  platform: DevicePlatform.android,
+  child: SettingsList(sections: sections),
+);
+
+final inherited = SettingsTheme.maybeOf(context);
+final requiredTheme = SettingsTheme.of(context);
+
+final merged = baseTheme.merge(theme: overrideTheme);
+final changed = baseTheme.copyWith(titleTextColor: Colors.blue);
 ```
 
 ### Customizable properties

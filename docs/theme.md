@@ -20,7 +20,7 @@ The `duskmoon_theme` package provides codegen-driven color schemes, a Material 3
 
 ```yaml
 dependencies:
-  duskmoon_theme: ^1.4.0
+  duskmoon_theme: ^1.6.0
 ```
 
 ```dart

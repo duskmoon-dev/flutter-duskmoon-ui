@@ -30,7 +30,7 @@ Current imported domains: core, scales, curves, stats, geo-core, delaunay, voron
 
 ## API Shaping
 
-Current default-exported curated types: `DmVizPoint`, `DmVizHeatmapCell`, `DmVizMarkerShape`
+Current default-exported curated types include chart models, network models, geo models, palette helpers, and six curated widgets: `DmVizLineChart`, `DmVizBarChart`, `DmVizScatterChart`, `DmVizHeatmap`, `DmVizNetworkGraph`, and `DmVizMapChart`.
 Compatibility import for the full migrated surface: `package:duskmoon_visualization/duskmoon_visualization_compat.dart`
 Current curated non-chart wrapper: `DmVizNetworkGraph`
 

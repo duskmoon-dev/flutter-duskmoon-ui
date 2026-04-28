@@ -14,6 +14,7 @@ BLoC-based form state management with adaptive form widgets for the DuskMoon Des
 - [Multi-step Forms](#multi-step-forms)
 - [Theming](#theming)
 - [Scrollable Forms](#scrollable-forms)
+- [FormBlocObserver](#formblocobserver)
 - [Re-exports](#re-exports)
 - [Complete Example](#complete-example)
 
@@ -21,14 +22,14 @@ BLoC-based form state management with adaptive form widgets for the DuskMoon Des
 
 ```yaml
 dependencies:
-  duskmoon_form: ^1.4.0
+  duskmoon_form: ^1.6.0
 ```
 
 Or use the umbrella package:
 
 ```yaml
 dependencies:
-  duskmoon_ui: ^1.4.0
+  duskmoon_ui: ^1.6.0
 ```
 
 ```dart
@@ -169,12 +170,14 @@ Extends `InputFieldBloc` for markdown text with write/preview tab state.
 ```dart
 final notes = MarkdownFieldBloc<dynamic>(
   initialValue: '# Hello',
+  initialTab: DmMarkdownTab.write,
 );
 ```
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `initialTab` | `DmMarkdownTab` | Default active tab (write or preview) |
+| API | Description |
+|-----|-------------|
+| `initialTab` | Constructor argument for the default active tab (`write` or `preview`) |
+| `updateTab(DmMarkdownTab tab)` | Updates the current markdown input tab state |
 
 ### CodeEditorFieldBloc
 
@@ -183,12 +186,14 @@ Extends `InputFieldBloc` for source code with language/syntax highlighting state
 ```dart
 final code = CodeEditorFieldBloc<dynamic>(
   initialValue: 'void main() {}',
+  initialLanguage: 'dart',
 );
 ```
 
 | Method | Description |
 |--------|-------------|
-| `updateLanguage(String?)` | Change syntax highlighting language at runtime |
+| `initialLanguage` | Constructor argument for the initial syntax highlighting language |
+| `updateLanguage(String? language)` | Change syntax highlighting language at runtime; pass `null` to clear |
 
 ### Common Field API
 
@@ -638,22 +643,54 @@ Access the theme in any descendant: `DmFormTheme.of(context)`.
 Auto-scroll to the first invalid field when submission fails:
 
 ```dart
-ScrollableFormBlocManager(
+DmScrollableFormBlocManager(
   formBloc: formBloc,
   child: ListView(
     children: [
-      ScrollableFieldBlocTarget(
-        fieldBloc: formBloc.email,
+      DmScrollableFieldBlocTarget(
+        singleFieldBloc: formBloc.email,
         child: DmTextFieldBlocBuilder(textFieldBloc: formBloc.email, ...),
       ),
-      ScrollableFieldBlocTarget(
-        fieldBloc: formBloc.password,
+      DmScrollableFieldBlocTarget(
+        singleFieldBloc: formBloc.password,
         child: DmTextFieldBlocBuilder(textFieldBloc: formBloc.password, ...),
       ),
     ],
   ),
 )
 ```
+
+## FormBlocObserver
+
+`FormBlocObserver` wraps another `BlocObserver` and filters which field/form bloc lifecycle events are forwarded.
+
+```dart
+Bloc.observer = FormBlocObserver(
+  notifyOnFieldBlocCreate: false,
+  notifyOnFieldBlocChange: false,
+  notifyOnFieldBlocError: true,
+  notifyOnFieldBlocClose: false,
+  notifyOnFormBlocCreate: false,
+  notifyOnFormBlocChange: false,
+  notifyOnFormBlocError: true,
+  notifyOnFormBlocClose: false,
+  child: Bloc.observer,
+);
+```
+
+Constructor parameters:
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `notifyOnFieldBlocCreate` | `false` | Forward `FieldBloc` creation events |
+| `notifyOnFieldBlocChange` | `false` | Forward `FieldBloc` state changes |
+| `notifyOnFieldBlocError` | `true` | Forward `FieldBloc` errors |
+| `notifyOnFieldBlocClose` | `false` | Forward `FieldBloc` close events |
+| `notifyOnFormBlocCreate` | `false` | Forward `FormBloc` creation events |
+| `notifyOnFormBlocChange` | `false` | Forward `FormBloc` state changes |
+| `notifyOnFormBlocError` | `true` | Forward `FormBloc` errors |
+| `notifyOnFormBlocClose` | `false` | Forward `FormBloc` close events |
+| `child` | required | Observer that receives allowed events |
 
 ## Re-exports
 

@@ -7,6 +7,7 @@ The `duskmoon_code_engine` package is a pure Dart code editor engine -- a ground
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [CodeEditorWidget](#codeeditorwidget)
+- [DmCodeEditor And Bars](#dmcodeeditor-and-bars)
 - [EditorViewController](#editorviewcontroller)
 - [Document Model](#document-model)
 - [State System](#state-system)
@@ -22,14 +23,14 @@ The `duskmoon_code_engine` package is a pure Dart code editor engine -- a ground
 
 ```yaml
 dependencies:
-  duskmoon_code_engine: ^1.4.0
+  duskmoon_code_engine: ^1.6.0
 ```
 
 ```dart
 import 'package:duskmoon_code_engine/duskmoon_code_engine.dart';
 ```
 
-The package is also re-exported by the umbrella `duskmoon_ui` package.
+The package is also re-exported by the umbrella `duskmoon_ui` package with `DmCodeEditor` hidden. Use `DmCodeEditor` from `duskmoon_widgets` or `duskmoon_ui` via the widgets export; use low-level engine APIs from `duskmoon_code_engine`.
 
 ## Quick Start
 
@@ -99,6 +100,69 @@ const CodeEditorWidget({
 - Arrow keys, Home/End, Ctrl+Home/End -- Cursor navigation
 - Shift+arrows -- Selection
 - Ctrl+Z / Ctrl+Y -- Undo/redo (when `historyExtension()` is active)
+
+## DmCodeEditor And Bars
+
+`DmCodeEditor` is the batteries-included editor shell exported by `duskmoon_code_engine`. It wraps `CodeEditorWidget` with optional top and bottom bars.
+
+```dart
+DmCodeEditor(
+  title: 'main.dart',
+  languageName: 'Dart',
+  initialDoc: 'void main() {}',
+  language: dartLanguageSupport(),
+  topBar: null,       // null uses DmCodeEditorToolbar
+  bottomBar: null,    // null uses DmCodeEditorStatusBar
+  actions: [
+    DmEditorAction.undo(controller),
+    DmEditorAction.redo(controller),
+    DmEditorAction.copy(controller),
+  ],
+  theme: EditorTheme.dark(),
+)
+```
+
+Constructor parameters include `topBar`, `bottomBar`, `title`, `actions`, `languageName`, and the `CodeEditorWidget` passthrough parameters: `initialDoc`, `language`, `extensions`, `theme`, `readOnly`, `lineNumbers`, `highlightActiveLine`, `onStateChanged`, `controller`, `focusNode`, `autofocus`, `minHeight`, `maxHeight`, `padding`, and `scrollPhysics`.
+
+### DmCodeEditorToolbar
+
+```dart
+DmCodeEditorToolbar(
+  title: 'main.dart',
+  actions: [DmEditorAction.copy(controller)],
+  controller: controller,
+  decoration: null,
+)
+```
+
+### DmCodeEditorStatusBar
+
+```dart
+DmCodeEditorStatusBar(
+  controller: controller,
+  languageName: 'Dart',
+  decoration: null,
+)
+```
+
+### DmEditorAction
+
+```dart
+const DmEditorAction(
+  icon: Icons.format_align_left,
+  tooltip: 'Format',
+  onPressed: format,
+);
+
+DmEditorAction.undo(controller);
+DmEditorAction.redo(controller);
+DmEditorAction.search(controller);
+DmEditorAction.copy(controller);
+```
+
+### Other View Exports
+
+The package also exports lower-level view primitives for advanced integrations: `EditorViewport`, `InlineSpan`, `HighlightBuilder`, `EditorView`, `LinePainter`, `GutterPainter`, `SelectionPainter`, `SearchPanel`, `LineColumn`, `PositionUtils`, `CursorBlink`, `InputHandler`, and `jsonHighlightMapping`.
 
 ## EditorViewController
 

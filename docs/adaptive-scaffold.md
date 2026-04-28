@@ -20,7 +20,7 @@ This package is a fork of `flutter_adaptive_scaffold`, versioned in sync with ot
 
 ```yaml
 dependencies:
-  duskmoon_adaptive_scaffold: ^1.4.0
+  duskmoon_adaptive_scaffold: ^1.6.0
 ```
 
 ```dart
@@ -134,6 +134,7 @@ DmAdaptiveScaffold(
   trailingNavRail: const Spacer(),
 
   // Size
+  navigationRailPadding: const EdgeInsets.all(kNavigationRailDefaultPadding),
   navigationRailWidth: 80,
   extendedNavigationRailWidth: 256,
 
@@ -150,6 +151,51 @@ DmAdaptiveScaffold(
     );
   },
 )
+```
+
+`NavigationRailDestinationBuilder` has this signature:
+
+```dart
+typedef NavigationRailDestinationBuilder = NavigationRailDestination Function(
+  int index,
+  NavigationDestination destination,
+);
+```
+
+Helper signatures for standard navigation widgets:
+
+```dart
+DmAdaptiveScaffold.standardNavigationRail(
+  destinations: railDestinations,
+  selectedIndex: 0,
+  extended: false,
+  width: 72,
+  backgroundColor: null,
+  padding: const EdgeInsets.all(kNavigationRailDefaultPadding),
+  leading: null,
+  trailing: null,
+  onDestinationSelected: (index) {},
+  groupAlignment: null,
+  selectedIconTheme: null,
+  unselectedIconTheme: null,
+  selectedLabelTextStyle: null,
+  unSelectedLabelTextStyle: null,
+  labelType: NavigationRailLabelType.none,
+);
+
+DmAdaptiveScaffold.standardBottomNavigationBar(
+  destinations: destinations,
+  currentIndex: 0,
+  iconSize: 24,
+  onDestinationSelected: (index) {},
+);
+
+DmAdaptiveScaffold.toMaterialGrid(
+  widgets: cards,
+  breakpoints: Breakpoints.all,
+  margin: null,
+  itemColumns: null,
+);
 ```
 
 ### Drawer Behavior
@@ -216,12 +262,16 @@ Each size breakpoint has desktop and mobile variants:
 
 Desktop platforms: macOS, Windows, Linux. Mobile platforms: Android, iOS, Fuchsia.
 
+`Breakpoints.all` contains all standard, platform-specific, and fallthrough breakpoints in resolution order.
+
 ### Querying the Active Breakpoint
 
 ```dart
 // Get the active breakpoint from context
 final bp = Breakpoint.activeBreakpointOf(context);
 final bp = Breakpoint.defaultBreakpointOf(context);
+final bp = Breakpoint.maybeActiveBreakpointFromSlotLayout(context);
+final bp = Breakpoint.activeBreakpointIn(context, Breakpoints.all);
 
 // Platform checks
 if (Breakpoint.isDesktop(context)) { /* desktop logic */ }
@@ -235,6 +285,17 @@ if (Breakpoints.mediumAndUp.isActive(context)) {
 // Comparison operators
 Breakpoints.large > Breakpoints.medium  // true
 bp.between(Breakpoints.medium, Breakpoints.large) // true if in range
+```
+
+Material 3 spacing constants:
+
+```dart
+kMaterialCompactSpacing       // 0.0
+kMaterialMediumAndUpSpacing   // 24.0
+kMaterialCompactMargin        // 16.0
+kMaterialMediumAndUpMargin    // 24.0
+kMaterialPadding              // 4.0
+kNavigationRailDefaultPadding // 8.0
 ```
 
 ## AdaptiveLayout
@@ -340,6 +401,8 @@ final config = SlotLayout.pickWidget(context, {
 });
 // Returns the SlotLayoutConfig for the currently active breakpoint
 ```
+
+Use `SlotLayoutConfig.empty()` when a slot should intentionally render nothing.
 
 ## Animations
 
