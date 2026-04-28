@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:duskmoon_widgets/duskmoon_widgets.dart';
+import 'package:duskmoon_widgets/duskmoon_widgets.dart'
+    show DmCard, DmChip, DmMarkdown, DmMarkdownConfig;
 import 'package:flutter/material.dart';
 
 import '../../models/dm_chat_message.dart';

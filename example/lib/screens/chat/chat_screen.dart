@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:duskmoon_ui/duskmoon_ui.dart';
+import 'package:duskmoon_widgets/duskmoon_widgets.dart' as chat_widgets;
 import 'package:flutter/material.dart';
 
 import '../../destination.dart';
@@ -16,22 +17,24 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final List<DmChatMessage> _messages = [];
+  final List<chat_widgets.DmChatMessage> _messages = [];
   bool _isStreaming = false;
-  DmChatSubmitShortcut _shortcut = DmChatSubmitShortcut.cmdEnter;
+  chat_widgets.DmChatSubmitShortcut _shortcut =
+      chat_widgets.DmChatSubmitShortcut.cmdEnter;
   StreamController<String>? _activeThinking;
   StreamController<String>? _activeText;
 
-  void _onSend(String text, List<DmChatAttachment> atts) {
+  void _onSend(String text, List<chat_widgets.DmChatAttachment> atts) {
     if (_isStreaming) return;
     setState(() {
       _messages.add(
-        DmChatMessage(
+        chat_widgets.DmChatMessage(
           id: 'u${_messages.length}',
-          role: DmChatRole.user,
+          role: chat_widgets.DmChatRole.user,
           blocks: [
-            if (text.isNotEmpty) DmChatTextBlock(text: text),
-            if (atts.isNotEmpty) DmChatAttachmentBlock(attachments: atts),
+            if (text.isNotEmpty) chat_widgets.DmChatTextBlock(text: text),
+            if (atts.isNotEmpty)
+              chat_widgets.DmChatAttachmentBlock(attachments: atts),
           ],
         ),
       );
@@ -45,21 +48,21 @@ class _ChatScreenState extends State<ChatScreen> {
     final thinking = _activeThinking!;
     final textC = _activeText!;
     final id = 'a${_messages.length}';
-    var toolCall = DmChatToolCallBlock(
+    var toolCall = chat_widgets.DmChatToolCallBlock(
       id: 't$id',
       name: 'run_code',
       input: const {'snippet': 'print("ok")'},
-      status: DmChatToolCallStatus.pending,
+      status: chat_widgets.DmChatToolCallStatus.pending,
     );
     _messages.add(
-      DmChatMessage(
+      chat_widgets.DmChatMessage(
         id: id,
-        role: DmChatRole.assistant,
-        status: DmChatMessageStatus.streaming,
+        role: chat_widgets.DmChatRole.assistant,
+        status: chat_widgets.DmChatMessageStatus.streaming,
         blocks: [
-          DmChatThinkingBlock(stream: thinking.stream),
+          chat_widgets.DmChatThinkingBlock(stream: thinking.stream),
           toolCall,
-          DmChatTextBlock(stream: textC.stream),
+          chat_widgets.DmChatTextBlock(stream: textC.stream),
         ],
       ),
     );
@@ -77,7 +80,9 @@ class _ChatScreenState extends State<ChatScreen> {
       (
         delay: const Duration(milliseconds: 300),
         send: () {
-          toolCall = toolCall.copyWith(status: DmChatToolCallStatus.running);
+          toolCall = toolCall.copyWith(
+            status: chat_widgets.DmChatToolCallStatus.running,
+          );
           setState(() => _replaceBlock(id, toolCall));
         },
       ),
@@ -85,7 +90,7 @@ class _ChatScreenState extends State<ChatScreen> {
         delay: const Duration(milliseconds: 500),
         send: () {
           toolCall = toolCall.copyWith(
-            status: DmChatToolCallStatus.done,
+            status: chat_widgets.DmChatToolCallStatus.done,
             output: 'ok\n',
           );
           setState(() => _replaceBlock(id, toolCall));
@@ -112,8 +117,9 @@ class _ChatScreenState extends State<ChatScreen> {
             _isStreaming = false;
             final idx = _messages.indexWhere((m) => m.id == id);
             if (idx >= 0) {
-              _messages[idx] =
-                  _messages[idx].copyWith(status: DmChatMessageStatus.complete);
+              _messages[idx] = _messages[idx].copyWith(
+                status: chat_widgets.DmChatMessageStatus.complete,
+              );
             }
           });
         },
@@ -130,11 +136,16 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void _replaceBlock(String messageId, DmChatToolCallBlock updated) {
+  void _replaceBlock(
+    String messageId,
+    chat_widgets.DmChatToolCallBlock updated,
+  ) {
     final idx = _messages.indexWhere((m) => m.id == messageId);
     if (idx < 0) return;
-    final blocks = _messages[idx].blocks.map<DmChatBlock>((b) {
-      if (b is DmChatToolCallBlock && b.id == updated.id) return updated;
+    final blocks = _messages[idx].blocks.map<chat_widgets.DmChatBlock>((b) {
+      if (b is chat_widgets.DmChatToolCallBlock && b.id == updated.id) {
+        return updated;
+      }
       return b;
     }).toList();
     _messages[idx] = _messages[idx].copyWith(blocks: blocks);
@@ -160,17 +171,17 @@ class _ChatScreenState extends State<ChatScreen> {
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text('Chat'),
         actions: [
-          PopupMenuButton<DmChatSubmitShortcut>(
+          PopupMenuButton<chat_widgets.DmChatSubmitShortcut>(
             tooltip: 'Submit shortcut',
             initialValue: _shortcut,
             onSelected: (v) => setState(() => _shortcut = v),
             itemBuilder: (_) => const [
               PopupMenuItem(
-                value: DmChatSubmitShortcut.cmdEnter,
+                value: chat_widgets.DmChatSubmitShortcut.cmdEnter,
                 child: Text('Cmd/Ctrl+Enter submits'),
               ),
               PopupMenuItem(
-                value: DmChatSubmitShortcut.enter,
+                value: chat_widgets.DmChatSubmitShortcut.enter,
                 child: Text('Enter submits'),
               ),
             ],
@@ -180,7 +191,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
       appBarBreakpoint: Breakpoints.standard,
-      body: (_) => DmChatView(
+      body: (_) => chat_widgets.DmChatView(
         messages: _messages,
         onSend: _onSend,
         isStreaming: _isStreaming,

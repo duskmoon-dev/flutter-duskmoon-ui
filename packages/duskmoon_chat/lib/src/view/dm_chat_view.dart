@@ -1,6 +1,11 @@
 import 'dart:math' as math;
 
-import 'package:duskmoon_widgets/duskmoon_widgets.dart';
+import 'package:duskmoon_widgets/duskmoon_widgets.dart'
+    show
+        DmIconButton,
+        DmMarkdownConfig,
+        DmMarkdownInput,
+        DmMarkdownInputController;
 import 'package:flutter/material.dart';
 
 import '../bubble/dm_chat_bubble.dart';

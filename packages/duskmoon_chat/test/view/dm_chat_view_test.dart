@@ -1,5 +1,6 @@
 import 'package:duskmoon_chat/duskmoon_chat.dart';
-import 'package:duskmoon_widgets/duskmoon_widgets.dart';
+import 'package:duskmoon_widgets/duskmoon_widgets.dart'
+    show DmMarkdownConfig, DmMarkdownInput;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

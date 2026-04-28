@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:duskmoon_chat/duskmoon_chat.dart';
-import 'package:duskmoon_widgets/duskmoon_widgets.dart';
+import 'package:duskmoon_widgets/duskmoon_widgets.dart' show DmMarkdown;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:duskmoon_widgets/duskmoon_widgets.dart';
+import 'package:duskmoon_widgets/duskmoon_widgets.dart'
+    show DmCard, DmMarkdown, DmMarkdownConfig;
 import 'package:flutter/material.dart';
 
 import '../../models/dm_chat_message.dart';
