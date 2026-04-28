@@ -28,21 +28,45 @@ class BubbleFrame extends StatelessWidget {
           builder: (ctx, constraints) {
             final maxWidth =
                 constraints.maxWidth * theme.userBubbleMaxWidthFraction;
+            final bubble = Container(
+              padding: theme.bubblePadding,
+              decoration: BoxDecoration(
+                color: theme.userBubbleColor,
+                borderRadius: theme.userBubbleRadius,
+              ),
+              child: DefaultTextStyle.merge(
+                style: TextStyle(color: theme.userBubbleOnColor),
+                child: child,
+              ),
+            );
             return Align(
               alignment: Alignment.centerRight,
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: maxWidth),
-                child: Container(
-                  padding: theme.bubblePadding,
-                  decoration: BoxDecoration(
-                    color: theme.userBubbleColor,
-                    borderRadius: theme.userBubbleRadius,
-                  ),
-                  child: DefaultTextStyle.merge(
-                    style: TextStyle(color: theme.userBubbleOnColor),
-                    child: child,
-                  ),
-                ),
+                child: avatar == null && header == null
+                    ? bubble
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                if (header != null) ...[
+                                  header!,
+                                  const SizedBox(height: 4),
+                                ],
+                                bubble,
+                              ],
+                            ),
+                          ),
+                          if (avatar != null) ...[
+                            const SizedBox(width: 10),
+                            avatar!,
+                          ],
+                        ],
+                      ),
               ),
             );
           },

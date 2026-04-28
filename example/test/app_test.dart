@@ -117,6 +117,11 @@ void main() {
     });
 
     testWidgets('chat screen builds via GoRouter', (tester) async {
+      tester.view.physicalSize = const Size(1440, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
       await tester.pumpWidget(
         MaterialApp.router(
           routerConfig: buildRouter(
@@ -127,9 +132,20 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.widgetWithText(AppBar, 'Chat'), findsOneWidget);
-      expect(find.text('Send a message to begin.'), findsOneWidget);
       expect(find.text('Model not ready'), findsOneWidget);
-      expect(find.text('Remote: deepseek-v4-flash'), findsOneWidget);
+      expect(find.text('Demo: Mixed blocks'), findsOneWidget);
+      expect(find.byTooltip('Attach'), findsOneWidget);
+      expect(find.text('User'), findsWidgets);
+      expect(find.text('Assistant'), findsWidgets);
+
+      await tester.tap(find.text('Demo: Mixed blocks'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('50-round history').last);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Demo: 50-round history'), findsOneWidget);
+      expect(find.text('round-50-summary.csv'), findsOneWidget);
+      expect(find.text('search_docs'), findsOneWidget);
     });
   });
 

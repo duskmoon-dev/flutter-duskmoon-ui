@@ -73,5 +73,23 @@ void main() {
       expect(find.byKey(const ValueKey('avatar')), findsOneWidget);
       expect(find.byKey(const ValueKey('header')), findsOneWidget);
     });
+
+    testWidgets('renders user avatar and header slots when provided',
+        (tester) async {
+      await pumpThemed(
+        tester,
+        const DmChatBubble(
+          message: DmChatMessage(
+            id: 'u1',
+            role: DmChatRole.user,
+            blocks: [DmChatTextBlock(text: 'body')],
+          ),
+          avatar: Icon(Icons.person, key: ValueKey('user-avatar')),
+          header: Text('User', key: ValueKey('user-header')),
+        ),
+      );
+      expect(find.byKey(const ValueKey('user-avatar')), findsOneWidget);
+      expect(find.byKey(const ValueKey('user-header')), findsOneWidget);
+    });
   });
 }
