@@ -34,7 +34,7 @@ MaterialApp(
 |---------|-------------|---------|
 | [`duskmoon_theme`](packages/duskmoon_theme/) | Codegen-driven theme — Sunshine/Moonlight color schemes, 20 semantic color tokens, M3 text theme | [![pub package](https://img.shields.io/pub/v/duskmoon_theme.svg)](https://pub.dev/packages/duskmoon_theme) |
 | [`duskmoon_theme_bloc`](packages/duskmoon_theme_bloc/) | BLoC for theme name + mode persistence via SharedPreferences | [![pub package](https://img.shields.io/pub/v/duskmoon_theme_bloc.svg)](https://pub.dev/packages/duskmoon_theme_bloc) |
-| [`duskmoon_widgets`](packages/duskmoon_widgets/) | 18 adaptive widgets with Material/Cupertino rendering | [![pub package](https://img.shields.io/pub/v/duskmoon_widgets.svg)](https://pub.dev/packages/duskmoon_widgets) |
+| [`duskmoon_widgets`](packages/duskmoon_widgets/) | Adaptive widgets and chat components with Material/Cupertino rendering | [![pub package](https://img.shields.io/pub/v/duskmoon_widgets.svg)](https://pub.dev/packages/duskmoon_widgets) |
 | [`duskmoon_settings`](packages/duskmoon_settings/) | Settings UI — 10 tile types, 3 platform renderers (Material/Cupertino/Fluent) | [![pub package](https://img.shields.io/pub/v/duskmoon_settings.svg)](https://pub.dev/packages/duskmoon_settings) |
 | [`duskmoon_feedback`](packages/duskmoon_feedback/) | Adaptive dialogs, snackbars, toasts, bottom sheets | [![pub package](https://img.shields.io/pub/v/duskmoon_feedback.svg)](https://pub.dev/packages/duskmoon_feedback) |
 | [`duskmoon_form`](packages/duskmoon_form/) | BLoC-based form management with 7 field types | [![pub package](https://img.shields.io/pub/v/duskmoon_form.svg)](https://pub.dev/packages/duskmoon_form) |
@@ -107,6 +107,7 @@ DmButton(
 **Navigation:** `DmScaffold` (responsive rail/bottom nav), `DmAppBar`, `DmBottomNav`, `DmTabBar`, `DmDrawer`
 **Data Display:** `DmBadge`, `DmChip`, `DmAvatar`
 **Scaffold:** `DmActionList` (popup/icon/text button modes)
+**Chat:** `DmChatView`, `DmChatInput`, `DmChatBubble`, message/block models, attachments, tool calls
 
 ## Settings UI
 

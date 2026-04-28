@@ -1,6 +1,6 @@
 # duskmoon_widgets
 
-Adaptive widget library for the DuskMoon Design System. 18 widgets that automatically render Material or Cupertino variants based on platform.
+Adaptive widget library for the DuskMoon Design System. Includes platform-aware widgets plus chat components for LLM-style conversations.
 
 ## Installation
 
@@ -26,6 +26,12 @@ DmSwitch(value: true, onChanged: (v) {});
 
 // Navigation
 DmAppBar(title: const Text('Home'));
+
+// Chat
+DmChatView(
+  messages: const [],
+  onSend: (text, attachments) {},
+);
 ```
 
 ### Platform Resolution
@@ -61,6 +67,7 @@ DmButton(
 | Layout | `DmCard`, `DmDivider` |
 | Navigation | `DmAppBar`, `DmBottomNav`, `DmTabBar`, `DmDrawer` |
 | Data Display | `DmBadge`, `DmChip`, `DmAvatar` |
+| Chat | `DmChatView`, `DmChatInput`, `DmChatBubble`, `DmChatTheme` |
 
 ## License
 
