@@ -89,6 +89,14 @@ class AppRouter {
             child: const CodeEditorScreen(),
           ),
         ),
+        GoRoute(
+          name: ChatScreen.name,
+          path: ChatScreen.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const ChatScreen(),
+          ),
+        ),
       ],
     ),
     GoRoute(
@@ -97,14 +105,6 @@ class AppRouter {
       pageBuilder: (context, state) => NoTransitionPage<void>(
         key: state.pageKey,
         child: const FormScreen(),
-      ),
-    ),
-    GoRoute(
-      name: ChatScreen.name,
-      path: ChatScreen.path,
-      pageBuilder: (context, state) => NoTransitionPage<void>(
-        key: state.pageKey,
-        child: const ChatScreen(),
       ),
     ),
     GoRoute(

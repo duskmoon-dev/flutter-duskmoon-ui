@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../destination.dart';
 import '../button/button_screen.dart';
+import '../chat/chat_screen.dart';
 import '../code_editor/code_editor_screen.dart';
 import '../feedback/feedback_screen.dart';
 import '../markdown/markdown_screen.dart';
@@ -68,6 +69,12 @@ class _WidgetsBody extends StatelessWidget {
       title: 'Code Editor',
       subtitle: '19-language editor with syntax highlighting',
       icon: Icons.code,
+    ),
+    _WidgetMenuItem(
+      routeName: ChatScreen.name,
+      title: 'Chat',
+      subtitle: 'DmChatView, streaming responses, tools, and attachments',
+      icon: Icons.chat_outlined,
     ),
   ];
 

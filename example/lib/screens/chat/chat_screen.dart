@@ -8,7 +8,7 @@ import '../../destination.dart';
 
 class ChatScreen extends StatefulWidget {
   static const name = 'Chat';
-  static const path = '/chat';
+  static const path = 'chat';
 
   const ChatScreen({super.key});
 
@@ -161,7 +161,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return DmAdaptiveScaffold(
-      selectedIndex: Destinations.indexOf(const Key(ChatScreen.name)),
+      selectedIndex: Destinations.indexOf(const Key('Widgets')),
       onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
       destinations: Destinations.navs,
       useDrawer: true,
@@ -169,6 +169,7 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: DmAppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        leading: const BackButton(),
         title: const Text('Chat'),
         actions: [
           PopupMenuButton<chat_widgets.DmChatSubmitShortcut>(

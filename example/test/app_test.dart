@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:example/main.dart';
 import 'package:example/router.dart';
 import 'package:example/screens/button/button_screen.dart';
+import 'package:example/screens/chat/chat_screen.dart';
 import 'package:example/screens/code_editor/code_editor_screen.dart';
 import 'package:example/screens/feedback/feedback_screen.dart';
 import 'package:example/screens/markdown/markdown_screen.dart';
@@ -41,6 +42,7 @@ void main() {
       expect(find.text('Scaffold & Layout'), findsOneWidget);
       expect(find.text('Markdown'), findsOneWidget);
       expect(find.text('Code Editor'), findsOneWidget);
+      expect(find.text('Chat'), findsOneWidget);
     });
 
     testWidgets('buttons screen builds via GoRouter', (tester) async {
@@ -112,6 +114,20 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.widgetWithText(AppBar, 'Code Editor'), findsOneWidget);
+    });
+
+    testWidgets('chat screen builds via GoRouter', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: buildRouter(
+            '${WidgetsScreen.path}/${ChatScreen.path}',
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.widgetWithText(AppBar, 'Chat'), findsOneWidget);
+      expect(find.text('Send a message to begin.'), findsOneWidget);
     });
   });
 
