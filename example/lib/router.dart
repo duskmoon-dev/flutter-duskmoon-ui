@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'screens/button/button_screen.dart';
+import 'screens/chat/chat_screen.dart';
 import 'screens/code_editor/code_editor_screen.dart';
 import 'screens/feedback/feedback_screen.dart';
 import 'screens/form/form_screen.dart';
@@ -96,6 +97,14 @@ class AppRouter {
       pageBuilder: (context, state) => NoTransitionPage<void>(
         key: state.pageKey,
         child: const FormScreen(),
+      ),
+    ),
+    GoRoute(
+      name: ChatScreen.name,
+      path: ChatScreen.path,
+      pageBuilder: (context, state) => NoTransitionPage<void>(
+        key: state.pageKey,
+        child: const ChatScreen(),
       ),
     ),
     GoRoute(

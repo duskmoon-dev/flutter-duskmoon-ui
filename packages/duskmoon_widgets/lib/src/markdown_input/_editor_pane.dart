@@ -249,7 +249,7 @@ class _EditorPaneState extends State<EditorPane> {
 
     return Stack(
       key: const ValueKey('dm-markdown-editor-surface'),
-      fit: StackFit.expand,
+      fit: expandToFit ? StackFit.expand : StackFit.loose,
       children: [
         Padding(
           padding: padding,
