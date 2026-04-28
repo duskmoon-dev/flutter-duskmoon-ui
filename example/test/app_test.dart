@@ -128,6 +128,8 @@ void main() {
 
       expect(find.widgetWithText(AppBar, 'Chat'), findsOneWidget);
       expect(find.text('Send a message to begin.'), findsOneWidget);
+      expect(find.text('Model not ready'), findsOneWidget);
+      expect(find.text('Remote: deepseek-v4-flash'), findsOneWidget);
     });
   });
 

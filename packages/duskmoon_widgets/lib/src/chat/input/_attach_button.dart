@@ -7,9 +7,14 @@ import '../models/dm_chat_attachment.dart';
 
 /// Opens the platform file picker and forwards selected files as attachments.
 class AttachButton extends StatelessWidget {
-  const AttachButton({super.key, required this.onPicked});
+  const AttachButton({
+    super.key,
+    required this.onPicked,
+    this.enabled = true,
+  });
 
   final ValueChanged<List<DmChatAttachment>> onPicked;
+  final bool enabled;
 
   Future<void> _pick() async {
     final result = await FilePicker.platform.pickFiles(
@@ -50,7 +55,7 @@ class AttachButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => IconButton(
         tooltip: 'Attach',
-        onPressed: _pick,
+        onPressed: enabled ? _pick : null,
         icon: const Icon(Icons.attach_file),
       );
 }

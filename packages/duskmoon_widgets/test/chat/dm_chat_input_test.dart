@@ -7,6 +7,41 @@ import 'helpers/chat_test_harness.dart';
 
 void main() {
   group('DmChatInput', () {
+    testWidgets('uses markdown input with an upward send control', (
+      tester,
+    ) async {
+      await pumpThemed(
+        tester,
+        DmChatInput(onSend: (_, __) {}),
+      );
+
+      expect(find.byType(DmMarkdownInput), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_upward), findsOneWidget);
+      expect(find.byIcon(Icons.send), findsNothing);
+    });
+
+    testWidgets('send is disabled until text or ready attachments exist', (
+      tester,
+    ) async {
+      await pumpThemed(
+        tester,
+        DmChatInput(onSend: (_, __) {}),
+      );
+
+      var sendButton = tester.widget<IconButton>(
+        find.widgetWithIcon(IconButton, Icons.arrow_upward),
+      );
+      expect(sendButton.onPressed, isNull);
+
+      await tester.enterText(find.byType(EditableText), 'hello');
+      await tester.pump();
+
+      sendButton = tester.widget<IconButton>(
+        find.widgetWithIcon(IconButton, Icons.arrow_upward),
+      );
+      expect(sendButton.onPressed, isNotNull);
+    });
+
     testWidgets('renders send button; tap submits current text',
         (tester) async {
       String? sent;
@@ -17,6 +52,7 @@ void main() {
         ),
       );
       await tester.enterText(find.byType(EditableText), 'hello');
+      await tester.pump();
       await tester.tap(find.byTooltip('Send'));
       await tester.pump();
       expect(sent, 'hello');
@@ -95,6 +131,7 @@ void main() {
         ),
       );
       await tester.enterText(find.byType(EditableText), 'text');
+      await tester.pump();
       await tester.tap(find.byTooltip('Send'));
       await tester.pump();
       expect(sent, isFalse);

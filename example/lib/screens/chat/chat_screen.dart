@@ -21,6 +21,7 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _isStreaming = false;
   chat_widgets.DmChatSubmitShortcut _shortcut =
       chat_widgets.DmChatSubmitShortcut.cmdEnter;
+  String _model = 'deepseek-v4-flash';
   StreamController<String>? _activeThinking;
   StreamController<String>? _activeText;
 
@@ -196,11 +197,78 @@ class _ChatScreenState extends State<ChatScreen> {
         messages: _messages,
         onSend: _onSend,
         isStreaming: _isStreaming,
+        inputPlaceholder: 'Model not ready',
+        inputMinLines: 10,
+        inputMaxLines: 10,
+        inputTrailing: _ModelSelector(
+          value: _model,
+          onChanged: (value) => setState(() => _model = value),
+        ),
         submitShortcut: _shortcut,
         emptyBuilder: (_) => const Center(
           child: Text(
             'Send a message to begin.',
             style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ModelSelector extends StatelessWidget {
+  const _ModelSelector({
+    required this.value,
+    required this.onChanged,
+  });
+
+  final String value;
+  final ValueChanged<String> onChanged;
+
+  static const _models = [
+    'deepseek-v4-flash',
+    'gpt-5.4-mini',
+    'local-preview',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return PopupMenuButton<String>(
+      tooltip: 'Select model',
+      initialValue: value,
+      onSelected: onChanged,
+      itemBuilder: (context) => [
+        for (final model in _models)
+          PopupMenuItem(
+            value: model,
+            child: Text('Remote: $model'),
+          ),
+      ],
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 320),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: Text(
+                  'Remote: $value',
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              Icon(
+                Icons.arrow_drop_down,
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ],
           ),
         ),
       ),

@@ -17,17 +17,30 @@ class SendButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     if (isStreaming) {
-      return IconButton(
+      return IconButton.filled(
         tooltip: 'Stop',
+        style: IconButton.styleFrom(
+          backgroundColor: colorScheme.errorContainer,
+          foregroundColor: colorScheme.onErrorContainer,
+          disabledBackgroundColor: colorScheme.surfaceContainerHighest,
+          disabledForegroundColor: colorScheme.onSurfaceVariant,
+        ),
         onPressed: onStop,
         icon: const Icon(Icons.stop),
       );
     }
-    return IconButton(
+    return IconButton.filled(
       tooltip: 'Send',
+      style: IconButton.styleFrom(
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        disabledBackgroundColor: colorScheme.surfaceContainerHighest,
+        disabledForegroundColor: colorScheme.onSurfaceVariant,
+      ),
       onPressed: enabled ? onSend : null,
-      icon: const Icon(Icons.send),
+      icon: const Icon(Icons.arrow_upward),
     );
   }
 }

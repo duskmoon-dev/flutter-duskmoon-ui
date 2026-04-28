@@ -82,16 +82,19 @@ class _DmChatInputState extends State<DmChatInput> {
   bool get _anyUploading => widget.pendingAttachments
       .any((a) => a.status == DmChatAttachmentStatus.uploading);
 
+  List<DmChatAttachment> get _readyAttachments => widget.pendingAttachments
+      .where((a) => a.status == DmChatAttachmentStatus.done)
+      .toList();
+
   bool get _canSend =>
-      !widget.isStreaming && !_anyUploading && _controller.text.isNotEmpty;
+      !widget.isStreaming &&
+      !_anyUploading &&
+      (_controller.text.trim().isNotEmpty || _readyAttachments.isNotEmpty);
 
   void _submit() {
     if (!_canSend) return;
     final text = _controller.text;
-    final ready = widget.pendingAttachments
-        .where((a) => a.status == DmChatAttachmentStatus.done)
-        .toList();
-    widget.onSend(text, ready);
+    widget.onSend(text, _readyAttachments);
     _controller.clear();
   }
 
@@ -130,15 +133,10 @@ class _DmChatInputState extends State<DmChatInput> {
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, _) {
-        return Container(
+        final colorScheme = Theme.of(context).colorScheme;
+
+        return Padding(
           padding: theme.inputPadding,
-          decoration: BoxDecoration(
-            color: theme.inputSurface,
-            borderRadius: theme.inputRadius,
-            border: Border.all(
-              color: Theme.of(context).colorScheme.outlineVariant,
-            ),
-          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -164,26 +162,55 @@ class _DmChatInputState extends State<DmChatInput> {
                     border: InputBorder.none,
                     isDense: true,
                     contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 8,
+                      horizontal: 24,
+                      vertical: 24,
                     ),
+                    hintStyle:
+                        Theme.of(context).textTheme.titleMedium?.copyWith(
+                              color: colorScheme.onSurfaceVariant
+                                  .withValues(alpha: 0.58),
+                              fontWeight: FontWeight.w600,
+                            ),
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  if (widget.leading != null) widget.leading!,
-                  if (widget.onAttach != null)
-                    AttachButton(onPicked: widget.onAttach!),
-                  const Spacer(),
-                  if (widget.trailing != null) widget.trailing!,
-                  SendButton(
-                    isStreaming: widget.isStreaming,
-                    onSend: _submit,
-                    onStop: widget.onStop ?? () {},
-                    enabled: !widget.isStreaming && !_anyUploading,
+              Container(
+                constraints: const BoxConstraints(minHeight: 56),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainer,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: theme.inputRadius.bottomLeft,
+                    bottomRight: theme.inputRadius.bottomRight,
                   ),
-                ],
+                ),
+                child: Row(
+                  children: [
+                    if (widget.leading != null) widget.leading!,
+                    if (widget.onAttach != null)
+                      AttachButton(
+                        onPicked: widget.onAttach!,
+                        enabled: !widget.isStreaming,
+                      ),
+                    const Spacer(),
+                    if (widget.trailing != null)
+                      Flexible(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: widget.trailing!,
+                        ),
+                      ),
+                    SendButton(
+                      isStreaming: widget.isStreaming,
+                      onSend: _submit,
+                      onStop: widget.onStop ?? () {},
+                      enabled: _canSend,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

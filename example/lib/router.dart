@@ -28,7 +28,6 @@ class AppRouter {
 
   static GoRouter router = GoRouter(
     navigatorKey: key,
-    initialLocation: ThemeScreen.path,
     routes: routes,
   );
 

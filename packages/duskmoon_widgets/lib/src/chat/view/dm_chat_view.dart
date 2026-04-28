@@ -28,6 +28,8 @@ class DmChatView extends StatefulWidget {
     this.inputPlaceholder = 'Message…',
     this.inputLeading,
     this.inputTrailing,
+    this.inputMinLines = 1,
+    this.inputMaxLines = 8,
     this.submitShortcut = DmChatSubmitShortcut.cmdEnter,
     this.markdownConfig = const DmMarkdownConfig(),
     this.emptyBuilder,
@@ -53,6 +55,8 @@ class DmChatView extends StatefulWidget {
   final String inputPlaceholder;
   final Widget? inputLeading;
   final Widget? inputTrailing;
+  final int inputMinLines;
+  final int inputMaxLines;
   final DmChatSubmitShortcut submitShortcut;
   final DmMarkdownConfig markdownConfig;
   final WidgetBuilder? emptyBuilder;
@@ -177,6 +181,8 @@ class _DmChatViewState extends State<DmChatView> {
             placeholder: widget.inputPlaceholder,
             leading: widget.inputLeading,
             trailing: widget.inputTrailing,
+            minLines: widget.inputMinLines,
+            maxLines: widget.inputMaxLines,
             submitShortcut: widget.submitShortcut,
           ),
         ],

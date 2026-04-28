@@ -66,5 +66,28 @@ void main() {
       );
       expect(find.text('Say hi'), findsOneWidget);
     });
+
+    testWidgets('input line limits propagate to DmMarkdownInput', (
+      tester,
+    ) async {
+      await pumpThemed(
+        tester,
+        SizedBox(
+          height: 500,
+          child: DmChatView(
+            messages: const [],
+            onSend: (_, __) {},
+            inputMinLines: 6,
+            inputMaxLines: 6,
+          ),
+        ),
+      );
+
+      final input = tester.widget<DmMarkdownInput>(
+        find.byType(DmMarkdownInput),
+      );
+      expect(input.minLines, 6);
+      expect(input.maxLines, 6);
+    });
   });
 }
