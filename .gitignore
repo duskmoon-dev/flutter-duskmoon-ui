@@ -45,4 +45,7 @@ local.properties
 # git worktrees
 /.trees/
 
+# graphify
+/graphify-out/
+
 

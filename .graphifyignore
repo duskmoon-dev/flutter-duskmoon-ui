@@ -1,0 +1,32 @@
+# Build artifacts
+build/
+.dart_tool/
+.pub-cache/
+.pub/
+
+# Generated files
+**/*.g.dart
+**/*.freezed.dart
+**/*.mocks.dart
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+
+# Vendored / forked chart modules (internal to duskmoon_visualization)
+packages/duskmoon_visualization/lib/src/vendor/
+
+# Graphify internals
+graphify-out/
+
+# Git worktrees
+.trees/
+
+# Agent configs
+.claude/
+.gemini/
+.agents/
