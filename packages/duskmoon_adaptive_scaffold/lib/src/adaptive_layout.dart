@@ -437,12 +437,9 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    // When duo-screen policy is navigationOnSecondary and either:
-    // 1. A hinge exists (foldable device like Surface Duo)
-    // 2. This is a secondary physical display (like AYANEO Pocket DS)
-    // then use the dedicated duo-screen layout path.
-    if (duoScreenPolicy == DuoScreenPolicy.navigationOnSecondary &&
-        (hinge != null || displayId > 0)) {
+    // When duo-screen policy is navigationOnSecondary, use the dedicated
+    // duo-screen layout path to handle role-based rendering across displays.
+    if (duoScreenPolicy == DuoScreenPolicy.navigationOnSecondary) {
       _performDuoScreenLayout(size);
       return;
     }
@@ -768,7 +765,7 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
       secondaryWidth = size.width;
       secondaryHeight = size.height;
       secondaryOrigin = Offset.zero;
-    } else {
+    } else if (hinge != null) {
       // Role: Spanned Primary Display (Foldable)
       final Rect h = hinge!;
       if (_isVerticalHinge) {
@@ -786,6 +783,14 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
         secondaryHeight = size.height;
         secondaryOrigin = Offset(h.right, 0);
       }
+    } else {
+      // Role: Discrete Primary Display (acting as Viewer in Duo mode)
+      // The entire window is the main region.
+      mainWidth = size.width;
+      mainHeight = size.height;
+      secondaryWidth = 0;
+      secondaryHeight = 0;
+      secondaryOrigin = Offset.zero;
     }
 
     // --- Layout logic based on role ---

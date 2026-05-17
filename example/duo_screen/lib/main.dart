@@ -9,12 +9,12 @@ const String channelId = 'dev.duskmoon.duo_screen/bridge';
 const MethodChannel bridge = MethodChannel(channelId);
 
 void main() {
-  runApp(const DuoScreenExampleApp());
+  runApp(const DuoScreenApp(displayId: 0));
 }
 
 @pragma('vm:entry-point')
 void secondaryDisplayMain() {
-  runApp(const SecondaryDisplayControllerApp());
+  runApp(const DuoScreenApp(displayId: 1));
 }
 
 // --- Data Model ---
@@ -42,50 +42,60 @@ class AppConfig {
   );
 }
 
-// --- Primary Display: THE VIEWER ---
-class DuoScreenExampleApp extends StatelessWidget {
-  const DuoScreenExampleApp({super.key});
+class DuoScreenApp extends StatelessWidget {
+  final int displayId;
+  const DuoScreenApp({super.key, required this.displayId});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Viewer (Primary)',
+      title: displayId == 0 ? 'Viewer' : 'Controller',
       theme: DmThemeData.sunshine(),
       darkTheme: DmThemeData.moonlight(),
-      home: const MainViewerScreen(),
+      home: SharedDuoScaffold(displayId: displayId),
     );
   }
 }
 
-class MainViewerScreen extends StatefulWidget {
-  const MainViewerScreen({super.key});
+class SharedDuoScaffold extends StatefulWidget {
+  final int displayId;
+  const SharedDuoScaffold({super.key, required this.displayId});
 
   @override
-  State<MainViewerScreen> createState() => _MainViewerScreenState();
+  State<SharedDuoScaffold> createState() => _SharedDuoScaffoldState();
 }
 
-class _MainViewerScreenState extends State<MainViewerScreen> {
+class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
   final _displayManager = DisplayManager();
-  AppConfig _config = AppConfig(
-    selectedIndex: 0,
-    themeColor: Colors.blue,
-    statusText: 'Waiting for Controller...',
+  final TextEditingController _textController = TextEditingController(
+    text: 'Hello from Controller!',
   );
+
+  // Current State
+  int _selectedIndex = 0;
+  Color _currentColor = Colors.blue;
+  String _statusText = 'Waiting for interaction...';
 
   @override
   void initState() {
     super.initState();
     _setupBridge();
-    _checkDisplays();
+    if (widget.displayId == 0) {
+      _checkDisplays();
+    }
   }
 
   void _setupBridge() {
     bridge.setMethodCallHandler((call) async {
       if (call.method == 'updateConfig') {
         final json = jsonDecode(call.arguments as String);
+        final config = AppConfig.fromJson(json);
         setState(() {
-          _config = AppConfig.fromJson(json);
+          _selectedIndex = config.selectedIndex;
+          _currentColor = config.themeColor;
+          _statusText = config.statusText;
+          _textController.text = config.statusText;
         });
       }
     });
@@ -97,7 +107,6 @@ class _MainViewerScreenState extends State<MainViewerScreen> {
       final secondary = displays.where((d) => d.displayId != 0).toList();
       if (secondary.isNotEmpty) {
         secondary.sort((a, b) => b.displayId!.compareTo(a.displayId!));
-        // Auto-launch controller on secondary display
         await _displayManager.showSecondaryDisplay(
           displayId: secondary.first.displayId!,
           routerName: "secondaryDisplayMain",
@@ -106,105 +115,7 @@ class _MainViewerScreenState extends State<MainViewerScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return DmAdaptiveScaffold(
-      displayId: 0,
-      duoScreenPolicy: DuoScreenPolicy.navigationOnSecondary,
-      appBar: DmAppBar(
-        title: const Text('Viewer (Main Screen)'),
-        backgroundColor: _config.themeColor.withValues(alpha: 0.2),
-      ),
-      body: (_) => Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: _config.themeColor.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
-                border: Border.all(color: _config.themeColor, width: 4),
-              ),
-              child: Icon(
-                _config.selectedIndex == 0 ? Icons.home : Icons.settings,
-                size: 120,
-                color: _config.themeColor,
-              ),
-            ),
-            const SizedBox(height: 48),
-            Text(
-              'Current Mode: ${_config.selectedIndex == 0 ? "Home" : "Settings"}',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: 16),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
-                ),
-                child: Text(
-                  _config.statusText,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      secondaryBody: (_) => Container(
-        color: _config.themeColor.withValues(alpha: 0.05),
-        child: Center(
-          child: Text(
-            'This text is defined on the Viewer\nbut rendered by the Scaffold on the Controller display!',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ),
-      ),
-      destinations: const [
-        NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-        NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
-      ],
-      selectedIndex: _config.selectedIndex,
-      onSelectedIndexChange: (_) {},
-    );
-  }
-}
-
-// --- Secondary Display: THE CONTROLLER (has Nav Rail) ---
-class SecondaryDisplayControllerApp extends StatelessWidget {
-  const SecondaryDisplayControllerApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Controller (Secondary)',
-      theme: DmThemeData.sunshine(),
-      darkTheme: DmThemeData.moonlight(),
-      home: const ControllerScreen(),
-    );
-  }
-}
-
-class ControllerScreen extends StatefulWidget {
-  const ControllerScreen({super.key});
-
-  @override
-  State<ControllerScreen> createState() => _ControllerScreenState();
-}
-
-class _ControllerScreenState extends State<ControllerScreen> {
-  int _selectedIndex = 0;
-  Color _currentColor = Colors.blue;
-  final TextEditingController _textController = TextEditingController(
-    text: 'Hello from Controller!',
-  );
-
-  void _syncToViewer() {
+  void _syncToOther() {
     final config = AppConfig(
       selectedIndex: _selectedIndex,
       themeColor: _currentColor,
@@ -216,45 +127,75 @@ class _ControllerScreenState extends State<ControllerScreen> {
   @override
   Widget build(BuildContext context) {
     return DmAdaptiveScaffold(
-      displayId: 1,
+      displayId: widget.displayId,
       duoScreenPolicy: DuoScreenPolicy.navigationOnSecondary,
-      // We force NavRail on this screen by providing destinations
-      destinations: const [
-        NavigationDestination(icon: Icon(Icons.dashboard), label: 'Control'),
-        NavigationDestination(icon: Icon(Icons.palette), label: 'Appearance'),
-      ],
-      selectedIndex: _selectedIndex,
-      onSelectedIndexChange: (index) {
-        setState(() {
-          _selectedIndex = index;
-        });
-        _syncToViewer();
-      },
       appBar: DmAppBar(
-        title: const Text('Controller (Second Screen)'),
+        title: Text(widget.displayId == 0 ? 'Main Viewer' : 'Controller'),
+        backgroundColor: _currentColor.withValues(alpha: 0.2),
         automaticallyImplyLeading: false,
       ),
-      body: (_) => Padding(
+      // --- THE MAIN VIEW (Renders only on Display 0) ---
+      body: (_) => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: _currentColor.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+                border: Border.all(color: _currentColor, width: 4),
+              ),
+              child: Icon(
+                _selectedIndex == 0 ? Icons.home : Icons.settings,
+                size: 120,
+                color: _currentColor,
+              ),
+            ),
+            const SizedBox(height: 48),
+            Text(
+              'Current Mode: ${_selectedIndex == 0 ? "Home" : "Settings"}',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+                child: Text(
+                  _statusText,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      // --- THE CONTROLLER VIEW (Renders only on Display 1+) ---
+      secondaryBody: (_) => Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Menu & Configuration',
+              'Interactive Menu',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 24),
             TextField(
               controller: _textController,
               decoration: const InputDecoration(
-                labelText: 'Message to Main Screen',
+                labelText: 'Update Main Screen Text',
                 border: OutlineInputBorder(),
               ),
-              onChanged: (_) => _syncToViewer(),
+              onChanged: (_) => _syncToOther(),
             ),
             const SizedBox(height: 32),
             Text(
-              'Quick Theme Actions:',
+              'Quick Theme Colors:',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
@@ -265,50 +206,54 @@ class _ControllerScreenState extends State<ControllerScreen> {
                   color: Colors.blue,
                   onTap: () {
                     setState(() => _currentColor = Colors.blue);
-                    _syncToViewer();
+                    _syncToOther();
                   },
                 ),
                 _ColorButton(
                   color: Colors.red,
                   onTap: () {
                     setState(() => _currentColor = Colors.red);
-                    _syncToViewer();
+                    _syncToOther();
                   },
                 ),
                 _ColorButton(
                   color: Colors.green,
                   onTap: () {
                     setState(() => _currentColor = Colors.green);
-                    _syncToViewer();
+                    _syncToOther();
                   },
                 ),
                 _ColorButton(
                   color: Colors.orange,
                   onTap: () {
                     setState(() => _currentColor = Colors.orange);
-                    _syncToViewer();
+                    _syncToOther();
                   },
                 ),
               ],
             ),
             const Spacer(),
-            const Center(
-              child: Opacity(
-                opacity: 0.5,
-                child: Text(
-                  'Interacting here updates the Main Screen instantly',
-                ),
+            const Opacity(
+              opacity: 0.5,
+              child: Text(
+                'This Controller UI is only visible on the second screen.',
+                textAlign: TextAlign.center,
               ),
             ),
           ],
         ),
       ),
-      secondaryBody: (_) => const Center(
-        child: RotatedBox(
-          quarterTurns: 1,
-          child: Text('Extra Controller Panel'),
-        ),
-      ),
+      destinations: const [
+        NavigationDestination(icon: Icon(Icons.dashboard), label: 'Dashboard'),
+        NavigationDestination(icon: Icon(Icons.tune), label: 'Settings'),
+      ],
+      selectedIndex: _selectedIndex,
+      onSelectedIndexChange: (index) {
+        setState(() {
+          _selectedIndex = index;
+        });
+        _syncToOther();
+      },
     );
   }
 }
