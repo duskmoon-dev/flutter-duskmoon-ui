@@ -108,12 +108,14 @@ class _MainViewerScreenState extends State<MainViewerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DmAdaptiveScaffold(
+      displayId: 0,
+      duoScreenPolicy: DuoScreenPolicy.navigationOnSecondary,
       appBar: DmAppBar(
         title: const Text('Viewer (Main Screen)'),
         backgroundColor: _config.themeColor.withValues(alpha: 0.2),
       ),
-      body: Center(
+      body: (_) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -152,6 +154,22 @@ class _MainViewerScreenState extends State<MainViewerScreen> {
           ],
         ),
       ),
+      secondaryBody: (_) => Container(
+        color: _config.themeColor.withValues(alpha: 0.05),
+        child: Center(
+          child: Text(
+            'This text is defined on the Viewer\nbut rendered by the Scaffold on the Controller display!',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+      ),
+      destinations: const [
+        NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
+        NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
+      ],
+      selectedIndex: _config.selectedIndex,
+      onSelectedIndexChange: (_) {},
     );
   }
 }
@@ -198,6 +216,8 @@ class _ControllerScreenState extends State<ControllerScreen> {
   @override
   Widget build(BuildContext context) {
     return DmAdaptiveScaffold(
+      displayId: 1,
+      duoScreenPolicy: DuoScreenPolicy.navigationOnSecondary,
       // We force NavRail on this screen by providing destinations
       destinations: const [
         NavigationDestination(icon: Icon(Icons.dashboard), label: 'Control'),
@@ -281,6 +301,12 @@ class _ControllerScreenState extends State<ControllerScreen> {
               ),
             ),
           ],
+        ),
+      ),
+      secondaryBody: (_) => const Center(
+        child: RotatedBox(
+          quarterTurns: 1,
+          child: Text('Extra Controller Panel'),
         ),
       ),
     );

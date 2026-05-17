@@ -177,7 +177,13 @@ class AdaptiveLayout extends StatefulWidget {
     this.internalAnimations = true,
     this.bodyOrientation = Axis.horizontal,
     this.duoScreenPolicy = DuoScreenPolicy.splitBody,
+    this.displayId = 0,
   });
+
+  /// The ID of the display this layout is rendered on.
+  ///
+  /// Defaults to 0 (the primary display).
+  final int displayId;
 
   /// The slot placed on the beginning side of the app window.
   ///
@@ -385,6 +391,7 @@ class _AdaptiveLayoutState extends State<AdaptiveLayout>
         hinge: hinge,
         sizeAnimation: _sizeAnimation,
         duoScreenPolicy: widget.duoScreenPolicy,
+        displayId: widget.displayId,
       ),
       children: entries,
     );
@@ -406,6 +413,7 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
     required this.textDirection,
     required this.sizeAnimation,
     required this.duoScreenPolicy,
+    required this.displayId,
     this.hinge,
   }) : super(relayout: controller);
 
@@ -421,6 +429,7 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
   final Rect? hinge;
   final Animation<double> sizeAnimation;
   final DuoScreenPolicy duoScreenPolicy;
+  final int displayId;
 
   /// Whether the hinge splits the screen vertically (top/bottom, like a
   /// clamshell device) rather than horizontally (left/right).
@@ -428,10 +437,12 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    // When duo-screen policy is navigationOnSecondary and a hinge exists,
-    // use the dedicated duo-screen layout path.
+    // When duo-screen policy is navigationOnSecondary and either:
+    // 1. A hinge exists (foldable device like Surface Duo)
+    // 2. This is a secondary physical display (like AYANEO Pocket DS)
+    // then use the dedicated duo-screen layout path.
     if (duoScreenPolicy == DuoScreenPolicy.navigationOnSecondary &&
-        hinge != null) {
+        (hinge != null || displayId > 0)) {
       _performDuoScreenLayout(size);
       return;
     }
@@ -734,115 +745,145 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
   /// [bottomNavigation] and [secondaryNavigation] are laid out with zero size
   /// since navigation is handled by [primaryNavigation] on the secondary screen.
   void _performDuoScreenLayout(Size size) {
-    final Rect h = hinge!;
-
-    // --- Determine screen regions based on hinge orientation ---
+    // --- Determine screen regions based on hardware type and role ---
     late final double mainWidth;
     late final double mainHeight;
     late final double secondaryWidth;
     late final double secondaryHeight;
     late final Offset secondaryOrigin;
 
-    if (_isVerticalHinge) {
-      // Vertical hinge: top/bottom split (e.g., AYANEO Pocket DS)
-      mainWidth = size.width;
-      mainHeight = h.top;
+    // The current display acts as the "Main Screen" if it's the primary display
+    // and we are spanning a hinge.
+    final bool isMainScreen = displayId == 0 && hinge != null;
+    // The current display acts as the "Secondary Screen" if it's a secondary
+    // physical display OR it's the primary display but we are looking at the
+    // region below/right of the hinge.
+    final bool isSecondaryScreen = displayId > 0;
+
+    if (displayId > 0) {
+      // Role: Discrete Secondary Display (e.g. bottom screen of Pocket DS)
+      // The entire window is the secondary region.
+      mainWidth = 0;
+      mainHeight = 0;
       secondaryWidth = size.width;
-      secondaryHeight = size.height - h.bottom;
-      secondaryOrigin = Offset(0, h.bottom);
-    } else {
-      // Horizontal hinge: left/right split (e.g., Surface Duo)
-      mainWidth = h.left;
-      mainHeight = size.height;
-      secondaryWidth = size.width - h.right;
       secondaryHeight = size.height;
-      secondaryOrigin = Offset(h.right, 0);
+      secondaryOrigin = Offset.zero;
+    } else {
+      // Role: Spanned Primary Display (Foldable)
+      final Rect h = hinge!;
+      if (_isVerticalHinge) {
+        // Vertical hinge: top/bottom split
+        mainWidth = size.width;
+        mainHeight = h.top;
+        secondaryWidth = size.width;
+        secondaryHeight = size.height - h.bottom;
+        secondaryOrigin = Offset(0, h.bottom);
+      } else {
+        // Horizontal hinge: left/right split
+        mainWidth = h.left;
+        mainHeight = size.height;
+        secondaryWidth = size.width - h.right;
+        secondaryHeight = size.height;
+        secondaryOrigin = Offset(h.right, 0);
+      }
     }
 
-    // --- Main screen layout ---
-    double mainTopMargin = 0;
+    // --- Layout logic based on role ---
 
-    // topNavigation: placed at the top of the main screen
-    if (hasChild(_SlotIds.topNavigation.name)) {
-      final Size childSize = layoutChild(
-        _SlotIds.topNavigation.name,
-        BoxConstraints.loose(Size(mainWidth, mainHeight)),
-      );
-      updateSize(_SlotIds.topNavigation.name, childSize);
-      positionChild(_SlotIds.topNavigation.name, Offset.zero);
-      mainTopMargin += childSize.height;
+    // 1. MAIN SCREEN SLOTS (Only if this display is the Main Screen)
+    if (isMainScreen || (displayId == 0 && hinge == null)) {
+      double mainTopMargin = 0;
+
+      // topNavigation: placed at the top of the main region
+      if (hasChild(_SlotIds.topNavigation.name)) {
+        final Size childSize = layoutChild(
+          _SlotIds.topNavigation.name,
+          BoxConstraints.loose(Size(mainWidth, mainHeight)),
+        );
+        updateSize(_SlotIds.topNavigation.name, childSize);
+        positionChild(_SlotIds.topNavigation.name, Offset.zero);
+        mainTopMargin += childSize.height;
+      }
+
+      // body: fills the main region (below topNavigation)
+      if (hasChild(_SlotIds.body.name)) {
+        layoutChild(
+          _SlotIds.body.name,
+          BoxConstraints.tight(
+            Size(mainWidth, mainHeight - mainTopMargin),
+          ),
+        );
+        positionChild(_SlotIds.body.name, Offset(0, mainTopMargin));
+      }
+    } else {
+      // Hide main screen slots if this engine is only rendering the secondary display
+      if (hasChild(_SlotIds.topNavigation.name)) {
+        layoutChild(_SlotIds.topNavigation.name, BoxConstraints.tight(Size.zero));
+        positionChild(_SlotIds.topNavigation.name, Offset.zero);
+      }
+      if (hasChild(_SlotIds.body.name)) {
+        layoutChild(_SlotIds.body.name, BoxConstraints.tight(Size.zero));
+        positionChild(_SlotIds.body.name, Offset.zero);
+      }
     }
 
-    // bottomNavigation: hidden in duo-screen mode (laid out with zero size)
+    // 2. SHARED SLOTS (Always hidden in Duo mode)
     if (hasChild(_SlotIds.bottomNavigation.name)) {
-      layoutChild(
-        _SlotIds.bottomNavigation.name,
-        BoxConstraints.tight(Size.zero),
-      );
+      layoutChild(_SlotIds.bottomNavigation.name, BoxConstraints.tight(Size.zero));
       positionChild(_SlotIds.bottomNavigation.name, Offset.zero);
     }
-
-    // body: fills the main screen (below topNavigation)
-    if (hasChild(_SlotIds.body.name)) {
-      layoutChild(
-        _SlotIds.body.name,
-        BoxConstraints.tight(
-          Size(mainWidth, mainHeight - mainTopMargin),
-        ),
-      );
-      positionChild(_SlotIds.body.name, Offset(0, mainTopMargin));
-    }
-
-    // --- Secondary screen layout ---
-    double navWidth = 0;
-
-    // primaryNavigation: on the leading edge of the secondary screen
-    if (hasChild(_SlotIds.primaryNavigation.name)) {
-      final Size childSize = layoutChild(
-        _SlotIds.primaryNavigation.name,
-        BoxConstraints.loose(Size(secondaryWidth, secondaryHeight)),
-      );
-      updateSize(_SlotIds.primaryNavigation.name, childSize);
-      if (textDirection) {
-        positionChild(
-          _SlotIds.primaryNavigation.name,
-          secondaryOrigin,
-        );
-      } else {
-        positionChild(
-          _SlotIds.primaryNavigation.name,
-          secondaryOrigin + Offset(secondaryWidth - childSize.width, 0),
-        );
-      }
-      navWidth = childSize.width;
-    }
-
-    // secondaryNavigation: hidden in duo-screen mode
     if (hasChild(_SlotIds.secondaryNavigation.name)) {
-      layoutChild(
-        _SlotIds.secondaryNavigation.name,
-        BoxConstraints.tight(Size.zero),
-      );
+      layoutChild(_SlotIds.secondaryNavigation.name, BoxConstraints.tight(Size.zero));
       positionChild(_SlotIds.secondaryNavigation.name, Offset.zero);
     }
 
-    // secondaryBody: fills the remaining space on the secondary screen
-    if (hasChild(_SlotIds.secondaryBody.name)) {
-      final double sBodyWidth = secondaryWidth - navWidth;
-      layoutChild(
-        _SlotIds.secondaryBody.name,
-        BoxConstraints.tight(Size(sBodyWidth, secondaryHeight)),
-      );
-      if (textDirection) {
-        positionChild(
-          _SlotIds.secondaryBody.name,
-          secondaryOrigin + Offset(navWidth, 0),
+    // 3. SECONDARY SCREEN SLOTS (Only if this display is (part of) the Secondary Screen)
+    if (isSecondaryScreen || (displayId == 0 && hinge != null)) {
+      double navWidth = 0;
+
+      // primaryNavigation: on the leading edge of the secondary region
+      if (hasChild(_SlotIds.primaryNavigation.name)) {
+        final Size childSize = layoutChild(
+          _SlotIds.primaryNavigation.name,
+          BoxConstraints.loose(Size(secondaryWidth, secondaryHeight)),
         );
-      } else {
-        positionChild(
+        updateSize(_SlotIds.primaryNavigation.name, childSize);
+        if (textDirection) {
+          positionChild(_SlotIds.primaryNavigation.name, secondaryOrigin);
+        } else {
+          positionChild(
+            _SlotIds.primaryNavigation.name,
+            secondaryOrigin + Offset(secondaryWidth - childSize.width, 0),
+          );
+        }
+        navWidth = childSize.width;
+      }
+
+      // secondaryBody: fills the remaining space on the secondary region
+      if (hasChild(_SlotIds.secondaryBody.name)) {
+        final double sBodyWidth = secondaryWidth - navWidth;
+        layoutChild(
           _SlotIds.secondaryBody.name,
-          secondaryOrigin,
+          BoxConstraints.tight(Size(sBodyWidth, secondaryHeight)),
         );
+        if (textDirection) {
+          positionChild(
+            _SlotIds.secondaryBody.name,
+            secondaryOrigin + Offset(navWidth, 0),
+          );
+        } else {
+          positionChild(_SlotIds.secondaryBody.name, secondaryOrigin);
+        }
+      }
+    } else {
+      // Hide secondary screen slots if this engine is only rendering the main display
+      if (hasChild(_SlotIds.primaryNavigation.name)) {
+        layoutChild(_SlotIds.primaryNavigation.name, BoxConstraints.tight(Size.zero));
+        positionChild(_SlotIds.primaryNavigation.name, Offset.zero);
+      }
+      if (hasChild(_SlotIds.secondaryBody.name)) {
+        layoutChild(_SlotIds.secondaryBody.name, BoxConstraints.tight(Size.zero));
+        positionChild(_SlotIds.secondaryBody.name, Offset.zero);
       }
     }
   }

@@ -134,10 +134,16 @@ class DmAdaptiveScaffold extends StatefulWidget {
     this.collapseIcon = Icons.menu_open,
     this.expandIcon = Icons.menu,
     this.duoScreenPolicy = DuoScreenPolicy.splitBody,
+    this.displayId = 0,
   }) : assert(
           destinations.length >= 2,
           'At least two destinations are required',
         );
+
+  /// The ID of the display this scaffold is rendered on.
+  ///
+  /// Defaults to 0 (the primary display).
+  final int displayId;
 
   /// The destinations to be used in navigation items. These are converted to
   /// [NavigationRailDestination]s and [BottomNavigationBarItem]s and inserted
@@ -726,6 +732,7 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
         bodyRatio: widget.bodyRatio,
         internalAnimations: widget.internalAnimations,
         duoScreenPolicy: widget.duoScreenPolicy,
+        displayId: widget.displayId,
         primaryNavigation: SlotLayout(
           config: <Breakpoint, SlotLayoutConfig>{
             widget.mediumBreakpoint: SlotLayout.from(
