@@ -18,6 +18,7 @@ class DuoScreenExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Duo Screen App',
       theme: DmThemeData.sunshine(),
       darkTheme: DmThemeData.moonlight(),
@@ -32,6 +33,7 @@ class SecondaryDisplayApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Secondary Display',
       theme: DmThemeData.sunshine(),
       darkTheme: DmThemeData.moonlight(),
