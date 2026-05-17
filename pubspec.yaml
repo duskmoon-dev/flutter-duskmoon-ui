@@ -15,7 +15,8 @@ workspace:
   - packages/duskmoon_form
   - packages/duskmoon_code_engine
   - packages/duskmoon_adaptive_scaffold
-  - example
+  - example/design_preview
+  - example/duo_screen
 
 flutter:
   uses-material-design: true

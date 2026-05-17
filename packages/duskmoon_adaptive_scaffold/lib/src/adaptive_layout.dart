@@ -7,6 +7,62 @@ import 'package:flutter/widgets.dart';
 import 'breakpoints.dart';
 import 'slot_layout.dart';
 
+/// Policy for how the layout adapts when a dual-screen hinge/fold is detected.
+///
+/// Dual-screen devices like the AYANEO Pocket DS or Microsoft Surface Duo
+/// report a [DisplayFeature] of type [DisplayFeatureType.hinge] or
+/// [DisplayFeatureType.fold]. This enum controls how [AdaptiveLayout] and
+/// [DmAdaptiveScaffold] redistribute their slots across the two screens.
+///
+/// See also:
+///
+///  * [AdaptiveLayout.duoScreenPolicy], which uses this enum.
+///  * [DmAdaptiveScaffold.duoScreenPolicy], which passes through to
+///    [AdaptiveLayout].
+enum DuoScreenPolicy {
+  /// Default behavior. Body and [secondaryBody] split around the hinge.
+  ///
+  /// Navigation slots stay in their normal positions. This is the existing
+  /// behavior from before duo-screen support was added.
+  splitBody,
+
+  /// Duo-screen mode: navigation moves to the secondary screen.
+  ///
+  /// When a hinge/fold is detected:
+  ///
+  ///  * **Main screen** (above or left of the hinge): [body] fills the
+  ///    entire region. [topNavigation] is preserved if present.
+  ///  * **Secondary screen** (below or right of the hinge):
+  ///    [primaryNavigation] is placed on the leading edge, and
+  ///    [secondaryBody] fills the remaining space.
+  ///  * [bottomNavigation] is hidden (laid out with zero size).
+  ///
+  /// For vertical hinges (clamshell devices like AYANEO Pocket DS):
+  /// ```
+  /// ┌──────────────────────┐
+  /// │                      │
+  /// │        body          │  ← Main screen
+  /// │                      │
+  /// ├──────────────────────┤  ← Hinge
+  /// │ ┌───┐                │
+  /// │ │Nav│  secondaryBody │  ← Secondary screen
+  /// │ └───┘                │
+  /// └──────────────────────┘
+  /// ```
+  ///
+  /// For horizontal hinges (foldable devices like Surface Duo):
+  /// ```
+  /// ┌──────────┐┌─┐┌───┬──────────┐
+  /// │          ││ ││   │          │
+  /// │   body   ││H││Nav│ secondary│
+  /// │          ││ ││   │   Body   │
+  /// └──────────┘└─┘└───┴──────────┘
+  /// ```
+  ///
+  /// When no hinge is detected, falls back to [splitBody] behavior.
+  navigationOnSecondary,
+}
+
 enum _SlotIds {
   primaryNavigation,
   secondaryNavigation,
@@ -120,6 +176,7 @@ class AdaptiveLayout extends StatefulWidget {
     this.transitionDuration = const Duration(seconds: 1),
     this.internalAnimations = true,
     this.bodyOrientation = Axis.horizontal,
+    this.duoScreenPolicy = DuoScreenPolicy.splitBody,
   });
 
   /// The slot placed on the beginning side of the app window.
@@ -198,6 +255,15 @@ class AdaptiveLayout extends StatefulWidget {
   ///
   /// Defaults to Axis.horizontal.
   final Axis bodyOrientation;
+
+  /// Policy controlling how slots are redistributed on dual-screen devices.
+  ///
+  /// When a hinge or fold [DisplayFeature] is detected, this policy determines
+  /// whether the layout splits the body around the hinge (default) or
+  /// redistributes navigation to the secondary screen.
+  ///
+  /// Defaults to [DuoScreenPolicy.splitBody].
+  final DuoScreenPolicy duoScreenPolicy;
 
   @override
   State<AdaptiveLayout> createState() => _AdaptiveLayoutState();
@@ -301,9 +367,7 @@ class _AdaptiveLayoutState extends State<AdaptiveLayout>
     for (final DisplayFeature e in MediaQuery.displayFeaturesOf(context)) {
       if (e.type == DisplayFeatureType.hinge ||
           e.type == DisplayFeatureType.fold) {
-        if (e.bounds.left != 0) {
-          hinge = e.bounds;
-        }
+        hinge = e.bounds;
       }
     }
 
@@ -320,6 +384,7 @@ class _AdaptiveLayoutState extends State<AdaptiveLayout>
         textDirection: Directionality.of(context) == TextDirection.ltr,
         hinge: hinge,
         sizeAnimation: _sizeAnimation,
+        duoScreenPolicy: widget.duoScreenPolicy,
       ),
       children: entries,
     );
@@ -340,6 +405,7 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
     required this.bodyOrientation,
     required this.textDirection,
     required this.sizeAnimation,
+    required this.duoScreenPolicy,
     this.hinge,
   }) : super(relayout: controller);
 
@@ -354,9 +420,22 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
   final bool textDirection;
   final Rect? hinge;
   final Animation<double> sizeAnimation;
+  final DuoScreenPolicy duoScreenPolicy;
+
+  /// Whether the hinge splits the screen vertically (top/bottom, like a
+  /// clamshell device) rather than horizontally (left/right).
+  bool get _isVerticalHinge => hinge != null && hinge!.left == 0;
 
   @override
   void performLayout(Size size) {
+    // When duo-screen policy is navigationOnSecondary and a hinge exists,
+    // use the dedicated duo-screen layout path.
+    if (duoScreenPolicy == DuoScreenPolicy.navigationOnSecondary &&
+        hinge != null) {
+      _performDuoScreenLayout(size);
+      return;
+    }
+
     double leftMargin = 0;
     double topMargin = 0;
     double rightMargin = 0;
@@ -640,6 +719,131 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
         _SlotIds.secondaryBody.name,
         BoxConstraints.tight(Size(remainingWidth, remainingHeight)),
       );
+    }
+  }
+
+  /// Performs layout for [DuoScreenPolicy.navigationOnSecondary] when a hinge
+  /// is present.
+  ///
+  /// This method divides the screen into two regions separated by the hinge:
+  ///
+  ///  * **Main screen**: [topNavigation] (if present) + [body] filling the rest
+  ///  * **Secondary screen**: [primaryNavigation] on the leading edge +
+  ///    [secondaryBody] filling the remaining space
+  ///
+  /// [bottomNavigation] and [secondaryNavigation] are laid out with zero size
+  /// since navigation is handled by [primaryNavigation] on the secondary screen.
+  void _performDuoScreenLayout(Size size) {
+    final Rect h = hinge!;
+
+    // --- Determine screen regions based on hinge orientation ---
+    late final double mainWidth;
+    late final double mainHeight;
+    late final double secondaryWidth;
+    late final double secondaryHeight;
+    late final Offset secondaryOrigin;
+
+    if (_isVerticalHinge) {
+      // Vertical hinge: top/bottom split (e.g., AYANEO Pocket DS)
+      mainWidth = size.width;
+      mainHeight = h.top;
+      secondaryWidth = size.width;
+      secondaryHeight = size.height - h.bottom;
+      secondaryOrigin = Offset(0, h.bottom);
+    } else {
+      // Horizontal hinge: left/right split (e.g., Surface Duo)
+      mainWidth = h.left;
+      mainHeight = size.height;
+      secondaryWidth = size.width - h.right;
+      secondaryHeight = size.height;
+      secondaryOrigin = Offset(h.right, 0);
+    }
+
+    // --- Main screen layout ---
+    double mainTopMargin = 0;
+
+    // topNavigation: placed at the top of the main screen
+    if (hasChild(_SlotIds.topNavigation.name)) {
+      final Size childSize = layoutChild(
+        _SlotIds.topNavigation.name,
+        BoxConstraints.loose(Size(mainWidth, mainHeight)),
+      );
+      updateSize(_SlotIds.topNavigation.name, childSize);
+      positionChild(_SlotIds.topNavigation.name, Offset.zero);
+      mainTopMargin += childSize.height;
+    }
+
+    // bottomNavigation: hidden in duo-screen mode (laid out with zero size)
+    if (hasChild(_SlotIds.bottomNavigation.name)) {
+      layoutChild(
+        _SlotIds.bottomNavigation.name,
+        BoxConstraints.tight(Size.zero),
+      );
+      positionChild(_SlotIds.bottomNavigation.name, Offset.zero);
+    }
+
+    // body: fills the main screen (below topNavigation)
+    if (hasChild(_SlotIds.body.name)) {
+      layoutChild(
+        _SlotIds.body.name,
+        BoxConstraints.tight(
+          Size(mainWidth, mainHeight - mainTopMargin),
+        ),
+      );
+      positionChild(_SlotIds.body.name, Offset(0, mainTopMargin));
+    }
+
+    // --- Secondary screen layout ---
+    double navWidth = 0;
+
+    // primaryNavigation: on the leading edge of the secondary screen
+    if (hasChild(_SlotIds.primaryNavigation.name)) {
+      final Size childSize = layoutChild(
+        _SlotIds.primaryNavigation.name,
+        BoxConstraints.loose(Size(secondaryWidth, secondaryHeight)),
+      );
+      updateSize(_SlotIds.primaryNavigation.name, childSize);
+      if (textDirection) {
+        positionChild(
+          _SlotIds.primaryNavigation.name,
+          secondaryOrigin,
+        );
+      } else {
+        positionChild(
+          _SlotIds.primaryNavigation.name,
+          secondaryOrigin + Offset(secondaryWidth - childSize.width, 0),
+        );
+      }
+      navWidth = childSize.width;
+    }
+
+    // secondaryNavigation: hidden in duo-screen mode
+    if (hasChild(_SlotIds.secondaryNavigation.name)) {
+      layoutChild(
+        _SlotIds.secondaryNavigation.name,
+        BoxConstraints.tight(Size.zero),
+      );
+      positionChild(_SlotIds.secondaryNavigation.name, Offset.zero);
+    }
+
+    // secondaryBody: fills the remaining space on the secondary screen
+    if (hasChild(_SlotIds.secondaryBody.name)) {
+      final double sBodyWidth = secondaryWidth - navWidth;
+      layoutChild(
+        _SlotIds.secondaryBody.name,
+        BoxConstraints.tight(Size(sBodyWidth, secondaryHeight)),
+      );
+      if (textDirection) {
+        positionChild(
+          _SlotIds.secondaryBody.name,
+          secondaryOrigin + Offset(navWidth, 0),
+        );
+      } else {
+        positionChild(
+          _SlotIds.secondaryBody.name,
+          secondaryOrigin,
+        );
+      }
     }
   }
 

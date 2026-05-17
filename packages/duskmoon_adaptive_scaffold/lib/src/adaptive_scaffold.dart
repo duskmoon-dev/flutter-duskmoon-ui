@@ -133,6 +133,7 @@ class DmAdaptiveScaffold extends StatefulWidget {
     this.showCollapseToggle = false,
     this.collapseIcon = Icons.menu_open,
     this.expandIcon = Icons.menu,
+    this.duoScreenPolicy = DuoScreenPolicy.splitBody,
   }) : assert(
           destinations.length >= 2,
           'At least two destinations are required',
@@ -350,6 +351,15 @@ class DmAdaptiveScaffold extends StatefulWidget {
 
   /// Icon to show when the navigation rail is collapsed (will expand on tap).
   final IconData expandIcon;
+
+  /// Policy controlling how the scaffold behaves on dual-screen devices.
+  ///
+  /// When a hinge or fold [DisplayFeature] is detected and this is set to
+  /// [DuoScreenPolicy.navigationOnSecondary], navigation slots move to the
+  /// secondary screen while the body fills the primary screen.
+  ///
+  /// Defaults to [DuoScreenPolicy.splitBody] (existing behavior).
+  final DuoScreenPolicy duoScreenPolicy;
 
   /// Callback function for when the index of a [NavigationRail] changes.
   static WidgetBuilder emptyBuilder = (_) => const SizedBox();
@@ -715,6 +725,7 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
         bodyOrientation: widget.bodyOrientation,
         bodyRatio: widget.bodyRatio,
         internalAnimations: widget.internalAnimations,
+        duoScreenPolicy: widget.duoScreenPolicy,
         primaryNavigation: SlotLayout(
           config: <Breakpoint, SlotLayoutConfig>{
             widget.mediumBreakpoint: SlotLayout.from(
