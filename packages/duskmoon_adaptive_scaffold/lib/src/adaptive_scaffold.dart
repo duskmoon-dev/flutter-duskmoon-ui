@@ -736,8 +736,8 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
         primaryNavigation: SlotLayout(
           config: <Breakpoint, SlotLayoutConfig>{
             if (widget.duoScreenPolicy == DuoScreenPolicy.navigationOnSecondary)
-              widget.smallBreakpoint: SlotLayout.from(
-                key: const Key('primaryNavigationSmall'),
+              Breakpoints.standard: SlotLayout.from(
+                key: const Key('primaryNavigationStandard'),
                 builder: (_) => DmAdaptiveScaffold.standardNavigationRail(
                   width: widget.navigationRailWidth,
                   leading: widget.leadingUnextendedNavRail,
@@ -831,6 +831,27 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
                 unSelectedLabelTextStyle: navRailTheme.unselectedLabelTextStyle,
               ),
             ),
+            if (widget.displayId > 0)
+              Breakpoints.standard: SlotLayout.from(
+                key: const Key('primaryNavigationForced'),
+                builder: (_) => DmAdaptiveScaffold.standardNavigationRail(
+                  width: widget.navigationRailWidth,
+                  leading: widget.leadingUnextendedNavRail,
+                  trailing: widget.trailingNavRail,
+                  padding: widget.navigationRailPadding,
+                  selectedIndex: widget.selectedIndex,
+                  destinations: destinations,
+                  onDestinationSelected: widget.onSelectedIndexChange,
+                  backgroundColor: navRailTheme.backgroundColor,
+                  selectedIconTheme: navRailTheme.selectedIconTheme,
+                  unselectedIconTheme: navRailTheme.unselectedIconTheme,
+                  selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
+                  unSelectedLabelTextStyle:
+                      navRailTheme.unselectedLabelTextStyle,
+                  labelType: navRailTheme.labelType,
+                  groupAlignment: widget.groupAlignment,
+                ),
+              ),
           },
         ),
         bottomNavigation: !isDrawerMode &&
