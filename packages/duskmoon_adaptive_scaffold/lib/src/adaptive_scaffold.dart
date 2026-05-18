@@ -735,6 +735,27 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
         displayId: widget.displayId,
         primaryNavigation: SlotLayout(
           config: <Breakpoint, SlotLayoutConfig>{
+            if (widget.duoScreenPolicy == DuoScreenPolicy.navigationOnSecondary)
+              widget.smallBreakpoint: SlotLayout.from(
+                key: const Key('primaryNavigationSmall'),
+                builder: (_) => DmAdaptiveScaffold.standardNavigationRail(
+                  width: widget.navigationRailWidth,
+                  leading: widget.leadingUnextendedNavRail,
+                  trailing: widget.trailingNavRail,
+                  padding: widget.navigationRailPadding,
+                  selectedIndex: widget.selectedIndex,
+                  destinations: destinations,
+                  onDestinationSelected: widget.onSelectedIndexChange,
+                  backgroundColor: navRailTheme.backgroundColor,
+                  selectedIconTheme: navRailTheme.selectedIconTheme,
+                  unselectedIconTheme: navRailTheme.unselectedIconTheme,
+                  selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
+                  unSelectedLabelTextStyle:
+                      navRailTheme.unselectedLabelTextStyle,
+                  labelType: navRailTheme.labelType,
+                  groupAlignment: widget.groupAlignment,
+                ),
+              ),
             widget.mediumBreakpoint: SlotLayout.from(
               key: const Key('primaryNavigation'),
               builder: (_) => DmAdaptiveScaffold.standardNavigationRail(
@@ -812,7 +833,8 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
             ),
           },
         ),
-        bottomNavigation: !isDrawerMode
+        bottomNavigation: !isDrawerMode &&
+                widget.duoScreenPolicy != DuoScreenPolicy.navigationOnSecondary
             ? SlotLayout(
                 config: <Breakpoint, SlotLayoutConfig>{
                   widget.smallBreakpoint: SlotLayout.from(
