@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:presentation_displays/displays_manager.dart';
+import 'package:presentation_displays/display.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 
 void main() {
@@ -67,6 +68,8 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
   final TextEditingController _textController =
       TextEditingController(text: 'Hello from Controller!');
 
+  List<Display> _displays = [];
+
   // Current State
   int _selectedIndex = 0;
   Color _currentColor = Colors.blue;
@@ -103,8 +106,12 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
 
   Future<void> _checkDisplays() async {
     final displays = await _displayManager.getDisplays();
-    if (displays != null && displays.length > 1) {
-      final secondary = displays.where((d) => d.displayId != 0).toList();
+    setState(() {
+      _displays = displays ?? [];
+    });
+
+    if (_displays.length > 1) {
+      final secondary = _displays.where((d) => d.displayId != 0).toList();
       if (secondary.isNotEmpty) {
         secondary.sort((a, b) => b.displayId!.compareTo(a.displayId!));
         await _displayManager.showSecondaryDisplay(
@@ -129,10 +136,18 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    // Only use Duo policy if we actually have more than one display detected
+    // OR if we are currently running on a secondary display.
+    final bool isDuoModeActive = _displays.length > 1 || widget.displayId > 0;
+
     return DmAdaptiveScaffold(
       displayId: widget.displayId,
-      duoScreenPolicy: DuoScreenPolicy.navigationOnSecondary,
-      useDrawer: false,
+      duoScreenPolicy: isDuoModeActive
+          ? DuoScreenPolicy.navigationOnSecondary
+          : DuoScreenPolicy.splitBody,
+      // On secondary display, we force Nav Rail (no drawer).
+      // On primary display in solo mode, we allow the standard drawer behavior.
+      useDrawer: widget.displayId == 0 && !isDuoModeActive,
       appBar: widget.displayId == 0
           ? DmAppBar(
               title: const Text('Main Viewer'),
