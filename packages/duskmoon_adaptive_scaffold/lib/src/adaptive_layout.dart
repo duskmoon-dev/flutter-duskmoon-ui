@@ -8,58 +8,11 @@ import 'breakpoints.dart';
 import 'slot_layout.dart';
 
 /// Policy for how the layout adapts when a dual-screen hinge/fold is detected.
-///
-/// Dual-screen devices like the AYANEO Pocket DS or Microsoft Surface Duo
-/// report a [DisplayFeature] of type [DisplayFeatureType.hinge] or
-/// [DisplayFeatureType.fold]. This enum controls how [AdaptiveLayout] and
-/// [DmAdaptiveScaffold] redistribute their slots across the two screens.
-///
-/// See also:
-///
-///  * [AdaptiveLayout.duoScreenPolicy], which uses this enum.
-///  * [DmAdaptiveScaffold.duoScreenPolicy], which passes through to
-///    [AdaptiveLayout].
 enum DuoScreenPolicy {
   /// Default behavior. Body and [secondaryBody] split around the hinge.
-  ///
-  /// Navigation slots stay in their normal positions. This is the existing
-  /// behavior from before duo-screen support was added.
   splitBody,
 
   /// Duo-screen mode: navigation moves to the secondary screen.
-  ///
-  /// When a hinge/fold is detected:
-  ///
-  ///  * **Main screen** (above or left of the hinge): [body] fills the
-  ///    entire region. [topNavigation] is preserved if present.
-  ///  * **Secondary screen** (below or right of the hinge):
-  ///    [primaryNavigation] is placed on the leading edge, and
-  ///    [secondaryBody] fills the remaining space.
-  ///  * [bottomNavigation] is hidden (laid out with zero size).
-  ///
-  /// For vertical hinges (clamshell devices like AYANEO Pocket DS):
-  /// ```
-  /// ┌──────────────────────┐
-  /// │                      │
-  /// │        body          │  ← Main screen
-  /// │                      │
-  /// ├──────────────────────┤  ← Hinge
-  /// │ ┌───┐                │
-  /// │ │Nav│  secondaryBody │  ← Secondary screen
-  /// │ └───┘                │
-  /// └──────────────────────┘
-  /// ```
-  ///
-  /// For horizontal hinges (foldable devices like Surface Duo):
-  /// ```
-  /// ┌──────────┐┌─┐┌───┬──────────┐
-  /// │          ││ ││   │          │
-  /// │   body   ││H││Nav│ secondary│
-  /// │          ││ ││   │   Body   │
-  /// └──────────┘└─┘└───┴──────────┘
-  /// ```
-  ///
-  /// When no hinge is detected, falls back to [splitBody] behavior.
   navigationOnSecondary,
 }
 
@@ -73,95 +26,6 @@ enum _SlotIds {
 }
 
 /// Layout an app that adapts to different screens using predefined slots.
-///
-/// This widget separates the app window into predefined sections called
-/// "slots". It lays out the app using the following kinds of slots (in order):
-///
-///  * [topNavigation], full width at the top. Must have defined size.
-///  * [bottomNavigation], full width at the bottom. Must have defined size.
-///  * [primaryNavigation], displayed on the beginning side of the app window
-///    from the bottom of [topNavigation] to the top of [bottomNavigation]. Must
-///    have defined size.
-///  * [secondaryNavigation], displayed on the end side of the app window from
-///    the bottom of [topNavigation] to the top of [bottomNavigation]. Must have
-///    defined size.
-///  * [body], first panel; fills the remaining space from the beginning side.
-///    The main view should have flexible size (like a container).
-///  * [secondaryBody], second panel; fills the remaining space from the end
-///    side. The use of this property is common in apps that have a main view
-///    and a detail view. The main view should have flexible size (like a
-///    Container). This provides some automatic functionality with foldable
-///    screens.
-///
-/// Slots can display differently under different screen conditions (such as
-/// different widths), and each slot is defined with a [SlotLayout], which maps
-/// [Breakpoint]s to [SlotLayoutConfig], where [SlotLayoutConfig] defines the
-/// content and transition.
-///
-/// [AdaptiveLayout] handles the placement of the slots on the app window and
-/// animations regarding their macromovements.
-///
-/// ```dart
-/// AdaptiveLayout(
-///   primaryNavigation: SlotLayout(
-///     config: {
-///       Breakpoints.small: SlotLayout.from(
-///         key: const Key('Primary Navigation Small'),
-///         builder: (_) => const SizedBox.shrink(),
-///       ),
-///       Breakpoints.medium: SlotLayout.from(
-///         inAnimation: leftOutIn,
-///         key: const Key('Primary Navigation Medium'),
-///         builder: (_) => DmAdaptiveScaffold.toNavigationRail(destinations: destinations),
-///       ),
-///       Breakpoints.mediumLarge: SlotLayout.from(
-///         key: const Key('Primary Navigation MediumLarge'),
-///         inAnimation: leftOutIn,
-///         builder: (_) => DmAdaptiveScaffold.toNavigationRail(extended: true, destinations: destinations),
-///       ),
-///     },
-///   ),
-///   body: SlotLayout(
-///     config: {
-///       Breakpoints.small: SlotLayout.from(
-///         key: const Key('Body Small'),
-///         builder: (_) => ListView.builder(
-///           itemCount: children.length,
-///           itemBuilder: (_, idx) => children[idx]
-///         ),
-///       ),
-///       Breakpoints.medium: SlotLayout.from(
-///         key: const Key('Body Medium'),
-///         builder: (_) => GridView.count(
-///           crossAxisCount: 2,
-///           children: children
-///         ),
-///       ),
-///     },
-///   ),
-///   bottomNavigation: SlotLayout(
-///     config: {
-///       Breakpoints.small: SlotLayout.from(
-///         key: const Key('Bottom Navigation Small'),
-///         inAnimation: bottomToTop,
-///         builder: (_) => DmAdaptiveScaffold.toBottomNavigationBar(destinations: destinations),
-///       ),
-///     },
-///   ),
-/// )
-/// ```
-///
-/// See also:
-///
-///  * [SlotLayout], which handles the actual switching and animations between
-///    elements based on [Breakpoint]s.
-///  * [SlotLayout.from], which holds information regarding the actual Widgets
-///    and the desired way to animate between switches. Often used within
-///    [SlotLayout].
-///  * [DmAdaptiveScaffold], which provides a more friendly API with less
-///    customizability. and holds a preset of animations and helper builders.
-///  * [Design Doc](https://flutter.dev/go/adaptive-layout-foldables).
-///  * [Material Design 3 Specifications](https://m3.material.io/foundations/adaptive-design/overview).
 class AdaptiveLayout extends StatefulWidget {
   /// Creates a const [AdaptiveLayout] widget.
   const AdaptiveLayout({
@@ -180,95 +44,17 @@ class AdaptiveLayout extends StatefulWidget {
     this.displayId = 0,
   });
 
-  /// The ID of the display this layout is rendered on.
-  ///
-  /// Defaults to 0 (the primary display).
   final int displayId;
-
-  /// The slot placed on the beginning side of the app window.
-  ///
-  /// The beginning side means the right when the ambient [Directionality] is
-  /// [TextDirection.rtl] and on the left when it is [TextDirection.ltr].
-  ///
-  /// If the content is a flexibly sized Widget like [Container], wrap the
-  /// content in a [SizedBox] or limit its size (width and height) by another
-  /// method. See the builder in [DmAdaptiveScaffold.standardNavigationRail] for
-  /// an example.
   final SlotLayout? primaryNavigation;
-
-  /// The slot placed on the end side of the app window.
-  ///
-  /// The end side means the right when the ambient [Directionality] is
-  /// [TextDirection.ltr] and on the left when it is [TextDirection.rtl].
-  ///
-  /// If the content is a flexibly sized Widget like [Container], wrap the
-  /// content in a [SizedBox] or limit its size (width and height) by another
-  /// method. See the builder in [DmAdaptiveScaffold.standardNavigationRail] for
-  /// an example.
   final SlotLayout? secondaryNavigation;
-
-  /// The slot placed on the top part of the app window.
-  ///
-  /// If the content is a flexibly sized Widget like [Container], wrap the
-  /// content in a [SizedBox] or limit its size (width and height) by another
-  /// method. See the builder in [DmAdaptiveScaffold.standardNavigationRail] for
-  /// an example.
   final SlotLayout? topNavigation;
-
-  /// The slot placed on the bottom part of the app window.
-  ///
-  /// If the content is a flexibly sized Widget like [Container], wrap the
-  /// content in a [SizedBox] or limit its size (width and height) by another
-  /// method. See the builder in [DmAdaptiveScaffold.standardNavigationRail] for
-  /// an example.
   final SlotLayout? bottomNavigation;
-
-  /// The slot that fills the rest of the space in the center.
   final SlotLayout? body;
-
-  /// A supporting slot for [body].
-  ///
-  /// The [secondaryBody] as a sliding entrance animation by default.
-  ///
-  /// The default ratio for the split between [body] and [secondaryBody] is so
-  /// that the split axis is in the center of the app window when there is no
-  /// hinge and surrounding the hinge when there is one.
   final SlotLayout? secondaryBody;
-
-  /// Defines the fractional ratio of [body] to the [secondaryBody].
-  ///
-  /// For example 0.3 would mean [body] takes up 30% of the available space
-  /// and[secondaryBody] takes up the rest.
-  ///
-  /// If this value is null, the ratio is defined so that the split axis is in
-  /// the center of the app window when there is no hinge and surrounding the
-  /// hinge when there is one.
   final double? bodyRatio;
-
-  /// Defines the duration of transition between layouts.
-  ///
-  /// Defaults to [Duration(seconds: 1)].
   final Duration transitionDuration;
-
-  /// Whether or not the developer wants the smooth entering slide transition on
-  /// [secondaryBody].
-  ///
-  /// Defaults to true.
   final bool internalAnimations;
-
-  /// The orientation of the body and secondaryBody. Either horizontal (side by
-  /// side) or vertical (top to bottom).
-  ///
-  /// Defaults to Axis.horizontal.
   final Axis bodyOrientation;
-
-  /// Policy controlling how slots are redistributed on dual-screen devices.
-  ///
-  /// When a hinge or fold [DisplayFeature] is detected, this policy determines
-  /// whether the layout splits the body around the hinge (default) or
-  /// redistributes navigation to the secondary screen.
-  ///
-  /// Defaults to [DuoScreenPolicy.splitBody].
   final DuoScreenPolicy duoScreenPolicy;
 
   @override
@@ -353,12 +139,13 @@ class _AdaptiveLayoutState extends State<AdaptiveLayout>
         ),
       );
     });
+
     final List<Widget> entries = slots.entries
         .map((MapEntry<String, SlotLayout?> entry) {
           if (entry.value != null) {
             return LayoutId(
               id: entry.key,
-              child: entry.value ?? const SizedBox(),
+              child: entry.value!,
             );
           }
         })
@@ -398,8 +185,6 @@ class _AdaptiveLayoutState extends State<AdaptiveLayout>
   }
 }
 
-/// The delegate responsible for laying out the slots in their correct
-/// positions.
 class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
   _AdaptiveLayoutDelegate({
     required this.slots,
@@ -431,14 +216,10 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
   final DuoScreenPolicy duoScreenPolicy;
   final int displayId;
 
-  /// Whether the hinge splits the screen vertically (top/bottom, like a
-  /// clamshell device) rather than horizontally (left/right).
   bool get _isVerticalHinge => hinge != null && hinge!.left == 0;
 
   @override
   void performLayout(Size size) {
-    // When duo-screen policy is navigationOnSecondary, use the dedicated
-    // duo-screen layout path to handle role-based rendering across displays.
     if (duoScreenPolicy == DuoScreenPolicy.navigationOnSecondary) {
       _performDuoScreenLayout(size);
       return;
@@ -449,8 +230,6 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
     double rightMargin = 0;
     double bottomMargin = 0;
 
-    // An animation that is used as either a width or height value on the Size
-    // for the body/secondaryBody.
     double animatedSize(double begin, double end) {
       if (isAnimating.contains(_SlotIds.secondaryBody.name)) {
         return internalAnimations
@@ -461,14 +240,9 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
     }
 
     if (hasChild(_SlotIds.topNavigation.name)) {
-      final Size childSize = layoutChild(
-        _SlotIds.topNavigation.name,
-        BoxConstraints.loose(size),
-      );
-      // Trigger the animation if the new size is different from the old size.
+      final Size childSize =
+          layoutChild(_SlotIds.topNavigation.name, BoxConstraints.loose(size));
       updateSize(_SlotIds.topNavigation.name, childSize);
-      // Tween not the actual size, but the size that is used in the margins so
-      // the offsets can be animated.
       final Size currentSize = Tween<Size>(
         begin: slotSizes[_SlotIds.topNavigation.name] ?? Size.zero,
         end: childSize,
@@ -477,10 +251,8 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
       topMargin += currentSize.height;
     }
     if (hasChild(_SlotIds.bottomNavigation.name)) {
-      final Size childSize = layoutChild(
-        _SlotIds.bottomNavigation.name,
-        BoxConstraints.loose(size),
-      );
+      final Size childSize =
+          layoutChild(_SlotIds.bottomNavigation.name, BoxConstraints.loose(size));
       updateSize(_SlotIds.bottomNavigation.name, childSize);
       final Size currentSize = Tween<Size>(
         begin: slotSizes[_SlotIds.bottomNavigation.name] ?? Size.zero,
@@ -493,10 +265,8 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
       bottomMargin += currentSize.height;
     }
     if (hasChild(_SlotIds.primaryNavigation.name)) {
-      final Size childSize = layoutChild(
-        _SlotIds.primaryNavigation.name,
-        BoxConstraints.loose(size),
-      );
+      final Size childSize =
+          layoutChild(_SlotIds.primaryNavigation.name, BoxConstraints.loose(size));
       updateSize(_SlotIds.primaryNavigation.name, childSize);
       final Size currentSize = Tween<Size>(
         begin: slotSizes[_SlotIds.primaryNavigation.name] ?? Size.zero,
@@ -504,33 +274,25 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
       ).animate(controller).value;
       if (textDirection) {
         positionChild(
-          _SlotIds.primaryNavigation.name,
-          Offset(leftMargin, topMargin),
-        );
+            _SlotIds.primaryNavigation.name, Offset(leftMargin, topMargin));
         leftMargin += currentSize.width;
       } else {
-        positionChild(
-          _SlotIds.primaryNavigation.name,
-          Offset(size.width - currentSize.width, topMargin),
-        );
+        positionChild(_SlotIds.primaryNavigation.name,
+            Offset(size.width - currentSize.width, topMargin));
         rightMargin += currentSize.width;
       }
     }
     if (hasChild(_SlotIds.secondaryNavigation.name)) {
       final Size childSize = layoutChild(
-        _SlotIds.secondaryNavigation.name,
-        BoxConstraints.loose(size),
-      );
+          _SlotIds.secondaryNavigation.name, BoxConstraints.loose(size));
       updateSize(_SlotIds.secondaryNavigation.name, childSize);
       final Size currentSize = Tween<Size>(
         begin: slotSizes[_SlotIds.secondaryNavigation.name] ?? Size.zero,
         end: childSize,
       ).animate(controller).value;
       if (textDirection) {
-        positionChild(
-          _SlotIds.secondaryNavigation.name,
-          Offset(size.width - currentSize.width, topMargin),
-        );
+        positionChild(_SlotIds.secondaryNavigation.name,
+            Offset(size.width - currentSize.width, topMargin));
         rightMargin += currentSize.width;
       } else {
         positionChild(_SlotIds.secondaryNavigation.name, Offset(0, topMargin));
@@ -550,233 +312,130 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
       if (chosenWidgets[_SlotIds.secondaryBody.name] == null ||
           chosenWidgets[_SlotIds.secondaryBody.name]!.builder == null) {
         if (!textDirection) {
-          currentBodySize = layoutChild(
-            _SlotIds.body.name,
-            BoxConstraints.tight(Size(remainingWidth, remainingHeight)),
-          );
+          currentBodySize = layoutChild(_SlotIds.body.name,
+              BoxConstraints.tight(Size(remainingWidth, remainingHeight)));
         } else if (bodyOrientation == Axis.horizontal) {
-          double beginWidth;
-          if (bodyRatio == null) {
-            beginWidth = halfWidth - leftMargin;
-          } else {
-            beginWidth = remainingWidth * bodyRatio!;
-          }
+          double beginWidth =
+              bodyRatio == null ? halfWidth - leftMargin : remainingWidth * bodyRatio!;
           currentBodySize = layoutChild(
-            _SlotIds.body.name,
-            BoxConstraints.tight(
-              Size(animatedSize(beginWidth, remainingWidth), remainingHeight),
-            ),
-          );
+              _SlotIds.body.name,
+              BoxConstraints.tight(Size(
+                  animatedSize(beginWidth, remainingWidth), remainingHeight)));
         } else {
-          double beginHeight;
-          if (bodyRatio == null) {
-            beginHeight = halfHeight - topMargin;
-          } else {
-            beginHeight = remainingHeight * bodyRatio!;
-          }
+          double beginHeight =
+              bodyRatio == null ? halfHeight - topMargin : remainingHeight * bodyRatio!;
           currentBodySize = layoutChild(
-            _SlotIds.body.name,
-            BoxConstraints.tight(
-              Size(remainingWidth, animatedSize(beginHeight, remainingHeight)),
-            ),
-          );
+              _SlotIds.body.name,
+              BoxConstraints.tight(Size(
+                  remainingWidth, animatedSize(beginHeight, remainingHeight))));
         }
         layoutChild(_SlotIds.secondaryBody.name, BoxConstraints.loose(size));
       } else {
         if (bodyOrientation == Axis.horizontal) {
-          // Take this path if the body and secondaryBody are laid out horizontally.
           if (textDirection) {
-            // Take this path if the textDirection is LTR.
-            double finalBodySize;
-            double finalSBodySize;
-            if (hinge != null) {
-              finalBodySize = hinge!.left - leftMargin;
-              finalSBodySize =
-                  size.width - (hinge!.left + hingeWidth) - rightMargin;
-            } else if (bodyRatio != null) {
-              finalBodySize = remainingWidth * bodyRatio!;
-              finalSBodySize = remainingWidth * (1 - bodyRatio!);
-            } else {
-              finalBodySize = halfWidth - leftMargin;
-              finalSBodySize = halfWidth - rightMargin;
-            }
+            double finalBodySize = hinge != null
+                ? hinge!.left - leftMargin
+                : (bodyRatio != null ? remainingWidth * bodyRatio! : halfWidth - leftMargin);
+            double finalSBodySize = hinge != null
+                ? size.width - (hinge!.left + hingeWidth) - rightMargin
+                : (bodyRatio != null
+                    ? remainingWidth * (1 - bodyRatio!)
+                    : halfWidth - rightMargin);
 
             currentBodySize = layoutChild(
-              _SlotIds.body.name,
-              BoxConstraints.tight(
-                Size(
-                  animatedSize(remainingWidth, finalBodySize),
-                  remainingHeight,
-                ),
-              ),
-            );
-            layoutChild(
-              _SlotIds.secondaryBody.name,
-              BoxConstraints.tight(Size(finalSBodySize, remainingHeight)),
-            );
+                _SlotIds.body.name,
+                BoxConstraints.tight(Size(
+                    animatedSize(remainingWidth, finalBodySize),
+                    remainingHeight)));
+            layoutChild(_SlotIds.secondaryBody.name,
+                BoxConstraints.tight(Size(finalSBodySize, remainingHeight)));
           } else {
-            // Take this path if the textDirection is RTL.
-            double finalBodySize;
-            double finalSBodySize;
-            if (hinge != null) {
-              finalBodySize =
-                  size.width - (hinge!.left + hingeWidth) - rightMargin;
-              finalSBodySize = hinge!.left - leftMargin;
-            } else if (bodyRatio != null) {
-              finalBodySize = remainingWidth * bodyRatio!;
-              finalSBodySize = remainingWidth * (1 - bodyRatio!);
-            } else {
-              finalBodySize = halfWidth - rightMargin;
-              finalSBodySize = halfWidth - leftMargin;
-            }
+            double finalBodySize = hinge != null
+                ? size.width - (hinge!.left + hingeWidth) - rightMargin
+                : (bodyRatio != null ? remainingWidth * bodyRatio! : halfWidth - rightMargin);
+            double finalSBodySize = hinge != null
+                ? hinge!.left - leftMargin
+                : (bodyRatio != null
+                    ? remainingWidth * (1 - bodyRatio!)
+                    : halfWidth - leftMargin);
             currentSBodySize = layoutChild(
-              _SlotIds.secondaryBody.name,
-              BoxConstraints.tight(
-                Size(animatedSize(0, finalSBodySize), remainingHeight),
-              ),
-            );
-            layoutChild(
-              _SlotIds.body.name,
-              BoxConstraints.tight(Size(finalBodySize, remainingHeight)),
-            );
+                _SlotIds.secondaryBody.name,
+                BoxConstraints.tight(
+                    Size(animatedSize(0, finalSBodySize), remainingHeight)));
+            layoutChild(_SlotIds.body.name,
+                BoxConstraints.tight(Size(finalBodySize, remainingHeight)));
           }
         } else {
-          // Take this path if the body and secondaryBody are laid out vertically.
           currentBodySize = layoutChild(
-            _SlotIds.body.name,
-            BoxConstraints.tight(
-              Size(
-                remainingWidth,
-                animatedSize(
-                  remainingHeight,
-                  bodyRatio == null
-                      ? halfHeight - topMargin
-                      : remainingHeight * bodyRatio!,
-                ),
-              ),
-            ),
-          );
+              _SlotIds.body.name,
+              BoxConstraints.tight(Size(
+                  remainingWidth,
+                  animatedSize(
+                      remainingHeight,
+                      bodyRatio == null
+                          ? halfHeight - topMargin
+                          : remainingHeight * bodyRatio!))));
           layoutChild(
-            _SlotIds.secondaryBody.name,
-            BoxConstraints.tight(
-              Size(
-                remainingWidth,
-                bodyRatio == null
-                    ? halfHeight - bottomMargin
-                    : remainingHeight * (1 - bodyRatio!),
-              ),
-            ),
-          );
+              _SlotIds.secondaryBody.name,
+              BoxConstraints.tight(Size(
+                  remainingWidth,
+                  bodyRatio == null
+                      ? halfHeight - bottomMargin
+                      : remainingHeight * (1 - bodyRatio!))));
         }
       }
-      // Handle positioning for the body and secondaryBody.
       if (bodyOrientation == Axis.horizontal &&
           !textDirection &&
           chosenWidgets[_SlotIds.secondaryBody.name] != null) {
-        if (hinge != null) {
-          positionChild(
-            _SlotIds.body.name,
-            Offset(currentSBodySize.width + leftMargin + hingeWidth, topMargin),
-          );
-          positionChild(
-            _SlotIds.secondaryBody.name,
-            Offset(leftMargin, topMargin),
-          );
-        } else {
-          positionChild(
-            _SlotIds.body.name,
-            Offset(currentSBodySize.width + leftMargin, topMargin),
-          );
-          positionChild(
-            _SlotIds.secondaryBody.name,
-            Offset(leftMargin, topMargin),
-          );
-        }
+        double offset = hinge != null ? hingeWidth : 0;
+        positionChild(_SlotIds.body.name,
+            Offset(currentSBodySize.width + leftMargin + offset, topMargin));
+        positionChild(_SlotIds.secondaryBody.name, Offset(leftMargin, topMargin));
       } else {
         positionChild(_SlotIds.body.name, Offset(leftMargin, topMargin));
         if (bodyOrientation == Axis.horizontal) {
-          if (hinge != null) {
-            positionChild(
-              _SlotIds.secondaryBody.name,
-              Offset(
-                currentBodySize.width + leftMargin + hingeWidth,
-                topMargin,
-              ),
-            );
-          } else {
-            positionChild(
-              _SlotIds.secondaryBody.name,
-              Offset(currentBodySize.width + leftMargin, topMargin),
-            );
-          }
+          double offset = hinge != null ? hingeWidth : 0;
+          positionChild(_SlotIds.secondaryBody.name,
+              Offset(currentBodySize.width + leftMargin + offset, topMargin));
         } else {
-          positionChild(
-            _SlotIds.secondaryBody.name,
-            Offset(leftMargin, topMargin + currentBodySize.height),
-          );
+          positionChild(_SlotIds.secondaryBody.name,
+              Offset(leftMargin, topMargin + currentBodySize.height));
         }
       }
     } else if (hasChild(_SlotIds.body.name)) {
-      layoutChild(
-        _SlotIds.body.name,
-        BoxConstraints.tight(Size(remainingWidth, remainingHeight)),
-      );
+      layoutChild(_SlotIds.body.name,
+          BoxConstraints.tight(Size(remainingWidth, remainingHeight)));
       positionChild(_SlotIds.body.name, Offset(leftMargin, topMargin));
     } else if (hasChild(_SlotIds.secondaryBody.name)) {
-      layoutChild(
-        _SlotIds.secondaryBody.name,
-        BoxConstraints.tight(Size(remainingWidth, remainingHeight)),
-      );
+      layoutChild(_SlotIds.secondaryBody.name,
+          BoxConstraints.tight(Size(remainingWidth, remainingHeight)));
     }
   }
 
-  /// Performs layout for [DuoScreenPolicy.navigationOnSecondary] when a hinge
-  /// is present.
-  ///
-  /// This method divides the screen into two regions separated by the hinge:
-  ///
-  ///  * **Main screen**: [topNavigation] (if present) + [body] filling the rest
-  ///  * **Secondary screen**: [primaryNavigation] on the leading edge +
-  ///    [secondaryBody] filling the remaining space
-  ///
-  /// [bottomNavigation] and [secondaryNavigation] are laid out with zero size
-  /// since navigation is handled by [primaryNavigation] on the secondary screen.
   void _performDuoScreenLayout(Size size) {
-    // --- Determine screen regions based on hardware type and role ---
     late final double mainWidth;
     late final double mainHeight;
     late final double secondaryWidth;
     late final double secondaryHeight;
     late final Offset secondaryOrigin;
 
-    // The current display acts as the "Main Screen" if it's the primary display
-    // and we are spanning a hinge.
-    final bool isMainScreen = displayId == 0 && hinge != null;
-    // The current display acts as the "Secondary Screen" if it's a secondary
-    // physical display OR it's the primary display but we are looking at the
-    // region below/right of the hinge.
     final bool isSecondaryScreen = displayId > 0;
 
     if (displayId > 0) {
-      // Role: Discrete Secondary Display (e.g. bottom screen of Pocket DS)
-      // The entire window is the secondary region.
       mainWidth = 0;
       mainHeight = 0;
       secondaryWidth = size.width;
       secondaryHeight = size.height;
       secondaryOrigin = Offset.zero;
     } else if (hinge != null) {
-      // Role: Spanned Primary Display (Foldable)
       final Rect h = hinge!;
       if (_isVerticalHinge) {
-        // Vertical hinge: top/bottom split
         mainWidth = size.width;
         mainHeight = h.top;
         secondaryWidth = size.width;
         secondaryHeight = size.height - h.bottom;
         secondaryOrigin = Offset(0, h.bottom);
       } else {
-        // Horizontal hinge: left/right split
         mainWidth = h.left;
         mainHeight = size.height;
         secondaryWidth = size.width - h.right;
@@ -784,8 +443,6 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
         secondaryOrigin = Offset(h.right, 0);
       }
     } else {
-      // Role: Discrete Primary Display (acting as Viewer in Duo mode)
-      // The entire window is the main region.
       mainWidth = size.width;
       mainHeight = size.height;
       secondaryWidth = 0;
@@ -793,35 +450,21 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
       secondaryOrigin = Offset.zero;
     }
 
-    // --- Layout logic based on role ---
-
-    // 1. MAIN SCREEN SLOTS (Only if this display is the Main Screen)
-    if (isMainScreen || (displayId == 0 && hinge == null)) {
+    if (displayId == 0) {
       double mainTopMargin = 0;
-
-      // topNavigation: placed at the top of the main region
       if (hasChild(_SlotIds.topNavigation.name)) {
         final Size childSize = layoutChild(
-          _SlotIds.topNavigation.name,
-          BoxConstraints.loose(Size(mainWidth, mainHeight)),
-        );
+            _SlotIds.topNavigation.name, BoxConstraints.loose(Size(mainWidth, mainHeight)));
         updateSize(_SlotIds.topNavigation.name, childSize);
         positionChild(_SlotIds.topNavigation.name, Offset.zero);
         mainTopMargin += childSize.height;
       }
-
-      // body: fills the main region (below topNavigation)
       if (hasChild(_SlotIds.body.name)) {
         layoutChild(
-          _SlotIds.body.name,
-          BoxConstraints.tight(
-            Size(mainWidth, mainHeight - mainTopMargin),
-          ),
-        );
+            _SlotIds.body.name, BoxConstraints.tight(Size(mainWidth, mainHeight - mainTopMargin)));
         positionChild(_SlotIds.body.name, Offset(0, mainTopMargin));
       }
     } else {
-      // Hide main screen slots if this engine is only rendering the secondary display
       if (hasChild(_SlotIds.topNavigation.name)) {
         layoutChild(_SlotIds.topNavigation.name, BoxConstraints.tight(Size.zero));
         positionChild(_SlotIds.topNavigation.name, Offset.zero);
@@ -832,7 +475,6 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
       }
     }
 
-    // 2. SHARED SLOTS (Always hidden in Duo mode)
     if (hasChild(_SlotIds.bottomNavigation.name)) {
       layoutChild(_SlotIds.bottomNavigation.name, BoxConstraints.tight(Size.zero));
       positionChild(_SlotIds.bottomNavigation.name, Offset.zero);
@@ -842,46 +484,32 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
       positionChild(_SlotIds.secondaryNavigation.name, Offset.zero);
     }
 
-    // 3. SECONDARY SCREEN SLOTS (Only if this display is (part of) the Secondary Screen)
     if (isSecondaryScreen || (displayId == 0 && hinge != null)) {
       double navWidth = 0;
-
-      // primaryNavigation: on the leading edge of the secondary region
       if (hasChild(_SlotIds.primaryNavigation.name)) {
-        final Size childSize = layoutChild(
-          _SlotIds.primaryNavigation.name,
-          BoxConstraints.loose(Size(secondaryWidth, secondaryHeight)),
-        );
+        final Size childSize = layoutChild(_SlotIds.primaryNavigation.name,
+            BoxConstraints.loose(Size(secondaryWidth, secondaryHeight)));
         updateSize(_SlotIds.primaryNavigation.name, childSize);
         if (textDirection) {
           positionChild(_SlotIds.primaryNavigation.name, secondaryOrigin);
         } else {
-          positionChild(
-            _SlotIds.primaryNavigation.name,
-            secondaryOrigin + Offset(secondaryWidth - childSize.width, 0),
-          );
+          positionChild(_SlotIds.primaryNavigation.name,
+              secondaryOrigin + Offset(secondaryWidth - childSize.width, 0));
         }
         navWidth = childSize.width;
       }
-
-      // secondaryBody: fills the remaining space on the secondary region
       if (hasChild(_SlotIds.secondaryBody.name)) {
         final double sBodyWidth = secondaryWidth - navWidth;
-        layoutChild(
-          _SlotIds.secondaryBody.name,
-          BoxConstraints.tight(Size(sBodyWidth, secondaryHeight)),
-        );
+        layoutChild(_SlotIds.secondaryBody.name,
+            BoxConstraints.tight(Size(sBodyWidth, secondaryHeight)));
         if (textDirection) {
           positionChild(
-            _SlotIds.secondaryBody.name,
-            secondaryOrigin + Offset(navWidth, 0),
-          );
+              _SlotIds.secondaryBody.name, secondaryOrigin + Offset(navWidth, 0));
         } else {
           positionChild(_SlotIds.secondaryBody.name, secondaryOrigin);
         }
       }
     } else {
-      // Hide secondary screen slots if this engine is only rendering the main display
       if (hasChild(_SlotIds.primaryNavigation.name)) {
         layoutChild(_SlotIds.primaryNavigation.name, BoxConstraints.tight(Size.zero));
         positionChild(_SlotIds.primaryNavigation.name, Offset.zero);
@@ -903,13 +531,12 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
         }
         controller.removeStatusListener(listener);
       }
-
       controller.addStatusListener(listener);
     }
   }
 
   @override
   bool shouldRelayout(_AdaptiveLayoutDelegate oldDelegate) {
-    return oldDelegate.slots != slots;
+    return oldDelegate.slots != slots || oldDelegate.displayId != displayId;
   }
 }
