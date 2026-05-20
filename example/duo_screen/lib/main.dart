@@ -1,13 +1,10 @@
 import 'dart:convert';
+import 'dart:isolate';
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:presentation_displays/displays_manager.dart';
 import 'package:presentation_displays/display.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
-
-// --- Shared Communication Bridge ---
-const String channelId = 'dev.duskmoon.duo_screen/bridge';
-const MethodChannel bridge = MethodChannel(channelId);
 
 void main() {
   runApp(const DuoScreenApp(displayId: 0));
@@ -64,6 +61,10 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
   final _displayManager = DisplayManager();
   List<Display> _displays = [];
 
+  // Isolate Communication
+  final ReceivePort _receivePort = ReceivePort();
+  SendPort? _otherPort;
+
   // Shared State
   int _selectedIndex = 0;
   String _message = "Welcome to DuskMoon Duo!";
@@ -77,20 +78,48 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
     }
   }
 
-  void _setupBridge() {
-    _displayManager.connectedDisplaysChangedStream?.listen((event) {
-      if (widget.displayId == 0) _checkDisplays();
-    });
+  @override
+  void dispose() {
+    _receivePort.close();
+    super.dispose();
+  }
 
-    bridge.setMethodCallHandler((call) async {
-      if (call.method == 'syncState') {
-        final json = jsonDecode(call.arguments as String);
-        final newState = AppState.fromJson(json);
-        setState(() {
-          _selectedIndex = newState.selectedIndex;
-          _message = newState.message;
-        });
-      }
+  void _setupBridge() {
+    if (widget.displayId == 0) {
+      IsolateNameServer.removePortNameMapping('primary_display_port');
+      IsolateNameServer.registerPortWithName(
+          _receivePort.sendPort, 'primary_display_port');
+
+      _receivePort.listen((message) {
+        if (message is SendPort) {
+          _otherPort = message;
+          _syncToOther(); // Sync initial state to secondary
+        } else if (message is String) {
+          _applySync(message);
+        }
+      });
+
+      _displayManager.connectedDisplaysChangedStream?.listen((event) {
+        _checkDisplays();
+      });
+    } else {
+      _otherPort = IsolateNameServer.lookupPortByName('primary_display_port');
+      _otherPort?.send(_receivePort.sendPort);
+
+      _receivePort.listen((message) {
+        if (message is String) {
+          _applySync(message);
+        }
+      });
+    }
+  }
+
+  void _applySync(String message) {
+    final json = jsonDecode(message);
+    final newState = AppState.fromJson(json);
+    setState(() {
+      _selectedIndex = newState.selectedIndex;
+      _message = newState.message;
     });
   }
 
@@ -117,10 +146,15 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
       _selectedIndex = index;
       if (message != null) _message = message;
     });
+    _syncToOther();
+  }
+
+  void _syncToOther() {
     final state = AppState(selectedIndex: _selectedIndex, message: _message);
-    bridge
-        .invokeMethod('syncState', jsonEncode(state.toJson()))
-        .catchError((_) {});
+    if (widget.displayId == 1) {
+      _otherPort ??= IsolateNameServer.lookupPortByName('primary_display_port');
+    }
+    _otherPort?.send(jsonEncode(state.toJson()));
   }
 
   @override
