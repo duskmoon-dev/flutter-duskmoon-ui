@@ -40,6 +40,12 @@ dependencies:
     path: ../../packages/duskmoon_ui
   duskmoon_adaptive_scaffold:
     path: ../../packages/duskmoon_adaptive_scaffold
+  duskmoon_visualization:
+    path: ../../packages/duskmoon_visualization
+  duskmoon_code_engine:
+    path: ../../packages/duskmoon_code_engine
+  duskmoon_form:
+    path: ../../packages/duskmoon_form
 
 dev_dependencies:
   flutter_test:

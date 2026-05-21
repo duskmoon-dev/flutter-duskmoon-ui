@@ -4,7 +4,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:presentation_displays/displays_manager.dart';
 import 'package:presentation_displays/display.dart';
-import 'package:duskmoon_ui/duskmoon_ui.dart';
+import 'package:duskmoon_ui/duskmoon_ui.dart' hide DmCodeEditor;
+import 'package:duskmoon_code_engine/duskmoon_code_engine.dart';
 
 // --- Shared Communication Bridge ---
 const String channelId = 'dev.duskmoon.duo_screen/bridge';
@@ -22,17 +23,24 @@ void secondaryDisplayMain() {
 class AppState {
   final int selectedIndex;
   final String message;
+  final bool isViewerOnly;
 
-  AppState({required this.selectedIndex, required this.message});
+  AppState({
+    required this.selectedIndex,
+    required this.message,
+    required this.isViewerOnly,
+  });
 
   Map<String, dynamic> toJson() => {
         'selectedIndex': selectedIndex,
         'message': message,
+        'isViewerOnly': isViewerOnly,
       };
 
   factory AppState.fromJson(Map<String, dynamic> json) => AppState(
         selectedIndex: json['selectedIndex'] as int,
         message: json['message'] as String,
+        isViewerOnly: json['isViewerOnly'] as bool,
       );
 }
 
@@ -71,6 +79,7 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
   // Shared State
   int _selectedIndex = 0;
   String _message = "Welcome to DuskMoon Duo!";
+  bool _isViewerOnly = false;
   final TextEditingController _textController =
       TextEditingController(text: 'Welcome to DuskMoon Duo!');
 
@@ -126,6 +135,7 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
     setState(() {
       _selectedIndex = newState.selectedIndex;
       _message = newState.message;
+      _isViewerOnly = newState.isViewerOnly;
       if (_textController.text != newState.message) {
         _textController.text = newState.message;
       }
@@ -150,16 +160,21 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
     }
   }
 
-  void _updateAndSync(int index, {String? message}) {
+  void _updateAndSync(int index, {String? message, bool? isViewerOnly}) {
     setState(() {
       _selectedIndex = index;
       if (message != null) _message = message;
+      if (isViewerOnly != null) _isViewerOnly = isViewerOnly;
     });
     _syncToOther();
   }
 
   void _syncToOther() {
-    final state = AppState(selectedIndex: _selectedIndex, message: _message);
+    final state = AppState(
+      selectedIndex: _selectedIndex,
+      message: _message,
+      isViewerOnly: _isViewerOnly,
+    );
     if (widget.displayId == 1) {
       _otherPort ??= IsolateNameServer.lookupPortByName('primary_display_port');
     }
@@ -177,16 +192,17 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
           : DuoScreenPolicy.splitBody,
       useDrawer: false,
       appBar: widget.displayId == 0
-          ? DmAppBar(title: const Text('DuskMoon Viewer'))
+          ? DmAppBar(
+              title: Text(_isViewerOnly ? 'Viewer Console' : 'DuskMoon Viewer'),
+            )
           : DmAppBar(
               title: const Text('Controller Panel'),
               automaticallyImplyLeading: false,
               backgroundColor:
                   Theme.of(context).colorScheme.surfaceContainerHighest,
             ),
-      // --- THE MAIN VIEW (Renders only on Display 0) ---
-      body: (_) => _buildMainContent(context),
-      // --- THE CONTROLLER VIEW (Renders only on Display 1+) ---
+      body: (_) =>
+          _isViewerOnly ? _buildViewerMode(context) : _buildMainContent(context),
       secondaryBody: (_) => _buildControllerContent(context),
       destinations: const [
         NavigationDestination(icon: Icon(Icons.palette), label: 'Widgets'),
@@ -199,17 +215,38 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
     );
   }
 
+  Widget _buildViewerMode(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.dashboard_customize, size: 80, color: Colors.blue),
+          const SizedBox(height: 24),
+          Text('System Dashboard',
+              style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 16),
+          Text(
+              'Navigation: ${['Widgets', 'Forms', 'Charts', 'Editor'][_selectedIndex]}',
+              style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 32),
+          DmCard(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child:
+                  Text(_message, style: Theme.of(context).textTheme.bodyLarge),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildMainContent(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            'Display: ${widget.displayId} | ${MediaQuery.sizeOf(context).width.toInt()}x${MediaQuery.sizeOf(context).height.toInt()}',
-            style: Theme.of(context).textTheme.labelSmall,
-          ),
-          const SizedBox(height: 24),
           IndexedStack(
             index: _selectedIndex,
             alignment: Alignment.topCenter,
@@ -231,14 +268,19 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Category: ${['Widgets', 'Forms', 'Charts', 'Editor'][_selectedIndex]}',
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Interaction engine for display ${widget.displayId}',
-            style: Theme.of(context).textTheme.labelSmall,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Category: ${['Widgets', 'Forms', 'Charts', 'Editor'][_selectedIndex]}',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              Switch(
+                value: _isViewerOnly,
+                onChanged: (val) =>
+                    _updateAndSync(_selectedIndex, isViewerOnly: val),
+              ),
+            ],
           ),
           const Divider(height: 48),
           IndexedStack(
@@ -261,44 +303,30 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
                         _updateAndSync(_selectedIndex, message: val),
                   ),
                   const SizedBox(height: 32),
-                  Text('Action Shortcuts:',
-                      style: Theme.of(context).textTheme.titleSmall),
-                  const SizedBox(height: 12),
                   Wrap(
                     spacing: 8,
                     children: [
                       DmButton(
                         onPressed: () => showDmSuccessToast(
                           context: context,
-                          message: 'Sent from secondary display!',
-                          title: 'Action Triggered',
+                          message: 'Action completed!',
+                          title: 'Controller Input',
                         ),
-                        child: const Text('Send Toast'),
+                        child: const Text('Fire Toast'),
                       ),
                     ],
                   ),
                 ],
               ),
               // Forms Controller
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              const Column(
                 children: [
-                  const DmCard(
+                  DmCard(
                     child: Padding(
                       padding: EdgeInsets.all(16),
                       child: Text(
-                          'In a real app, this screen would hold the form labels, instructions, or validation errors while the primary screen holds the fields.'),
+                          'DuskMoon Form components are now active on the primary display.'),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  DmButton(
-                    onPressed: () => showDmDialog(
-                      context: context,
-                      title: const Text('Form Submitted'),
-                      content: const Text(
-                          'The data from the primary screen has been processed.'),
-                    ),
-                    child: const Text('Process Form Content'),
                   ),
                 ],
               ),
@@ -306,48 +334,30 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Filter Data View:',
+                  Text('Visual Config:',
                       style: Theme.of(context).textTheme.titleSmall),
                   const SizedBox(height: 16),
                   const DmCard(
                     child: ListTile(
-                      leading: Icon(Icons.show_chart),
-                      title: Text('Toggle Trend Lines'),
-                      trailing: Switch(value: true, onChanged: null),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const DmCard(
-                    child: ListTile(
-                      leading: Icon(Icons.calendar_today),
-                      title: Text('Time Range: Last 7 Days'),
-                      trailing: Icon(Icons.chevron_right),
+                      leading: Icon(Icons.refresh),
+                      title: Text('Randomize Data'),
                     ),
                   ),
                 ],
               ),
               // Editor Controller
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Editor Settings:',
-                      style: Theme.of(context).textTheme.titleSmall),
-                  const SizedBox(height: 16),
-                  const Wrap(
+                  Text('Language Selection:',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(height: 12),
+                  Wrap(
                     spacing: 8,
-                    runSpacing: 8,
                     children: [
                       DmChip(label: Text('Dart')),
-                      DmChip(label: Text('Python')),
-                      DmChip(label: Text('JavaScript')),
+                      DmChip(label: Text('Flutter')),
                     ],
-                  ),
-                  const SizedBox(height: 24),
-                  const DmCard(
-                    child: ListTile(
-                      leading: Icon(Icons.color_lens),
-                      title: Text('Theme: Monokai Dark'),
-                    ),
                   ),
                 ],
               ),
@@ -359,8 +369,6 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
   }
 }
 
-// --- SUB-PAGES FOR SHOWCASE ---
-
 class _WidgetsShowcase extends StatelessWidget {
   final String message;
   const _WidgetsShowcase({required this.message});
@@ -369,35 +377,26 @@ class _WidgetsShowcase extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          message,
-          style: Theme.of(context).textTheme.headlineMedium,
-          textAlign: TextAlign.center,
-        ),
+        Text(message,
+            style: Theme.of(context).textTheme.headlineMedium,
+            textAlign: TextAlign.center),
         const SizedBox(height: 48),
         Wrap(
           spacing: 16,
           runSpacing: 16,
           children: [
-            const DmBadge(
-              label: 'Live',
-              child: Icon(Icons.sensors, size: 40, color: Colors.red),
-            ),
+            const DmBadge(label: 'Duo', child: Icon(Icons.devices, size: 40)),
             DmButton(onPressed: () {}, child: const Text('Primary')),
             DmButton(
-              variant: DmButtonVariant.tonal,
-              onPressed: () {},
-              child: const Text('Tonal'),
-            ),
+                variant: DmButtonVariant.tonal,
+                onPressed: () {},
+                child: const Text('Tonal')),
             DmButton(
-              variant: DmButtonVariant.outlined,
-              onPressed: () {},
-              child: const Text('Outline'),
-            ),
+                variant: DmButtonVariant.outlined,
+                onPressed: () {},
+                child: const Text('Outline')),
           ],
         ),
-        const SizedBox(height: 32),
-        const CircularProgressIndicator(),
       ],
     );
   }
@@ -407,30 +406,28 @@ class _FormsShowcase extends StatelessWidget {
   const _FormsShowcase();
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
-        Text('Active Form Context',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-        SizedBox(height: 24),
+        Text('DuskMoon Form', style: Theme.of(context).textTheme.headlineSmall),
+        const SizedBox(height: 24),
         DmCard(
           child: Padding(
-            padding: EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Remote Data Field',
-                    hintText: 'Controlled by Display 1',
-                    prefixIcon: Icon(Icons.storage),
-                  ),
+                const DmTextField(
+                  placeholder: 'Project Name',
                 ),
-                SizedBox(height: 16),
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Status Label',
-                    prefixIcon: Icon(Icons.info_outline),
-                  ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Expanded(child: Text('Enable Synchronization')),
+                    DmSwitch(value: true, onChanged: (_) {}),
+                  ],
                 ),
+                const SizedBox(height: 24),
+                DmButton(
+                    onPressed: () {}, child: const Text('Save Configuration')),
               ],
             ),
           ),
@@ -446,25 +443,21 @@ class _ChartsShowcase extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Text('Real-time Metrics',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        Text('Visualization', style: Theme.of(context).textTheme.headlineSmall),
         const SizedBox(height: 24),
-        Container(
+        SizedBox(
           height: 250,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.blue.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.blue.withValues(alpha: 0.2)),
-          ),
-          child: const Center(
-              child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.bar_chart, size: 64, color: Colors.blue),
-              Text('Rendering High-Performance DmViz...'),
+          child: DmVizLineChart(
+            data: const [
+              DmVizPoint(x: 0, y: 10),
+              DmVizPoint(x: 1, y: 25),
+              DmVizPoint(x: 2, y: 18),
+              DmVizPoint(x: 3, y: 40),
+              DmVizPoint(x: 4, y: 32),
             ],
-          )),
+            xAxisLabel: 'Time',
+            yAxisLabel: 'Value',
+          ),
         ),
       ],
     );
@@ -475,30 +468,20 @@ class _EditorShowcase extends StatelessWidget {
   const _EditorShowcase();
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
-        const Text('Distributed Code Editor',
+        Text('Distributed Editor',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 24),
-        Container(
-          height: 350,
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: const Color(0xFF1E1E1E),
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.5), blurRadius: 10)
-            ],
-          ),
-          child: const Text(
-            '// DuskMoon Code Engine\n// Multi-Display Sync Active\n\nvoid main() {\n  var display = getActiveDisplay();\n  print("Running on \$display");\n}',
-            style: TextStyle(
-              color: Colors.greenAccent,
-              fontFamily: 'monospace',
-              fontSize: 16,
-            ),
+        SizedBox(height: 24),
+        SizedBox(
+          height: 400,
+          child: DmCodeEditor(
+            initialDoc: """void main() {
+  print("Hello from DuskMoon Duo!");
+  // The secondary screen acts as your
+  // command center while this display
+  // renders the code and execution.
+}""",
           ),
         ),
       ],
