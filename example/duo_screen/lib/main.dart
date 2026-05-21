@@ -24,24 +24,34 @@ class AppState {
   final int selectedIndex;
   final String message;
   final bool isViewerOnly;
+  final List<double> chartData;
+  final String editorLanguage;
 
   AppState({
     required this.selectedIndex,
     required this.message,
     required this.isViewerOnly,
+    required this.chartData,
+    required this.editorLanguage,
   });
 
   Map<String, dynamic> toJson() => {
-        'selectedIndex': selectedIndex,
-        'message': message,
-        'isViewerOnly': isViewerOnly,
-      };
+    'selectedIndex': selectedIndex,
+    'message': message,
+    'isViewerOnly': isViewerOnly,
+    'chartData': chartData,
+    'editorLanguage': editorLanguage,
+  };
 
   factory AppState.fromJson(Map<String, dynamic> json) => AppState(
-        selectedIndex: json['selectedIndex'] as int,
-        message: json['message'] as String,
-        isViewerOnly: json['isViewerOnly'] as bool,
-      );
+    selectedIndex: json['selectedIndex'] as int,
+    message: json['message'] as String,
+    isViewerOnly: json['isViewerOnly'] as bool,
+    chartData: (json['chartData'] as List<dynamic>)
+        .map((e) => e as double)
+        .toList(),
+    editorLanguage: json['editorLanguage'] as String,
+  );
 }
 
 class DuoScreenApp extends StatelessWidget {
@@ -80,8 +90,11 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
   int _selectedIndex = 0;
   String _message = "Welcome to DuskMoon Duo!";
   bool _isViewerOnly = false;
-  final TextEditingController _textController =
-      TextEditingController(text: 'Welcome to DuskMoon Duo!');
+  List<double> _chartData = [10.0, 25.0, 18.0, 40.0, 32.0];
+  String _editorLanguage = 'Dart';
+  final TextEditingController _textController = TextEditingController(
+    text: 'Welcome to DuskMoon Duo!',
+  );
 
   @override
   void initState() {
@@ -103,7 +116,9 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
     if (widget.displayId == 0) {
       IsolateNameServer.removePortNameMapping('primary_display_port');
       IsolateNameServer.registerPortWithName(
-          _receivePort.sendPort, 'primary_display_port');
+        _receivePort.sendPort,
+        'primary_display_port',
+      );
 
       _receivePort.listen((message) {
         if (message is SendPort) {
@@ -136,6 +151,8 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
       _selectedIndex = newState.selectedIndex;
       _message = newState.message;
       _isViewerOnly = newState.isViewerOnly;
+      _chartData = newState.chartData;
+      _editorLanguage = newState.editorLanguage;
       if (_textController.text != newState.message) {
         _textController.text = newState.message;
       }
@@ -160,11 +177,19 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
     }
   }
 
-  void _updateAndSync(int index, {String? message, bool? isViewerOnly}) {
+  void _updateAndSync(
+    int index, {
+    String? message,
+    bool? isViewerOnly,
+    List<double>? chartData,
+    String? editorLanguage,
+  }) {
     setState(() {
       _selectedIndex = index;
       if (message != null) _message = message;
       if (isViewerOnly != null) _isViewerOnly = isViewerOnly;
+      if (chartData != null) _chartData = chartData;
+      if (editorLanguage != null) _editorLanguage = editorLanguage;
     });
     _syncToOther();
   }
@@ -174,6 +199,8 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
       selectedIndex: _selectedIndex,
       message: _message,
       isViewerOnly: _isViewerOnly,
+      chartData: _chartData,
+      editorLanguage: _editorLanguage,
     );
     if (widget.displayId == 1) {
       _otherPort ??= IsolateNameServer.lookupPortByName('primary_display_port');
@@ -198,11 +225,13 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
           : DmAppBar(
               title: const Text('Controller Panel'),
               automaticallyImplyLeading: false,
-              backgroundColor:
-                  Theme.of(context).colorScheme.surfaceContainerHighest,
+              backgroundColor: Theme.of(
+                context,
+              ).colorScheme.surfaceContainerHighest,
             ),
-      body: (_) =>
-          _isViewerOnly ? _buildViewerMode(context) : _buildMainContent(context),
+      body: (_) => _isViewerOnly
+          ? _buildViewerMode(context)
+          : _buildMainContent(context),
       secondaryBody: (_) => _buildControllerContent(context),
       destinations: const [
         NavigationDestination(icon: Icon(Icons.palette), label: 'Widgets'),
@@ -222,18 +251,23 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
         children: [
           const Icon(Icons.dashboard_customize, size: 80, color: Colors.blue),
           const SizedBox(height: 24),
-          Text('System Dashboard',
-              style: Theme.of(context).textTheme.headlineMedium),
+          Text(
+            'System Dashboard',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
           const SizedBox(height: 16),
           Text(
-              'Navigation: ${['Widgets', 'Forms', 'Charts', 'Editor'][_selectedIndex]}',
-              style: Theme.of(context).textTheme.titleLarge),
+            'Navigation: ${['Widgets', 'Forms', 'Charts', 'Editor'][_selectedIndex]}',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 32),
           DmCard(
             child: Padding(
               padding: const EdgeInsets.all(24),
-              child:
-                  Text(_message, style: Theme.of(context).textTheme.bodyLarge),
+              child: Text(
+                _message,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
             ),
           ),
         ],
@@ -253,8 +287,8 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
             children: [
               _WidgetsShowcase(message: _message),
               const _FormsShowcase(),
-              const _ChartsShowcase(),
-              const _EditorShowcase(),
+              _ChartsShowcase(data: _chartData),
+              _EditorShowcase(language: _editorLanguage),
             ],
           ),
         ],
@@ -290,8 +324,10 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Update Viewer Text:',
-                      style: Theme.of(context).textTheme.titleSmall),
+                  Text(
+                    'Update Viewer Text:',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                   const SizedBox(height: 12),
                   TextField(
                     controller: _textController,
@@ -325,7 +361,8 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
                     child: Padding(
                       padding: EdgeInsets.all(16),
                       child: Text(
-                          'DuskMoon Form components are now active on the primary display.'),
+                        'DuskMoon Form components are now active on the primary display.',
+                      ),
                     ),
                   ),
                 ],
@@ -334,29 +371,60 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Visual Config:',
-                      style: Theme.of(context).textTheme.titleSmall),
+                  Text(
+                    'Visual Config:',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                   const SizedBox(height: 16),
-                  const DmCard(
+                  DmCard(
                     child: ListTile(
-                      leading: Icon(Icons.refresh),
-                      title: Text('Randomize Data'),
+                      leading: const Icon(Icons.refresh),
+                      title: const Text('Randomize Data'),
+                      onTap: () {
+                        final data = List.generate(
+                          5,
+                          (index) =>
+                              (index * 10.0 +
+                              (DateTime.now().millisecond % 20)),
+                        );
+                        _updateAndSync(_selectedIndex, chartData: data);
+                      },
                     ),
                   ),
                 ],
               ),
               // Editor Controller
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Language Selection:',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  SizedBox(height: 12),
+                  const Text(
+                    'Language Selection:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 12),
                   Wrap(
                     spacing: 8,
                     children: [
-                      DmChip(label: Text('Dart')),
-                      DmChip(label: Text('Flutter')),
+                      ActionChip(
+                        label: const Text('Dart'),
+                        backgroundColor: _editorLanguage == 'Dart'
+                            ? Colors.blue.withValues(alpha: 0.2)
+                            : null,
+                        onPressed: () => _updateAndSync(
+                          _selectedIndex,
+                          editorLanguage: 'Dart',
+                        ),
+                      ),
+                      ActionChip(
+                        label: const Text('Flutter'),
+                        backgroundColor: _editorLanguage == 'Flutter'
+                            ? Colors.blue.withValues(alpha: 0.2)
+                            : null,
+                        onPressed: () => _updateAndSync(
+                          _selectedIndex,
+                          editorLanguage: 'Flutter',
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -377,9 +445,11 @@ class _WidgetsShowcase extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(message,
-            style: Theme.of(context).textTheme.headlineMedium,
-            textAlign: TextAlign.center),
+        Text(
+          message,
+          style: Theme.of(context).textTheme.headlineMedium,
+          textAlign: TextAlign.center,
+        ),
         const SizedBox(height: 48),
         Wrap(
           spacing: 16,
@@ -388,13 +458,15 @@ class _WidgetsShowcase extends StatelessWidget {
             const DmBadge(label: 'Duo', child: Icon(Icons.devices, size: 40)),
             DmButton(onPressed: () {}, child: const Text('Primary')),
             DmButton(
-                variant: DmButtonVariant.tonal,
-                onPressed: () {},
-                child: const Text('Tonal')),
+              variant: DmButtonVariant.tonal,
+              onPressed: () {},
+              child: const Text('Tonal'),
+            ),
             DmButton(
-                variant: DmButtonVariant.outlined,
-                onPressed: () {},
-                child: const Text('Outline')),
+              variant: DmButtonVariant.outlined,
+              onPressed: () {},
+              child: const Text('Outline'),
+            ),
           ],
         ),
       ],
@@ -423,9 +495,7 @@ class _FormsShowcaseState extends State<_FormsShowcase> {
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                const DmTextField(
-                  placeholder: 'Project Name',
-                ),
+                const DmTextField(placeholder: 'Project Name'),
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -442,7 +512,9 @@ class _FormsShowcaseState extends State<_FormsShowcase> {
                 ),
                 const SizedBox(height: 24),
                 DmButton(
-                    onPressed: () {}, child: const Text('Save Configuration')),
+                  onPressed: () {},
+                  child: const Text('Save Configuration'),
+                ),
               ],
             ),
           ),
@@ -453,7 +525,8 @@ class _FormsShowcaseState extends State<_FormsShowcase> {
 }
 
 class _ChartsShowcase extends StatelessWidget {
-  const _ChartsShowcase();
+  final List<double> data;
+  const _ChartsShowcase({required this.data});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -463,13 +536,11 @@ class _ChartsShowcase extends StatelessWidget {
         SizedBox(
           height: 250,
           child: DmVizLineChart(
-            data: const [
-              DmVizPoint(x: 0, y: 10),
-              DmVizPoint(x: 1, y: 25),
-              DmVizPoint(x: 2, y: 18),
-              DmVizPoint(x: 3, y: 40),
-              DmVizPoint(x: 4, y: 32),
-            ],
+            data: data
+                .asMap()
+                .entries
+                .map((e) => DmVizPoint(x: e.key, y: e.value))
+                .toList(),
             xAxisLabel: 'Time',
             yAxisLabel: 'Value',
           ),
@@ -480,19 +551,24 @@ class _ChartsShowcase extends StatelessWidget {
 }
 
 class _EditorShowcase extends StatelessWidget {
-  const _EditorShowcase();
+  final String language;
+  const _EditorShowcase({required this.language});
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
-        Text('Distributed Editor',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-        SizedBox(height: 24),
+        const Text(
+          'Distributed Editor',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 24),
         SizedBox(
           height: 400,
           child: DmCodeEditor(
-            initialDoc: """void main() {
+            initialDoc:
+                """void main() {
   print("Hello from DuskMoon Duo!");
+  // Running with $language language syntax.
   // The secondary screen acts as your
   // command center while this display
   // renders the code and execution.
