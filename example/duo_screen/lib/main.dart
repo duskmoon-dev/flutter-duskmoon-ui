@@ -402,8 +402,16 @@ class _WidgetsShowcase extends StatelessWidget {
   }
 }
 
-class _FormsShowcase extends StatelessWidget {
+class _FormsShowcase extends StatefulWidget {
   const _FormsShowcase();
+
+  @override
+  State<_FormsShowcase> createState() => _FormsShowcaseState();
+}
+
+class _FormsShowcaseState extends State<_FormsShowcase> {
+  bool _syncEnabled = true;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -422,7 +430,14 @@ class _FormsShowcase extends StatelessWidget {
                 Row(
                   children: [
                     const Expanded(child: Text('Enable Synchronization')),
-                    DmSwitch(value: true, onChanged: (_) {}),
+                    DmSwitch(
+                      value: _syncEnabled,
+                      onChanged: (value) {
+                        setState(() {
+                          _syncEnabled = value;
+                        });
+                      },
+                    ),
                   ],
                 ),
                 const SizedBox(height: 24),
