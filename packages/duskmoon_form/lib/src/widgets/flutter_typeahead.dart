@@ -269,7 +269,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:rxdart/rxdart.dart';
 
 typedef FutureOr<List<T>> SuggestionsCallback<T>(String pattern);
@@ -618,14 +617,30 @@ class _TypeAheadFieldState<T> extends State<TypeAheadField<T>>
   // The rate at which the suggestion box will resize when the user is scrolling
   final Duration _resizeOnScrollRefreshRate = const Duration(milliseconds: 500);
 
-  late StreamSubscription<bool> _keyboardSubscription;
-
   late PublishSubject _hideSuggestionsController;
 
   @override
   void didChangeMetrics() {
     // Catch keyboard event and orientation change; resize suggestions list
     this._suggestionsBox!.onChangeMetrics();
+    _unfocusWhenMobileWebKeyboardHides();
+  }
+
+  void _unfocusWhenMobileWebKeyboardHides() {
+    if (!isWebMobile || !widget.hideSuggestionsOnKeyboardHide) {
+      return;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+
+      final viewInsets = MediaQuery.maybeViewInsetsOf(context);
+      if (viewInsets != null && viewInsets.bottom == 0) {
+        _effectiveFocusNode?.unfocus();
+      }
+    });
   }
 
   @override
@@ -636,10 +651,6 @@ class _TypeAheadFieldState<T> extends State<TypeAheadField<T>>
     // }
     this._suggestionsBox!.widgetMounted = false;
     WidgetsBinding.instance.removeObserver(this);
-
-    if (isWebMobile) {
-      _keyboardSubscription.cancel();
-    }
 
     _effectiveFocusNode!.removeListener(_focusNodeListener);
     _focusNode?.dispose();
@@ -654,7 +665,6 @@ class _TypeAheadFieldState<T> extends State<TypeAheadField<T>>
     super.dispose();
   }
 
-  late final KeyboardVisibilityController keyboardVisibilityController;
   late final bool isWebMobile;
   @override
   void initState() {
@@ -678,19 +688,6 @@ class _TypeAheadFieldState<T> extends State<TypeAheadField<T>>
       widget.autoFlipDirection,
     );
     widget.suggestionsBoxController?._suggestionsBox = this._suggestionsBox;
-    if (isWebMobile) {
-      keyboardVisibilityController = KeyboardVisibilityController();
-      _keyboardSubscription = keyboardVisibilityController.onChange.listen((
-        bool visible,
-      ) {
-        setState(() {
-          if (widget.hideSuggestionsOnKeyboardHide && !visible) {
-            _effectiveFocusNode!.unfocus();
-          }
-        });
-      });
-    }
-
     this._focusNodeListener = () {
       if (_effectiveFocusNode!.hasFocus) {
         this._suggestionsBox?.open();
