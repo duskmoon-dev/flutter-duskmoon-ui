@@ -91,5 +91,28 @@ void main() {
       expect(find.byKey(const ValueKey('user-avatar')), findsOneWidget);
       expect(find.byKey(const ValueKey('user-header')), findsOneWidget);
     });
+
+    testWidgets('does not notify stream scope during a parent rebuild',
+        (tester) async {
+      DmChatMessage message(String text) => DmChatMessage(
+            id: 'a1',
+            role: DmChatRole.assistant,
+            blocks: [
+              const DmChatThinkingBlock(text: 'reasoning'),
+              DmChatTextBlock(text: text),
+            ],
+          );
+
+      await pumpThemed(
+        tester,
+        DmChatBubble(message: message('partial streamed text')),
+      );
+      await pumpThemed(
+        tester,
+        DmChatBubble(message: message('partial streamed text updated')),
+      );
+
+      expect(tester.takeException(), isNull);
+    });
   });
 }
