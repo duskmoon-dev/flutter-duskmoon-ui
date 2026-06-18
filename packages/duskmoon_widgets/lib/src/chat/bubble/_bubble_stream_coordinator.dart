@@ -1,3 +1,4 @@
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
 /// Signals cross-block events within a single bubble — specifically, the
@@ -6,12 +7,33 @@ import 'package:flutter/widgets.dart';
 /// toggled yet.
 class BubbleStreamCoordinator extends ChangeNotifier {
   bool _textStarted = false;
+  bool _notifyScheduled = false;
+  bool _disposed = false;
+
   bool get textStarted => _textStarted;
 
   void markTextStarted() {
-    if (_textStarted) return;
+    if (_textStarted || _disposed) return;
     _textStarted = true;
-    notifyListeners();
+    if (SchedulerBinding.instance.schedulerPhase !=
+        SchedulerPhase.persistentCallbacks) {
+      notifyListeners();
+      return;
+    }
+    if (_notifyScheduled) return;
+    _notifyScheduled = true;
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _notifyScheduled = false;
+      if (!_disposed) {
+        notifyListeners();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
   }
 }
 
