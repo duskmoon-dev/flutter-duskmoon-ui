@@ -1,5 +1,5 @@
 import 'package:duskmoon_widgets/duskmoon_widgets.dart'
-    show DmDropdown, DmDropdownItem, DmPlatformStyle, resolvePlatformStyle;
+    show DmDropdown, DmDropdownItem;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -179,8 +179,6 @@ class DmDropdownFieldBlocBuilder<Value> extends StatelessWidget {
               isEnabled,
             );
 
-            final isMaterial =
-                resolvePlatformStyle(context) == DmPlatformStyle.material;
             final dropdown = DmDropdown<Value>(
               value: fieldState.value,
               isExpanded: isExpanded,
@@ -202,44 +200,14 @@ class DmDropdownFieldBlocBuilder<Value> extends StatelessWidget {
               }).toList(),
             );
 
-            if (isMaterial) {
-              return DefaultFieldBlocBuilderPadding(
-                padding: padding,
-                child: InputDecorator(
-                  decoration: decoration,
-                  textAlign: textAlign,
-                  isEmpty:
-                      fieldState.value == null && decoration.hintText == null,
-                  child: dropdown,
-                ),
-              );
-            }
-
-            final errorText = Style.getErrorText(
-              context: context,
-              errorBuilder: errorBuilder,
-              fieldBlocState: fieldState,
-              fieldBloc: selectFieldBloc,
-            );
             return DefaultFieldBlocBuilderPadding(
               padding: padding,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  dropdown,
-                  if (errorText != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        errorText,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.error,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                ],
+              child: InputDecorator(
+                decoration: decoration,
+                textAlign: textAlign,
+                isEmpty:
+                    fieldState.value == null && decoration.hintText == null,
+                child: dropdown,
               ),
             );
           },
