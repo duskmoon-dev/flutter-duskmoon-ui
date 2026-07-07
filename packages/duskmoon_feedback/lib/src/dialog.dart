@@ -51,14 +51,21 @@ Future<T?> showDmDialog<T>({
   List<Widget>? actions,
 }) {
   final style = resolvePlatformStyle(context);
+  final materialTheme = Theme.of(context);
+  final cupertinoTheme = CupertinoTheme.of(context);
+  final cupertinoBrightness =
+      cupertinoTheme.brightness ?? materialTheme.brightness;
   return showDialog<T>(
     context: context,
-    builder: (context) {
+    builder: (_) {
       if (style == DmPlatformStyle.cupertino) {
-        return CupertinoAlertDialog(
-          title: title,
-          content: content,
-          actions: actions ?? const [],
+        return CupertinoTheme(
+          data: cupertinoTheme.copyWith(brightness: cupertinoBrightness),
+          child: CupertinoAlertDialog(
+            title: title,
+            content: content,
+            actions: actions ?? const [],
+          ),
         );
       }
       return AlertDialog(

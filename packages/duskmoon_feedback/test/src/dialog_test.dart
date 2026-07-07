@@ -1,4 +1,6 @@
 import 'package:duskmoon_feedback/duskmoon_feedback.dart';
+import 'package:duskmoon_theme/duskmoon_theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -37,6 +39,46 @@ void main() {
 
       expect(find.text('Dialog Title'), findsOneWidget);
       expect(find.text('Dialog Content'), findsOneWidget);
+    });
+
+    testWidgets('uses dark Cupertino theme for dark adaptive dialogs', (
+      WidgetTester tester,
+    ) async {
+      const Key tapTarget = Key('tap-target');
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData.dark(),
+          home: DmPlatformOverride(
+            style: DmPlatformStyle.cupertino,
+            child: Builder(
+              builder: (BuildContext context) {
+                return GestureDetector(
+                  onTap: () {
+                    showDmDialog(
+                      context: context,
+                      title: const Text('Dark Dialog'),
+                      content: const Text('Dark Content'),
+                    );
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: const SizedBox(
+                    height: 100.0,
+                    width: 100.0,
+                    key: tapTarget,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byKey(tapTarget), warnIfMissed: false);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoAlertDialog), findsOneWidget);
+      final dialogContext = tester.element(find.byType(CupertinoAlertDialog));
+      expect(CupertinoTheme.brightnessOf(dialogContext), Brightness.dark);
     });
 
     testWidgets('displays action buttons', (WidgetTester tester) async {
