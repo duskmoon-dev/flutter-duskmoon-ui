@@ -656,8 +656,7 @@ class FormBlocLoading<SuccessResponse, FailureResponse>
 /// {@macro form_bloc.form_state.notUseThisClassInsteadUseToMethod}
 /// [FormBlocState.toLoadFailed].
 class FormBlocLoadFailed<SuccessResponse, FailureResponse>
-    extends FormBlocState<SuccessResponse, FailureResponse>
-    with EquatableMixin {
+    extends FormBlocState<SuccessResponse, FailureResponse> {
   final FailureResponse? failureResponse;
 
   bool get hasFailureResponse => failureResponse != null;
@@ -717,8 +716,7 @@ class FormBlocLoaded<SuccessResponse, FailureResponse>
 /// {@macro form_bloc.form_state.notUseThisClassInsteadUseToMethod}
 /// [FormBlocState.toSubmitting].
 class FormBlocSubmitting<SuccessResponse, FailureResponse>
-    extends FormBlocState<SuccessResponse, FailureResponse>
-    with EquatableMixin {
+    extends FormBlocState<SuccessResponse, FailureResponse> {
   final bool isCanceling;
   final double progress;
 
@@ -763,8 +761,7 @@ class FormBlocSubmitting<SuccessResponse, FailureResponse>
 /// {@macro form_bloc.form_state.notUseThisClassInsteadUseToMethod}
 /// [FormBlocState.toSuccess].
 class FormBlocSuccess<SuccessResponse, FailureResponse>
-    extends FormBlocState<SuccessResponse, FailureResponse>
-    with EquatableMixin {
+    extends FormBlocState<SuccessResponse, FailureResponse> {
   final SuccessResponse? successResponse;
   final bool canSubmitAgain;
   final int stepCompleted;
@@ -809,8 +806,7 @@ class FormBlocSuccess<SuccessResponse, FailureResponse>
 /// {@macro form_bloc.form_state.notUseThisClassInsteadUseToMethod}
 /// [FormBlocState.toFailure].
 class FormBlocFailure<SuccessResponse, FailureResponse>
-    extends FormBlocState<SuccessResponse, FailureResponse>
-    with EquatableMixin {
+    extends FormBlocState<SuccessResponse, FailureResponse> {
   final FailureResponse? failureResponse;
 
   bool get hasFailureResponse => failureResponse != null;
@@ -923,8 +919,7 @@ class FormBlocDeleting<SuccessResponse, FailureResponse>
 /// {@macro form_bloc.form_state.notUseThisClassInsteadUseToMethod}
 /// [FormBlocState.toFailure].
 class FormBlocDeleteFailed<SuccessResponse, FailureResponse>
-    extends FormBlocState<SuccessResponse, FailureResponse>
-    with EquatableMixin {
+    extends FormBlocState<SuccessResponse, FailureResponse> {
   final FailureResponse? failureResponse;
 
   bool get hasFailureResponse => failureResponse != null;
@@ -960,8 +955,7 @@ class FormBlocDeleteFailed<SuccessResponse, FailureResponse>
 /// {@macro form_bloc.form_state.notUseThisClassInsteadUseToMethod}
 /// [FormBlocState.toSuccess].
 class FormBlocDeleteSuccessful<SuccessResponse, FailureResponse>
-    extends FormBlocState<SuccessResponse, FailureResponse>
-    with EquatableMixin {
+    extends FormBlocState<SuccessResponse, FailureResponse> {
   final SuccessResponse? successResponse;
 
   bool get hasSuccessResponse => successResponse != null;
@@ -997,8 +991,7 @@ class FormBlocDeleteSuccessful<SuccessResponse, FailureResponse>
 /// {@macro form_bloc.form_state.notUseThisClassInsteadUseToMethod}
 /// [FormBlocState.toUpdatingFields].
 class FormBlocUpdatingFields<SuccessResponse, FailureResponse>
-    extends FormBlocState<SuccessResponse, FailureResponse>
-    with EquatableMixin {
+    extends FormBlocState<SuccessResponse, FailureResponse> {
   final double progress;
 
   FormBlocUpdatingFields({
