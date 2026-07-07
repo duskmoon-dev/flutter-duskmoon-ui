@@ -81,6 +81,57 @@ void main() {
       expect(CupertinoTheme.brightnessOf(dialogContext), Brightness.dark);
     });
 
+    testWidgets('can keep Cupertino dialogs on a nested local navigator', (
+      WidgetTester tester,
+    ) async {
+      final outerNavigatorKey = GlobalKey<NavigatorState>();
+      final innerNavigatorKey = GlobalKey<NavigatorState>();
+      const Key tapTarget = Key('tap-target');
+
+      await tester.pumpWidget(
+        MaterialApp(
+          navigatorKey: outerNavigatorKey,
+          theme: ThemeData.light(),
+          home: MaterialApp(
+            navigatorKey: innerNavigatorKey,
+            theme: DmThemeData.moonlight(),
+            home: DmPlatformOverride(
+              style: DmPlatformStyle.cupertino,
+              child: Builder(
+                builder: (BuildContext context) {
+                  return GestureDetector(
+                    onTap: () {
+                      showDmDialog(
+                        context: context,
+                        title: const Text('Run Deploy'),
+                        content: const Text('Branch/Tag'),
+                        useRootNavigator: false,
+                      );
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: const SizedBox(
+                      height: 100.0,
+                      width: 100.0,
+                      key: tapTarget,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byKey(tapTarget), warnIfMissed: false);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoAlertDialog), findsOneWidget);
+      final dialogContext = tester.element(find.byType(CupertinoAlertDialog));
+      expect(CupertinoTheme.brightnessOf(dialogContext), Brightness.dark);
+      expect(innerNavigatorKey.currentState!.canPop(), isTrue);
+      expect(outerNavigatorKey.currentState!.canPop(), isFalse);
+    });
+
     testWidgets('displays action buttons', (WidgetTester tester) async {
       const Key tapTarget = Key('tap-target');
       await tester.pumpWidget(

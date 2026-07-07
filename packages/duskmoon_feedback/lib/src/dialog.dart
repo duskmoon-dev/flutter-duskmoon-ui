@@ -49,14 +49,15 @@ Future<T?> showDmDialog<T>({
   required Widget title,
   required Widget content,
   List<Widget>? actions,
+  bool useRootNavigator = true,
 }) {
   final style = resolvePlatformStyle(context);
   final materialTheme = Theme.of(context);
   final cupertinoTheme = CupertinoTheme.of(context);
-  final cupertinoBrightness =
-      cupertinoTheme.brightness ?? materialTheme.brightness;
+  final cupertinoBrightness = materialTheme.brightness;
   return showDialog<T>(
     context: context,
+    useRootNavigator: useRootNavigator,
     builder: (_) {
       if (style == DmPlatformStyle.cupertino) {
         return CupertinoTheme(
