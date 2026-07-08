@@ -14,6 +14,7 @@ void main() {
       bool showLineNumbers = false,
       ValueChanged<String>? onChanged,
       ValueChanged<DmMarkdownTab>? onTabChanged,
+      DmMarkdownConfig config = const DmMarkdownConfig(),
     }) {
       return MaterialApp(
         home: Scaffold(
@@ -26,6 +27,7 @@ void main() {
               readOnly: readOnly,
               enabled: enabled,
               showLineNumbers: showLineNumbers,
+              config: config,
               onChanged: onChanged,
               onTabChanged: onTabChanged,
             ),
@@ -62,6 +64,17 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(lastTab, DmMarkdownTab.preview);
+    });
+
+    testWidgets('preview supports mermaid fenced blocks', (tester) async {
+      await tester.pumpWidget(buildApp(
+        initialValue: '```mermaid\nflowchart LR\nA --> B\n```',
+        initialTab: DmMarkdownTab.preview,
+        config: const DmMarkdownConfig(enableMermaid: true),
+      ));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DmMermaidView), findsOneWidget);
     });
 
     testWidgets('onChanged fires on text change', (tester) async {

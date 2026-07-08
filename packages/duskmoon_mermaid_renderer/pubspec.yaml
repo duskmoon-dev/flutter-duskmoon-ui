@@ -1,0 +1,21 @@
+name: duskmoon_mermaid_renderer
+description: Flutter RenderObject-based Mermaid renderer for Duskmoon UI.
+version: 0.1.0
+homepage: https://github.com/duskmoon-dev/flutter_duskmoon_ui
+repository: https://github.com/duskmoon-dev/flutter_duskmoon_ui
+resolution: workspace
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  collection: ^1.19.0
+  meta: ^1.15.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

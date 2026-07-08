@@ -50,6 +50,8 @@ export 'src/data_display/dm_chip.dart';
 export 'src/markdown/dm_markdown.dart';
 export 'src/markdown/dm_markdown_config.dart';
 export 'src/markdown/dm_markdown_scroll_controller.dart';
+export 'package:duskmoon_mermaid_renderer/duskmoon_mermaid_renderer.dart'
+    show DmMermaidView, MermaidLayoutConfig, MermaidRenderOptions, MermaidTheme;
 
 // Markdown Input
 export 'src/markdown_input/dm_markdown_input.dart';

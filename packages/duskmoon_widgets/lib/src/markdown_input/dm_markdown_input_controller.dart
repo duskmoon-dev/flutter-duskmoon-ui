@@ -135,6 +135,24 @@ class DmMarkdownInputController extends MarkdownEditingController {
     );
   }
 
+  /// Inserts a Mermaid diagram code fence at the cursor.
+  void insertMermaidDiagram({
+    String template = 'flowchart LR\n  A[Start] --> B[End]',
+  }) {
+    final sel = selection;
+    if (!sel.isValid) return;
+
+    final selected = sel.textInside(text);
+    final diagram = selected.isEmpty ? template : selected;
+    final replacement = '```mermaid\n$diagram\n```';
+    applyMutation(
+      text: text.replaceRange(sel.start, sel.end, replacement),
+      selection: TextSelection.collapsed(
+        offset: sel.start + '```mermaid\n'.length,
+      ),
+    );
+  }
+
   /// Inserts a markdown link at the cursor.
   void insertLink({String url = 'url'}) {
     final sel = selection;

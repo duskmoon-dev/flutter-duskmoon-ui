@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:duskmoon_mermaid_renderer/duskmoon_mermaid_renderer.dart';
 
 import '_code_block_widget.dart';
 
-/// Placeholder Mermaid widget (Option C — disabled by default).
-///
-/// Renders mermaid source as a syntax-highlighted code block.
-/// The internal structure is ready for future replacement with a native
-/// Dart renderer (Option A) or WebView (Option B).
+/// Renders Mermaid source as a diagram when enabled, otherwise as code.
 class MermaidWidget extends StatelessWidget {
   /// Creates a mermaid widget.
   const MermaidWidget({
     super.key,
     required this.source,
     this.enabled = false,
+    this.options = const MermaidRenderOptions(),
   });
 
   /// The Mermaid diagram source code.
@@ -22,15 +20,28 @@ class MermaidWidget extends StatelessWidget {
   /// syntax-highlighted code block instead.
   final bool enabled;
 
+  /// Render options passed to the native Mermaid renderer.
+  final MermaidRenderOptions options;
+
   @override
   Widget build(BuildContext context) {
     if (!enabled) {
-      // Option C: render as plain code block with mermaid syntax label.
       return CodeBlockWidget(code: source, language: 'mermaid');
     }
 
-    // Future: Option A (native) or Option B (WebView) would go here.
-    // For now, fall back to the same code block rendering.
-    return CodeBlockWidget(code: source, language: 'mermaid');
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: colorScheme.outlineVariant, width: 0.5),
+      ),
+      child: DmMermaidView(
+        source: source,
+        options: options,
+      ),
+    );
   }
 }

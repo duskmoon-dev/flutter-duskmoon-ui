@@ -417,6 +417,7 @@ class BlockWidgetBuilder {
       return MermaidWidget(
         source: code,
         enabled: config.enableMermaid,
+        options: config.mermaidOptions,
       );
     }
 

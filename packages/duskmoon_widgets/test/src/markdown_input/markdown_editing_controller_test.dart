@@ -42,6 +42,16 @@ void main() {
       expect(controller.text, endsWith('```'));
     });
 
+    test('insertMermaidDiagram inserts mermaid fence', () {
+      final controller = DmMarkdownInputController();
+      controller.selection = const TextSelection.collapsed(offset: 0);
+      controller.insertMermaidDiagram();
+
+      expect(controller.text, startsWith('```mermaid'));
+      expect(controller.text, contains('flowchart LR'));
+      expect(controller.text, endsWith('```'));
+    });
+
     test('insertLink creates markdown link', () {
       final controller = DmMarkdownInputController(text: 'click here');
       controller.selection =

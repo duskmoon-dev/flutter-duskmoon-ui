@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'package:duskmoon_mermaid_renderer/duskmoon_mermaid_renderer.dart';
 
 /// Configuration for [DmMarkdown] rendering features.
 @immutable
@@ -9,6 +10,7 @@ class DmMarkdownConfig {
     this.enableGfm = true,
     this.enableKatex = true,
     this.enableMermaid = false,
+    this.mermaidOptions = const MermaidRenderOptions(),
     this.enableCodeHighlight = true,
     this.codeTheme,
     this.blockBuilders,
@@ -26,6 +28,9 @@ class DmMarkdownConfig {
   /// Defaults to `false` — when disabled, mermaid blocks render as
   /// syntax-highlighted code.
   final bool enableMermaid;
+
+  /// Mermaid render options used when [enableMermaid] is true.
+  final MermaidRenderOptions mermaidOptions;
 
   /// Enable syntax highlighting in fenced code blocks.
   final bool enableCodeHighlight;

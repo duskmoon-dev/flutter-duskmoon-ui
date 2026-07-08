@@ -57,6 +57,26 @@ void main() {
       expect(find.text('dart'), findsOneWidget);
     });
 
+    testWidgets('renders mermaid as code when disabled', (tester) async {
+      await tester.pumpWidget(buildApp(
+        data: '```mermaid\nflowchart LR\nA --> B\n```',
+      ));
+      await tester.pumpAndSettle();
+
+      expect(find.text('mermaid'), findsOneWidget);
+      expect(find.byType(DmMermaidView), findsNothing);
+    });
+
+    testWidgets('renders mermaid view when enabled', (tester) async {
+      await tester.pumpWidget(buildApp(
+        data: '```mermaid\nflowchart LR\nA --> B\n```',
+        config: const DmMarkdownConfig(enableMermaid: true),
+      ));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DmMermaidView), findsOneWidget);
+    });
+
     testWidgets('renders horizontal rule', (tester) async {
       await tester.pumpWidget(buildApp(data: 'Above\n\n---\n\nBelow'));
       await tester.pumpAndSettle();
