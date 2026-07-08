@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:example/main.dart';
 import 'package:example/router.dart';
 import 'package:example/screens/button/button_screen.dart';
@@ -101,6 +102,28 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.widgetWithText(AppBar, 'Markdown'), findsOneWidget);
+    });
+
+    testWidgets('markdown screen renders mermaid chart tab', (tester) async {
+      tester.view.physicalSize = const Size(1200, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: buildRouter(
+            '${WidgetsScreen.path}/${MarkdownScreen.path}',
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Mermaid'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Mermaid Flowchart'), findsOneWidget);
+      expect(find.byType(DmMermaidView), findsOneWidget);
     });
 
     testWidgets('code editor screen builds via GoRouter', (tester) async {

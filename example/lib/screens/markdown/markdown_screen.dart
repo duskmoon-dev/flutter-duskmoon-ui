@@ -50,6 +50,14 @@ class _MarkdownBodyState extends State<_MarkdownBody>
   Timer? _streamTimer;
   Key _streamKey = UniqueKey();
 
+  static const _mermaidFlowchart = '''
+flowchart LR
+  Input[Markdown fence] --> Parser{Mermaid enabled?}
+  Parser -->|yes| Render[Flutter RenderObject]
+  Parser -->|no| Code[Code block]
+  Render --> Canvas[Canvas paint]
+''';
+
   static const _sampleMarkdown = '''
 # DmMarkdown Showcase
 
@@ -99,8 +107,14 @@ def fibonacci(n):
 |---------|--------|----------|
 | GFM | Done | High |
 | KaTeX | Done | High |
-| Mermaid | Planned | Medium |
+| Mermaid | Done | Medium |
 | Streaming | Done | High |
+
+## Mermaid Flowchart
+
+```mermaid
+$_mermaidFlowchart
+```
 
 ## Math (KaTeX)
 
@@ -141,7 +155,7 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     _inputController.text =
         '# Write your markdown here\n\nTry using **bold** or *italic* text!';
     _chatInputController.text = 'var data = new Data()';
@@ -185,8 +199,10 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
           color: colorScheme.surfaceContainer,
           child: TabBar(
             controller: _tabController,
+            isScrollable: true,
             tabs: const [
               Tab(icon: Icon(Icons.article), text: 'Renderer'),
+              Tab(icon: Icon(Icons.account_tree_outlined), text: 'Mermaid'),
               Tab(icon: Icon(Icons.stream), text: 'Streaming'),
               Tab(icon: Icon(Icons.edit_note), text: 'Editor'),
               Tab(icon: Icon(Icons.chat), text: 'Chat Input'),
@@ -198,6 +214,7 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
             controller: _tabController,
             children: [
               _buildRendererDemo(),
+              _buildMermaidDemo(),
               _buildStreamingDemo(),
               _buildEditorDemo(),
               _buildChatInputDemo(),
@@ -208,11 +225,75 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
     );
   }
 
+  MermaidRenderOptions _mermaidOptions(BuildContext context) {
+    return MermaidRenderOptions(
+      layoutConfig: const MermaidLayoutConfig(
+        nodeSpacing: 56,
+        rankSpacing: 88,
+        padding: 20,
+      ),
+      theme: Theme.of(context).brightness == Brightness.dark
+          ? MermaidTheme.dark
+          : MermaidTheme.light,
+    );
+  }
+
+  DmMarkdownConfig _markdownConfig(BuildContext context) {
+    return DmMarkdownConfig(
+      enableKatex: true,
+      enableMermaid: true,
+      mermaidOptions: _mermaidOptions(context),
+    );
+  }
+
   Widget _buildRendererDemo() {
-    return const DmMarkdown(
+    return DmMarkdown(
       data: _sampleMarkdown,
-      config: DmMarkdownConfig(enableKatex: true),
-      padding: EdgeInsets.all(16),
+      config: _markdownConfig(context),
+      padding: const EdgeInsets.all(16),
+    );
+  }
+
+  Widget _buildMermaidDemo() {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        Text(
+          'Mermaid Flowchart',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: 12),
+        Container(
+          constraints: const BoxConstraints(minHeight: 220),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: colorScheme.outlineVariant,
+              width: 0.5,
+            ),
+          ),
+          child: DmMermaidView(
+            source: _mermaidFlowchart,
+            options: _mermaidOptions(context),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          'Source',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: 8),
+        const DmMarkdown(
+          data: '```mermaid\n$_mermaidFlowchart\n```',
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
+        ),
+      ],
     );
   }
 
@@ -247,7 +328,7 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
               ? DmMarkdown(
                   key: _streamKey,
                   stream: _streamController!.stream,
-                  config: const DmMarkdownConfig(enableKatex: true),
+                  config: _markdownConfig(context),
                   padding: const EdgeInsets.all(16),
                 )
               : Center(
@@ -289,7 +370,7 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
             controller: _inputController,
             showLineNumbers: true,
             showPreview: _showPreview,
-            config: const DmMarkdownConfig(enableKatex: true),
+            config: _markdownConfig(context),
           ),
         ),
       ],
