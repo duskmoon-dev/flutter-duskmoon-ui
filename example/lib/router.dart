@@ -7,6 +7,7 @@ import 'screens/code_editor/code_editor_screen.dart';
 import 'screens/feedback/feedback_screen.dart';
 import 'screens/form/form_screen.dart';
 import 'screens/markdown/markdown_screen.dart';
+import 'screens/markdown/mermaid_screen.dart';
 import 'screens/scaffold/scaffold_screen.dart';
 import 'screens/settings/settings_screen.dart';
 import 'screens/theme/theme_screen.dart';
@@ -79,6 +80,16 @@ class AppRouter {
             key: state.pageKey,
             child: const MarkdownScreen(),
           ),
+          routes: [
+            GoRoute(
+              name: MermaidScreen.name,
+              path: MermaidScreen.path,
+              pageBuilder: (context, state) => MaterialPage<void>(
+                key: state.pageKey,
+                child: const MermaidScreen(),
+              ),
+            ),
+          ],
         ),
         GoRoute(
           name: CodeEditorScreen.name,

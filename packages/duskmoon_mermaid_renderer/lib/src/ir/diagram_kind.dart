@@ -1,5 +1,6 @@
 enum MermaidDiagramKind {
   flowchart,
+  swimlanes,
   sequence,
   classDiagram,
   state,
@@ -20,6 +21,12 @@ enum MermaidDiagramKind {
   kanban,
   architecture,
   radar,
+  eventModeling,
   treemap,
+  venn,
+  ishikawa,
+  wardley,
+  cynefin,
+  treeView,
   xyChart,
 }

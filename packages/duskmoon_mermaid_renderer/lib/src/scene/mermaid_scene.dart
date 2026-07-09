@@ -5,6 +5,7 @@ import '../theme/theme.dart';
 import 'scene_edge.dart';
 import 'scene_label.dart';
 import 'scene_node.dart';
+import 'scene_path.dart';
 
 class MermaidScene {
   const MermaidScene({
@@ -12,12 +13,14 @@ class MermaidScene {
     required this.nodes,
     required this.edges,
     required this.labels,
+    this.paths = const [],
   });
 
   final Size size;
   final List<SceneNode> nodes;
   final List<SceneEdge> edges;
   final List<SceneLabel> labels;
+  final List<ScenePath> paths;
 }
 
 MermaidScene buildMermaidScene(MermaidLayout layout, MermaidTheme theme) {

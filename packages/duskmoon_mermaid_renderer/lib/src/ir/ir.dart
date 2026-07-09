@@ -1,7 +1,11 @@
+export 'charts.dart';
 export 'diagram_kind.dart';
 export 'direction.dart';
 export 'edge.dart';
 export 'graph.dart';
 export 'node.dart';
+export 'relationship_diagrams.dart';
 export 'style.dart';
+export 'structured_diagrams.dart';
 export 'subgraph.dart';
+export 'xy_chart.dart';

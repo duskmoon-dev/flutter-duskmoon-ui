@@ -11,6 +11,7 @@ import 'package:example/screens/chat/chat_screen.dart';
 import 'package:example/screens/code_editor/code_editor_screen.dart';
 import 'package:example/screens/feedback/feedback_screen.dart';
 import 'package:example/screens/markdown/markdown_screen.dart';
+import 'package:example/screens/markdown/mermaid_screen.dart';
 import 'package:example/screens/scaffold/scaffold_screen.dart';
 import 'package:example/screens/visualization/chart_gallery_page.dart';
 import 'package:example/screens/visualization/geo_map_page.dart';
@@ -122,8 +123,42 @@ void main() {
       await tester.tap(find.text('Mermaid'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Mermaid Flowchart'), findsOneWidget);
+      expect(find.text('Mermaid XY Chart'), findsOneWidget);
       expect(find.byType(DmMermaidView), findsOneWidget);
+    });
+
+    testWidgets('mermaid gallery screen builds via GoRouter', (tester) async {
+      tester.view.physicalSize = const Size(1440, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: buildRouter(
+            '${WidgetsScreen.path}/${MarkdownScreen.path}/${MermaidScreen.path}',
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.widgetWithText(AppBar, 'Mermaid'), findsOneWidget);
+      expect(find.text('Mermaid Diagram Types'), findsOneWidget);
+      expect(find.text('${MermaidScreen.exampleCount} types'), findsOneWidget);
+      expect(
+        find.text(
+          'Native canvas coverage: ${MermaidScreen.nativeExampleCount} of ${MermaidScreen.exampleCount} types',
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey<String>('mermaid-example-flowchart')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey<String>('mermaid-example-xy-chart')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('code editor screen builds via GoRouter', (tester) async {

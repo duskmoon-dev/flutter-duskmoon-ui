@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:duskmoon_widgets/duskmoon_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../destination.dart';
+import 'mermaid_screen.dart';
 
 class MarkdownScreen extends StatelessWidget {
   static const name = 'Markdown';
@@ -50,12 +52,13 @@ class _MarkdownBodyState extends State<_MarkdownBody>
   Timer? _streamTimer;
   Key _streamKey = UniqueKey();
 
-  static const _mermaidFlowchart = '''
-flowchart LR
-  Input[Markdown fence] --> Parser{Mermaid enabled?}
-  Parser -->|yes| Render[Flutter RenderObject]
-  Parser -->|no| Code[Code block]
-  Render --> Canvas[Canvas paint]
+  static const _mermaidChart = '''
+xychart
+  title "Monthly active users"
+  x-axis [Jan, Feb, Mar, Apr, May, Jun]
+  y-axis "Users" 0 --> 120
+  bar [32, 45, 63, 74, 98, 111]
+  line [28, 40, 58, 70, 92, 105]
 ''';
 
   static const _sampleMarkdown = '''
@@ -110,10 +113,10 @@ def fibonacci(n):
 | Mermaid | Done | Medium |
 | Streaming | Done | High |
 
-## Mermaid Flowchart
+## Mermaid XY Chart
 
 ```mermaid
-$_mermaidFlowchart
+$_mermaidChart
 ```
 
 ## Math (KaTeX)
@@ -260,9 +263,20 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Text(
-          'Mermaid Flowchart',
-          style: Theme.of(context).textTheme.titleLarge,
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Mermaid XY Chart',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            OutlinedButton.icon(
+              onPressed: () => context.goNamed(MermaidScreen.name),
+              icon: const Icon(Icons.account_tree_outlined),
+              label: const Text('All Types'),
+            ),
+          ],
         ),
         const SizedBox(height: 12),
         Container(
@@ -277,7 +291,7 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
             ),
           ),
           child: DmMermaidView(
-            source: _mermaidFlowchart,
+            source: _mermaidChart,
             options: _mermaidOptions(context),
           ),
         ),
@@ -288,7 +302,7 @@ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
         ),
         const SizedBox(height: 8),
         const DmMarkdown(
-          data: '```mermaid\n$_mermaidFlowchart\n```',
+          data: '```mermaid\n$_mermaidChart\n```',
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           padding: EdgeInsets.zero,

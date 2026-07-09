@@ -39,9 +39,28 @@ graph TD
 
     test('reports unsupported diagram kinds', () {
       expect(
-        () => parseMermaid('sequenceDiagram\nA->>B: hello'),
+        () => parseMermaid('unsupportedDiagram\nclass User'),
         throwsA(isA<UnsupportedDiagramError>()),
       );
+    });
+
+    test('classifies documented unsupported diagram headers', () {
+      const cases = <String, MermaidDiagramKind>{
+        'unsupportedDiagram\nclass User': MermaidDiagramKind.classDiagram,
+      };
+
+      for (final entry in cases.entries) {
+        expect(
+          () => parseMermaid(entry.key),
+          throwsA(
+            isA<UnsupportedDiagramError>().having(
+              (error) => error.kind,
+              'kind',
+              entry.value,
+            ),
+          ),
+        );
+      }
     });
 
     test('reports invalid init directives', () {

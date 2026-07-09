@@ -33,6 +33,29 @@ class MermaidPainter {
       );
     }
 
+    for (final path in scene.paths) {
+      final fillColor = path.fillColor;
+      if (fillColor != null) {
+        canvas.drawPath(
+          path.path,
+          Paint()
+            ..color = fillColor
+            ..style = PaintingStyle.fill,
+        );
+      }
+
+      final strokeColor = path.strokeColor;
+      if (strokeColor != null) {
+        canvas.drawPath(
+          path.path,
+          Paint()
+            ..color = strokeColor
+            ..strokeWidth = path.strokeWidth
+            ..style = PaintingStyle.stroke,
+        );
+      }
+    }
+
     for (final edge in scene.edges) {
       edgePainter.paint(canvas, edge);
     }

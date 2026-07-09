@@ -66,7 +66,7 @@ flowchart LR
     testWidgets('error scene', (tester) async {
       await _pumpGolden(
         tester,
-        source: 'sequenceDiagram\nA->>B: hello',
+        source: 'unsupportedDiagram\nclass User',
       );
 
       await expectLater(

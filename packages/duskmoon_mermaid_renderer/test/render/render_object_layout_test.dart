@@ -28,7 +28,7 @@ void main() {
       Directionality(
         textDirection: TextDirection.ltr,
         child: DmMermaidView(
-          source: 'sequenceDiagram\nA->>B: hello',
+          source: 'unsupportedDiagram\nclass User',
           onError: (value) => error = value,
         ),
       ),
