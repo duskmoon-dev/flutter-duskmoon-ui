@@ -73,9 +73,8 @@ packet
 ''',
       '''
 sankey
-  Demos,Native,11
-  Demos,Pending,19
-  Native,Canvas,11
+  Demos,Native,30
+  Native,Canvas,30
 ''',
       '''
 timeline
@@ -230,15 +229,20 @@ treeView-beta
     ];
 
     for (final source in sources) {
+      MermaidError? error;
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: DmMermaidView(source: source),
+            body: DmMermaidView(
+              source: source,
+              onError: (value) => error = value,
+            ),
           ),
         ),
       );
 
       expect(find.byType(DmMermaidView), findsOneWidget);
+      expect(error, isNull, reason: source);
       expect(tester.takeException(), isNull);
     }
   });

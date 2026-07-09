@@ -507,9 +507,7 @@ const _examples = [
     docsPath: '/syntax/sankey',
     native: true,
     source: r'''sankey
-  Demos,Native,17
   Demos,Native,30
-  Demos,Pending,0
   Native,Canvas,30''',
   ),
   _MermaidExample(

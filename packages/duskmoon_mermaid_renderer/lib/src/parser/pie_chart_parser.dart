@@ -37,13 +37,13 @@ ParseOutput parsePieChart(String source) {
 
     final label = _stripQuotes(match.group(1)!);
     final value = double.tryParse(match.group(2)!);
-    if (label.isEmpty || value == null || value <= 0) {
+    if (label.isEmpty || value == null || value < 0) {
       throw MermaidParseError('Invalid pie slice: $line');
     }
     slices.add(PieSlice(label: label, value: value));
   }
 
-  if (slices.isEmpty) {
+  if (slices.isEmpty || slices.every((slice) => slice.value == 0)) {
     throw const MermaidParseError('pie requires at least one positive slice');
   }
 

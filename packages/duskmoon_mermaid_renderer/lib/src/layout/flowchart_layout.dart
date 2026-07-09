@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../config/layout_config.dart';
 import '../error/mermaid_error.dart';
-import '../ir/diagram_kind.dart';
 import '../ir/direction.dart';
 import '../ir/graph.dart';
 import 'label_placement.dart';
@@ -18,10 +17,6 @@ MermaidLayout computeMermaidLayout(
   MermaidLayoutConfig config,
   MermaidTextMeasurer textMeasurer,
 ) {
-  if (graph.kind != MermaidDiagramKind.flowchart) {
-    throw UnsupportedDiagramError(graph.kind);
-  }
-
   final ranks = assignRanks(graph);
   final nodesByRank = <int, List<String>>{};
   for (final entry in ranks.entries) {

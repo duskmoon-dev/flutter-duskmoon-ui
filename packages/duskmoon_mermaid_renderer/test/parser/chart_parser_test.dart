@@ -19,7 +19,24 @@ pie showData
       expect(chart.slices.map((slice) => slice.value), [5, 25]);
     });
 
-    test('rejects non-positive pie values', () {
+    test('allows zero pie slices when the total is positive', () {
+      final output = parseMermaid('''
+pie
+  "Native": 30
+  "Pending": 0
+''');
+
+      expect(output.graph.pieChart!.slices.map((slice) => slice.value), [
+        30,
+        0,
+      ]);
+    });
+
+    test('rejects negative or all-zero pie values', () {
+      expect(
+        () => parseMermaid('pie\n"Invalid": -1'),
+        throwsA(isA<MermaidParseError>()),
+      );
       expect(
         () => parseMermaid('pie\n"Invalid": 0'),
         throwsA(isA<MermaidParseError>()),
