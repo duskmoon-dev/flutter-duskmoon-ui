@@ -127,6 +127,8 @@ class InlineSpanBuilder {
   }
 
   InlineSpan _buildInlineCode(md.Element element) {
+    final value = element.textContent;
+    final color = config.enableColorChips ? _parseCssColor(value) : null;
     return WidgetSpan(
       alignment: PlaceholderAlignment.middle,
       child: Container(
@@ -135,16 +137,84 @@ class InlineSpanBuilder {
           color: colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(4),
         ),
-        child: Text(
-          element.textContent,
-          style: textTheme.bodyMedium?.copyWith(
-            fontFamily: 'monospace',
-            color: colorScheme.tertiary,
-            fontSize: (textTheme.bodyMedium?.fontSize ?? 14) * 0.9,
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (color != null) ...[
+              Semantics(
+                label: 'Color $value',
+                child: Container(
+                  key: const ValueKey('dm-markdown-color-chip'),
+                  width: 14,
+                  height: 14,
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(3),
+                    border: Border.all(color: colorScheme.outlineVariant),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 5),
+            ],
+            Text(
+              value,
+              style: textTheme.bodyMedium?.copyWith(
+                fontFamily: 'monospace',
+                color: colorScheme.tertiary,
+                fontSize: (textTheme.bodyMedium?.fontSize ?? 14) * 0.9,
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  Color? _parseCssColor(String value) {
+    final hex = RegExp(r'^#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$')
+        .firstMatch(value);
+    if (hex != null) {
+      final raw = hex.group(1)!;
+      final expanded = raw.length <= 4
+          ? raw.split('').map((digit) => '$digit$digit').join()
+          : raw;
+      final argb = expanded.length == 6
+          ? 'ff$expanded'
+          : '${expanded.substring(6, 8)}${expanded.substring(0, 6)}';
+      return Color(int.parse(argb, radix: 16));
+    }
+
+    final rgb = RegExp(
+      r'^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*(0|1|0?\.\d+))?\s*\)$',
+      caseSensitive: false,
+    ).firstMatch(value);
+    if (rgb != null) {
+      final channels = [1, 2, 3].map((index) => int.parse(rgb.group(index)!));
+      if (channels.any((channel) => channel > 255)) return null;
+      final alpha = ((double.tryParse(rgb.group(4) ?? '1') ?? 1) * 255).round();
+      if (alpha < 0 || alpha > 255) return null;
+      final values = channels.toList();
+      return Color.fromARGB(alpha, values[0], values[1], values[2]);
+    }
+
+    final hsl = RegExp(
+      r'^hsla?\(\s*(-?(?:\d+(?:\.\d+)?|\.\d+))\s*,\s*(\d+(?:\.\d+)?)%\s*,\s*(\d+(?:\.\d+)?)%(?:\s*,\s*(0|1|0?\.\d+))?\s*\)$',
+      caseSensitive: false,
+    ).firstMatch(value);
+    if (hsl == null) return null;
+    final saturation = double.parse(hsl.group(2)!);
+    final lightness = double.parse(hsl.group(3)!);
+    final alpha = double.tryParse(hsl.group(4) ?? '1') ?? 1;
+    if (saturation > 100 || lightness > 100 || alpha < 0 || alpha > 1) {
+      return null;
+    }
+    final hue = double.parse(hsl.group(1)!) % 360;
+    return HSLColor.fromAHSL(
+      alpha,
+      hue < 0 ? hue + 360 : hue,
+      saturation / 100,
+      lightness / 100,
+    ).toColor();
   }
 
   InlineSpan _buildLink(md.Element element, {TextStyle? parentStyle}) {

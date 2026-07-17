@@ -83,6 +83,69 @@ void main() {
       expect(find.byType(Divider), findsOneWidget);
     });
 
+    testWidgets('renders color chips for complete CSS colors', (tester) async {
+      await tester.pumpWidget(buildApp(
+        data:
+            'Colors `#4C86FC`, `rgba(255, 0, 0, 0.5)`, and `hsl(120, 50%, 50%)`.',
+      ));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byKey(const ValueKey('dm-markdown-color-chip')),
+        findsNWidgets(3),
+      );
+    });
+
+    testWidgets('can disable color chips', (tester) async {
+      await tester.pumpWidget(buildApp(
+        data: '`#fff`',
+        config: const DmMarkdownConfig(enableColorChips: false),
+      ));
+      await tester.pumpAndSettle();
+
+      expect(
+          find.byKey(const ValueKey('dm-markdown-color-chip')), findsNothing);
+      expect(find.text('#fff'), findsOneWidget);
+    });
+
+    testWidgets('renders initial front matter as yaml by default',
+        (tester) async {
+      await tester.pumpWidget(buildApp(
+        data: '---\ntitle: Example\n---\n# Document',
+      ));
+      await tester.pumpAndSettle();
+
+      expect(find.text('yaml'), findsOneWidget);
+      expect(find.text('Document'), findsOneWidget);
+      expect(find.textContaining('title: Example'), findsOneWidget);
+    });
+
+    testWidgets('can hide initial front matter', (tester) async {
+      await tester.pumpWidget(buildApp(
+        data: '---\ntitle: Example\n---\n# Document',
+        config: const DmMarkdownConfig(
+          frontMatter: DmFrontMatterMode.hidden,
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Document'), findsOneWidget);
+      expect(find.textContaining('title: Example'), findsNothing);
+    });
+
+    testWidgets('renders soft line breaks by default', (tester) async {
+      await tester.pumpWidget(buildApp(data: 'First line\nSecond line'));
+      await tester.pumpAndSettle();
+
+      final richText = tester.widget<RichText>(
+        find
+            .descendant(
+                of: find.byType(DmMarkdown), matching: find.byType(RichText))
+            .first,
+      );
+      expect(richText.text.toPlainText(), contains('First line\nSecond line'));
+    });
+
     testWidgets('blockquote renders with border decoration', (tester) async {
       await tester.pumpWidget(buildApp(data: '> Quote text'));
       await tester.pumpAndSettle();

@@ -137,6 +137,13 @@ class BlockWidgetBuilder {
       case 'mathBlock':
         return MathWidget(tex: element.textContent, displayMode: true);
 
+      case 'frontMatter':
+        return CodeBlockWidget(
+          code: element.textContent,
+          language: 'yaml',
+          codeTheme: config.codeTheme,
+        );
+
       default:
         // Unknown element — try to render children.
         return _buildParagraph(element);

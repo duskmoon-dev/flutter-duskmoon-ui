@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:duskmoon_mermaid_renderer/duskmoon_mermaid_renderer.dart';
 
+/// Controls how YAML front matter at the start of a Markdown document is shown.
+enum DmFrontMatterMode {
+  /// Render the YAML as a syntax-highlighted code block before the document.
+  render,
+
+  /// Remove the YAML front matter and render only the document body.
+  hidden,
+
+  /// Treat the complete source as ordinary Markdown.
+  disabled,
+}
+
 /// Configuration for [DmMarkdown] rendering features.
 @immutable
 class DmMarkdownConfig {
@@ -9,6 +21,9 @@ class DmMarkdownConfig {
   const DmMarkdownConfig({
     this.enableGfm = true,
     this.enableKatex = true,
+    this.enableColorChips = true,
+    this.frontMatter = DmFrontMatterMode.render,
+    this.breaks = true,
     this.enableMermaid = false,
     this.mermaidOptions = const MermaidRenderOptions(),
     this.enableCodeHighlight = true,
@@ -23,6 +38,15 @@ class DmMarkdownConfig {
 
   /// Enable KaTeX math rendering for `$...$` and `$$...$$`.
   final bool enableKatex;
+
+  /// Add a visual swatch to inline code containing a complete CSS color.
+  final bool enableColorChips;
+
+  /// Controls extraction and presentation of initial YAML front matter.
+  final DmFrontMatterMode frontMatter;
+
+  /// Convert soft line breaks to visible line breaks. Defaults to `true`.
+  final bool breaks;
 
   /// Enable Mermaid diagram rendering for ` ```mermaid ` code blocks.
   /// Defaults to `false` — when disabled, mermaid blocks render as

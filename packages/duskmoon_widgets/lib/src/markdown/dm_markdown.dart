@@ -160,6 +160,8 @@ class _DmMarkdownState extends State<DmMarkdown> {
     return IncrementalParser(
       enableGfm: widget.config.enableGfm,
       enableKatex: widget.config.enableKatex,
+      frontMatter: widget.config.frontMatter,
+      breaks: widget.config.breaks,
     );
   }
 

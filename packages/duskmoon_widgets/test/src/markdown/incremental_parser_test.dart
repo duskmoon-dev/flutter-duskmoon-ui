@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:markdown/markdown.dart' as md;
 
 import 'package:duskmoon_widgets/src/_shared/incremental_parser.dart';
+import 'package:duskmoon_widgets/src/markdown/dm_markdown_config.dart';
 
 void main() {
   group('IncrementalParser', () {
@@ -75,6 +77,55 @@ void main() {
       final result = parser.fullParse(r'$$E = mc^2$$');
 
       expect(result.nodes, isNotEmpty);
+    });
+
+    test('breaks defaults to br elements and can be disabled', () {
+      final withBreaks = IncrementalParser().fullParse('First\nSecond');
+      final withoutBreaks = IncrementalParser(
+        breaks: false,
+      ).fullParse('First\nSecond');
+
+      final paragraph = withBreaks.nodes.single as md.Element;
+      expect(
+        paragraph.children!.whereType<md.Element>().map((node) => node.tag),
+        contains('br'),
+      );
+      expect(withoutBreaks.nodes.single.textContent, 'First Second');
+    });
+
+    test('front matter renders by default and supports hidden and disabled',
+        () {
+      const source = '---\ntitle: Example\n---\n# Document';
+      final rendered = IncrementalParser().fullParse(source);
+      final hidden = IncrementalParser(
+        frontMatter: DmFrontMatterMode.hidden,
+      ).fullParse(source);
+      final disabled = IncrementalParser(
+        frontMatter: DmFrontMatterMode.disabled,
+      ).fullParse(source);
+
+      expect((rendered.nodes.first as md.Element).tag, 'frontMatter');
+      expect(rendered.nodes.first.textContent, 'title: Example');
+      expect(hidden.nodes, hasLength(1));
+      expect(hidden.nodes.single.textContent, 'Document');
+      expect(
+        disabled.nodes.whereType<md.Element>().map((node) => node.tag),
+        isNot(contains('frontMatter')),
+      );
+      expect(
+        disabled.nodes.map((node) => node.textContent).join(' '),
+        contains('title: Example'),
+      );
+    });
+
+    test('front matter accepts a BOM, CRLF, and dot delimiter', () {
+      final result = IncrementalParser().fullParse(
+        '\u{feff}---\r\ntitle: Example\r\n...\r\n# Document',
+      );
+
+      expect((result.nodes.first as md.Element).tag, 'frontMatter');
+      expect(result.nodes.first.textContent, 'title: Example\r');
+      expect(result.nodes.last.textContent, 'Document');
     });
   });
 }

@@ -1,6 +1,7 @@
 import 'package:markdown/markdown.dart' as md;
 
 import 'math_syntax.dart';
+import '../markdown/dm_markdown_config.dart';
 
 /// A dirty region representing a range of lines that changed.
 class DirtyRegion {
@@ -38,6 +39,8 @@ class IncrementalParser {
   IncrementalParser({
     this.enableGfm = true,
     this.enableKatex = true,
+    this.frontMatter = DmFrontMatterMode.render,
+    this.breaks = true,
   });
 
   /// Whether GFM extensions are enabled.
@@ -45,6 +48,12 @@ class IncrementalParser {
 
   /// Whether KaTeX math extensions are enabled.
   final bool enableKatex;
+
+  /// How initial YAML front matter is handled.
+  final DmFrontMatterMode frontMatter;
+
+  /// Whether soft line breaks produce `br` elements.
+  final bool breaks;
 
   /// Cached AST nodes from the most recent parse.
   List<md.Node> _cachedNodes = [];
@@ -184,14 +193,46 @@ class IncrementalParser {
   // ── Private helpers ───────────────────────────────────────────────────
 
   List<md.Node> _parseLines(List<String> lines) {
+    final extracted = frontMatter == DmFrontMatterMode.disabled
+        ? null
+        : _extractFrontMatter(lines);
+    final bodyLines = extracted?.body ?? lines;
     final doc = md.Document(
       encodeHtml: false,
       extensionSet: enableGfm ? md.ExtensionSet.gitHubFlavored : null,
       blockSyntaxes: enableKatex ? dmBlockSyntaxes() : [],
-      inlineSyntaxes: enableKatex ? dmInlineSyntaxes() : [],
+      inlineSyntaxes: [
+        _SoftLineBreakSyntax(breaks: breaks),
+        if (enableKatex) ...dmInlineSyntaxes(),
+      ],
     );
-    return doc.parseLines(lines);
+    final nodes = doc.parseLines(bodyLines);
+    if (extracted != null && frontMatter == DmFrontMatterMode.render) {
+      nodes.insert(0, md.Element.text('frontMatter', extracted.source));
+    }
+    return nodes;
   }
+
+  _FrontMatter? _extractFrontMatter(List<String> lines) {
+    if (lines.isEmpty ||
+        _withoutCarriageReturn(lines.first.replaceFirst('\u{feff}', '')) !=
+            '---') {
+      return null;
+    }
+    for (var index = 1; index < lines.length; index++) {
+      final line = _withoutCarriageReturn(lines[index]);
+      if (line == '---' || line == '...') {
+        return _FrontMatter(
+          lines.sublist(1, index).join('\n'),
+          lines.sublist(index + 1),
+        );
+      }
+    }
+    return null;
+  }
+
+  String _withoutCarriageReturn(String line) =>
+      line.endsWith('\r') ? line.substring(0, line.length - 1) : line;
 
   /// Returns the 0-based line index for a character [offset].
   int _lineIndexAtOffset(int offset, List<String> lines) {
@@ -325,6 +366,25 @@ class IncrementalParser {
     }
     return 1;
   }
+}
+
+class _SoftLineBreakSyntax extends md.InlineSyntax {
+  _SoftLineBreakSyntax({required this.breaks}) : super(r'\n');
+
+  final bool breaks;
+
+  @override
+  bool onMatch(md.InlineParser parser, Match match) {
+    parser.addNode(breaks ? md.Element.empty('br') : md.Text(' '));
+    return true;
+  }
+}
+
+class _FrontMatter {
+  const _FrontMatter(this.source, this.body);
+
+  final String source;
+  final List<String> body;
 }
 
 /// A simple integer range [start, end).
