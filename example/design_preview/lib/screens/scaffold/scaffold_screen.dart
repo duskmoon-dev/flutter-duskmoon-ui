@@ -326,8 +326,7 @@ class _ScaffoldBody extends StatelessWidget {
             Wrap(
               spacing: 8,
               children: [
-                for (final feature
-                    in MediaQuery.displayFeaturesOf(context))
+                for (final feature in MediaQuery.displayFeaturesOf(context))
                   Chip(
                     label: Text(
                       '${feature.type.name}: ${feature.bounds}',
@@ -346,8 +345,7 @@ class _ScaffoldBody extends StatelessWidget {
             const SizedBox(height: 12),
             DmButton(
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (_) => const _DuoScreenDemoPage()),
+                MaterialPageRoute(builder: (_) => const _DuoScreenDemoPage()),
               ),
               child: const Text('Open Duo Screen Demo'),
             ),
@@ -477,8 +475,18 @@ class _DuoScreenDemoPageState extends State<_DuoScreenDemoPage> {
   ];
 
   static const _labels = ['Inbox', 'Articles', 'Chat', 'Video'];
-  static const _icons = [Icons.inbox, Icons.article, Icons.chat, Icons.video_call];
-  static const _colors = [Colors.blue, Colors.green, Colors.orange, Colors.purple];
+  static const _icons = [
+    Icons.inbox,
+    Icons.article,
+    Icons.chat,
+    Icons.video_call
+  ];
+  static const _colors = [
+    Colors.blue,
+    Colors.green,
+    Colors.orange,
+    Colors.purple
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -546,7 +554,10 @@ class _DuoScreenDemoPageState extends State<_DuoScreenDemoPage> {
               Icon(
                 Icons.devices_fold,
                 size: 48,
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.5),
               ),
               const SizedBox(height: 16),
               Text(
@@ -565,4 +576,3 @@ class _DuoScreenDemoPageState extends State<_DuoScreenDemoPage> {
     );
   }
 }
-

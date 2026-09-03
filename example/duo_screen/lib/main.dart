@@ -305,9 +305,11 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Category: ${['Widgets', 'Forms', 'Charts', 'Editor'][_selectedIndex]}',
-                style: Theme.of(context).textTheme.headlineSmall,
+              Expanded(
+                child: Text(
+                  'Category: ${['Widgets', 'Forms', 'Charts', 'Editor'][_selectedIndex]}',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
               ),
               Switch(
                 value: _isViewerOnly,

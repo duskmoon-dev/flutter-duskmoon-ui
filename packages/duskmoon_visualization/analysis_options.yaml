@@ -11,3 +11,5 @@ analyzer:
     curly_braces_in_flow_control_structures: ignore
     sort_child_properties_last: ignore
     file_names: ignore
+  exclude:
+    - build/**

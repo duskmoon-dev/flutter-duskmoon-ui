@@ -172,26 +172,38 @@ class DmAdaptiveScaffold extends StatefulWidget {
     }
     return Builder(
       builder: (BuildContext context) {
-        return Container(
-          color: backgroundColor ?? Colors.red.withValues(alpha: 0.3), // FORCE RED FOR DEBUG
+        return Padding(
           padding: padding,
           child: SizedBox(
             width: width,
-            height: double.infinity,
-            child: NavigationRail(
-              labelType: labelType,
-              leading: leading,
-              trailing: trailing,
-              onDestinationSelected: onDestinationSelected,
-              groupAlignment: groupAlignment,
-              backgroundColor: Colors.transparent, // Use parent container color
-              extended: extended,
-              selectedIndex: selectedIndex,
-              selectedIconTheme: selectedIconTheme,
-              unselectedIconTheme: unselectedIconTheme,
-              selectedLabelTextStyle: selectedLabelTextStyle,
-              unselectedLabelTextStyle: unSelectedLabelTextStyle,
-              destinations: destinations,
+            height: MediaQuery.sizeOf(context).height,
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: IntrinsicHeight(
+                      child: NavigationRail(
+                        labelType: labelType,
+                        leading: leading,
+                        trailing: trailing,
+                        onDestinationSelected: onDestinationSelected,
+                        groupAlignment: groupAlignment,
+                        backgroundColor: backgroundColor,
+                        extended: extended,
+                        selectedIndex: selectedIndex,
+                        selectedIconTheme: selectedIconTheme,
+                        unselectedIconTheme: unselectedIconTheme,
+                        selectedLabelTextStyle: selectedLabelTextStyle,
+                        unselectedLabelTextStyle: unSelectedLabelTextStyle,
+                        destinations: destinations,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         );
@@ -409,13 +421,13 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
                   selectedIndex: widget.selectedIndex,
                   destinations: destinations,
                   onDestinationSelected: widget.onSelectedIndexChange,
-                  backgroundColor: Colors.yellow, // DEBUG VISIBILITY
+                  backgroundColor: navRailTheme.backgroundColor,
                   selectedIconTheme: navRailTheme.selectedIconTheme,
                   unselectedIconTheme: navRailTheme.unselectedIconTheme,
                   selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
                   unSelectedLabelTextStyle:
                       navRailTheme.unselectedLabelTextStyle,
-                  labelType: NavigationRailLabelType.all,
+                  labelType: navRailTheme.labelType,
                   groupAlignment: widget.groupAlignment,
                 ),
               )
@@ -429,6 +441,14 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
                     destinations: destinations,
                     selectedIndex: widget.selectedIndex,
                     onDestinationSelected: widget.onSelectedIndexChange,
+                    backgroundColor: navRailTheme.backgroundColor,
+                    selectedIconTheme: navRailTheme.selectedIconTheme,
+                    unselectedIconTheme: navRailTheme.unselectedIconTheme,
+                    selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
+                    unSelectedLabelTextStyle:
+                        navRailTheme.unselectedLabelTextStyle,
+                    labelType: navRailTheme.labelType,
+                    groupAlignment: widget.groupAlignment,
                   ),
                 ),
               widget.mediumBreakpoint: SlotLayout.from(
@@ -458,9 +478,18 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
                   extended: isExtendedOnLarge,
                   leading: _buildLeading(isExtendedOnLarge),
                   trailing: widget.trailingNavRail,
+                  padding: widget.navigationRailPadding,
                   selectedIndex: widget.selectedIndex,
                   destinations: destinations,
                   onDestinationSelected: widget.onSelectedIndexChange,
+                  backgroundColor: navRailTheme.backgroundColor,
+                  selectedIconTheme: navRailTheme.selectedIconTheme,
+                  unselectedIconTheme: navRailTheme.unselectedIconTheme,
+                  selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
+                  unSelectedLabelTextStyle:
+                      navRailTheme.unselectedLabelTextStyle,
+                  labelType: navRailTheme.labelType,
+                  groupAlignment: widget.groupAlignment,
                 ),
               ),
               widget.largeBreakpoint: SlotLayout.from(
@@ -469,9 +498,19 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
                   width: largeWidth,
                   extended: isExtendedOnLarge,
                   leading: _buildLeading(isExtendedOnLarge),
+                  trailing: widget.trailingNavRail,
+                  padding: widget.navigationRailPadding,
                   destinations: destinations,
                   selectedIndex: widget.selectedIndex,
                   onDestinationSelected: widget.onSelectedIndexChange,
+                  backgroundColor: navRailTheme.backgroundColor,
+                  selectedIconTheme: navRailTheme.selectedIconTheme,
+                  unselectedIconTheme: navRailTheme.unselectedIconTheme,
+                  selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
+                  unSelectedLabelTextStyle:
+                      navRailTheme.unselectedLabelTextStyle,
+                  labelType: navRailTheme.labelType,
+                  groupAlignment: widget.groupAlignment,
                 ),
               ),
               widget.extraLargeBreakpoint: SlotLayout.from(
@@ -480,9 +519,19 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
                   width: largeWidth,
                   extended: isExtendedOnLarge,
                   leading: _buildLeading(isExtendedOnLarge),
+                  trailing: widget.trailingNavRail,
+                  padding: widget.navigationRailPadding,
                   destinations: destinations,
                   selectedIndex: widget.selectedIndex,
                   onDestinationSelected: widget.onSelectedIndexChange,
+                  backgroundColor: navRailTheme.backgroundColor,
+                  selectedIconTheme: navRailTheme.selectedIconTheme,
+                  unselectedIconTheme: navRailTheme.unselectedIconTheme,
+                  selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
+                  unSelectedLabelTextStyle:
+                      navRailTheme.unselectedLabelTextStyle,
+                  labelType: navRailTheme.labelType,
+                  groupAlignment: widget.groupAlignment,
                 ),
               ),
             },
@@ -508,13 +557,60 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
           config: <Breakpoint, SlotLayoutConfig?>{
             Breakpoints.standard: SlotLayout.from(
               key: const Key('body'),
+              inAnimation: DmAdaptiveScaffold.fadeIn,
+              outAnimation: DmAdaptiveScaffold.fadeOut,
               builder: widget.body,
             ),
             if (widget.smallBody != null)
-              widget.smallBreakpoint: SlotLayout.from(
-                key: const Key('smallBody'),
-                builder: widget.smallBody,
-              ),
+              widget.smallBreakpoint:
+                  (widget.smallBody != DmAdaptiveScaffold.emptyBuilder)
+                      ? SlotLayout.from(
+                          key: const Key('smallBody'),
+                          inAnimation: DmAdaptiveScaffold.fadeIn,
+                          outAnimation: DmAdaptiveScaffold.fadeOut,
+                          builder: widget.smallBody,
+                        )
+                      : null,
+            if (widget.body != null)
+              widget.mediumBreakpoint:
+                  (widget.body != DmAdaptiveScaffold.emptyBuilder)
+                      ? SlotLayout.from(
+                          key: const Key('body'),
+                          inAnimation: DmAdaptiveScaffold.fadeIn,
+                          outAnimation: DmAdaptiveScaffold.fadeOut,
+                          builder: widget.body,
+                        )
+                      : null,
+            if (widget.mediumLargeBody != null)
+              widget.mediumLargeBreakpoint:
+                  (widget.mediumLargeBody != DmAdaptiveScaffold.emptyBuilder)
+                      ? SlotLayout.from(
+                          key: const Key('mediumLargeBody'),
+                          inAnimation: DmAdaptiveScaffold.fadeIn,
+                          outAnimation: DmAdaptiveScaffold.fadeOut,
+                          builder: widget.mediumLargeBody,
+                        )
+                      : null,
+            if (widget.largeBody != null)
+              widget.largeBreakpoint:
+                  (widget.largeBody != DmAdaptiveScaffold.emptyBuilder)
+                      ? SlotLayout.from(
+                          key: const Key('largeBody'),
+                          inAnimation: DmAdaptiveScaffold.fadeIn,
+                          outAnimation: DmAdaptiveScaffold.fadeOut,
+                          builder: widget.largeBody,
+                        )
+                      : null,
+            if (widget.extraLargeBody != null)
+              widget.extraLargeBreakpoint:
+                  (widget.extraLargeBody != DmAdaptiveScaffold.emptyBuilder)
+                      ? SlotLayout.from(
+                          key: const Key('extraLargeBody'),
+                          inAnimation: DmAdaptiveScaffold.fadeIn,
+                          outAnimation: DmAdaptiveScaffold.fadeOut,
+                          builder: widget.extraLargeBody,
+                        )
+                      : null,
           },
         ),
         secondaryBody: SlotLayout(
@@ -522,18 +618,61 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
             if (widget.displayId > 0)
               Breakpoints.standard: SlotLayout.from(
                 key: const Key('sBodyForcedSecondary'),
+                outAnimation: DmAdaptiveScaffold.stayOnScreen,
                 builder: widget.secondaryBody,
               )
             else ...<Breakpoint, SlotLayoutConfig?>{
               Breakpoints.standard: SlotLayout.from(
                 key: const Key('sBody'),
+                outAnimation: DmAdaptiveScaffold.stayOnScreen,
                 builder: widget.secondaryBody,
               ),
               if (widget.smallSecondaryBody != null)
-                widget.smallBreakpoint: SlotLayout.from(
-                  key: const Key('smallSBody'),
-                  builder: widget.smallSecondaryBody,
-                ),
+                widget.smallBreakpoint: (widget.smallSecondaryBody !=
+                        DmAdaptiveScaffold.emptyBuilder)
+                    ? SlotLayout.from(
+                        key: const Key('smallSBody'),
+                        outAnimation: DmAdaptiveScaffold.stayOnScreen,
+                        builder: widget.smallSecondaryBody,
+                      )
+                    : null,
+              if (widget.secondaryBody != null)
+                widget.mediumBreakpoint:
+                    (widget.secondaryBody != DmAdaptiveScaffold.emptyBuilder)
+                        ? SlotLayout.from(
+                            key: const Key('sBody'),
+                            outAnimation: DmAdaptiveScaffold.stayOnScreen,
+                            builder: widget.secondaryBody,
+                          )
+                        : null,
+              if (widget.mediumLargeSecondaryBody != null)
+                widget.mediumLargeBreakpoint:
+                    (widget.mediumLargeSecondaryBody !=
+                            DmAdaptiveScaffold.emptyBuilder)
+                        ? SlotLayout.from(
+                            key: const Key('mediumLargeSBody'),
+                            outAnimation: DmAdaptiveScaffold.stayOnScreen,
+                            builder: widget.mediumLargeSecondaryBody,
+                          )
+                        : null,
+              if (widget.largeSecondaryBody != null)
+                widget.largeBreakpoint: (widget.largeSecondaryBody !=
+                        DmAdaptiveScaffold.emptyBuilder)
+                    ? SlotLayout.from(
+                        key: const Key('largeSBody'),
+                        outAnimation: DmAdaptiveScaffold.stayOnScreen,
+                        builder: widget.largeSecondaryBody,
+                      )
+                    : null,
+              if (widget.extraLargeSecondaryBody != null)
+                widget.extraLargeBreakpoint: (widget.extraLargeSecondaryBody !=
+                        DmAdaptiveScaffold.emptyBuilder)
+                    ? SlotLayout.from(
+                        key: const Key('extraLargeSBody'),
+                        outAnimation: DmAdaptiveScaffold.stayOnScreen,
+                        builder: widget.extraLargeSecondaryBody,
+                      )
+                    : null,
             }
           },
         ),

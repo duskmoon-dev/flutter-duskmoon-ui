@@ -251,8 +251,8 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
       topMargin += currentSize.height;
     }
     if (hasChild(_SlotIds.bottomNavigation.name)) {
-      final Size childSize =
-          layoutChild(_SlotIds.bottomNavigation.name, BoxConstraints.loose(size));
+      final Size childSize = layoutChild(
+          _SlotIds.bottomNavigation.name, BoxConstraints.loose(size));
       updateSize(_SlotIds.bottomNavigation.name, childSize);
       final Size currentSize = Tween<Size>(
         begin: slotSizes[_SlotIds.bottomNavigation.name] ?? Size.zero,
@@ -265,8 +265,8 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
       bottomMargin += currentSize.height;
     }
     if (hasChild(_SlotIds.primaryNavigation.name)) {
-      final Size childSize =
-          layoutChild(_SlotIds.primaryNavigation.name, BoxConstraints.loose(size));
+      final Size childSize = layoutChild(
+          _SlotIds.primaryNavigation.name, BoxConstraints.loose(size));
       updateSize(_SlotIds.primaryNavigation.name, childSize);
       final Size currentSize = Tween<Size>(
         begin: slotSizes[_SlotIds.primaryNavigation.name] ?? Size.zero,
@@ -315,15 +315,17 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
           currentBodySize = layoutChild(_SlotIds.body.name,
               BoxConstraints.tight(Size(remainingWidth, remainingHeight)));
         } else if (bodyOrientation == Axis.horizontal) {
-          double beginWidth =
-              bodyRatio == null ? halfWidth - leftMargin : remainingWidth * bodyRatio!;
+          double beginWidth = bodyRatio == null
+              ? halfWidth - leftMargin
+              : remainingWidth * bodyRatio!;
           currentBodySize = layoutChild(
               _SlotIds.body.name,
               BoxConstraints.tight(Size(
                   animatedSize(beginWidth, remainingWidth), remainingHeight)));
         } else {
-          double beginHeight =
-              bodyRatio == null ? halfHeight - topMargin : remainingHeight * bodyRatio!;
+          double beginHeight = bodyRatio == null
+              ? halfHeight - topMargin
+              : remainingHeight * bodyRatio!;
           currentBodySize = layoutChild(
               _SlotIds.body.name,
               BoxConstraints.tight(Size(
@@ -335,7 +337,9 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
           if (textDirection) {
             double finalBodySize = hinge != null
                 ? hinge!.left - leftMargin
-                : (bodyRatio != null ? remainingWidth * bodyRatio! : halfWidth - leftMargin);
+                : (bodyRatio != null
+                    ? remainingWidth * bodyRatio!
+                    : halfWidth - leftMargin);
             double finalSBodySize = hinge != null
                 ? size.width - (hinge!.left + hingeWidth) - rightMargin
                 : (bodyRatio != null
@@ -352,7 +356,9 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
           } else {
             double finalBodySize = hinge != null
                 ? size.width - (hinge!.left + hingeWidth) - rightMargin
-                : (bodyRatio != null ? remainingWidth * bodyRatio! : halfWidth - rightMargin);
+                : (bodyRatio != null
+                    ? remainingWidth * bodyRatio!
+                    : halfWidth - rightMargin);
             double finalSBodySize = hinge != null
                 ? hinge!.left - leftMargin
                 : (bodyRatio != null
@@ -390,7 +396,8 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
         double offset = hinge != null ? hingeWidth : 0;
         positionChild(_SlotIds.body.name,
             Offset(currentSBodySize.width + leftMargin + offset, topMargin));
-        positionChild(_SlotIds.secondaryBody.name, Offset(leftMargin, topMargin));
+        positionChild(
+            _SlotIds.secondaryBody.name, Offset(leftMargin, topMargin));
       } else {
         positionChild(_SlotIds.body.name, Offset(leftMargin, topMargin));
         if (bodyOrientation == Axis.horizontal) {
@@ -453,20 +460,21 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
     if (displayId == 0) {
       double mainTopMargin = 0;
       if (hasChild(_SlotIds.topNavigation.name)) {
-        final Size childSize = layoutChild(
-            _SlotIds.topNavigation.name, BoxConstraints.loose(Size(mainWidth, mainHeight)));
+        final Size childSize = layoutChild(_SlotIds.topNavigation.name,
+            BoxConstraints.loose(Size(mainWidth, mainHeight)));
         updateSize(_SlotIds.topNavigation.name, childSize);
         positionChild(_SlotIds.topNavigation.name, Offset.zero);
         mainTopMargin += childSize.height;
       }
       if (hasChild(_SlotIds.body.name)) {
-        layoutChild(
-            _SlotIds.body.name, BoxConstraints.tight(Size(mainWidth, mainHeight - mainTopMargin)));
+        layoutChild(_SlotIds.body.name,
+            BoxConstraints.tight(Size(mainWidth, mainHeight - mainTopMargin)));
         positionChild(_SlotIds.body.name, Offset(0, mainTopMargin));
       }
     } else {
       if (hasChild(_SlotIds.topNavigation.name)) {
-        layoutChild(_SlotIds.topNavigation.name, BoxConstraints.tight(Size.zero));
+        layoutChild(
+            _SlotIds.topNavigation.name, BoxConstraints.tight(Size.zero));
         positionChild(_SlotIds.topNavigation.name, Offset.zero);
       }
       if (hasChild(_SlotIds.body.name)) {
@@ -476,11 +484,13 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
     }
 
     if (hasChild(_SlotIds.bottomNavigation.name)) {
-      layoutChild(_SlotIds.bottomNavigation.name, BoxConstraints.tight(Size.zero));
+      layoutChild(
+          _SlotIds.bottomNavigation.name, BoxConstraints.tight(Size.zero));
       positionChild(_SlotIds.bottomNavigation.name, Offset.zero);
     }
     if (hasChild(_SlotIds.secondaryNavigation.name)) {
-      layoutChild(_SlotIds.secondaryNavigation.name, BoxConstraints.tight(Size.zero));
+      layoutChild(
+          _SlotIds.secondaryNavigation.name, BoxConstraints.tight(Size.zero));
       positionChild(_SlotIds.secondaryNavigation.name, Offset.zero);
     }
 
@@ -503,19 +513,21 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
         layoutChild(_SlotIds.secondaryBody.name,
             BoxConstraints.tight(Size(sBodyWidth, secondaryHeight)));
         if (textDirection) {
-          positionChild(
-              _SlotIds.secondaryBody.name, secondaryOrigin + Offset(navWidth, 0));
+          positionChild(_SlotIds.secondaryBody.name,
+              secondaryOrigin + Offset(navWidth, 0));
         } else {
           positionChild(_SlotIds.secondaryBody.name, secondaryOrigin);
         }
       }
     } else {
       if (hasChild(_SlotIds.primaryNavigation.name)) {
-        layoutChild(_SlotIds.primaryNavigation.name, BoxConstraints.tight(Size.zero));
+        layoutChild(
+            _SlotIds.primaryNavigation.name, BoxConstraints.tight(Size.zero));
         positionChild(_SlotIds.primaryNavigation.name, Offset.zero);
       }
       if (hasChild(_SlotIds.secondaryBody.name)) {
-        layoutChild(_SlotIds.secondaryBody.name, BoxConstraints.tight(Size.zero));
+        layoutChild(
+            _SlotIds.secondaryBody.name, BoxConstraints.tight(Size.zero));
         positionChild(_SlotIds.secondaryBody.name, Offset.zero);
       }
     }
@@ -531,6 +543,7 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
         }
         controller.removeStatusListener(listener);
       }
+
       controller.addStatusListener(listener);
     }
   }

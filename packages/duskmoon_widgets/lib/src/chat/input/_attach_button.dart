@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -17,21 +15,19 @@ class AttachButton extends StatelessWidget {
   final bool enabled;
 
   Future<void> _pick() async {
-    final result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      withData: true,
-    );
-    if (result == null) return;
+    final files = await FilePicker.pickFiles();
+    if (files.isEmpty) return;
     final attachments = <DmChatAttachment>[];
-    for (final f in result.files) {
+    for (final f in files) {
+      final size = await f.length();
+      final bytes = await f.readAsBytes();
       attachments.add(
         DmChatAttachment(
-          id: f.identifier ??
-              '${f.name}:${DateTime.now().microsecondsSinceEpoch}',
+          id: f.path ?? '${f.name}:${DateTime.now().microsecondsSinceEpoch}',
           name: f.name,
-          sizeBytes: f.size,
+          sizeBytes: size,
           mimeType: _mimeFromExtension(f.extension),
-          bytes: f.bytes == null ? null : Uint8List.fromList(f.bytes!),
+          bytes: bytes,
           status: DmChatAttachmentStatus.idle,
         ),
       );

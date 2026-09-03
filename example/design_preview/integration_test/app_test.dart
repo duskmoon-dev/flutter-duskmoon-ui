@@ -18,24 +18,24 @@ void main() {
     // Assuming we have a way to navigate to the scaffold screen. The app uses go_router.
     // We can look for the text 'Open Duo Screen Demo' which is on the Scaffold screen.
     // Actually, looking at example/lib/screens/scaffold/scaffold_screen.dart, it's a tab or a sub-page.
-    
+
     // Instead of navigating through the complex UI, let's just launch the _DuoScreenDemoPage directly
     // Wait, since we are doing an e2e test, we should just test if the app launches successfully on the emulator.
-    
+
     expect(find.byType(MaterialApp), findsOneWidget);
-    
+
     // Tap on the Adaptive Scaffold menu item if it exists.
     final scaffoldMenu = find.text('Scaffold');
     if (scaffoldMenu.evaluate().isNotEmpty) {
       await tester.tap(scaffoldMenu);
       await tester.pumpAndSettle();
-      
+
       final openDemo = find.text('Open Duo Screen Demo');
       if (openDemo.evaluate().isNotEmpty) {
         await tester.ensureVisible(openDemo);
         await tester.tap(openDemo);
         await tester.pumpAndSettle();
-        
+
         // Wait for it to render
         expect(find.text('Duo Screen Demo'), findsOneWidget);
         expect(find.text('Main Screen'), findsOneWidget);
