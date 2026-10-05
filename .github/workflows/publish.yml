@@ -42,16 +42,7 @@ jobs:
 
       - name: Publish to pub.dev
         run: |
-          # Build dependency-ordered publish list from all packages/ subdirectories.
-          # Tiers are resolved by counting internal deps (packages whose name
-          # appears in another package's pubspec.yaml dependencies block).
-          #
-          # Tier 0 — no internal deps (e.g. adaptive_scaffold, code_engine, theme)
-          # Tier 1 — depends only on tier-0 (e.g. theme_bloc, widgets, settings, feedback, visualization)
-          # Tier 2 — depends on tier-0 + tier-1 (e.g. form)
-          # Tier 3 — umbrella (e.g. ui)
-          #
-          # Within each tier packages are sorted alphabetically.
+          # Order packages after all their internal dependencies, including dev dependencies.
 
           ALL_PKGS=()
           for d in packages/*/; do
@@ -64,30 +55,35 @@ jobs:
             PKG_NAMES+=("$(basename "$pkg")")
           done
 
-          # Assign tier to each package based on how many internal deps it has
-          declare -A TIER
-          for pkg in "${ALL_PKGS[@]}"; do
-            name=$(basename "$pkg")
-            count=0
-            for dep in "${PKG_NAMES[@]}"; do
-              [ "$dep" = "$name" ] && continue
-              if grep -q "  $dep:" "$pkg/pubspec.yaml" 2>/dev/null; then
-                count=$((count + 1))
+          declare -A ORDERED
+          PUBLISH_ORDER=()
+          while [ "${#PUBLISH_ORDER[@]}" -lt "${#ALL_PKGS[@]}" ]; do
+            progress=false
+            for pkg in "${ALL_PKGS[@]}"; do
+              name=$(basename "$pkg")
+              [ "${ORDERED[$name]:-}" = true ] && continue
+              ready=true
+              for dep in "${PKG_NAMES[@]}"; do
+                if grep -q "^  $dep:" "$pkg/pubspec.yaml" && [ "${ORDERED[$dep]:-}" != true ]; then
+                  ready=false
+                  break
+                fi
+              done
+              if [ "$ready" = true ]; then
+                PUBLISH_ORDER+=("$pkg")
+                ORDERED[$name]=true
+                progress=true
               fi
             done
-            TIER[$pkg]=$count
+            if [ "$progress" = false ]; then
+              echo "::error::Internal package dependencies contain a cycle"
+              exit 1
+            fi
           done
-
-          # Sort: by tier (ascending), then alphabetically within tier
-          PUBLISH_ORDER=($(
-            for pkg in "${ALL_PKGS[@]}"; do
-              echo "${TIER[$pkg]} $pkg"
-            done | sort -k1,1n -k2,2 | awk '{print $2}'
-          ))
 
           echo "Publish order:"
           for pkg in "${PUBLISH_ORDER[@]}"; do
-            echo "  [tier ${TIER[$pkg]}] $pkg"
+            echo "  $pkg"
           done
 
           for pkg in "${PUBLISH_ORDER[@]}"; do
@@ -98,7 +94,10 @@ jobs:
             if curl -s -o /dev/null -w '%{http_code}' "https://pub.dev/api/packages/$PKG_NAME/versions/$PKG_VER" | grep -q '^200$'; then
               echo "::notice::$PKG_NAME $PKG_VER already published — skipping"
             else
-              (cd "$pkg" && dart pub publish --force) || echo "::warning::$pkg publish failed"
+              if ! (cd "$pkg" && dart pub publish --force); then
+                echo "::error::$pkg publish failed"
+                exit 1
+              fi
               # Wait between publishes to avoid pub.dev rate limits
               echo "Waiting 30s before next publish..."
               sleep 30
@@ -110,6 +109,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "$TAG" \
-            --title "$TAG" \
-            --generate-notes || echo "::warning::Release already exists"
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "::notice::Release $TAG already exists"
+          else
+            gh release create "$TAG" --title "$TAG" --generate-notes
+          fi
