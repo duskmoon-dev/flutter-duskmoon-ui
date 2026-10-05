@@ -15,7 +15,7 @@ dart pub get                    # Resolve the full workspace
 melos run format                # Format and verify every member
 melos run analyze               # Analyze with --fatal-infos
 melos run test                  # Run all Flutter tests
-melos run codegen               # Regenerate tokens from ../duskmoon-dev-design
+melos run codegen               # Regenerate tokens from ../design
 ```
 
 Run the showcase with `cd example && flutter run -d chrome`. For focused work, enter one package and run `flutter test` or `dart analyze --fatal-infos`, for example `cd packages/duskmoon_theme`.

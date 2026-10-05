@@ -41,8 +41,5 @@ melos:
     format:
       run: melos exec -- dart format --set-exit-if-changed .
     codegen:
-      description: "Run duskmoon-codegen to update generated token files"
-      run: |
-        duskmoon-codegen generate --target dart \
-          --input ../duskmoon-dev-design/tokens \
-          --output packages/duskmoon_theme/lib/src/generated
+      description: "Sync generated theme tokens from the sibling design repository"
+      run: bun run tool/sync_design_tokens.ts

@@ -147,7 +147,7 @@ cd example
 flutter run -d chrome
 ```
 
-`melos run codegen` regenerates theme tokens and requires `duskmoon-codegen` plus the sibling `../duskmoon-dev-design/tokens` directory. For contribution conventions and focused package commands, see [AGENTS.md](AGENTS.md).
+`melos run codegen` regenerates theme tokens from a sibling checkout of [duskmoon-dev/design](https://github.com/duskmoon-dev/design) at `../design`. Update that checkout first and run `bun install --frozen-lockfile` there. The sync requires Bun and Dart, invokes the upstream YAML generator, and verifies every generated color against its JSON output while preserving the Flutter token class names and both surface tokens. To use another checkout, run `bun run tool/sync_design_tokens.ts /path/to/design`. Generated Dart files are committed; package consumers and CI do not need Bun. For contribution conventions and focused package commands, see [AGENTS.md](AGENTS.md).
 
 ## License
 
