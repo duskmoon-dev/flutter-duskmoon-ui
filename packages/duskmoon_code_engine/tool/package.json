@@ -6,8 +6,8 @@
     "compile": "node compile_grammar.mjs"
   },
   "dependencies": {
-    "@lezer/generator": "^1.7.0",
-    "@lezer/common": "^1.2.0",
-    "@lezer/lr": "^1.4.0"
+    "@lezer/generator": "^1.8.1",
+    "@lezer/common": "^1.5.3",
+    "@lezer/lr": "^1.4.10"
   }
 }
