@@ -29,8 +29,12 @@ Future<void> _pumpScaffold(
   double extendedNavigationRailWidth = 192,
   bool settle = true,
 }) async {
-  await tester.binding.setSurfaceSize(Size(width, 800));
-  addTearDown(() => tester.binding.setSurfaceSize(null));
+  final devicePixelRatio = tester.view.devicePixelRatio;
+  tester.view.physicalSize = Size(
+    width * devicePixelRatio,
+    800 * devicePixelRatio,
+  );
+  addTearDown(tester.view.resetPhysicalSize);
   await tester.pumpWidget(
     MaterialApp(
       theme: ThemeData(
