@@ -22,7 +22,7 @@ flutter:
   uses-material-design: true
 
 dev_dependencies:
-  melos: ^8.6.0
+  melos: ^8.9.0
 
 melos:
   repository: https://github.com/duskmoon-dev/flutter_duskmoon_ui
@@ -40,6 +40,9 @@ melos:
       run: melos exec -- flutter test
     format:
       run: melos exec -- dart format --set-exit-if-changed .
+    upgrade:
+      description: "Upgrade all dependencies to latest across workspace"
+      run: dart pub upgrade --major-versions
     codegen:
       description: "Run duskmoon-codegen to update generated token files"
       run: |
