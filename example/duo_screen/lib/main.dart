@@ -36,22 +36,22 @@ class AppState {
   });
 
   Map<String, dynamic> toJson() => {
-    'selectedIndex': selectedIndex,
-    'message': message,
-    'isViewerOnly': isViewerOnly,
-    'chartData': chartData,
-    'editorLanguage': editorLanguage,
-  };
+        'selectedIndex': selectedIndex,
+        'message': message,
+        'isViewerOnly': isViewerOnly,
+        'chartData': chartData,
+        'editorLanguage': editorLanguage,
+      };
 
   factory AppState.fromJson(Map<String, dynamic> json) => AppState(
-    selectedIndex: json['selectedIndex'] as int,
-    message: json['message'] as String,
-    isViewerOnly: json['isViewerOnly'] as bool,
-    chartData: (json['chartData'] as List<dynamic>)
-        .map((e) => e as double)
-        .toList(),
-    editorLanguage: json['editorLanguage'] as String,
-  );
+        selectedIndex: json['selectedIndex'] as int,
+        message: json['message'] as String,
+        isViewerOnly: json['isViewerOnly'] as bool,
+        chartData: (json['chartData'] as List<dynamic>)
+            .map((e) => e as double)
+            .toList(),
+        editorLanguage: json['editorLanguage'] as String,
+      );
 }
 
 class DuoScreenApp extends StatelessWidget {
@@ -257,7 +257,12 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Navigation: ${['Widgets', 'Forms', 'Charts', 'Editor'][_selectedIndex]}',
+            'Navigation: ${[
+              'Widgets',
+              'Forms',
+              'Charts',
+              'Editor'
+            ][_selectedIndex]}',
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 32),
@@ -307,7 +312,12 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
             children: [
               Expanded(
                 child: Text(
-                  'Category: ${['Widgets', 'Forms', 'Charts', 'Editor'][_selectedIndex]}',
+                  'Category: ${[
+                    'Widgets',
+                    'Forms',
+                    'Charts',
+                    'Editor'
+                  ][_selectedIndex]}',
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ),
@@ -385,8 +395,7 @@ class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
                       onTap: () {
                         final data = List.generate(
                           5,
-                          (index) =>
-                              (index * 10.0 +
+                          (index) => (index * 10.0 +
                               (DateTime.now().millisecond % 20)),
                         );
                         _updateAndSync(_selectedIndex, chartData: data);
@@ -567,8 +576,7 @@ class _EditorShowcase extends StatelessWidget {
         SizedBox(
           height: 400,
           child: DmCodeEditor(
-            initialDoc:
-                """void main() {
+            initialDoc: """void main() {
   print("Hello from DuskMoon Duo!");
   // Running with $language language syntax.
   // The secondary screen acts as your
