@@ -143,7 +143,7 @@ melos run test
 Run the showcase locally:
 
 ```bash
-cd example
+cd example/design_preview
 flutter run -d chrome
 ```
 
