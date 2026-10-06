@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 
 import '../../destination.dart';
+import '../../showcase_scaffold.dart';
 
 class RadialPage extends StatelessWidget {
   static const name = 'Radial & Hierarchy';
@@ -16,12 +17,8 @@ class RadialPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return DmAdaptiveScaffold(
+    return ShowcaseScaffold(
       selectedIndex: Destinations.indexOf(const Key('Visualization')),
-      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
-      destinations: Destinations.navs,
-      useDrawer: true,
-      transitionDuration: Duration.zero,
       appBar: DmAppBar(
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
@@ -29,7 +26,6 @@ class RadialPage extends StatelessWidget {
         leading: const BackButton(),
         actions: const [PlatformSwitchAction()],
       ),
-      appBarBreakpoint: Breakpoints.standard,
       body: (_) => ListView(
         padding: const EdgeInsets.all(16),
         children: [

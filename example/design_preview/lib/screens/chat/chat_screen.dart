@@ -5,6 +5,7 @@ import 'package:duskmoon_widgets/duskmoon_widgets.dart' as chat_widgets;
 import 'package:flutter/material.dart';
 
 import '../../destination.dart';
+import '../../showcase_scaffold.dart';
 
 class ChatScreen extends StatefulWidget {
   static const name = 'Chat';
@@ -233,12 +234,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return DmAdaptiveScaffold(
+    return ShowcaseScaffold(
       selectedIndex: Destinations.indexOf(const Key('Widgets')),
-      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
-      destinations: Destinations.navs,
-      useDrawer: true,
-      transitionDuration: Duration.zero,
       appBar: DmAppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -264,7 +261,6 @@ class _ChatScreenState extends State<ChatScreen> {
           const PlatformSwitchAction(),
         ],
       ),
-      appBarBreakpoint: Breakpoints.standard,
       body: (_) => chat_widgets.DmChatView(
         messages: _messages,
         onSend: _onSend,

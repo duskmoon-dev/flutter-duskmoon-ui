@@ -2,6 +2,7 @@ import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
 
 import '../../destination.dart';
+import '../../showcase_scaffold.dart';
 
 class ButtonScreen extends StatelessWidget {
   static const name = 'Buttons';
@@ -11,12 +12,8 @@ class ButtonScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DmAdaptiveScaffold(
+    return ShowcaseScaffold(
       selectedIndex: Destinations.indexOf(const Key('Widgets')),
-      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
-      destinations: Destinations.navs,
-      useDrawer: true,
-      transitionDuration: Duration.zero,
       appBar: DmAppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -24,7 +21,6 @@ class ButtonScreen extends StatelessWidget {
         title: const Text('Buttons & Inputs'),
         actions: const [PlatformSwitchAction()],
       ),
-      appBarBreakpoint: Breakpoints.standard,
       body: (_) => const _ButtonBody(),
     );
   }

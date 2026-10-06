@@ -85,8 +85,8 @@ class DmAdaptiveScaffold extends StatefulWidget {
     this.isExtendedOverride,
     this.onExtendedChange,
     this.showCollapseToggle = false,
-    this.collapseIcon = Icons.menu_open,
-    this.expandIcon = Icons.menu,
+    this.collapseIcon = Icons.chevron_left,
+    this.expandIcon = Icons.chevron_right,
     this.duoScreenPolicy = DuoScreenPolicy.splitBody,
     this.displayId = 0,
   }) : assert(
@@ -327,29 +327,101 @@ class DmAdaptiveScaffold extends StatefulWidget {
 class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  bool? _isExtended;
+
   bool _shouldBeExtended(bool defaultExtended) {
-    return widget.isExtendedOverride ?? defaultExtended;
+    return widget.isExtendedOverride ?? _isExtended ?? defaultExtended;
   }
 
-  Widget? _buildToggleButton(bool isExtended) {
-    if (!widget.showCollapseToggle) return null;
+  Widget _buildToggleButton(bool isExtended) {
     return IconButton(
+      tooltip: isExtended ? 'Collapse navigation' : 'Expand navigation',
+      constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
       icon: Icon(isExtended ? widget.collapseIcon : widget.expandIcon),
-      onPressed: () => widget.onExtendedChange?.call(!isExtended),
+      onPressed: () {
+        if (widget.isExtendedOverride == null) {
+          setState(() => _isExtended = !isExtended);
+        }
+        widget.onExtendedChange?.call(!isExtended);
+      },
     );
   }
 
-  Widget? _buildLeading(bool isExtended) {
-    final toggleButton = _buildToggleButton(isExtended);
-    final existingLeading = isExtended
-        ? widget.leadingExtendedNavRail
-        : widget.leadingUnextendedNavRail;
-    if (toggleButton == null && existingLeading == null) return null;
-    if (toggleButton == null) return existingLeading;
-    if (existingLeading == null) return toggleButton;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [toggleButton, const SizedBox(height: 8), existingLeading],
+  Widget _buildNavigationRail(
+    List<NavigationRailDestination> destinations, {
+    bool defaultExtended = false,
+  }) {
+    final isExtended = _shouldBeExtended(defaultExtended);
+    final width = isExtended
+        ? widget.extendedNavigationRailWidth
+        : widget.navigationRailWidth;
+    final padding =
+        widget.navigationRailPadding.resolve(Directionality.of(context));
+    final theme = NavigationRailTheme.of(context);
+    final rail = DmAdaptiveScaffold.standardNavigationRail(
+      width: widget.showCollapseToggle ? double.infinity : width,
+      extended: isExtended,
+      leading: isExtended
+          ? widget.leadingExtendedNavRail
+          : widget.leadingUnextendedNavRail,
+      trailing: widget.trailingNavRail,
+      padding: widget.showCollapseToggle
+          ? padding.copyWith(bottom: 0)
+          : widget.navigationRailPadding,
+      destinations: destinations,
+      selectedIndex: widget.selectedIndex,
+      onDestinationSelected: widget.onSelectedIndexChange,
+      backgroundColor: theme.backgroundColor,
+      selectedIconTheme: theme.selectedIconTheme,
+      unselectedIconTheme: theme.unselectedIconTheme,
+      selectedLabelTextStyle: theme.selectedLabelTextStyle,
+      unSelectedLabelTextStyle: theme.unselectedLabelTextStyle,
+      labelType: widget.showCollapseToggle
+          ? NavigationRailLabelType.none
+          : theme.labelType,
+      groupAlignment: widget.groupAlignment,
+    );
+    if (!widget.showCollapseToggle) return rail;
+
+    return _AnimatedNavigationRailWidth(
+      extended: isExtended,
+      collapsedWidth: widget.navigationRailWidth + padding.horizontal,
+      extendedWidth: widget.extendedNavigationRailWidth + padding.horizontal,
+      child: Column(
+        children: [
+          Expanded(
+            child: NavigationRailTheme(
+              data: theme.copyWith(
+                minWidth: widget.navigationRailWidth,
+                minExtendedWidth: widget.extendedNavigationRailWidth,
+              ),
+              child: rail,
+            ),
+          ),
+          Padding(
+            padding: padding.copyWith(top: 0),
+            child: Material(
+              color: theme.backgroundColor ??
+                  Theme.of(context).colorScheme.surface,
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Divider(height: 1),
+                    Align(
+                      alignment: isExtended
+                          ? AlignmentDirectional.centerEnd
+                          : Alignment.center,
+                      child: _buildToggleButton(isExtended),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -363,11 +435,6 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
                 ?.call(widget.destinations.indexOf(d), d) ??
             DmAdaptiveScaffold.toRailDestination(d))
         .toList();
-
-    final bool isExtendedOnLarge = _shouldBeExtended(true);
-    final double largeWidth = isExtendedOnLarge
-        ? widget.extendedNavigationRailWidth
-        : widget.navigationRailWidth;
 
     final bool isDrawerMode =
         widget.drawerBreakpoint.isActive(context) && widget.useDrawer;
@@ -413,126 +480,33 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
             if (widget.displayId > 0)
               Breakpoints.standard: SlotLayout.from(
                 key: const Key('primaryNavigationForcedSecondary'),
-                builder: (_) => DmAdaptiveScaffold.standardNavigationRail(
-                  width: widget.navigationRailWidth,
-                  leading: widget.leadingUnextendedNavRail,
-                  trailing: widget.trailingNavRail,
-                  padding: widget.navigationRailPadding,
-                  selectedIndex: widget.selectedIndex,
-                  destinations: destinations,
-                  onDestinationSelected: widget.onSelectedIndexChange,
-                  backgroundColor: navRailTheme.backgroundColor,
-                  selectedIconTheme: navRailTheme.selectedIconTheme,
-                  unselectedIconTheme: navRailTheme.unselectedIconTheme,
-                  selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
-                  unSelectedLabelTextStyle:
-                      navRailTheme.unselectedLabelTextStyle,
-                  labelType: navRailTheme.labelType,
-                  groupAlignment: widget.groupAlignment,
-                ),
+                builder: (_) => _buildNavigationRail(destinations),
               )
             else ...<Breakpoint, SlotLayoutConfig>{
               if (widget.duoScreenPolicy ==
                   DuoScreenPolicy.navigationOnSecondary)
                 Breakpoints.standard: SlotLayout.from(
                   key: const Key('primaryNavigationStandard'),
-                  builder: (_) => DmAdaptiveScaffold.standardNavigationRail(
-                    width: widget.navigationRailWidth,
-                    destinations: destinations,
-                    selectedIndex: widget.selectedIndex,
-                    onDestinationSelected: widget.onSelectedIndexChange,
-                    backgroundColor: navRailTheme.backgroundColor,
-                    selectedIconTheme: navRailTheme.selectedIconTheme,
-                    unselectedIconTheme: navRailTheme.unselectedIconTheme,
-                    selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
-                    unSelectedLabelTextStyle:
-                        navRailTheme.unselectedLabelTextStyle,
-                    labelType: navRailTheme.labelType,
-                    groupAlignment: widget.groupAlignment,
-                  ),
+                  builder: (_) => _buildNavigationRail(destinations),
                 ),
               widget.mediumBreakpoint: SlotLayout.from(
                 key: const Key('primaryNavigation'),
-                builder: (_) => DmAdaptiveScaffold.standardNavigationRail(
-                  width: widget.navigationRailWidth,
-                  leading: widget.leadingUnextendedNavRail,
-                  trailing: widget.trailingNavRail,
-                  padding: widget.navigationRailPadding,
-                  selectedIndex: widget.selectedIndex,
-                  destinations: destinations,
-                  onDestinationSelected: widget.onSelectedIndexChange,
-                  backgroundColor: navRailTheme.backgroundColor,
-                  selectedIconTheme: navRailTheme.selectedIconTheme,
-                  unselectedIconTheme: navRailTheme.unselectedIconTheme,
-                  selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
-                  unSelectedLabelTextStyle:
-                      navRailTheme.unselectedLabelTextStyle,
-                  labelType: navRailTheme.labelType,
-                  groupAlignment: widget.groupAlignment,
-                ),
+                builder: (_) => _buildNavigationRail(destinations),
               ),
               widget.mediumLargeBreakpoint: SlotLayout.from(
                 key: const Key('primaryNavigation1'),
-                builder: (_) => DmAdaptiveScaffold.standardNavigationRail(
-                  width: largeWidth,
-                  extended: isExtendedOnLarge,
-                  leading: _buildLeading(isExtendedOnLarge),
-                  trailing: widget.trailingNavRail,
-                  padding: widget.navigationRailPadding,
-                  selectedIndex: widget.selectedIndex,
-                  destinations: destinations,
-                  onDestinationSelected: widget.onSelectedIndexChange,
-                  backgroundColor: navRailTheme.backgroundColor,
-                  selectedIconTheme: navRailTheme.selectedIconTheme,
-                  unselectedIconTheme: navRailTheme.unselectedIconTheme,
-                  selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
-                  unSelectedLabelTextStyle:
-                      navRailTheme.unselectedLabelTextStyle,
-                  labelType: navRailTheme.labelType,
-                  groupAlignment: widget.groupAlignment,
-                ),
+                builder: (_) =>
+                    _buildNavigationRail(destinations, defaultExtended: true),
               ),
               widget.largeBreakpoint: SlotLayout.from(
                 key: const Key('primaryNavigation2'),
-                builder: (_) => DmAdaptiveScaffold.standardNavigationRail(
-                  width: largeWidth,
-                  extended: isExtendedOnLarge,
-                  leading: _buildLeading(isExtendedOnLarge),
-                  trailing: widget.trailingNavRail,
-                  padding: widget.navigationRailPadding,
-                  destinations: destinations,
-                  selectedIndex: widget.selectedIndex,
-                  onDestinationSelected: widget.onSelectedIndexChange,
-                  backgroundColor: navRailTheme.backgroundColor,
-                  selectedIconTheme: navRailTheme.selectedIconTheme,
-                  unselectedIconTheme: navRailTheme.unselectedIconTheme,
-                  selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
-                  unSelectedLabelTextStyle:
-                      navRailTheme.unselectedLabelTextStyle,
-                  labelType: navRailTheme.labelType,
-                  groupAlignment: widget.groupAlignment,
-                ),
+                builder: (_) =>
+                    _buildNavigationRail(destinations, defaultExtended: true),
               ),
               widget.extraLargeBreakpoint: SlotLayout.from(
                 key: const Key('primaryNavigation3'),
-                builder: (_) => DmAdaptiveScaffold.standardNavigationRail(
-                  width: largeWidth,
-                  extended: isExtendedOnLarge,
-                  leading: _buildLeading(isExtendedOnLarge),
-                  trailing: widget.trailingNavRail,
-                  padding: widget.navigationRailPadding,
-                  destinations: destinations,
-                  selectedIndex: widget.selectedIndex,
-                  onDestinationSelected: widget.onSelectedIndexChange,
-                  backgroundColor: navRailTheme.backgroundColor,
-                  selectedIconTheme: navRailTheme.selectedIconTheme,
-                  unselectedIconTheme: navRailTheme.unselectedIconTheme,
-                  selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
-                  unSelectedLabelTextStyle:
-                      navRailTheme.unselectedLabelTextStyle,
-                  labelType: navRailTheme.labelType,
-                  groupAlignment: widget.groupAlignment,
-                ),
+                builder: (_) =>
+                    _buildNavigationRail(destinations, defaultExtended: true),
               ),
             },
           },
@@ -688,6 +662,71 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
       }
     }
     widget.onSelectedIndexChange?.call(index);
+  }
+}
+
+/// Matches NavigationRail's extension animation so its content always fits.
+class _AnimatedNavigationRailWidth extends StatefulWidget {
+  const _AnimatedNavigationRailWidth({
+    required this.extended,
+    required this.collapsedWidth,
+    required this.extendedWidth,
+    required this.child,
+  });
+
+  final bool extended;
+  final double collapsedWidth;
+  final double extendedWidth;
+  final Widget child;
+
+  @override
+  State<_AnimatedNavigationRailWidth> createState() =>
+      _AnimatedNavigationRailWidthState();
+}
+
+class _AnimatedNavigationRailWidthState
+    extends State<_AnimatedNavigationRailWidth>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final CurvedAnimation _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: kThemeAnimationDuration,
+      vsync: this,
+      value: widget.extended ? 1 : 0,
+    );
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+  }
+
+  @override
+  void didUpdateWidget(_AnimatedNavigationRailWidth oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.extended != oldWidget.extended) {
+      widget.extended ? _controller.forward() : _controller.reverse();
+    }
+  }
+
+  @override
+  void dispose() {
+    _animation.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      child: widget.child,
+      builder: (context, child) => SizedBox(
+        width: widget.collapsedWidth +
+            (widget.extendedWidth - widget.collapsedWidth) * _animation.value,
+        child: child,
+      ),
+    );
   }
 }
 

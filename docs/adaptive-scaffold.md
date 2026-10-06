@@ -432,7 +432,17 @@ SlotLayout.from(
 
 ## Collapsible Navigation Rail
 
-Allow users to collapse/expand the navigation rail on large screens:
+Set `showCollapseToggle: true` to add a footer chevron on navigation rails.
+The button switches between an expanded rail with labels and a narrower
+icons-only rail, preserving the selected destination and body state. Without
+an override or callback, the scaffold retains the user's choice internally.
+With the default breakpoints, medium screens initially use the collapsed rail
+and screens 840 pixels or wider use the expanded rail. A user's choice survives
+breakpoint changes. Mobile bottom navigation and
+desktop drawers retain their existing behavior.
+
+To control the preference externally or share it across routes, use
+`isExtendedOverride` and `onExtendedChange`:
 
 ```dart
 class _MyHomeState extends State<MyHome> {
@@ -453,12 +463,15 @@ class _MyHomeState extends State<MyHome> {
       onExtendedChange: (extended) {
         setState(() => _isExtended = extended);
       },
-      collapseIcon: Icons.menu_open,  // shown when extended
-      expandIcon: Icons.menu,          // shown when collapsed
+      collapseIcon: Icons.chevron_left,  // default when extended
+      expandIcon: Icons.chevron_right,   // default when collapsed
     );
   }
 }
 ```
+
+The default chevrons reverse direction in right-to-left layouts. Custom
+leading and trailing rail widgets remain in their existing positions.
 
 ## Custom Breakpoints
 

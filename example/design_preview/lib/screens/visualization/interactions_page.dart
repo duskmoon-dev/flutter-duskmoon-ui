@@ -7,6 +7,7 @@ import 'package:duskmoon_visualization/duskmoon_visualization_compat.dart'
     as dv;
 
 import '../../destination.dart';
+import '../../showcase_scaffold.dart';
 
 // ---------------------------------------------------------------------------
 // Page
@@ -20,12 +21,8 @@ class InteractionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DmAdaptiveScaffold(
+    return ShowcaseScaffold(
       selectedIndex: Destinations.indexOf(const Key('Visualization')),
-      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
-      destinations: Destinations.navs,
-      useDrawer: true,
-      transitionDuration: Duration.zero,
       appBar: DmAppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -33,7 +30,6 @@ class InteractionsPage extends StatelessWidget {
         leading: const BackButton(),
         actions: const [PlatformSwitchAction()],
       ),
-      appBarBreakpoint: Breakpoints.standard,
       body: (_) => ListView(
         padding: const EdgeInsets.all(16),
         children: [

@@ -7,6 +7,7 @@ import 'package:duskmoon_visualization/duskmoon_visualization_compat.dart'
     as dv;
 
 import '../../destination.dart';
+import '../../showcase_scaffold.dart';
 
 class LinesBarsPage extends StatelessWidget {
   static const name = 'Lines & Bars';
@@ -18,12 +19,8 @@ class LinesBarsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return DmAdaptiveScaffold(
+    return ShowcaseScaffold(
       selectedIndex: Destinations.indexOf(const Key('Visualization')),
-      onSelectedIndexChange: (idx) => Destinations.changeHandler(idx, context),
-      destinations: Destinations.navs,
-      useDrawer: true,
-      transitionDuration: Duration.zero,
       appBar: DmAppBar(
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
@@ -31,7 +28,6 @@ class LinesBarsPage extends StatelessWidget {
         leading: const BackButton(),
         actions: const [PlatformSwitchAction()],
       ),
-      appBarBreakpoint: Breakpoints.standard,
       body: (_) => ListView(
         padding: const EdgeInsets.all(16),
         children: [
