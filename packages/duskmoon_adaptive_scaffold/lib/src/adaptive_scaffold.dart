@@ -84,6 +84,7 @@ class DmAdaptiveScaffold extends StatefulWidget {
     this.groupAlignment,
     this.isExtendedOverride,
     this.onExtendedChange,
+    this.navigationVisible = true,
     this.showCollapseToggle = false,
     this.collapseIcon = Icons.chevron_left,
     this.expandIcon = Icons.chevron_right,
@@ -131,6 +132,13 @@ class DmAdaptiveScaffold extends StatefulWidget {
   final NavigationRailDestinationBuilder? navigationRailDestinationBuilder;
   final bool? isExtendedOverride;
   final void Function(bool isExtended)? onExtendedChange;
+
+  /// Whether rail, drawer and bottom navigation are visible.
+  ///
+  /// Hiding navigation preserves the selected destination, rail preference and
+  /// body state. Provide a caller-owned control to restore navigation.
+  final bool navigationVisible;
+
   final bool showCollapseToggle;
   final IconData collapseIcon;
   final IconData expandIcon;
@@ -449,7 +457,7 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
               child: widget.appBar ?? AppBar(),
             )
           : null,
-      drawer: isDrawerMode
+      drawer: widget.navigationVisible && isDrawerMode
           ? Drawer(
               child: NavigationRail(
                 extended: true,
@@ -475,14 +483,16 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
         internalAnimations: widget.internalAnimations,
         duoScreenPolicy: widget.duoScreenPolicy,
         displayId: widget.displayId,
+        // Keep navigation slots mounted so body elements retain their position.
         primaryNavigation: SlotLayout(
           config: <Breakpoint, SlotLayoutConfig>{
-            if (widget.displayId > 0)
+            if (widget.navigationVisible && widget.displayId > 0)
               Breakpoints.standard: SlotLayout.from(
                 key: const Key('primaryNavigationForcedSecondary'),
                 builder: (_) => _buildNavigationRail(destinations),
               )
-            else ...<Breakpoint, SlotLayoutConfig>{
+            else if (widget
+                .navigationVisible) ...<Breakpoint, SlotLayoutConfig>{
               if (widget.duoScreenPolicy ==
                   DuoScreenPolicy.navigationOnSecondary)
                 Breakpoints.standard: SlotLayout.from(
@@ -515,15 +525,16 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
                 widget.duoScreenPolicy != DuoScreenPolicy.navigationOnSecondary
             ? SlotLayout(
                 config: <Breakpoint, SlotLayoutConfig>{
-                  widget.smallBreakpoint: SlotLayout.from(
-                    key: const Key('bottomNavigation'),
-                    builder: (_) =>
-                        DmAdaptiveScaffold.standardBottomNavigationBar(
-                      currentIndex: widget.selectedIndex,
-                      destinations: widget.destinations,
-                      onDestinationSelected: widget.onSelectedIndexChange,
+                  if (widget.navigationVisible)
+                    widget.smallBreakpoint: SlotLayout.from(
+                      key: const Key('bottomNavigation'),
+                      builder: (_) =>
+                          DmAdaptiveScaffold.standardBottomNavigationBar(
+                        currentIndex: widget.selectedIndex,
+                        destinations: widget.destinations,
+                        onDestinationSelected: widget.onSelectedIndexChange,
+                      ),
                     ),
-                  ),
                 },
               )
             : null,

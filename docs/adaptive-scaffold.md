@@ -14,6 +14,7 @@ This package is a fork of `flutter_adaptive_scaffold`, versioned in sync with ot
 - [SlotLayout](#slotlayout)
 - [Animations](#animations)
 - [Collapsible Navigation Rail](#collapsible-navigation-rail)
+- [Hiding Navigation](#hiding-navigation)
 - [Custom Breakpoints](#custom-breakpoints)
 
 ## Installation
@@ -472,6 +473,54 @@ class _MyHomeState extends State<MyHome> {
 
 The default chevrons reverse direction in right-to-left layouts. Custom
 leading and trailing rail widgets remain in their existing positions.
+
+`DmScaffold` also forwards `showCollapseToggle`, `isExtendedOverride`,
+`onExtendedChange`, `collapseIcon`, and `expandIcon` to its adaptive scaffold.
+
+## Hiding Navigation
+
+Both `DmScaffold` and `DmAdaptiveScaffold` accept `navigationVisible` (default
+`true`). Setting it to `false` removes the entire navigation rail, drawer, or
+bottom navigation so the body can use the available space. This is separate
+from collapsing the rail to icons only. The selected destination, body state,
+and rail expansion preference are retained when navigation is shown again.
+
+Keep the show/hide control outside navigation, such as in the app bar, so it
+remains available while navigation is hidden:
+
+```dart
+class _MyPageState extends State<MyPage> {
+  int _selectedIndex = 0;
+  bool _navigationVisible = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return DmScaffold(
+      destinations: destinations,
+      selectedIndex: _selectedIndex,
+      onSelectedIndexChange: (index) => setState(() => _selectedIndex = index),
+      navigationVisible: _navigationVisible,
+      showCollapseToggle: true,
+      appBarBreakpoint: Breakpoints.standard,
+      appBar: DmAppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.view_sidebar_outlined),
+          tooltip: _navigationVisible ? 'Hide navigation' : 'Show navigation',
+          onPressed: () => setState(() {
+            _navigationVisible = !_navigationVisible;
+          }),
+        ),
+        title: const Text('My Page'),
+      ),
+      body: (_) => const MyContent(),
+    );
+  }
+}
+```
+
+The showcase at `/widgets/scaffold` includes a persistent app bar toggle.
+Open **DmScaffold Demo** on that page to try both label collapsing and fully
+hiding navigation. Hidden-state control is local to each demo page.
 
 ## Custom Breakpoints
 

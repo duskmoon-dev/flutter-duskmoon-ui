@@ -13,11 +13,13 @@ class ShowcaseScaffold extends StatelessWidget {
     required this.selectedIndex,
     required this.appBar,
     required this.body,
+    this.navigationVisible = true,
   });
 
   final int selectedIndex;
   final PreferredSizeWidget appBar;
   final WidgetBuilder body;
+  final bool navigationVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class ShowcaseScaffold extends StatelessWidget {
         onSelectedIndexChange: (index) =>
             Destinations.changeHandler(index, context),
         destinations: Destinations.navs,
+        navigationVisible: navigationVisible,
         useDrawer: true,
         transitionDuration: Duration.zero,
         appBar: appBar,

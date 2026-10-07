@@ -4,24 +4,73 @@ import 'package:flutter/material.dart';
 import '../../destination.dart';
 import '../../showcase_scaffold.dart';
 
-class ScaffoldScreen extends StatelessWidget {
+class ScaffoldScreen extends StatefulWidget {
   static const name = 'Scaffold';
   static const path = 'scaffold';
 
   const ScaffoldScreen({super.key});
 
   @override
+  State<ScaffoldScreen> createState() => _ScaffoldScreenState();
+}
+
+class _ScaffoldScreenState extends State<ScaffoldScreen> {
+  bool _navigationVisible = true;
+
+  @override
   Widget build(BuildContext context) {
     return ShowcaseScaffold(
       selectedIndex: Destinations.indexOf(const Key('Widgets')),
+      navigationVisible: _navigationVisible,
       appBar: DmAppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         leading: const BackButton(),
-        title: const Text('Scaffold & Layout'),
+        title: _NavigationToggleTitle(
+          title: 'Scaffold & Layout',
+          navigationVisible: _navigationVisible,
+          onToggle: () =>
+              setState(() => _navigationVisible = !_navigationVisible),
+        ),
         actions: const [PlatformSwitchAction()],
       ),
       body: (_) => const _ScaffoldBody(),
+    );
+  }
+}
+
+class _NavigationToggleTitle extends StatelessWidget {
+  const _NavigationToggleTitle({
+    required this.title,
+    required this.navigationVisible,
+    required this.onToggle,
+  });
+
+  final String title;
+  final bool navigationVisible;
+  final VoidCallback onToggle;
+
+  @override
+  Widget build(BuildContext context) {
+    final label = navigationVisible ? 'Hide navigation' : 'Show navigation';
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Tooltip(
+          message: label,
+          excludeFromSemantics: true,
+          child: Semantics(
+            label: label,
+            button: true,
+            child: DmIconButton(
+              icon: const Icon(Icons.view_sidebar_outlined),
+              onPressed: onToggle,
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Flexible(child: Text(title, overflow: TextOverflow.ellipsis)),
+      ],
     );
   }
 }
@@ -287,7 +336,8 @@ class _ScaffoldBody extends StatelessWidget {
             Text('DmScaffold', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 4),
             Text(
-              'Responsive scaffold: NavigationRail (desktop) / BottomNav (mobile)',
+              'Responsive scaffold: NavigationRail (desktop) / BottomNav (mobile). '
+              'Use the footer to collapse labels or the app bar button to hide navigation.',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 12),
@@ -403,6 +453,7 @@ class _ScaffoldDemoPage extends StatefulWidget {
 
 class _ScaffoldDemoPageState extends State<_ScaffoldDemoPage> {
   int _selectedIndex = 0;
+  bool _navigationVisible = true;
 
   static const _destinations = [
     NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
@@ -418,8 +469,16 @@ class _ScaffoldDemoPageState extends State<_ScaffoldDemoPage> {
       selectedIndex: _selectedIndex,
       onSelectedIndexChange: (i) => setState(() => _selectedIndex = i),
       destinations: _destinations,
+      navigationVisible: _navigationVisible,
+      showCollapseToggle: true,
+      appBarBreakpoint: Breakpoints.standard,
       appBar: DmAppBar(
-        title: const Text('DmScaffold Demo'),
+        title: _NavigationToggleTitle(
+          title: 'DmScaffold Demo',
+          navigationVisible: _navigationVisible,
+          onToggle: () =>
+              setState(() => _navigationVisible = !_navigationVisible),
+        ),
         actions: [
           DmIconButton(
             icon: const Icon(Icons.close),

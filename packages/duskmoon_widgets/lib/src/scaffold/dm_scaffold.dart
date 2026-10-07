@@ -90,6 +90,27 @@ class DmScaffold extends StatelessWidget {
   /// Custom builder for navigation rail destinations.
   final NavigationRailDestinationBuilder? navigationRailDestinationBuilder;
 
+  /// Whether rail, drawer and bottom navigation are visible.
+  ///
+  /// Hiding navigation preserves the body state and rail preference. The caller
+  /// provides a control to restore navigation, such as an app bar action.
+  final bool navigationVisible;
+
+  /// Whether the rail shows its footer collapse/expand button.
+  final bool showCollapseToggle;
+
+  /// Explicit rail extension preference; null uses the scaffold's preference.
+  final bool? isExtendedOverride;
+
+  /// Called when the rail footer requests an extension change.
+  final void Function(bool isExtended)? onExtendedChange;
+
+  /// Icon displayed by the footer when the rail is extended.
+  final IconData collapseIcon;
+
+  /// Icon displayed by the footer when the rail is collapsed.
+  final IconData expandIcon;
+
   /// Creates a responsive scaffold with adaptive navigation.
   const DmScaffold({
     super.key,
@@ -128,6 +149,12 @@ class DmScaffold extends StatelessWidget {
     this.appBarBreakpoint,
     this.navigationRailDestinationBuilder,
     this.groupAlignment,
+    this.navigationVisible = true,
+    this.showCollapseToggle = false,
+    this.isExtendedOverride,
+    this.onExtendedChange,
+    this.collapseIcon = Icons.chevron_left,
+    this.expandIcon = Icons.chevron_right,
   });
 
   @override
@@ -167,6 +194,12 @@ class DmScaffold extends StatelessWidget {
       appBarBreakpoint: appBarBreakpoint,
       navigationRailDestinationBuilder: navigationRailDestinationBuilder,
       groupAlignment: groupAlignment,
+      navigationVisible: navigationVisible,
+      showCollapseToggle: showCollapseToggle,
+      isExtendedOverride: isExtendedOverride,
+      onExtendedChange: onExtendedChange,
+      collapseIcon: collapseIcon,
+      expandIcon: expandIcon,
     );
   }
 }
