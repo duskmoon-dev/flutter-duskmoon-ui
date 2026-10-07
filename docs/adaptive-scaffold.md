@@ -485,8 +485,13 @@ bottom navigation so the body can use the available space. This is separate
 from collapsing the rail to icons only. The selected destination, body state,
 and rail expansion preference are retained when navigation is shown again.
 
-Keep the show/hide control outside navigation, such as in the app bar, so it
-remains available while navigation is hidden:
+Put **Hide navigation** at the top right inside the sidebar using both rail
+leading slots. When navigation is hidden, put **Show navigation** at the top
+left inside the demonstrated scaffold's body. The rail header should fill its
+available width without fixing the expanded rail width, so it also works
+while the rail collapses. On small layouts without a rail, put **Hide navigation**
+at the body's top left too. Keep the body structure stable across visibility
+changes; the app bar contains only ordinary page navigation:
 
 ```dart
 class _MyPageState extends State<MyPage> {
@@ -495,32 +500,56 @@ class _MyPageState extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
+    final hasRail = Breakpoints.mediumAndUp.isActive(context);
+    final hideButton = IconButton(
+      icon: const Icon(Icons.view_sidebar_outlined),
+      tooltip: 'Hide navigation',
+      onPressed: () => setState(() => _navigationVisible = false),
+    );
+    final railHeader = Align(
+      alignment: AlignmentDirectional.topEnd,
+      heightFactor: 1,
+      child: hideButton,
+    );
     return DmScaffold(
       destinations: destinations,
       selectedIndex: _selectedIndex,
       onSelectedIndexChange: (index) => setState(() => _selectedIndex = index),
       navigationVisible: _navigationVisible,
       showCollapseToggle: true,
+      leadingExtendedNavRail: railHeader,
+      leadingUnextendedNavRail: railHeader,
       appBarBreakpoint: Breakpoints.standard,
-      appBar: DmAppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.view_sidebar_outlined),
-          tooltip: _navigationVisible ? 'Hide navigation' : 'Show navigation',
-          onPressed: () => setState(() {
-            _navigationVisible = !_navigationVisible;
-          }),
-        ),
-        title: const Text('My Page'),
+      appBar: const DmAppBar(title: Text('My Page')),
+      body: (_) => Stack(
+        fit: StackFit.expand,
+        children: [
+          const MyContent(),
+          if (!_navigationVisible || !hasRail)
+            PositionedDirectional(
+              top: 0,
+              start: 0,
+              child: _navigationVisible
+                  ? hideButton
+                  : IconButton(
+                      icon: const Icon(Icons.view_sidebar_outlined),
+                      tooltip: 'Show navigation',
+                      onPressed: () =>
+                          setState(() => _navigationVisible = true),
+                    ),
+            ),
+        ],
       ),
-      body: (_) => const MyContent(),
     );
   }
 }
 ```
 
-The showcase at `/widgets/scaffold` includes a persistent app bar toggle.
-Open **DmScaffold Demo** on that page to try both label collapsing and fully
-hiding navigation. Hidden-state control is local to each demo page.
+Open **DmScaffold Demo** on the showcase page at `/widgets/scaffold` to try
+hiding navigation. The demo places the hide button inside its sidebar header
+and the show button at its body's top left after hiding. Its footer button
+collapses labels independently. These controls affect only the demo component;
+the surrounding showcase navigation remains available when the demo closes.
 
 ## Custom Breakpoints
 

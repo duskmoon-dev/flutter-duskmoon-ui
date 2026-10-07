@@ -4,34 +4,21 @@ import 'package:flutter/material.dart';
 import '../../destination.dart';
 import '../../showcase_scaffold.dart';
 
-class ScaffoldScreen extends StatefulWidget {
+class ScaffoldScreen extends StatelessWidget {
   static const name = 'Scaffold';
   static const path = 'scaffold';
 
   const ScaffoldScreen({super.key});
 
   @override
-  State<ScaffoldScreen> createState() => _ScaffoldScreenState();
-}
-
-class _ScaffoldScreenState extends State<ScaffoldScreen> {
-  bool _navigationVisible = true;
-
-  @override
   Widget build(BuildContext context) {
     return ShowcaseScaffold(
       selectedIndex: Destinations.indexOf(const Key('Widgets')),
-      navigationVisible: _navigationVisible,
       appBar: DmAppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         leading: const BackButton(),
-        title: _NavigationToggleTitle(
-          title: 'Scaffold & Layout',
-          navigationVisible: _navigationVisible,
-          onToggle: () =>
-              setState(() => _navigationVisible = !_navigationVisible),
-        ),
+        title: const Text('Scaffold & Layout'),
         actions: const [PlatformSwitchAction()],
       ),
       body: (_) => const _ScaffoldBody(),
@@ -39,38 +26,51 @@ class _ScaffoldScreenState extends State<ScaffoldScreen> {
   }
 }
 
-class _NavigationToggleTitle extends StatelessWidget {
-  const _NavigationToggleTitle({
-    required this.title,
+class _NavigationHideHeader extends StatelessWidget {
+  const _NavigationHideHeader({required this.onHide});
+
+  final VoidCallback onHide;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: AlignmentDirectional.topEnd,
+      heightFactor: 1,
+      child: _NavigationVisibilityButton(
+        navigationVisible: true,
+        onToggle: onHide,
+      ),
+    );
+  }
+}
+
+class _NavigationVisibilityButton extends StatelessWidget {
+  const _NavigationVisibilityButton({
     required this.navigationVisible,
     required this.onToggle,
   });
 
-  final String title;
   final bool navigationVisible;
   final VoidCallback onToggle;
 
   @override
   Widget build(BuildContext context) {
     final label = navigationVisible ? 'Hide navigation' : 'Show navigation';
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Tooltip(
-          message: label,
-          excludeFromSemantics: true,
-          child: Semantics(
-            label: label,
-            button: true,
-            child: DmIconButton(
-              icon: const Icon(Icons.view_sidebar_outlined),
-              onPressed: onToggle,
-            ),
+    return SizedBox(
+      width: 48,
+      height: 48,
+      child: Tooltip(
+        message: label,
+        excludeFromSemantics: true,
+        child: Semantics(
+          label: label,
+          button: true,
+          child: DmIconButton(
+            icon: const Icon(Icons.view_sidebar_outlined),
+            onPressed: onToggle,
           ),
         ),
-        const SizedBox(width: 8),
-        Flexible(child: Text(title, overflow: TextOverflow.ellipsis)),
-      ],
+      ),
     );
   }
 }
@@ -337,7 +337,7 @@ class _ScaffoldBody extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               'Responsive scaffold: NavigationRail (desktop) / BottomNav (mobile). '
-              'Use the footer to collapse labels or the app bar button to hide navigation.',
+              'Use the footer to collapse labels or the sidebar header to hide navigation.',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 12),
@@ -455,6 +455,9 @@ class _ScaffoldDemoPageState extends State<_ScaffoldDemoPage> {
   int _selectedIndex = 0;
   bool _navigationVisible = true;
 
+  void _toggleNavigation() =>
+      setState(() => _navigationVisible = !_navigationVisible);
+
   static const _destinations = [
     NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
     NavigationDestination(icon: Icon(Icons.explore), label: 'Explore'),
@@ -465,20 +468,19 @@ class _ScaffoldDemoPageState extends State<_ScaffoldDemoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final hasRail = Breakpoints.mediumAndUp.isActive(context);
+    final railHeader = _NavigationHideHeader(onHide: _toggleNavigation);
     return DmScaffold(
       selectedIndex: _selectedIndex,
       onSelectedIndexChange: (i) => setState(() => _selectedIndex = i),
       destinations: _destinations,
       navigationVisible: _navigationVisible,
       showCollapseToggle: true,
+      leadingExtendedNavRail: railHeader,
+      leadingUnextendedNavRail: railHeader,
       appBarBreakpoint: Breakpoints.standard,
       appBar: DmAppBar(
-        title: _NavigationToggleTitle(
-          title: 'DmScaffold Demo',
-          navigationVisible: _navigationVisible,
-          onToggle: () =>
-              setState(() => _navigationVisible = !_navigationVisible),
-        ),
+        title: const Text('DmScaffold Demo'),
         actions: [
           DmIconButton(
             icon: const Icon(Icons.close),
@@ -486,27 +488,42 @@ class _ScaffoldDemoPageState extends State<_ScaffoldDemoPage> {
           ),
         ],
       ),
-      body: (_) => Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              [Icons.home, Icons.explore, Icons.person][_selectedIndex],
-              size: 64,
-              color: Theme.of(context).colorScheme.primary,
+      body: (_) => Stack(
+        key: const ValueKey('scaffold-demo-body'),
+        fit: StackFit.expand,
+        children: [
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  [Icons.home, Icons.explore, Icons.person][_selectedIndex],
+                  size: 64,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  _labels[_selectedIndex],
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Resize window to see NavigationRail vs BottomNav',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            Text(
-              _labels[_selectedIndex],
-              style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          if (!_navigationVisible || !hasRail)
+            PositionedDirectional(
+              top: 0,
+              start: 0,
+              child: _NavigationVisibilityButton(
+                navigationVisible: _navigationVisible,
+                onToggle: _toggleNavigation,
+              ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Resize window to see NavigationRail vs BottomNav',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
