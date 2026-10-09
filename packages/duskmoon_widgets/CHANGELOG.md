@@ -1,3 +1,8 @@
+## Unreleased
+
+- Preserve icon-button tooltips and accessible names in Cupertino and Fluent
+  styles, including disabled controls.
+
 ## 1.10.1
 
 - Release 1.10.1 (2026-10-09)
