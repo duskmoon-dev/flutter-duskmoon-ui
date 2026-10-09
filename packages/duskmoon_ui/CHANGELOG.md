@@ -1,3 +1,11 @@
+## Unreleased
+
+- Android `duo_screen` example: automatically launch a normal companion Activity
+  and route launcher taps on either screen to the primary viewer.
+- Retain the example's owned companion engine across primary Dart restart and
+  release it when the primary Activity finishes.
+- Package APIs are unchanged.
+
 ## 1.11.0
 
 - Export reusable sidebar visibility and header integration APIs.
