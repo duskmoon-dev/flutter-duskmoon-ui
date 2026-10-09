@@ -1,3 +1,11 @@
+## 1.11.0
+
+- Add reusable controlled navigation visibility controls with a top-right
+  sidebar hide button and a safe-area restore fallback.
+- Add `DmNavigationHeader` for composing restore with existing AppBar and
+  SliverAppBar leading controls without adding a toolbar row.
+- Preserve drafts, scrolling, selection, and rail expansion through hide/restore.
+
 ## 1.10.1
 
 - Add `DuoScreenRole` to the adaptive layout and scaffold, with deprecated

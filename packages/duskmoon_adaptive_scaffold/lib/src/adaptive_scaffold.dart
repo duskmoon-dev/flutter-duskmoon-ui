@@ -8,6 +8,7 @@ import 'adaptive_layout.dart';
 import 'breakpoints.dart';
 import 'duo_screen.dart';
 import 'slot_layout.dart';
+import 'navigation_visibility.dart';
 
 /// Spacing value of the compact breakpoint according to
 /// the material 3 design spec.
@@ -86,6 +87,9 @@ class DmAdaptiveScaffold extends StatefulWidget {
     this.isExtendedOverride,
     this.onExtendedChange,
     this.navigationVisible = true,
+    this.showNavigationToggle = false,
+    this.onNavigationVisibleChange,
+    this.navigationRestoreInHeader = false,
     this.showCollapseToggle = false,
     this.collapseIcon = Icons.chevron_left,
     this.expandIcon = Icons.chevron_right,
@@ -149,6 +153,18 @@ class DmAdaptiveScaffold extends StatefulWidget {
   /// Hiding navigation preserves the selected destination, rail preference and
   /// body state. Provide a caller-owned control to restore navigation.
   final bool navigationVisible;
+
+  /// Adds a top-right sidebar hide button, separate from the rail footer.
+  /// Requires [onNavigationVisibleChange] to enable the controls.
+  final bool showNavigationToggle;
+
+  /// Requests a change to caller-controlled [navigationVisible].
+  final ValueChanged<bool>? onNavigationVisibleChange;
+
+  /// The page adopts DmNavigationHeader or an adaptive app bar restore control.
+  /// When false, hidden navigation gets a safe-area overlay restore fallback.
+  /// Set true for headers nested in body builders as well as outer app bars.
+  final bool navigationRestoreInHeader;
 
   final bool showCollapseToggle;
   final IconData collapseIcon;
@@ -383,9 +399,12 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
     final rail = DmAdaptiveScaffold.standardNavigationRail(
       width: widget.showCollapseToggle ? double.infinity : width,
       extended: isExtended,
-      leading: isExtended
-          ? widget.leadingExtendedNavRail
-          : widget.leadingUnextendedNavRail,
+      leading: _navigationLeading(
+        isExtended
+            ? widget.leadingExtendedNavRail
+            : widget.leadingUnextendedNavRail,
+        width,
+      ),
       trailing: widget.trailingNavRail,
       padding: widget.showCollapseToggle
           ? padding.copyWith(bottom: 0)
@@ -447,6 +466,23 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
     );
   }
 
+  Widget? _navigationLeading(Widget? leading, double width) {
+    if (!widget.showNavigationToggle) return leading;
+    return SizedBox(
+      width: width,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Align(
+            alignment: AlignmentDirectional.topEnd,
+            child: DmNavigationVisibilityButton(),
+          ),
+          if (leading != null) leading,
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final NavigationRailThemeData navRailTheme =
@@ -478,215 +514,242 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
     final bool showAppBar =
         isDrawerMode || (widget.appBarBreakpoint?.isActive(context) ?? false);
 
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: showAppBar
-          ? _AppBarProxy(
-              key: ValueKey(isDrawerMode),
-              child: widget.appBar ?? AppBar(),
-            )
-          : null,
-      drawer: widget.navigationVisible && isDrawerMode
-          ? Drawer(
-              child: NavigationRail(
-                extended: true,
-                leading: widget.leadingExtendedNavRail,
-                trailing: widget.trailingNavRail,
-                selectedIndex: widget.selectedIndex,
-                destinations: destinations,
-                onDestinationSelected: _onDrawerDestinationSelected,
-                backgroundColor: navRailTheme.backgroundColor,
-                selectedIconTheme: navRailTheme.selectedIconTheme,
-                unselectedIconTheme: navRailTheme.unselectedIconTheme,
-                selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
-                unselectedLabelTextStyle: navRailTheme.unselectedLabelTextStyle,
-                groupAlignment: widget.groupAlignment,
-                labelType: navRailTheme.labelType,
-              ),
-            )
-          : null,
-      body: AdaptiveLayout(
-        transitionDuration: widget.transitionDuration,
-        bodyOrientation: widget.bodyOrientation,
-        bodyRatio: widget.bodyRatio,
-        internalAnimations: widget.internalAnimations,
-        duoScreenPolicy: widget.duoScreenPolicy,
-        duoScreenRole: role,
-        // Keep navigation slots mounted so body elements retain their position.
-        primaryNavigation: SlotLayout(
-          config: <Breakpoint, SlotLayoutConfig>{
-            if (widget.navigationVisible) ...<Breakpoint, SlotLayoutConfig>{
-              if (mode == DuoLayoutMode.hinge && !hingeBottomNavigation)
-                Breakpoints.standard: SlotLayout.from(
-                  key: const Key('primaryNavigationHinge'),
-                  builder: (_) => _buildNavigationRail(destinations),
-                ),
-              if (mode !=
-                  DuoLayoutMode.hinge) ...<Breakpoint, SlotLayoutConfig>{
-                widget.mediumBreakpoint: SlotLayout.from(
-                  key: const Key('primaryNavigation'),
-                  builder: (_) => _buildNavigationRail(destinations),
-                ),
-                widget.mediumLargeBreakpoint: SlotLayout.from(
-                  key: const Key('primaryNavigation1'),
-                  builder: (_) =>
-                      _buildNavigationRail(destinations, defaultExtended: true),
-                ),
-                widget.largeBreakpoint: SlotLayout.from(
-                  key: const Key('primaryNavigation2'),
-                  builder: (_) =>
-                      _buildNavigationRail(destinations, defaultExtended: true),
-                ),
-                widget.extraLargeBreakpoint: SlotLayout.from(
-                  key: const Key('primaryNavigation3'),
-                  builder: (_) =>
-                      _buildNavigationRail(destinations, defaultExtended: true),
-                ),
-              },
-            },
-          },
-        ),
-        bottomNavigation: !isDrawerMode
-            ? SlotLayout(
-                config: <Breakpoint, SlotLayoutConfig>{
-                  if (widget.navigationVisible &&
-                      (mode != DuoLayoutMode.hinge || hingeBottomNavigation))
-                    (hingeBottomNavigation
-                        ? Breakpoints.standard
-                        : widget.smallBreakpoint): SlotLayout.from(
-                      key: const Key('bottomNavigation'),
-                      builder: (_) =>
-                          DmAdaptiveScaffold.standardBottomNavigationBar(
-                        currentIndex: widget.selectedIndex,
-                        destinations: widget.destinations,
-                        onDestinationSelected: widget.onSelectedIndexChange,
-                      ),
-                    ),
-                },
+    return DmNavigationVisibilityScope(
+      navigationVisible: widget.navigationVisible,
+      onNavigationVisibleChange:
+          widget.showNavigationToggle ? widget.onNavigationVisibleChange : null,
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: showAppBar
+            ? _AppBarProxy(
+                key: ValueKey(isDrawerMode),
+                child: widget.appBar ?? AppBar(),
               )
             : null,
-        body: SlotLayout(
-          config: <Breakpoint, SlotLayoutConfig?>{
-            Breakpoints.standard: SlotLayout.from(
-              key: const Key('body'),
-              inAnimation: DmAdaptiveScaffold.fadeIn,
-              outAnimation: DmAdaptiveScaffold.fadeOut,
-              builder: widget.body,
-            ),
-            if (widget.smallBody != null)
-              widget.smallBreakpoint:
-                  (widget.smallBody != DmAdaptiveScaffold.emptyBuilder)
-                      ? SlotLayout.from(
-                          key: const Key('smallBody'),
-                          inAnimation: DmAdaptiveScaffold.fadeIn,
-                          outAnimation: DmAdaptiveScaffold.fadeOut,
-                          builder: widget.smallBody,
-                        )
-                      : null,
-            if (widget.body != null)
-              widget.mediumBreakpoint:
-                  (widget.body != DmAdaptiveScaffold.emptyBuilder)
-                      ? SlotLayout.from(
-                          key: const Key('body'),
-                          inAnimation: DmAdaptiveScaffold.fadeIn,
-                          outAnimation: DmAdaptiveScaffold.fadeOut,
-                          builder: widget.body,
-                        )
-                      : null,
-            if (widget.mediumLargeBody != null)
-              widget.mediumLargeBreakpoint:
-                  (widget.mediumLargeBody != DmAdaptiveScaffold.emptyBuilder)
-                      ? SlotLayout.from(
-                          key: const Key('mediumLargeBody'),
-                          inAnimation: DmAdaptiveScaffold.fadeIn,
-                          outAnimation: DmAdaptiveScaffold.fadeOut,
-                          builder: widget.mediumLargeBody,
-                        )
-                      : null,
-            if (widget.largeBody != null)
-              widget.largeBreakpoint:
-                  (widget.largeBody != DmAdaptiveScaffold.emptyBuilder)
-                      ? SlotLayout.from(
-                          key: const Key('largeBody'),
-                          inAnimation: DmAdaptiveScaffold.fadeIn,
-                          outAnimation: DmAdaptiveScaffold.fadeOut,
-                          builder: widget.largeBody,
-                        )
-                      : null,
-            if (widget.extraLargeBody != null)
-              widget.extraLargeBreakpoint:
-                  (widget.extraLargeBody != DmAdaptiveScaffold.emptyBuilder)
-                      ? SlotLayout.from(
-                          key: const Key('extraLargeBody'),
-                          inAnimation: DmAdaptiveScaffold.fadeIn,
-                          outAnimation: DmAdaptiveScaffold.fadeOut,
-                          builder: widget.extraLargeBody,
-                        )
-                      : null,
-          },
-        ),
-        secondaryBody: SlotLayout(
-          config: <Breakpoint, SlotLayoutConfig?>{
-            if (mode == DuoLayoutMode.secondary)
-              Breakpoints.standard: SlotLayout.from(
-                key: const Key('sBodyForcedSecondary'),
-                outAnimation: DmAdaptiveScaffold.stayOnScreen,
-                builder: widget.secondaryBody,
+        drawer: widget.navigationVisible && isDrawerMode
+            ? Drawer(
+                child: NavigationRail(
+                  extended: true,
+                  leading: _navigationLeading(widget.leadingExtendedNavRail,
+                      widget.extendedNavigationRailWidth),
+                  trailing: widget.trailingNavRail,
+                  selectedIndex: widget.selectedIndex,
+                  destinations: destinations,
+                  onDestinationSelected: _onDrawerDestinationSelected,
+                  backgroundColor: navRailTheme.backgroundColor,
+                  selectedIconTheme: navRailTheme.selectedIconTheme,
+                  unselectedIconTheme: navRailTheme.unselectedIconTheme,
+                  selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
+                  unselectedLabelTextStyle:
+                      navRailTheme.unselectedLabelTextStyle,
+                  groupAlignment: widget.groupAlignment,
+                  labelType: navRailTheme.labelType,
+                ),
               )
-            else ...<Breakpoint, SlotLayoutConfig?>{
-              Breakpoints.standard: SlotLayout.from(
-                key: const Key('sBody'),
-                outAnimation: DmAdaptiveScaffold.stayOnScreen,
-                builder: widget.secondaryBody,
+            : null,
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            AdaptiveLayout(
+              transitionDuration: widget.transitionDuration,
+              bodyOrientation: widget.bodyOrientation,
+              bodyRatio: widget.bodyRatio,
+              internalAnimations: widget.internalAnimations,
+              duoScreenPolicy: widget.duoScreenPolicy,
+              duoScreenRole: role,
+              // Keep navigation slots mounted so body elements retain their position.
+              primaryNavigation: SlotLayout(
+                config: <Breakpoint, SlotLayoutConfig>{
+                  if (widget
+                      .navigationVisible) ...<Breakpoint, SlotLayoutConfig>{
+                    if (mode == DuoLayoutMode.hinge && !hingeBottomNavigation)
+                      Breakpoints.standard: SlotLayout.from(
+                        key: const Key('primaryNavigationHinge'),
+                        builder: (_) => _buildNavigationRail(destinations),
+                      ),
+                    if (mode !=
+                        DuoLayoutMode.hinge) ...<Breakpoint, SlotLayoutConfig>{
+                      widget.mediumBreakpoint: SlotLayout.from(
+                        key: const Key('primaryNavigation'),
+                        builder: (_) => _buildNavigationRail(destinations),
+                      ),
+                      widget.mediumLargeBreakpoint: SlotLayout.from(
+                        key: const Key('primaryNavigation1'),
+                        builder: (_) => _buildNavigationRail(destinations,
+                            defaultExtended: true),
+                      ),
+                      widget.largeBreakpoint: SlotLayout.from(
+                        key: const Key('primaryNavigation2'),
+                        builder: (_) => _buildNavigationRail(destinations,
+                            defaultExtended: true),
+                      ),
+                      widget.extraLargeBreakpoint: SlotLayout.from(
+                        key: const Key('primaryNavigation3'),
+                        builder: (_) => _buildNavigationRail(destinations,
+                            defaultExtended: true),
+                      ),
+                    },
+                  },
+                },
               ),
-              if (widget.smallSecondaryBody != null)
-                widget.smallBreakpoint: (widget.smallSecondaryBody !=
-                        DmAdaptiveScaffold.emptyBuilder)
-                    ? SlotLayout.from(
-                        key: const Key('smallSBody'),
-                        outAnimation: DmAdaptiveScaffold.stayOnScreen,
-                        builder: widget.smallSecondaryBody,
-                      )
-                    : null,
-              if (widget.secondaryBody != null)
-                widget.mediumBreakpoint:
-                    (widget.secondaryBody != DmAdaptiveScaffold.emptyBuilder)
-                        ? SlotLayout.from(
-                            key: const Key('sBody'),
-                            outAnimation: DmAdaptiveScaffold.stayOnScreen,
-                            builder: widget.secondaryBody,
-                          )
-                        : null,
-              if (widget.mediumLargeSecondaryBody != null)
-                widget.mediumLargeBreakpoint:
-                    (widget.mediumLargeSecondaryBody !=
+              bottomNavigation: !isDrawerMode
+                  ? SlotLayout(
+                      config: <Breakpoint, SlotLayoutConfig>{
+                        if (widget.navigationVisible &&
+                            (mode != DuoLayoutMode.hinge ||
+                                hingeBottomNavigation))
+                          (hingeBottomNavigation
+                              ? Breakpoints.standard
+                              : widget.smallBreakpoint): SlotLayout.from(
+                            key: const Key('bottomNavigation'),
+                            builder: (_) =>
+                                DmAdaptiveScaffold.standardBottomNavigationBar(
+                              currentIndex: widget.selectedIndex,
+                              destinations: widget.destinations,
+                              onDestinationSelected:
+                                  widget.onSelectedIndexChange,
+                            ),
+                          ),
+                      },
+                    )
+                  : null,
+              body: SlotLayout(
+                config: <Breakpoint, SlotLayoutConfig?>{
+                  Breakpoints.standard: SlotLayout.from(
+                    key: const Key('body'),
+                    inAnimation: DmAdaptiveScaffold.fadeIn,
+                    outAnimation: DmAdaptiveScaffold.fadeOut,
+                    builder: widget.body,
+                  ),
+                  if (widget.smallBody != null)
+                    widget.smallBreakpoint:
+                        (widget.smallBody != DmAdaptiveScaffold.emptyBuilder)
+                            ? SlotLayout.from(
+                                key: const Key('smallBody'),
+                                inAnimation: DmAdaptiveScaffold.fadeIn,
+                                outAnimation: DmAdaptiveScaffold.fadeOut,
+                                builder: widget.smallBody,
+                              )
+                            : null,
+                  if (widget.body != null)
+                    widget.mediumBreakpoint:
+                        (widget.body != DmAdaptiveScaffold.emptyBuilder)
+                            ? SlotLayout.from(
+                                key: const Key('body'),
+                                inAnimation: DmAdaptiveScaffold.fadeIn,
+                                outAnimation: DmAdaptiveScaffold.fadeOut,
+                                builder: widget.body,
+                              )
+                            : null,
+                  if (widget.mediumLargeBody != null)
+                    widget.mediumLargeBreakpoint: (widget.mediumLargeBody !=
                             DmAdaptiveScaffold.emptyBuilder)
                         ? SlotLayout.from(
-                            key: const Key('mediumLargeSBody'),
-                            outAnimation: DmAdaptiveScaffold.stayOnScreen,
-                            builder: widget.mediumLargeSecondaryBody,
+                            key: const Key('mediumLargeBody'),
+                            inAnimation: DmAdaptiveScaffold.fadeIn,
+                            outAnimation: DmAdaptiveScaffold.fadeOut,
+                            builder: widget.mediumLargeBody,
                           )
                         : null,
-              if (widget.largeSecondaryBody != null)
-                widget.largeBreakpoint: (widget.largeSecondaryBody !=
-                        DmAdaptiveScaffold.emptyBuilder)
-                    ? SlotLayout.from(
-                        key: const Key('largeSBody'),
-                        outAnimation: DmAdaptiveScaffold.stayOnScreen,
-                        builder: widget.largeSecondaryBody,
-                      )
-                    : null,
-              if (widget.extraLargeSecondaryBody != null)
-                widget.extraLargeBreakpoint: (widget.extraLargeSecondaryBody !=
-                        DmAdaptiveScaffold.emptyBuilder)
-                    ? SlotLayout.from(
-                        key: const Key('extraLargeSBody'),
-                        outAnimation: DmAdaptiveScaffold.stayOnScreen,
-                        builder: widget.extraLargeSecondaryBody,
-                      )
-                    : null,
-            }
-          },
+                  if (widget.largeBody != null)
+                    widget.largeBreakpoint:
+                        (widget.largeBody != DmAdaptiveScaffold.emptyBuilder)
+                            ? SlotLayout.from(
+                                key: const Key('largeBody'),
+                                inAnimation: DmAdaptiveScaffold.fadeIn,
+                                outAnimation: DmAdaptiveScaffold.fadeOut,
+                                builder: widget.largeBody,
+                              )
+                            : null,
+                  if (widget.extraLargeBody != null)
+                    widget.extraLargeBreakpoint: (widget.extraLargeBody !=
+                            DmAdaptiveScaffold.emptyBuilder)
+                        ? SlotLayout.from(
+                            key: const Key('extraLargeBody'),
+                            inAnimation: DmAdaptiveScaffold.fadeIn,
+                            outAnimation: DmAdaptiveScaffold.fadeOut,
+                            builder: widget.extraLargeBody,
+                          )
+                        : null,
+                },
+              ),
+              secondaryBody: SlotLayout(
+                config: <Breakpoint, SlotLayoutConfig?>{
+                  if (mode == DuoLayoutMode.secondary)
+                    Breakpoints.standard: SlotLayout.from(
+                      key: const Key('sBodyForcedSecondary'),
+                      outAnimation: DmAdaptiveScaffold.stayOnScreen,
+                      builder: widget.secondaryBody,
+                    )
+                  else ...<Breakpoint, SlotLayoutConfig?>{
+                    Breakpoints.standard: SlotLayout.from(
+                      key: const Key('sBody'),
+                      outAnimation: DmAdaptiveScaffold.stayOnScreen,
+                      builder: widget.secondaryBody,
+                    ),
+                    if (widget.smallSecondaryBody != null)
+                      widget.smallBreakpoint: (widget.smallSecondaryBody !=
+                              DmAdaptiveScaffold.emptyBuilder)
+                          ? SlotLayout.from(
+                              key: const Key('smallSBody'),
+                              outAnimation: DmAdaptiveScaffold.stayOnScreen,
+                              builder: widget.smallSecondaryBody,
+                            )
+                          : null,
+                    if (widget.secondaryBody != null)
+                      widget.mediumBreakpoint: (widget.secondaryBody !=
+                              DmAdaptiveScaffold.emptyBuilder)
+                          ? SlotLayout.from(
+                              key: const Key('sBody'),
+                              outAnimation: DmAdaptiveScaffold.stayOnScreen,
+                              builder: widget.secondaryBody,
+                            )
+                          : null,
+                    if (widget.mediumLargeSecondaryBody != null)
+                      widget.mediumLargeBreakpoint:
+                          (widget.mediumLargeSecondaryBody !=
+                                  DmAdaptiveScaffold.emptyBuilder)
+                              ? SlotLayout.from(
+                                  key: const Key('mediumLargeSBody'),
+                                  outAnimation: DmAdaptiveScaffold.stayOnScreen,
+                                  builder: widget.mediumLargeSecondaryBody,
+                                )
+                              : null,
+                    if (widget.largeSecondaryBody != null)
+                      widget.largeBreakpoint: (widget.largeSecondaryBody !=
+                              DmAdaptiveScaffold.emptyBuilder)
+                          ? SlotLayout.from(
+                              key: const Key('largeSBody'),
+                              outAnimation: DmAdaptiveScaffold.stayOnScreen,
+                              builder: widget.largeSecondaryBody,
+                            )
+                          : null,
+                    if (widget.extraLargeSecondaryBody != null)
+                      widget.extraLargeBreakpoint:
+                          (widget.extraLargeSecondaryBody !=
+                                  DmAdaptiveScaffold.emptyBuilder)
+                              ? SlotLayout.from(
+                                  key: const Key('extraLargeSBody'),
+                                  outAnimation: DmAdaptiveScaffold.stayOnScreen,
+                                  builder: widget.extraLargeSecondaryBody,
+                                )
+                              : null,
+                  }
+                },
+              ),
+            ),
+            if (widget.showNavigationToggle &&
+                !widget.navigationVisible &&
+                !widget.navigationRestoreInHeader)
+              const PositionedDirectional(
+                top: 0,
+                start: 0,
+                child: SafeArea(
+                  bottom: false,
+                  child: DmNavigationVisibilityButton(),
+                ),
+              ),
+          ],
         ),
       ),
     );

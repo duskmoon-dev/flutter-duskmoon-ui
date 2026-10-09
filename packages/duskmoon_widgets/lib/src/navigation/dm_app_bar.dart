@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:duskmoon_theme/duskmoon_theme.dart';
+import 'package:duskmoon_adaptive_scaffold/duskmoon_adaptive_scaffold.dart';
 import '../adaptive/fluent_theme_bridge.dart';
 
 /// An adaptive app bar that renders Material [AppBar] or Cupertino navigation bar.
@@ -14,6 +15,8 @@ class DmAppBar extends StatelessWidget
     super.key,
     this.title,
     this.leading,
+    this.leadingWidth,
+    this.restoreNavigation = false,
     this.actions,
     this.automaticallyImplyLeading = true,
     this.backgroundColor,
@@ -26,6 +29,13 @@ class DmAppBar extends StatelessWidget
 
   /// Widget placed before the [title], typically a back button.
   final Widget? leading;
+
+  /// Width reserved for the existing leading control (Material defaults to 56).
+  final double? leadingWidth;
+
+  /// Composes a hidden-sidebar restore control beside the existing leading.
+  /// Uses the nearest DmNavigationVisibilityScope, including nested headers.
+  final bool restoreNavigation;
 
   /// Trailing action widgets shown after the [title].
   final List<Widget>? actions;
@@ -91,14 +101,37 @@ class DmAppBar extends StatelessWidget
   Widget build(BuildContext context) {
     final style = resolveStyle(context);
     final effectiveLeading = _resolveLeading(context, style);
+    if (restoreNavigation) {
+      return DmNavigationHeader(
+        leading: effectiveLeading,
+        leadingWidth: leadingWidth,
+        automaticallyImplyLeading: false,
+        builder: (context, data) => _buildBar(
+          context,
+          style,
+          data.leading,
+          data.leadingWidth,
+          data.leading == null && automaticallyImplyLeading,
+        ),
+      );
+    }
+    return _buildBar(context, style, effectiveLeading, leadingWidth,
+        effectiveLeading == null && automaticallyImplyLeading);
+  }
 
+  Widget _buildBar(
+      BuildContext context,
+      DmPlatformStyle style,
+      Widget? effectiveLeading,
+      double? effectiveLeadingWidth,
+      bool implyLeading) {
     return switch (style) {
       DmPlatformStyle.material => AppBar(
           title: title,
           leading: effectiveLeading,
+          leadingWidth: effectiveLeadingWidth,
           actions: actions,
-          automaticallyImplyLeading:
-              effectiveLeading == null && automaticallyImplyLeading,
+          automaticallyImplyLeading: implyLeading,
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
           iconTheme: foregroundColor != null
@@ -115,7 +148,9 @@ class DmAppBar extends StatelessWidget
                   ),
                 )
               : title,
-          leading: effectiveLeading,
+          leading: effectiveLeadingWidth != null && effectiveLeading != null
+              ? SizedBox(width: effectiveLeadingWidth, child: effectiveLeading)
+              : effectiveLeading,
           trailing: actions != null && actions!.isNotEmpty
               ? IconTheme(
                   data: IconThemeData(
@@ -125,15 +160,16 @@ class DmAppBar extends StatelessWidget
                       Row(mainAxisSize: MainAxisSize.min, children: actions!),
                 )
               : null,
-          automaticallyImplyLeading:
-              effectiveLeading == null && automaticallyImplyLeading,
+          automaticallyImplyLeading: implyLeading,
           backgroundColor: backgroundColor,
         ),
-      DmPlatformStyle.fluent => _buildFluent(context, effectiveLeading),
+      DmPlatformStyle.fluent =>
+        _buildFluent(context, effectiveLeading, effectiveLeadingWidth),
     };
   }
 
-  Widget _buildFluent(BuildContext context, Widget? effectiveLeading) {
+  Widget _buildFluent(BuildContext context, Widget? effectiveLeading,
+      double? effectiveLeadingWidth) {
     return wrapWithFluentTheme(
       context,
       Builder(builder: (context) {
@@ -151,7 +187,11 @@ class DmAppBar extends StatelessWidget
               if (effectiveLeading != null)
                 IconTheme(
                     data: IconThemeData(color: fgColor),
-                    child: effectiveLeading)
+                    child: effectiveLeadingWidth != null
+                        ? SizedBox(
+                            width: effectiveLeadingWidth,
+                            child: effectiveLeading)
+                        : effectiveLeading)
               else if (automaticallyImplyLeading &&
                   Navigator.of(context).canPop())
                 fluent.IconButton(
