@@ -1,591 +1,355 @@
-import 'dart:convert';
-import 'dart:isolate';
-import 'dart:ui';
+import 'package:duskmoon_ui/duskmoon_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:presentation_displays/displays_manager.dart';
-import 'package:presentation_displays/display.dart';
-import 'package:duskmoon_ui/duskmoon_ui.dart' hide DmCodeEditor;
-import 'package:duskmoon_code_engine/duskmoon_code_engine.dart';
 
-// --- Shared Communication Bridge ---
-const String channelId = 'dev.duskmoon.duo_screen/bridge';
+import 'duo_display_controller.dart';
 
-void main() {
-  runApp(const DuoScreenApp(displayId: 0));
-}
+void main() => runApp(const DuoScreenApp());
 
 @pragma('vm:entry-point')
-void secondaryDisplayMain() {
-  runApp(const DuoScreenApp(displayId: 1));
-}
-
-// --- Data Model for Synchronization ---
-class AppState {
-  final int selectedIndex;
-  final String message;
-  final bool isViewerOnly;
-  final List<double> chartData;
-  final String editorLanguage;
-
-  AppState({
-    required this.selectedIndex,
-    required this.message,
-    required this.isViewerOnly,
-    required this.chartData,
-    required this.editorLanguage,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'selectedIndex': selectedIndex,
-        'message': message,
-        'isViewerOnly': isViewerOnly,
-        'chartData': chartData,
-        'editorLanguage': editorLanguage,
-      };
-
-  factory AppState.fromJson(Map<String, dynamic> json) => AppState(
-        selectedIndex: json['selectedIndex'] as int,
-        message: json['message'] as String,
-        isViewerOnly: json['isViewerOnly'] as bool,
-        chartData: (json['chartData'] as List<dynamic>)
-            .map((e) => e as double)
-            .toList(),
-        editorLanguage: json['editorLanguage'] as String,
-      );
-}
+void secondaryDisplayMain() => runApp(const DuoScreenApp(secondary: true));
 
 class DuoScreenApp extends StatelessWidget {
-  final int displayId;
-  const DuoScreenApp({super.key, required this.displayId});
+  const DuoScreenApp({super.key, this.secondary = false, this.controller});
+
+  final bool secondary;
+  final DuoDisplayController? controller;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'DuskMoon Duo',
-      theme: DmThemeData.sunshine(),
-      darkTheme: DmThemeData.moonlight(),
-      home: SharedDuoScaffold(displayId: displayId),
+    final page =
+        SharedDuoScaffold(secondary: secondary, controller: controller);
+    return DuskmoonApp(
+      platformStyle: DmPlatformStyle.material,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'DuskMoon Duo',
+        theme: DmThemeData.sunshine(),
+        darkTheme: DmThemeData.moonlight(),
+        themeMode: ThemeMode.system,
+        home: page,
+        // Android sets routerName as both the cache key and initial route.
+        // Declare it explicitly instead of relying on unknown-route fallback.
+        routes: {secondaryRoute: (_) => page},
+      ),
     );
   }
 }
 
 class SharedDuoScaffold extends StatefulWidget {
-  final int displayId;
-  const SharedDuoScaffold({super.key, required this.displayId});
+  const SharedDuoScaffold({
+    super.key,
+    this.secondary = false,
+    this.controller,
+  });
+
+  final bool secondary;
+  final DuoDisplayController? controller;
 
   @override
   State<SharedDuoScaffold> createState() => _SharedDuoScaffoldState();
 }
 
 class _SharedDuoScaffoldState extends State<SharedDuoScaffold> {
-  final _displayManager = DisplayManager();
-  List<Display> _displays = [];
-
-  // Isolate Communication
-  final ReceivePort _receivePort = ReceivePort();
-  SendPort? _otherPort;
-
-  // Shared State
-  int _selectedIndex = 0;
-  String _message = "Welcome to DuskMoon Duo!";
-  bool _isViewerOnly = false;
-  List<double> _chartData = [10.0, 25.0, 18.0, 40.0, 32.0];
-  String _editorLanguage = 'Dart';
-  final TextEditingController _textController = TextEditingController(
-    text: 'Welcome to DuskMoon Duo!',
-  );
+  late final DuoDisplayController _controller;
+  final _message = TextEditingController();
+  final _project = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _setupBridge();
-    if (widget.displayId == 0) {
-      _checkDisplays();
+    _controller = widget.controller ??
+        DuoDisplayController(
+          secondary: widget.secondary,
+          platform: defaultDisplayPlatform(),
+          bridge: defaultBridge(secondary: widget.secondary),
+        );
+    _controller.addListener(_changed);
+    if (!widget.secondary) _controller.onToast = _showToast;
+    _syncText();
+    _controller.start();
+  }
+
+  void _showToast() {
+    if (!mounted) return;
+    showDmSuccessToast(
+      context: context,
+      message: 'Action completed!',
+      title: 'Viewer Input',
+    );
+  }
+
+  void _syncText() {
+    if (_message.text != _controller.state.message) {
+      _message.value = TextEditingValue(
+        text: _controller.state.message,
+        selection: TextSelection.collapsed(
+          offset: _controller.state.message.length,
+        ),
+      );
     }
+    if (_project.text != _controller.state.projectName) {
+      _project.value = TextEditingValue(
+        text: _controller.state.projectName,
+        selection: TextSelection.collapsed(
+          offset: _controller.state.projectName.length,
+        ),
+      );
+    }
+  }
+
+  void _changed() {
+    if (!mounted) return;
+    setState(_syncText);
   }
 
   @override
   void dispose() {
-    _receivePort.close();
-    _textController.dispose();
+    _controller.removeListener(_changed);
+    if (!widget.secondary) _controller.onToast = null;
+    if (widget.controller == null) _controller.dispose();
+    _message.dispose();
+    _project.dispose();
     super.dispose();
   }
 
-  void _setupBridge() {
-    if (widget.displayId == 0) {
-      IsolateNameServer.removePortNameMapping('primary_display_port');
-      IsolateNameServer.registerPortWithName(
-        _receivePort.sendPort,
-        'primary_display_port',
-      );
-
-      _receivePort.listen((message) {
-        if (message is SendPort) {
-          _otherPort = message;
-          _syncToOther();
-        } else if (message is String) {
-          _applySync(message);
-        }
-      });
-
-      _displayManager.connectedDisplaysChangedStream?.listen((event) {
-        _checkDisplays();
-      });
-    } else {
-      _otherPort = IsolateNameServer.lookupPortByName('primary_display_port');
-      _otherPort?.send(_receivePort.sendPort);
-
-      _receivePort.listen((message) {
-        if (message is String) {
-          _applySync(message);
-        }
-      });
-    }
-  }
-
-  void _applySync(String message) {
-    final json = jsonDecode(message);
-    final newState = AppState.fromJson(json);
-    setState(() {
-      _selectedIndex = newState.selectedIndex;
-      _message = newState.message;
-      _isViewerOnly = newState.isViewerOnly;
-      _chartData = newState.chartData;
-      _editorLanguage = newState.editorLanguage;
-      if (_textController.text != newState.message) {
-        _textController.text = newState.message;
-      }
-    });
-  }
-
-  Future<void> _checkDisplays() async {
-    final displays = await _displayManager.getDisplays();
-    setState(() {
-      _displays = displays ?? [];
-    });
-
-    if (_displays.length > 1) {
-      final secondary = _displays.where((d) => d.displayId != 0).toList();
-      if (secondary.isNotEmpty) {
-        secondary.sort((a, b) => b.displayId!.compareTo(a.displayId!));
-        await _displayManager.showSecondaryDisplay(
-          displayId: secondary.first.displayId!,
-          routerName: "secondaryDisplayMain",
-        );
-      }
-    }
-  }
-
-  void _updateAndSync(
-    int index, {
-    String? message,
-    bool? isViewerOnly,
-    List<double>? chartData,
-    String? editorLanguage,
-  }) {
-    setState(() {
-      _selectedIndex = index;
-      if (message != null) _message = message;
-      if (isViewerOnly != null) _isViewerOnly = isViewerOnly;
-      if (chartData != null) _chartData = chartData;
-      if (editorLanguage != null) _editorLanguage = editorLanguage;
-    });
-    _syncToOther();
-  }
-
-  void _syncToOther() {
-    final state = AppState(
-      selectedIndex: _selectedIndex,
-      message: _message,
-      isViewerOnly: _isViewerOnly,
-      chartData: _chartData,
-      editorLanguage: _editorLanguage,
-    );
-    if (widget.displayId == 1) {
-      _otherPort ??= IsolateNameServer.lookupPortByName('primary_display_port');
-    }
-    _otherPort?.send(jsonEncode(state.toJson()));
-  }
-
   @override
   Widget build(BuildContext context) {
-    final bool isDuoModeActive = _displays.length > 1 || widget.displayId > 0;
-
+    final state = _controller.state;
+    final role = widget.secondary
+        ? DuoScreenRole.secondary
+        : _controller.connected
+            ? DuoScreenRole.primary
+            : DuoScreenRole.single;
     return DmAdaptiveScaffold(
-      displayId: widget.displayId,
-      duoScreenPolicy: isDuoModeActive
-          ? DuoScreenPolicy.navigationOnSecondary
-          : DuoScreenPolicy.splitBody,
+      duoScreenRole: role,
+      duoScreenPolicy: DuoScreenPolicy.navigationOnSecondary,
       useDrawer: false,
-      appBar: widget.displayId == 0
-          ? DmAppBar(
-              title: Text(_isViewerOnly ? 'Viewer Console' : 'DuskMoon Viewer'),
-            )
-          : DmAppBar(
-              title: const Text('Controller Panel'),
-              automaticallyImplyLeading: false,
-              backgroundColor: Theme.of(
-                context,
-              ).colorScheme.surfaceContainerHighest,
-            ),
-      body: (_) => _isViewerOnly
-          ? _buildViewerMode(context)
-          : _buildMainContent(context),
-      secondaryBody: (_) => _buildControllerContent(context),
-      destinations: const [
-        NavigationDestination(icon: Icon(Icons.palette), label: 'Widgets'),
-        NavigationDestination(icon: Icon(Icons.edit_note), label: 'Forms'),
-        NavigationDestination(icon: Icon(Icons.insights), label: 'Charts'),
-        NavigationDestination(icon: Icon(Icons.code), label: 'Editor'),
+      appBarBreakpoint: Breakpoints.standard,
+      appBar: DmAppBar(
+        title: Text(widget.secondary
+            ? 'Controller Panel'
+            : _controller.connected
+                ? 'DuskMoon Viewer'
+                : 'DuskMoon Duo'),
+        automaticallyImplyLeading: false,
+      ),
+      body: (_) => _buildViewer(context),
+      secondaryBody: widget.secondary || DuoScreen.hingeOf(context) != null
+          ? (_) => _buildControls(context)
+          : null,
+      destinations: [
+        for (var index = 0; index < navigationLabels.length; index++)
+          NavigationDestination(
+            icon: Icon(const [
+              Icons.palette,
+              Icons.edit_note,
+              Icons.insights,
+              Icons.code,
+            ][index]),
+            label: navigationLabels[index],
+          ),
       ],
-      selectedIndex: _selectedIndex,
-      onSelectedIndexChange: (index) => _updateAndSync(index),
+      selectedIndex: state.selectedIndex,
+      onSelectedIndexChange: (index) => _controller.intent('select', index),
     );
   }
 
-  Widget _buildViewerMode(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.dashboard_customize, size: 80, color: Colors.blue),
-          const SizedBox(height: 24),
-          Text(
-            'System Dashboard',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Navigation: ${[
-              'Widgets',
-              'Forms',
-              'Charts',
-              'Editor'
-            ][_selectedIndex]}',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 32),
-          DmCard(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Text(
-                _message,
-                style: Theme.of(context).textTheme.bodyLarge,
+  Widget _buildViewer(BuildContext context) {
+    final state = _controller.state;
+    Widget content;
+    if (state.isViewerOnly) {
+      content = Column(children: [
+        Icon(Icons.dashboard_customize,
+            size: 80, color: Theme.of(context).colorScheme.primary),
+        const SizedBox(height: 24),
+        Text('System Dashboard',
+            style: Theme.of(context).textTheme.headlineMedium),
+        Text('Navigation: ${navigationLabels[state.selectedIndex]}'),
+        const SizedBox(height: 24),
+        Text(state.message),
+      ]);
+    } else {
+      content = switch (state.selectedIndex) {
+        0 => Column(children: [
+            Text(state.message,
+                style: Theme.of(context).textTheme.headlineMedium,
+                textAlign: TextAlign.center),
+            const SizedBox(height: 32),
+            Wrap(spacing: 16, runSpacing: 16, children: [
+              const DmBadge(label: 'Duo', child: Icon(Icons.devices, size: 40)),
+              DmButton(onPressed: _showToast, child: const Text('Fire Toast')),
+              DmButton(
+                  variant: DmButtonVariant.tonal,
+                  onPressed: () {},
+                  child: const Text('Tonal')),
+              DmButton(
+                  variant: DmButtonVariant.outlined,
+                  onPressed: () {},
+                  child: const Text('Outline')),
+            ]),
+            const SizedBox(height: 24),
+            _messageControls(),
+          ]),
+        1 => Column(children: [
+            Text('DuskMoon Form',
+                style: Theme.of(context).textTheme.headlineSmall),
+            const SizedBox(height: 24),
+            Text(
+              'Preview: ${state.liveFormPreview ? state.projectName : state.savedProjectName}',
+              key: const ValueKey('form-preview'),
+            ),
+            const SizedBox(height: 16),
+            _formControls(),
+          ]),
+        2 => Column(children: [
+            Text('Visualization',
+                style: Theme.of(context).textTheme.headlineSmall),
+            const SizedBox(height: 24),
+            SizedBox(
+              height: 250,
+              child: DmVizLineChart(
+                data: state.chartData
+                    .asMap()
+                    .entries
+                    .map((e) => DmVizPoint(x: e.key, y: e.value))
+                    .toList(),
+                xAxisLabel: 'Time',
+                yAxisLabel: 'Value',
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMainContent(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IndexedStack(
-            index: _selectedIndex,
-            alignment: Alignment.topCenter,
-            children: [
-              _WidgetsShowcase(message: _message),
-              const _FormsShowcase(),
-              _ChartsShowcase(data: _chartData),
-              _EditorShowcase(language: _editorLanguage),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildControllerContent(BuildContext context) {
+            _chartControls(),
+          ]),
+        _ => Column(children: [
+            Text('Distributed Editor',
+                style: Theme.of(context).textTheme.headlineSmall),
+            const SizedBox(height: 16),
+            _languageControls(),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 400,
+              child: DmCodeEditor(
+                // Each language has its own sample document, so replacing the
+                // language intentionally resets this read-only sample editor.
+                key: ValueKey(state.editorLanguage),
+                language: state.editorLanguage.toLowerCase(),
+                initialDoc: editorSamples[state.editorLanguage],
+                readOnly: true,
+              ),
+            ),
+          ]),
+      };
+    }
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  'Category: ${[
-                    'Widgets',
-                    'Forms',
-                    'Charts',
-                    'Editor'
-                  ][_selectedIndex]}',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-              ),
-              Switch(
-                value: _isViewerOnly,
-                onChanged: (val) =>
-                    _updateAndSync(_selectedIndex, isViewerOnly: val),
-              ),
-            ],
-          ),
-          const Divider(height: 48),
-          IndexedStack(
-            index: _selectedIndex,
-            children: [
-              // Widgets Controller
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Update Viewer Text:',
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: _textController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Type something...',
-                    ),
-                    onChanged: (val) =>
-                        _updateAndSync(_selectedIndex, message: val),
-                  ),
-                  const SizedBox(height: 32),
-                  Wrap(
-                    spacing: 8,
-                    children: [
-                      DmButton(
-                        onPressed: () => showDmSuccessToast(
-                          context: context,
-                          message: 'Action completed!',
-                          title: 'Controller Input',
-                        ),
-                        child: const Text('Fire Toast'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              // Forms Controller
-              const Column(
-                children: [
-                  DmCard(
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        'DuskMoon Form components are now active on the primary display.',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              // Charts Controller
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Visual Config:',
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: 16),
-                  DmCard(
-                    child: ListTile(
-                      leading: const Icon(Icons.refresh),
-                      title: const Text('Randomize Data'),
-                      onTap: () {
-                        final data = List.generate(
-                          5,
-                          (index) => (index * 10.0 +
-                              (DateTime.now().millisecond % 20)),
-                        );
-                        _updateAndSync(_selectedIndex, chartData: data);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              // Editor Controller
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Language Selection:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 12),
-                  Wrap(
-                    spacing: 8,
-                    children: [
-                      ActionChip(
-                        label: const Text('Dart'),
-                        backgroundColor: _editorLanguage == 'Dart'
-                            ? Colors.blue.withValues(alpha: 0.2)
-                            : null,
-                        onPressed: () => _updateAndSync(
-                          _selectedIndex,
-                          editorLanguage: 'Dart',
-                        ),
-                      ),
-                      ActionChip(
-                        label: const Text('Flutter'),
-                        backgroundColor: _editorLanguage == 'Flutter'
-                            ? Colors.blue.withValues(alpha: 0.2)
-                            : null,
-                        onPressed: () => _updateAndSync(
-                          _selectedIndex,
-                          editorLanguage: 'Flutter',
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
+      child: Column(children: [
+        if (_controller.status != null) ...[
+          Text(_controller.status!),
+          const SizedBox(height: 16),
         ],
-      ),
+        content,
+      ]),
     );
   }
-}
 
-class _WidgetsShowcase extends StatelessWidget {
-  final String message;
-  const _WidgetsShowcase({required this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          message,
-          style: Theme.of(context).textTheme.headlineMedium,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 48),
-        Wrap(
-          spacing: 16,
-          runSpacing: 16,
+  Widget _buildControls(BuildContext context) => SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const DmBadge(label: 'Duo', child: Icon(Icons.devices, size: 40)),
-            DmButton(onPressed: () {}, child: const Text('Primary')),
-            DmButton(
-              variant: DmButtonVariant.tonal,
-              onPressed: () {},
-              child: const Text('Tonal'),
-            ),
-            DmButton(
-              variant: DmButtonVariant.outlined,
-              onPressed: () {},
-              child: const Text('Outline'),
+            Text(
+                'Category: ${navigationLabels[_controller.state.selectedIndex]}',
+                style: Theme.of(context).textTheme.headlineSmall),
+            if (widget.secondary && !_controller.connected) ...[
+              const SizedBox(height: 16),
+              const Text('Waiting for viewer connection…'),
+            ],
+            const SizedBox(height: 16),
+            Row(children: [
+              const Expanded(child: Text('Dashboard view')),
+              DmSwitch(
+                value: _controller.state.isViewerOnly,
+                onChanged: (value) => _controller.intent('viewerOnly', value),
+              ),
+            ]),
+            const DmDivider(),
+            IgnorePointer(
+              ignoring: widget.secondary && !_controller.connected,
+              child: switch (_controller.state.selectedIndex) {
+                0 => _messageControls(includeToast: true),
+                1 => _formControls(),
+                2 => _chartControls(),
+                _ => _languageControls(),
+              },
             ),
           ],
         ),
-      ],
-    );
-  }
-}
+      );
 
-class _FormsShowcase extends StatefulWidget {
-  const _FormsShowcase();
+  Widget _messageControls({bool includeToast = false}) => Column(children: [
+        DmTextField(
+          controller: _message,
+          placeholder: 'Viewer message',
+          onChanged: (value) => _controller.intent('message', value),
+        ),
+        if (includeToast) ...[
+          const SizedBox(height: 16),
+          DmButton(
+            onPressed: () => _controller.intent('toast'),
+            child: const Text('Fire Toast'),
+          ),
+        ],
+      ]);
 
-  @override
-  State<_FormsShowcase> createState() => _FormsShowcaseState();
-}
-
-class _FormsShowcaseState extends State<_FormsShowcase> {
-  bool _syncEnabled = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('DuskMoon Form', style: Theme.of(context).textTheme.headlineSmall),
-        const SizedBox(height: 24),
-        DmCard(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              children: [
-                const DmTextField(placeholder: 'Project Name'),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    const Expanded(child: Text('Enable Synchronization')),
-                    DmSwitch(
-                      value: _syncEnabled,
-                      onChanged: (value) {
-                        setState(() {
-                          _syncEnabled = value;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                DmButton(
-                  onPressed: () {},
-                  child: const Text('Save Configuration'),
-                ),
-              ],
+  Widget _formControls() => DmCard(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(children: [
+            DmTextField(
+              controller: _project,
+              placeholder: 'Project Name',
+              onChanged: (value) => _controller.intent('projectName', value),
             ),
-          ),
+            const SizedBox(height: 16),
+            Row(children: [
+              const Expanded(child: Text('Live form preview')),
+              DmSwitch(
+                value: _controller.state.liveFormPreview,
+                onChanged: (value) =>
+                    _controller.intent('liveFormPreview', value),
+              ),
+            ]),
+            const SizedBox(height: 16),
+            Text('Saved project: ${_controller.state.savedProjectName}'),
+            DmButton(
+              onPressed: () => _controller.intent('saveProject'),
+              child: const Text('Save Configuration'),
+            ),
+          ]),
         ),
-      ],
-    );
-  }
+      );
+
+  Widget _chartControls() => DmButton(
+        onPressed: () => _controller.intent('randomize'),
+        child: const Text('Randomize Data'),
+      );
+
+  Widget _languageControls() => Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (final language in editorLanguages)
+            DmChip(
+              label: Text(language),
+              selected: _controller.state.editorLanguage == language,
+              onSelected: (_) => _controller.intent('language', language),
+            ),
+        ],
+      );
 }
 
-class _ChartsShowcase extends StatelessWidget {
-  final List<double> data;
-  const _ChartsShowcase({required this.data});
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('Visualization', style: Theme.of(context).textTheme.headlineSmall),
-        const SizedBox(height: 24),
-        SizedBox(
-          height: 250,
-          child: DmVizLineChart(
-            data: data
-                .asMap()
-                .entries
-                .map((e) => DmVizPoint(x: e.key, y: e.value))
-                .toList(),
-            xAxisLabel: 'Time',
-            yAxisLabel: 'Value',
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _EditorShowcase extends StatelessWidget {
-  final String language;
-  const _EditorShowcase({required this.language});
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Text(
-          'Distributed Editor',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 24),
-        SizedBox(
-          height: 400,
-          child: DmCodeEditor(
-            initialDoc: """void main() {
-  print("Hello from DuskMoon Duo!");
-  // Running with $language language syntax.
-  // The secondary screen acts as your
-  // command center while this display
-  // renders the code and execution.
-}""",
-          ),
-        ),
-      ],
-    );
-  }
-}
+const editorSamples = {
+  'Dart': 'void main() {\n  print("Hello from DuskMoon Duo!");\n}',
+  'Python': 'def main():\n    print("Hello from DuskMoon Duo!")\n\nmain()',
+  'JavaScript':
+      'function main() {\n  console.log("Hello from DuskMoon Duo!");\n}\nmain();',
+};
