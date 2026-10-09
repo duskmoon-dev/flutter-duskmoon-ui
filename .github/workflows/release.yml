@@ -72,9 +72,14 @@ jobs:
           DATE=$(date +%Y-%m-%d)
 
           for changelog in packages/*/CHANGELOG.md; do
-            ENTRY="## $VERSION\n\n- Release $VERSION ($DATE)\n"
-            # Prepend the new entry to the existing changelog
-            printf "%b\n" "$ENTRY" | cat - "$changelog" > tmp && mv tmp "$changelog"
+            if [ "$(head -n 1 "$changelog")" = "## Unreleased" ]; then
+              # Promote the pending release notes without changing their content.
+              { printf '## %s\n' "$VERSION"; tail -n +2 "$changelog"; } > tmp && mv tmp "$changelog"
+            else
+              ENTRY="## $VERSION\n\n- Release $VERSION ($DATE)\n"
+              # Prepend the new entry to the existing changelog
+              printf "%b\n" "$ENTRY" | cat - "$changelog" > tmp && mv tmp "$changelog"
+            fi
             echo "Updated $changelog"
           done
 
