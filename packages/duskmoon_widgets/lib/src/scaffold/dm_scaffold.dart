@@ -69,6 +69,12 @@ class DmScaffold extends StatelessWidget {
   /// Axis along which body and secondary body are laid out.
   final Axis bodyOrientation;
 
+  /// How slots are distributed across a foldable or companion display.
+  final DuoScreenPolicy duoScreenPolicy;
+
+  /// View role after a companion display has connected successfully.
+  final DuoScreenRole duoScreenRole;
+
   /// Whether a drawer is used instead of a bottom navigation bar.
   final bool useDrawer;
 
@@ -141,6 +147,8 @@ class DmScaffold extends StatelessWidget {
     this.internalAnimations = true,
     this.transitionDuration = const Duration(milliseconds: 0),
     this.bodyOrientation = Axis.horizontal,
+    this.duoScreenPolicy = DuoScreenPolicy.splitBody,
+    this.duoScreenRole = DuoScreenRole.single,
     this.onSelectedIndexChange,
     this.useDrawer = false,
     this.appBar,
@@ -186,6 +194,8 @@ class DmScaffold extends StatelessWidget {
       internalAnimations: internalAnimations,
       transitionDuration: transitionDuration,
       bodyOrientation: bodyOrientation,
+      duoScreenPolicy: duoScreenPolicy,
+      duoScreenRole: duoScreenRole,
       onSelectedIndexChange: onSelectedIndexChange,
       useDrawer: useDrawer,
       appBar: appBar,

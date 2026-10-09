@@ -15,6 +15,7 @@ This package is a fork of `flutter_adaptive_scaffold`, versioned in sync with ot
 - [Animations](#animations)
 - [Collapsible Navigation Rail](#collapsible-navigation-rail)
 - [Hiding Navigation](#hiding-navigation)
+- [Dual Screens and Foldables](#dual-screens-and-foldables)
 - [Custom Breakpoints](#custom-breakpoints)
 
 ## Installation
@@ -550,6 +551,76 @@ hiding navigation. The demo places the hide button inside its sidebar header
 and the show button at its body's top left after hiding. Its footer button
 collapses labels independently. These controls affect only the demo component;
 the surrounding showcase navigation remains available when the demo closes.
+
+## Dual Screens and Foldables
+
+`DmAdaptiveScaffold`, `DmScaffold`, and `AdaptiveLayout` accept
+`duoScreenPolicy` and `duoScreenRole`. The layout package describes screen
+roles; native display IDs belong in the application's display integration.
+
+| Policy | Behavior |
+|---|---|
+| `DuoScreenPolicy.splitBody` | Regular adaptive navigation; body and secondary body occupy separate regions when a separating hinge is present. |
+| `DuoScreenPolicy.navigationOnSecondary` | The primary region displays the body; the secondary region displays navigation and the secondary body. Without a hinge or an explicitly connected companion, regular adaptive navigation remains available. |
+
+| Role | Use |
+|---|---|
+| `DuoScreenRole.single` | Default. One Flutter view, with an optional fold or hinge reported by `MediaQuery`. |
+| `DuoScreenRole.primary` | Primary view of a connected multi-display application. Set this only after the companion has acknowledged its connection. |
+| `DuoScreenRole.secondary` | Companion view displaying navigation and the secondary body. |
+
+Explicit roles take effect with `navigationOnSecondary`. A foldable using one
+Flutter engine should keep the default `single` role:
+
+```dart
+DmAdaptiveScaffold(
+  destinations: destinations,
+  selectedIndex: selectedIndex,
+  onSelectedIndexChange: onSelectedIndexChange,
+  duoScreenPolicy: DuoScreenPolicy.navigationOnSecondary,
+  body: (_) => const Viewer(),
+  secondaryBody: (_) => const Controls(),
+)
+```
+
+For two Flutter engines, the application owns discovery, connection, and
+disconnect handling. Restore the primary role to `single` when the companion
+is unavailable:
+
+```dart
+DmAdaptiveScaffold(
+  destinations: destinations,
+  selectedIndex: selectedIndex,
+  onSelectedIndexChange: onSelectedIndexChange,
+  duoScreenPolicy: DuoScreenPolicy.navigationOnSecondary,
+  duoScreenRole: companionConnected
+      ? DuoScreenRole.primary
+      : DuoScreenRole.single,
+  body: (_) => const Viewer(),
+  secondaryBody: (_) => const Controls(),
+)
+```
+
+The companion uses `DuoScreenRole.secondary` with the same policy. Slots that
+belong exclusively to the other display are not mounted, so their builders,
+focus nodes, and accessibility nodes are absent. Keep shared application state
+outside these slots if it must survive connection changes.
+
+Separating hinges, half-opened folds, and folds with an occluding area split
+the layout. A flat, zero-width fold does not. Hinge coordinates are converted
+from the Flutter view to the layout's local coordinates, including AppBar and
+padding offsets. Left/right regions follow the text direction; top/bottom
+regions retain their physical order. Physical screen boundaries take priority
+over size animations.
+
+The deprecated `displayId` argument remains compatible: values greater than
+zero select the secondary role. New code should use `duoScreenRole` and keep
+the actual native display ID in its display controller.
+
+See [`example/duo_screen`](../example/duo_screen/README.md) for the Android
+presentation-display integration, handshake and reconnect protocol, fake-based
+tests, and instructions for simulated secondary displays. Other platforms run
+the example as a single-screen app without native presentation calls.
 
 ## Custom Breakpoints
 

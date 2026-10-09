@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'adaptive_layout.dart';
 import 'breakpoints.dart';
+import 'duo_screen.dart';
 import 'slot_layout.dart';
 
 /// Spacing value of the compact breakpoint according to
@@ -89,13 +90,23 @@ class DmAdaptiveScaffold extends StatefulWidget {
     this.collapseIcon = Icons.chevron_left,
     this.expandIcon = Icons.chevron_right,
     this.duoScreenPolicy = DuoScreenPolicy.splitBody,
+    this.duoScreenRole = DuoScreenRole.single,
+    @Deprecated('Use duoScreenRole instead. Values greater than 0 map to '
+        'DuoScreenRole.secondary. Will be removed in 2.0.0.')
     this.displayId = 0,
   }) : assert(
           destinations.length >= 2,
           'At least two destinations are required',
         );
 
+  /// Legacy role selector: positive IDs map to [DuoScreenRole.secondary].
+  /// Prefer role selection after a companion display has successfully connected.
+  @Deprecated('Use duoScreenRole instead. Will be removed in 2.0.0.')
   final int displayId;
+
+  /// The role of this view; primary requires an active companion view.
+  /// Only used with [DuoScreenPolicy.navigationOnSecondary].
+  final DuoScreenRole duoScreenRole;
   final List<NavigationDestination> destinations;
   final int? selectedIndex;
   final Widget? leadingUnextendedNavRail;
@@ -142,6 +153,9 @@ class DmAdaptiveScaffold extends StatefulWidget {
   final bool showCollapseToggle;
   final IconData collapseIcon;
   final IconData expandIcon;
+
+  /// Distribution of body, secondary body and navigation across screens.
+  /// Navigation remains local when no separating feature or companion exists.
   final DuoScreenPolicy duoScreenPolicy;
 
   static WidgetBuilder emptyBuilder = (_) => const SizedBox();
@@ -444,8 +458,23 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
             DmAdaptiveScaffold.toRailDestination(d))
         .toList();
 
-    final bool isDrawerMode =
-        widget.drawerBreakpoint.isActive(context) && widget.useDrawer;
+    // Android display identifiers belong at the integration boundary.
+    // ignore: deprecated_member_use_from_same_package
+    final role = resolveDuoScreenRole(widget.duoScreenRole, widget.displayId);
+    final hinge = DuoScreen.hingeOf(context);
+    final mode = resolveDuoLayoutMode(
+        policy: widget.duoScreenPolicy, role: role, hasHinge: hinge != null);
+    final viewWidth = MediaQuery.sizeOf(context).width;
+    final secondaryWidth = hinge == null || hinge.width > hinge.height
+        ? viewWidth
+        : Directionality.of(context) == TextDirection.ltr
+            ? viewWidth - hinge.right
+            : hinge.left;
+    final hingeBottomNavigation =
+        mode == DuoLayoutMode.hinge && secondaryWidth < 600;
+    final bool isDrawerMode = mode == DuoLayoutMode.none &&
+        widget.drawerBreakpoint.isActive(context) &&
+        widget.useDrawer;
     final bool showAppBar =
         isDrawerMode || (widget.appBarBreakpoint?.isActive(context) ?? false);
 
@@ -482,51 +511,49 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
         bodyRatio: widget.bodyRatio,
         internalAnimations: widget.internalAnimations,
         duoScreenPolicy: widget.duoScreenPolicy,
-        displayId: widget.displayId,
+        duoScreenRole: role,
         // Keep navigation slots mounted so body elements retain their position.
         primaryNavigation: SlotLayout(
           config: <Breakpoint, SlotLayoutConfig>{
-            if (widget.navigationVisible && widget.displayId > 0)
-              Breakpoints.standard: SlotLayout.from(
-                key: const Key('primaryNavigationForcedSecondary'),
-                builder: (_) => _buildNavigationRail(destinations),
-              )
-            else if (widget
-                .navigationVisible) ...<Breakpoint, SlotLayoutConfig>{
-              if (widget.duoScreenPolicy ==
-                  DuoScreenPolicy.navigationOnSecondary)
+            if (widget.navigationVisible) ...<Breakpoint, SlotLayoutConfig>{
+              if (mode == DuoLayoutMode.hinge && !hingeBottomNavigation)
                 Breakpoints.standard: SlotLayout.from(
-                  key: const Key('primaryNavigationStandard'),
+                  key: const Key('primaryNavigationHinge'),
                   builder: (_) => _buildNavigationRail(destinations),
                 ),
-              widget.mediumBreakpoint: SlotLayout.from(
-                key: const Key('primaryNavigation'),
-                builder: (_) => _buildNavigationRail(destinations),
-              ),
-              widget.mediumLargeBreakpoint: SlotLayout.from(
-                key: const Key('primaryNavigation1'),
-                builder: (_) =>
-                    _buildNavigationRail(destinations, defaultExtended: true),
-              ),
-              widget.largeBreakpoint: SlotLayout.from(
-                key: const Key('primaryNavigation2'),
-                builder: (_) =>
-                    _buildNavigationRail(destinations, defaultExtended: true),
-              ),
-              widget.extraLargeBreakpoint: SlotLayout.from(
-                key: const Key('primaryNavigation3'),
-                builder: (_) =>
-                    _buildNavigationRail(destinations, defaultExtended: true),
-              ),
+              if (mode !=
+                  DuoLayoutMode.hinge) ...<Breakpoint, SlotLayoutConfig>{
+                widget.mediumBreakpoint: SlotLayout.from(
+                  key: const Key('primaryNavigation'),
+                  builder: (_) => _buildNavigationRail(destinations),
+                ),
+                widget.mediumLargeBreakpoint: SlotLayout.from(
+                  key: const Key('primaryNavigation1'),
+                  builder: (_) =>
+                      _buildNavigationRail(destinations, defaultExtended: true),
+                ),
+                widget.largeBreakpoint: SlotLayout.from(
+                  key: const Key('primaryNavigation2'),
+                  builder: (_) =>
+                      _buildNavigationRail(destinations, defaultExtended: true),
+                ),
+                widget.extraLargeBreakpoint: SlotLayout.from(
+                  key: const Key('primaryNavigation3'),
+                  builder: (_) =>
+                      _buildNavigationRail(destinations, defaultExtended: true),
+                ),
+              },
             },
           },
         ),
-        bottomNavigation: !isDrawerMode &&
-                widget.duoScreenPolicy != DuoScreenPolicy.navigationOnSecondary
+        bottomNavigation: !isDrawerMode
             ? SlotLayout(
                 config: <Breakpoint, SlotLayoutConfig>{
-                  if (widget.navigationVisible)
-                    widget.smallBreakpoint: SlotLayout.from(
+                  if (widget.navigationVisible &&
+                      (mode != DuoLayoutMode.hinge || hingeBottomNavigation))
+                    (hingeBottomNavigation
+                        ? Breakpoints.standard
+                        : widget.smallBreakpoint): SlotLayout.from(
                       key: const Key('bottomNavigation'),
                       builder: (_) =>
                           DmAdaptiveScaffold.standardBottomNavigationBar(
@@ -600,7 +627,7 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
         ),
         secondaryBody: SlotLayout(
           config: <Breakpoint, SlotLayoutConfig?>{
-            if (widget.displayId > 0)
+            if (mode == DuoLayoutMode.secondary)
               Breakpoints.standard: SlotLayout.from(
                 key: const Key('sBodyForcedSecondary'),
                 outAnimation: DmAdaptiveScaffold.stayOnScreen,

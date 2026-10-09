@@ -1,3 +1,15 @@
+## Unreleased
+
+- Add `DuoScreenRole` to the adaptive layout and scaffold, with deprecated
+  `displayId` compatibility until 2.0.0 and single-screen navigation fallback.
+- Correct horizontal/vertical hinge coordinates below AppBars and padding,
+  deterministic fold posture detection, and RTL pane reading order.
+- Unmount hidden duo slots, preserve visible slot identity, and use bottom
+  navigation on narrow secondary displays.
+- Clip physical hinges during initial positioning and transitions; compare
+  layout inputs instead of newly allocated slot maps for relayout decisions.
+- Add permanent duo layout, focus, state, posture and paint regressions.
+
 ## 1.10.0
 
 - Release 1.10.0 (2026-10-07)

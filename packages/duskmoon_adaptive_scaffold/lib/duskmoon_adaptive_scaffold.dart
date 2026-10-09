@@ -5,4 +5,5 @@
 export 'src/adaptive_layout.dart';
 export 'src/adaptive_scaffold.dart';
 export 'src/breakpoints.dart';
+export 'src/duo_screen.dart' show DuoScreen, DuoScreenPolicy, DuoScreenRole;
 export 'src/slot_layout.dart';

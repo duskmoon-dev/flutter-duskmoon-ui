@@ -90,6 +90,26 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    testWidgets('forwards duo role and policy to adaptive scaffold',
+        (tester) async {
+      await tester.pumpWidget(MaterialApp(
+          home: DmScaffold(
+        destinations: destinations,
+        duoScreenPolicy: DuoScreenPolicy.navigationOnSecondary,
+        duoScreenRole: DuoScreenRole.secondary,
+        body: (_) => const Text('Viewer'),
+        secondaryBody: (_) => const Text('Controller'),
+      )));
+      await tester.pumpAndSettle();
+      final adaptive =
+          tester.widget<DmAdaptiveScaffold>(find.byType(DmAdaptiveScaffold));
+      expect(adaptive.duoScreenPolicy, DuoScreenPolicy.navigationOnSecondary);
+      expect(adaptive.duoScreenRole, DuoScreenRole.secondary);
+      expect(find.text('Viewer'), findsNothing);
+      expect(find.text('Controller'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
     test('navigation and collapse defaults remain compatible', () {
       final scaffold = DmScaffold(destinations: destinations);
       expect(scaffold.navigationVisible, isTrue);

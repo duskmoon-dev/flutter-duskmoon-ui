@@ -2,19 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:ui';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
+
 import 'breakpoints.dart';
+import 'duo_screen.dart';
 import 'slot_layout.dart';
 
-/// Policy for how the layout adapts when a dual-screen hinge/fold is detected.
-enum DuoScreenPolicy {
-  /// Default behavior. Body and [secondaryBody] split around the hinge.
-  splitBody,
-
-  /// Duo-screen mode: navigation moves to the secondary screen.
-  navigationOnSecondary,
-}
+// Preserve the policy import path used before duo_screen.dart was introduced.
+export 'duo_screen.dart' show DuoScreenPolicy, DuoScreenRole;
 
 enum _SlotIds {
   primaryNavigation,
@@ -41,9 +39,22 @@ class AdaptiveLayout extends StatefulWidget {
     this.internalAnimations = true,
     this.bodyOrientation = Axis.horizontal,
     this.duoScreenPolicy = DuoScreenPolicy.splitBody,
+    this.duoScreenRole = DuoScreenRole.single,
+    @Deprecated(
+      'Use duoScreenRole instead. A displayId greater than 0 maps to '
+      'DuoScreenRole.secondary. This parameter will be removed in 2.0.0.',
+    )
     this.displayId = 0,
   });
 
+  /// Legacy integer role selector.
+  ///
+  /// A value greater than 0 is treated as [DuoScreenRole.secondary] and takes
+  /// precedence over [duoScreenRole].
+  @Deprecated(
+    'Use duoScreenRole instead. A displayId greater than 0 maps to '
+    'DuoScreenRole.secondary. This parameter will be removed in 2.0.0.',
+  )
   final int displayId;
   final SlotLayout? primaryNavigation;
   final SlotLayout? secondaryNavigation;
@@ -55,7 +66,14 @@ class AdaptiveLayout extends StatefulWidget {
   final Duration transitionDuration;
   final bool internalAnimations;
   final Axis bodyOrientation;
+
+  /// How slots are distributed when a second screen exists.
   final DuoScreenPolicy duoScreenPolicy;
+
+  /// The role of this view in a multi-display setup.
+  ///
+  /// Only honoured with [DuoScreenPolicy.navigationOnSecondary].
+  final DuoScreenRole duoScreenRole;
 
   @override
   State<AdaptiveLayout> createState() => _AdaptiveLayoutState();
@@ -110,10 +128,26 @@ class _AdaptiveLayoutState extends State<AdaptiveLayout>
   void dispose() {
     _controller.dispose();
     _sizeAnimation.dispose();
+    _origin.dispose();
     for (final ValueNotifier<Key?> notifier in notifiers.values) {
       notifier.dispose();
     }
     super.dispose();
+  }
+
+  /// Layout offset of this widget inside the view, used to convert the
+  /// window-relative hinge bounds into local coordinates.
+  final ValueNotifier<Offset> _origin = ValueNotifier<Offset>(Offset.zero);
+  static bool _isSlotVisible(_SlotIds slot, DuoLayoutMode mode) {
+    return switch (mode) {
+      DuoLayoutMode.none => true,
+      DuoLayoutMode.hinge => slot != _SlotIds.secondaryNavigation,
+      DuoLayoutMode.primary =>
+        slot == _SlotIds.topNavigation || slot == _SlotIds.body,
+      DuoLayoutMode.secondary => slot == _SlotIds.primaryNavigation ||
+          slot == _SlotIds.bottomNavigation ||
+          slot == _SlotIds.secondaryBody,
+    };
   }
 
   @override
@@ -140,54 +174,57 @@ class _AdaptiveLayoutState extends State<AdaptiveLayout>
       );
     });
 
-    final List<Widget> entries = slots.entries
-        .map((MapEntry<String, SlotLayout?> entry) {
-          if (entry.value != null) {
-            return LayoutId(
-              id: entry.key,
-              child: entry.value!,
-            );
-          }
-        })
-        .whereType<Widget>()
-        .toList();
+    final Rect? hinge = DuoScreen.hingeOf(context);
+    final DuoLayoutMode mode = resolveDuoLayoutMode(
+      policy: widget.duoScreenPolicy,
+      // ignore: deprecated_member_use_from_same_package
+      role: resolveDuoScreenRole(widget.duoScreenRole, widget.displayId),
+      hasHinge: hinge != null,
+    );
+
+    // Slots hidden by the duo arrangement are not mounted at all, so they are
+    // neither built, focusable nor exposed to accessibility services.
+    final List<Widget> entries = <Widget>[
+      for (final _SlotIds slot in _SlotIds.values)
+        if (slots[slot.name] != null && _isSlotVisible(slot, mode))
+          LayoutId(
+            key: ValueKey<_SlotIds>(slot),
+            id: slot.name,
+            child: ClipRect(child: slots[slot.name]!),
+          ),
+    ];
 
     notifiers.forEach((String key, ValueNotifier<Key?> notifier) {
       notifier.value = chosenWidgets[key]?.key;
     });
 
-    Rect? hinge;
-    for (final DisplayFeature e in MediaQuery.displayFeaturesOf(context)) {
-      if (e.type == DisplayFeatureType.hinge ||
-          e.type == DisplayFeatureType.fold) {
-        hinge = e.bounds;
-      }
-    }
-
-    return CustomMultiChildLayout(
-      delegate: _AdaptiveLayoutDelegate(
-        slots: slots,
-        chosenWidgets: chosenWidgets,
-        slotSizes: slotSizes,
-        controller: _controller,
-        bodyRatio: widget.bodyRatio,
-        isAnimating: isAnimating,
-        internalAnimations: widget.internalAnimations,
-        bodyOrientation: widget.bodyOrientation,
-        textDirection: Directionality.of(context) == TextDirection.ltr,
-        hinge: hinge,
-        sizeAnimation: _sizeAnimation,
-        duoScreenPolicy: widget.duoScreenPolicy,
-        displayId: widget.displayId,
+    return _HingeBoundary(
+      hinge: hinge,
+      origin: _origin,
+      child: CustomMultiChildLayout(
+        delegate: _AdaptiveLayoutDelegate(
+          chosenWidgets: chosenWidgets,
+          slotSizes: slotSizes,
+          controller: _controller,
+          bodyRatio: widget.bodyRatio,
+          isAnimating: isAnimating,
+          internalAnimations: widget.internalAnimations,
+          bodyOrientation: widget.bodyOrientation,
+          textDirection: Directionality.of(context) == TextDirection.ltr,
+          globalHinge: hinge,
+          origin: _origin,
+          sizeAnimation: _sizeAnimation,
+          duoLayoutMode: mode,
+          duoScreenPolicy: widget.duoScreenPolicy,
+        ),
+        children: entries,
       ),
-      children: entries,
     );
   }
 }
 
 class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
   _AdaptiveLayoutDelegate({
-    required this.slots,
     required this.chosenWidgets,
     required this.slotSizes,
     required this.controller,
@@ -197,12 +234,12 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
     required this.bodyOrientation,
     required this.textDirection,
     required this.sizeAnimation,
+    required this.duoLayoutMode,
     required this.duoScreenPolicy,
-    required this.displayId,
-    this.hinge,
-  }) : super(relayout: controller);
+    required this.origin,
+    this.globalHinge,
+  }) : super(relayout: Listenable.merge(<Listenable>[controller, origin]));
 
-  final Map<String, SlotLayout?> slots;
   final Map<String, SlotLayoutConfig?> chosenWidgets;
   final Map<String, Size?> slotSizes;
   final Set<String> isAnimating;
@@ -211,17 +248,44 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
   final bool internalAnimations;
   final Axis bodyOrientation;
   final bool textDirection;
-  final Rect? hinge;
-  final Animation<double> sizeAnimation;
-  final DuoScreenPolicy duoScreenPolicy;
-  final int displayId;
 
-  bool get _isVerticalHinge => hinge != null && hinge!.left == 0;
+  /// Hinge bounds in window coordinates, as reported by [MediaQuery].
+  final Rect? globalHinge;
+
+  /// Layout offset of the [AdaptiveLayout] inside the window.
+  final ValueListenable<Offset> origin;
+  final Animation<double> sizeAnimation;
+  final DuoLayoutMode duoLayoutMode;
+  final DuoScreenPolicy duoScreenPolicy;
+
+  /// Hinge bounds in local coordinates, resolved at the start of each layout.
+  Rect? hinge;
+
+  /// Whether the hinge runs horizontally, splitting the view top/bottom.
+  bool get _isHorizontalHinge => hinge != null && hinge!.width > hinge!.height;
+
+  Rect? _localHinge(Size size) {
+    final Rect? h = globalHinge?.shift(-origin.value);
+    if (h == null) return null;
+    double clampX(double v) => v.clamp(0.0, size.width);
+    double clampY(double v) => v.clamp(0.0, size.height);
+    return Rect.fromLTRB(
+      clampX(h.left),
+      clampY(h.top),
+      clampX(h.right),
+      clampY(h.bottom),
+    );
+  }
 
   @override
   void performLayout(Size size) {
-    if (duoScreenPolicy == DuoScreenPolicy.navigationOnSecondary) {
+    hinge = _localHinge(size);
+    if (duoLayoutMode != DuoLayoutMode.none) {
       _performDuoScreenLayout(size);
+      return;
+    }
+    if (hinge != null) {
+      _performHingeLayout(size);
       return;
     }
 
@@ -419,117 +483,102 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
     }
   }
 
+  /// A physical separator fixes pane boundaries. Geometry never interpolates
+  /// across it; slot fades and navigation widths can still animate in a pane.
+  void _performHingeLayout(Size size) {
+    final Rect h = hinge!;
+    final Rect start;
+    final Rect end;
+    if (_isHorizontalHinge) {
+      start = Rect.fromLTRB(0, 0, size.width, h.top);
+      end = Rect.fromLTRB(0, h.bottom, size.width, size.height);
+    } else {
+      start = Rect.fromLTRB(0, 0, h.left, size.height);
+      end = Rect.fromLTRB(h.right, 0, size.width, size.height);
+    }
+    final main = _isHorizontalHinge || textDirection ? start : end;
+    final secondary = _isHorizontalHinge || textDirection ? end : start;
+    final navigationOnSecondary =
+        duoScreenPolicy == DuoScreenPolicy.navigationOnSecondary;
+    _layoutPane(
+      main,
+      body: _SlotIds.body,
+      top: _SlotIds.topNavigation,
+      leading: navigationOnSecondary ? null : _SlotIds.primaryNavigation,
+      bottom: navigationOnSecondary ? null : _SlotIds.bottomNavigation,
+    );
+    _layoutPane(
+      secondary,
+      body: _SlotIds.secondaryBody,
+      leading: navigationOnSecondary ? _SlotIds.primaryNavigation : null,
+      trailing: navigationOnSecondary ? null : _SlotIds.secondaryNavigation,
+      bottom: navigationOnSecondary ? _SlotIds.bottomNavigation : null,
+    );
+  }
+
   void _performDuoScreenLayout(Size size) {
-    late final double mainWidth;
-    late final double mainHeight;
-    late final double secondaryWidth;
-    late final double secondaryHeight;
-    late final Offset secondaryOrigin;
+    switch (duoLayoutMode) {
+      case DuoLayoutMode.none:
+        assert(false, 'Regular layouts are handled by performLayout');
+      case DuoLayoutMode.hinge:
+        _performHingeLayout(size);
+      case DuoLayoutMode.primary:
+        _layoutPane(Offset.zero & size,
+            body: _SlotIds.body, top: _SlotIds.topNavigation);
+      case DuoLayoutMode.secondary:
+        _layoutPane(Offset.zero & size,
+            body: _SlotIds.secondaryBody,
+            leading: _SlotIds.primaryNavigation,
+            bottom: _SlotIds.bottomNavigation);
+    }
+  }
 
-    final bool isSecondaryScreen = displayId > 0;
-
-    if (displayId > 0) {
-      mainWidth = 0;
-      mainHeight = 0;
-      secondaryWidth = size.width;
-      secondaryHeight = size.height;
-      secondaryOrigin = Offset.zero;
-    } else if (hinge != null) {
-      final Rect h = hinge!;
-      if (_isVerticalHinge) {
-        mainWidth = size.width;
-        mainHeight = h.top;
-        secondaryWidth = size.width;
-        secondaryHeight = size.height - h.bottom;
-        secondaryOrigin = Offset(0, h.bottom);
-      } else {
-        mainWidth = h.left;
-        mainHeight = size.height;
-        secondaryWidth = size.width - h.right;
-        secondaryHeight = size.height;
-        secondaryOrigin = Offset(h.right, 0);
+  void _layoutPane(
+    Rect area, {
+    required _SlotIds body,
+    _SlotIds? top,
+    _SlotIds? bottom,
+    _SlotIds? leading,
+    _SlotIds? trailing,
+  }) {
+    double animatedExtent(_SlotIds slot, double extent, {required bool width}) {
+      if (!internalAnimations || !isAnimating.contains(slot.name)) {
+        return extent;
       }
-    } else {
-      mainWidth = size.width;
-      mainHeight = size.height;
-      secondaryWidth = 0;
-      secondaryHeight = 0;
-      secondaryOrigin = Offset.zero;
+      final previous = slotSizes[slot.name] ?? Size.zero;
+      return Tween<double>(
+              begin: width ? previous.width : previous.height, end: extent)
+          .animate(sizeAnimation)
+          .value;
     }
 
-    if (displayId == 0) {
-      double mainTopMargin = 0;
-      if (hasChild(_SlotIds.topNavigation.name)) {
-        final Size childSize = layoutChild(_SlotIds.topNavigation.name,
-            BoxConstraints.loose(Size(mainWidth, mainHeight)));
-        updateSize(_SlotIds.topNavigation.name, childSize);
-        positionChild(_SlotIds.topNavigation.name, Offset.zero);
-        mainTopMargin += childSize.height;
-      }
-      if (hasChild(_SlotIds.body.name)) {
-        layoutChild(_SlotIds.body.name,
-            BoxConstraints.tight(Size(mainWidth, mainHeight - mainTopMargin)));
-        positionChild(_SlotIds.body.name, Offset(0, mainTopMargin));
-      }
-    } else {
-      if (hasChild(_SlotIds.topNavigation.name)) {
-        layoutChild(
-            _SlotIds.topNavigation.name, BoxConstraints.tight(Size.zero));
-        positionChild(_SlotIds.topNavigation.name, Offset.zero);
-      }
-      if (hasChild(_SlotIds.body.name)) {
-        layoutChild(_SlotIds.body.name, BoxConstraints.tight(Size.zero));
-        positionChild(_SlotIds.body.name, Offset.zero);
-      }
+    for (final slot in [top, bottom]) {
+      if (slot == null || !hasChild(slot.name)) continue;
+      final childSize = layoutChild(slot.name, BoxConstraints.loose(area.size));
+      final extent = animatedExtent(slot, childSize.height, width: false)
+          .clamp(0.0, area.height);
+      updateSize(slot.name, childSize);
+      final atTop = slot == top;
+      positionChild(slot.name,
+          Offset(area.left, atTop ? area.top : area.bottom - childSize.height));
+      area = Rect.fromLTRB(area.left, atTop ? area.top + extent : area.top,
+          area.right, atTop ? area.bottom : area.bottom - extent);
     }
-
-    if (hasChild(_SlotIds.bottomNavigation.name)) {
-      layoutChild(
-          _SlotIds.bottomNavigation.name, BoxConstraints.tight(Size.zero));
-      positionChild(_SlotIds.bottomNavigation.name, Offset.zero);
+    for (final slot in [leading, trailing]) {
+      if (slot == null || !hasChild(slot.name)) continue;
+      final childSize = layoutChild(slot.name, BoxConstraints.loose(area.size));
+      final extent = animatedExtent(slot, childSize.width, width: true)
+          .clamp(0.0, area.width);
+      updateSize(slot.name, childSize);
+      final atLeft = (slot == leading) == textDirection;
+      positionChild(slot.name,
+          Offset(atLeft ? area.left : area.right - childSize.width, area.top));
+      area = Rect.fromLTRB(atLeft ? area.left + extent : area.left, area.top,
+          atLeft ? area.right : area.right - extent, area.bottom);
     }
-    if (hasChild(_SlotIds.secondaryNavigation.name)) {
-      layoutChild(
-          _SlotIds.secondaryNavigation.name, BoxConstraints.tight(Size.zero));
-      positionChild(_SlotIds.secondaryNavigation.name, Offset.zero);
-    }
-
-    if (isSecondaryScreen || (displayId == 0 && hinge != null)) {
-      double navWidth = 0;
-      if (hasChild(_SlotIds.primaryNavigation.name)) {
-        final Size childSize = layoutChild(_SlotIds.primaryNavigation.name,
-            BoxConstraints.loose(Size(secondaryWidth, secondaryHeight)));
-        updateSize(_SlotIds.primaryNavigation.name, childSize);
-        if (textDirection) {
-          positionChild(_SlotIds.primaryNavigation.name, secondaryOrigin);
-        } else {
-          positionChild(_SlotIds.primaryNavigation.name,
-              secondaryOrigin + Offset(secondaryWidth - childSize.width, 0));
-        }
-        navWidth = childSize.width;
-      }
-      if (hasChild(_SlotIds.secondaryBody.name)) {
-        final double sBodyWidth = secondaryWidth - navWidth;
-        layoutChild(_SlotIds.secondaryBody.name,
-            BoxConstraints.tight(Size(sBodyWidth, secondaryHeight)));
-        if (textDirection) {
-          positionChild(_SlotIds.secondaryBody.name,
-              secondaryOrigin + Offset(navWidth, 0));
-        } else {
-          positionChild(_SlotIds.secondaryBody.name, secondaryOrigin);
-        }
-      }
-    } else {
-      if (hasChild(_SlotIds.primaryNavigation.name)) {
-        layoutChild(
-            _SlotIds.primaryNavigation.name, BoxConstraints.tight(Size.zero));
-        positionChild(_SlotIds.primaryNavigation.name, Offset.zero);
-      }
-      if (hasChild(_SlotIds.secondaryBody.name)) {
-        layoutChild(
-            _SlotIds.secondaryBody.name, BoxConstraints.tight(Size.zero));
-        positionChild(_SlotIds.secondaryBody.name, Offset.zero);
-      }
+    if (hasChild(body.name)) {
+      layoutChild(body.name, BoxConstraints.tight(area.size));
+      positionChild(body.name, area.topLeft);
     }
   }
 
@@ -550,6 +599,97 @@ class _AdaptiveLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   bool shouldRelayout(_AdaptiveLayoutDelegate oldDelegate) {
-    return oldDelegate.slots != slots || oldDelegate.displayId != displayId;
+    // Animation progress is covered by relayout. Compare selected slot keys,
+    // rather than newly allocated maps, and inputs that affect geometry.
+    final slotsChanged =
+        chosenWidgets.length != oldDelegate.chosenWidgets.length ||
+            chosenWidgets.entries.any((entry) =>
+                entry.value?.key != oldDelegate.chosenWidgets[entry.key]?.key ||
+                (entry.value?.builder == null) !=
+                    (oldDelegate.chosenWidgets[entry.key]?.builder == null));
+    return slotsChanged ||
+        oldDelegate.duoLayoutMode != duoLayoutMode ||
+        oldDelegate.duoScreenPolicy != duoScreenPolicy ||
+        oldDelegate.globalHinge != globalHinge ||
+        oldDelegate.bodyRatio != bodyRatio ||
+        oldDelegate.bodyOrientation != bodyOrientation ||
+        oldDelegate.internalAnimations != internalAnimations ||
+        oldDelegate.textDirection != textDirection;
+  }
+}
+
+/// Tracks the actual view offset after parent positioning, and clips the
+/// physical hinge even during the initial frame and ancestor transitions.
+class _HingeBoundary extends SingleChildRenderObjectWidget {
+  const _HingeBoundary(
+      {required this.hinge, required this.origin, required super.child});
+
+  final Rect? hinge;
+  final ValueNotifier<Offset> origin;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _RenderHingeBoundary(hinge, origin);
+
+  @override
+  void updateRenderObject(
+      BuildContext context, _RenderHingeBoundary renderObject) {
+    renderObject.hinge = hinge;
+  }
+}
+
+class _RenderHingeBoundary extends RenderProxyBox {
+  _RenderHingeBoundary(this._hinge, this.origin);
+
+  Rect? _hinge;
+  final ValueNotifier<Offset> origin;
+  bool _syncScheduled = false;
+
+  set hinge(Rect? value) {
+    if (_hinge == value) return;
+    _hinge = value;
+    markNeedsLayout();
+    markNeedsPaint();
+  }
+
+  @override
+  void performLayout() {
+    super.performLayout();
+    _scheduleOriginSync();
+  }
+
+  void _scheduleOriginSync() {
+    if (_hinge == null || _syncScheduled) return;
+    _syncScheduled = true;
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _syncScheduled = false;
+      if (attached && hasSize) origin.value = localToGlobal(Offset.zero);
+    });
+  }
+
+  Rect? get _localHinge => _hinge == null
+      ? null
+      : Rect.fromPoints(
+          globalToLocal(_hinge!.topLeft), globalToLocal(_hinge!.bottomRight));
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    _scheduleOriginSync();
+    final localHinge = _localHinge;
+    if (localHinge == null) {
+      super.paint(context, offset);
+      return;
+    }
+    final path = Path.combine(PathOperation.difference,
+        Path()..addRect(Offset.zero & size), Path()..addRect(localHinge));
+    context.pushClipPath(
+        needsCompositing, offset, Offset.zero & size, path, super.paint,
+        clipBehavior: Clip.hardEdge);
+  }
+
+  @override
+  bool hitTest(BoxHitTestResult result, {required Offset position}) {
+    if (_localHinge?.contains(position) ?? false) return false;
+    return super.hitTest(result, position: position);
   }
 }
