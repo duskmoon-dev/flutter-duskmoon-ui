@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:duo_screen/duo_display_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:presentation_displays/displays_manager.dart';
 
 class FakePlatform implements DuoDisplayPlatform {
   final events = StreamController<void>.broadcast();
@@ -99,35 +98,55 @@ Future<void> flush() => Future<void>.delayed(const Duration(milliseconds: 2));
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('Android adapter filters presentation displays and uses companion route',
+  test('Android adapter excludes default display and calls the native host',
       () async {
-    const channel = MethodChannel('presentation_displays_plugin');
+    const channel = MethodChannel('dev.duskmoon.duo/displays');
     final calls = <MethodCall>[];
     final messenger =
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
     messenger.setMockMethodCallHandler(channel, (call) async {
       calls.add(call);
-      if (call.method == 'listDisplay') {
-        return jsonEncode([
-          {'displayId': 0, 'name': 'Primary'},
-          {'displayId': 7, 'name': 'Presentation'},
-          {'displayId': null, 'name': 'Unknown'},
-        ]);
-      }
+      if (call.method == 'listDisplays') return [0, 7, -1];
       return true;
     });
     addTearDown(() => messenger.setMockMethodCallHandler(channel, null));
     final platform = AndroidDuoDisplayPlatform();
     expect(await platform.presentationDisplays(), [7]);
-    expect(calls.single.method, 'listDisplay');
-    expect(calls.single.arguments, DISPLAY_CATEGORY_PRESENTATION);
+    expect(calls.single.method, 'listDisplays');
+    expect(await platform.show(0), isFalse);
+    expect(await platform.show(-1), isFalse);
+    expect(calls, hasLength(1));
     expect(await platform.show(7), isTrue);
-    expect(calls.last.method, 'showPresentation');
-    expect(jsonDecode(calls.last.arguments as String),
-        {'displayId': 7, 'routerName': secondaryRoute});
+    expect(calls.last.method, 'show');
+    expect(calls.last.arguments, {'displayId': 7});
     expect(await platform.hide(7), isTrue);
-    expect(calls.last.method, 'hidePresentation');
-    expect(jsonDecode(calls.last.arguments as String), {'displayId': 7});
+    expect(calls.last.method, 'hide');
+    expect(calls.last.arguments, {'displayId': 7});
+  });
+
+  test(
+      'Android adapter propagates denied launches and native detach completion',
+      () async {
+    const channel = MethodChannel('dev.duskmoon.duo/displays');
+    final messenger =
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+    final detached = Completer<bool>();
+    messenger.setMockMethodCallHandler(channel, (call) async {
+      if (call.method == 'listDisplays') return null;
+      if (call.method == 'hide') return detached.future;
+      throw PlatformException(code: 'companion_unavailable');
+    });
+    addTearDown(() => messenger.setMockMethodCallHandler(channel, null));
+    final platform = AndroidDuoDisplayPlatform();
+    expect(await platform.presentationDisplays(), isEmpty);
+    await expectLater(platform.show(7), throwsA(isA<PlatformException>()));
+    var hidden = false;
+    final hide = platform.hide(7).then((value) => hidden = value);
+    await flush();
+    expect(hidden, isFalse);
+    detached.complete(true);
+    await hide;
+    expect(hidden, isTrue);
   });
 
   test('state accepts integer chart points and rejects invalid values', () {

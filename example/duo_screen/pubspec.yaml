@@ -1,5 +1,5 @@
 name: duo_screen
-description: Android presentation-display controller and DuskMoon viewer demo.
+description: Android dual-display controller and DuskMoon viewer demo.
 resolution: workspace
 publish_to: 'none'
 version: 1.0.0+1
@@ -10,7 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  presentation_displays: ^1.0.0
   duskmoon_ui:
     path: ../../packages/duskmoon_ui
 

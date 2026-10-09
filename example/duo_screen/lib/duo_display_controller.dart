@@ -5,7 +5,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
-import 'package:presentation_displays/displays_manager.dart';
+import 'package:flutter/services.dart';
 
 const secondaryRoute = 'secondaryDisplayMain';
 const navigationLabels = ['Widgets', 'Forms', 'Charts', 'Editor'];
@@ -80,36 +80,32 @@ abstract interface class DuoDisplayPlatform {
 }
 
 class AndroidDuoDisplayPlatform implements DuoDisplayPlatform {
-  final DisplayManager _manager = DisplayManager();
+  static const _methods = MethodChannel('dev.duskmoon.duo/displays');
+  static const _events = EventChannel('dev.duskmoon.duo/display_changes');
 
   @override
-  Stream<void> get changes =>
-      (_manager.connectedDisplaysChangedStream ?? const Stream<int?>.empty())
-          .map((_) {});
+  Stream<void> get changes => _events.receiveBroadcastStream().map((_) {});
 
   @override
   Future<List<int>> presentationDisplays() async {
-    final displays = await _manager.getDisplays(
-      category: DISPLAY_CATEGORY_PRESENTATION,
-    );
+    // Native discovery also excludes the Activity's current host display.
+    final displays = await _methods.invokeListMethod<int>('listDisplays');
     return [
-      for (final display in displays ?? [])
-        if (display.displayId != null && display.displayId! > 0)
-          display.displayId!,
+      for (final display in displays ?? <int>[])
+        if (display > 0) display,
     ];
   }
 
   @override
   Future<bool> show(int displayId) async =>
-      await _manager.showSecondaryDisplay(
-        displayId: displayId,
-        routerName: secondaryRoute,
-      ) ==
-      true;
+      displayId > 0 &&
+      await _methods.invokeMethod<bool>('show', {'displayId': displayId}) ==
+          true;
 
   @override
   Future<bool> hide(int displayId) async =>
-      await _manager.hideSecondaryDisplay(displayId: displayId) == true;
+      await _methods.invokeMethod<bool>('hide', {'displayId': displayId}) ==
+      true;
 }
 
 class SingleDisplayPlatform implements DuoDisplayPlatform {
@@ -154,8 +150,8 @@ DuoBridge defaultBridge({required bool secondary}) =>
         ? IsolateDuoBridge(secondary: secondary)
         : const SingleDisplayBridge();
 
-/// The plugin's data channel is primary-to-secondary only. This sample uses
-/// named ports for two-way communication. Across isolate groups we send only
+/// This sample uses named ports for two-way communication. Across isolate groups
+/// we send only
 /// JSON strings, never application objects. Looking up the peer for every send
 /// lets a cached companion engine discover a replacement primary after restart.
 class IsolateDuoBridge implements DuoBridge {
@@ -325,8 +321,8 @@ class DuoDisplayController extends ChangeNotifier {
         _setConnected(false);
         if (_shownDisplayId != null && !await _hideShown()) continue;
         if (_disposed || target == null) continue;
-        // The plugin retains its Presentation across primary hot restart.
-        // Dismiss that unknown old window before creating a fresh one.
+        // The native host retains its companion engine across Dart hot restart.
+        // Await the old Activity's detach before attaching a fresh view.
         if (!await platform.hide(target)) {
           status = 'Companion window could not be closed.';
           _setConnected(false);

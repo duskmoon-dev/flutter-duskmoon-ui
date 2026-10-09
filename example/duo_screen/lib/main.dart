@@ -27,7 +27,7 @@ class DuoScreenApp extends StatelessWidget {
         darkTheme: DmThemeData.moonlight(),
         themeMode: ThemeMode.system,
         home: page,
-        // Android sets routerName as both the cache key and initial route.
+        // The Android companion engine sets this initial route.
         // Declare it explicitly instead of relying on unknown-route fallback.
         routes: {secondaryRoute: (_) => page},
       ),

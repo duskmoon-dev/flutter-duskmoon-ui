@@ -1,11 +1,11 @@
 # DuskMoon Duo Screen
 
-An Android presentation-display demo: the primary screen shows DuskMoon widgets,
+An Android dual-display demo: the primary screen shows DuskMoon widgets,
 forms, a chart, and a themed code editor; an external display controls them.
 Web, macOS, Linux, Windows, and iOS run the same interactive single-screen demo
-without calling `presentation_displays`. iOS is deliberately not enabled: the
-plugin's iOS implementation starts its default entry point and needs additional
-native setup, unlike the Android contract used here.
+without opening native companion channels. The native dual-screen host is
+Android-only and requires Android 8.0 (API 26) or newer; older Android versions
+keep the interactive single-screen mode.
 
 ## Run on Android
 
@@ -22,16 +22,29 @@ On an Android emulator or compatible device, enable Developer options, select
 and select an external display size. The example queries only Android's
 `DISPLAY_CATEGORY_PRESENTATION` displays and uses the first eligible display,
 retaining the current target while it remains eligible. A real HDMI or wireless
-presentation display works through the same plugin API. Remove the simulated
-display to test disconnect recovery. Device-specific display behavior needs a
-real Android run; widget tests simulate the platform boundary.
+presentation display is eligible only when Android permits an Activity on it.
+The default display and the viewer Activity's host display are excluded. Remove
+the simulated display to test disconnect recovery. Devices may deny launching
+Activities on private or restricted displays; the viewer then keeps local
+navigation. Device-specific display behavior needs a real Android run.
 
 ## Two-engine lifecycle
 
-`main` starts the viewer. Android `presentation_displays` 1.0.0 always executes
-the annotated `secondaryDisplayMain` Dart entry point for its cached companion
-engine. `routerName: secondaryDisplayMain` is both its engine-cache key and its
-initial route; the app declares that route explicitly.
+`LauncherActivity` routes normal launcher taps from either screen to the viewer
+on display 0. `MainActivity` and `CompanionActivity` have distinct, single-instance
+tasks. The companion is a normal Android Activity: OEM secondary-screen launchers
+can cover Presentation windows until a normal Activity activates that screen.
+No overlay permission or elevated window type is used.
+
+The example-local MethodChannel host owns one cached companion Flutter engine,
+running the annotated `secondaryDisplayMain` entry point and its explicit route.
+The companion Activity attaches a Flutter fragment only after its launch generation
+is accepted. Stale or cancelled launches finish without creating another engine.
+Hide waits for the old fragment to detach before a new Activity can attach.
+Dart hot restart retains the companion engine/isolate; real primary Activity
+destruction closes the companion task and releases that engine. Background/resume
+reuses existing tasks, and configuration recreation retains the owned engine.
+This host replaces `presentation_displays`; no patched package cache is required.
 
 `DuoDisplayController` serializes window changes and tracks the shown display.
 Repeated display events do not show another window. The previous window is
@@ -44,8 +57,7 @@ the UI watchdog expires, so slow native calls cannot create overlapping windows.
 
 Both engines register named ports and resolve the peer on every send. Companion
 hello messages repeat every second, letting a cached engine discover a restarted
-primary. The plugin's built-in transfer channel is one-way, so the sample uses
-`IsolateNameServer` for two-way intents and snapshots. Only JSON strings cross
+primary. The sample uses `IsolateNameServer` for two-way intents and snapshots. Only JSON strings cross
 engine/isolate-group boundaries. Session IDs, handshake nonces and monotonic
 sequences reject stale snapshots and repeated commands; malformed data is ignored.
 The primary is the sole state authority. The companion submits intents and waits
@@ -75,9 +87,18 @@ foldable layouts remain the adaptive scaffold's responsibility.
 ```sh
 flutter test
 dart analyze --fatal-infos
+bash tool/test_native_lifecycle.sh
 ```
 
 Tests inject fake display and bridge implementations for show/hide deduplication,
 handshake, failed calls, timeout, restart, malformed/stale messages, primary-only
 state authority, form semantics and viewer toasts. Widget tests cover compact
 and expanded AppBars/navigation, form controls, languages and companion routing.
+
+Native lifecycle checks cover display exclusion, duplicate/pending show, hide
+completion, stale launches, configuration recreation and finish/reopen without
+Android test dependencies. On hardware, cold-launch the primary icon and verify
+Viewer on display 0 and Controller on the eligible secondary display without a
+second tap; repeat from the secondary icon, background/resume, finish/reopen,
+and primary Dart hot restart. Verify there is exactly one Activity per role,
+no Presentation windows, and navigation still synchronizes between screens.
