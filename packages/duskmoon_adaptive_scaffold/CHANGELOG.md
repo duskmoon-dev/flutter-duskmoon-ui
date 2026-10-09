@@ -1,4 +1,4 @@
-## Unreleased
+## 1.10.1
 
 - Add `DuoScreenRole` to the adaptive layout and scaffold, with deprecated
   `displayId` compatibility until 2.0.0 and single-screen navigation fallback.
