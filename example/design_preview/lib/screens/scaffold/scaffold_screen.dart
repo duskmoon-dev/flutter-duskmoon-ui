@@ -26,55 +26,6 @@ class ScaffoldScreen extends StatelessWidget {
   }
 }
 
-class _NavigationHideHeader extends StatelessWidget {
-  const _NavigationHideHeader({required this.onHide});
-
-  final VoidCallback onHide;
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: AlignmentDirectional.topEnd,
-      heightFactor: 1,
-      child: _NavigationVisibilityButton(
-        navigationVisible: true,
-        onToggle: onHide,
-      ),
-    );
-  }
-}
-
-class _NavigationVisibilityButton extends StatelessWidget {
-  const _NavigationVisibilityButton({
-    required this.navigationVisible,
-    required this.onToggle,
-  });
-
-  final bool navigationVisible;
-  final VoidCallback onToggle;
-
-  @override
-  Widget build(BuildContext context) {
-    final label = navigationVisible ? 'Hide navigation' : 'Show navigation';
-    return SizedBox(
-      width: 48,
-      height: 48,
-      child: Tooltip(
-        message: label,
-        excludeFromSemantics: true,
-        child: Semantics(
-          label: label,
-          button: true,
-          child: DmIconButton(
-            icon: const Icon(Icons.view_sidebar_outlined),
-            onPressed: onToggle,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _ScaffoldBody extends StatelessWidget {
   const _ScaffoldBody();
 
@@ -455,9 +406,6 @@ class _ScaffoldDemoPageState extends State<_ScaffoldDemoPage> {
   int _selectedIndex = 0;
   bool _navigationVisible = true;
 
-  void _toggleNavigation() =>
-      setState(() => _navigationVisible = !_navigationVisible);
-
   static const _destinations = [
     NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
     NavigationDestination(icon: Icon(Icons.explore), label: 'Explore'),
@@ -468,20 +416,23 @@ class _ScaffoldDemoPageState extends State<_ScaffoldDemoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final hasRail = Breakpoints.mediumAndUp.isActive(context);
-    final railHeader = _NavigationHideHeader(onHide: _toggleNavigation);
     return DmScaffold(
       selectedIndex: _selectedIndex,
       onSelectedIndexChange: (i) => setState(() => _selectedIndex = i),
       destinations: _destinations,
       navigationVisible: _navigationVisible,
       showCollapseToggle: true,
-      leadingExtendedNavRail: railHeader,
-      leadingUnextendedNavRail: railHeader,
+      showNavigationToggle: true,
+      onNavigationVisibleChange: (visible) =>
+          setState(() => _navigationVisible = visible),
+      navigationRestoreInHeader: true,
       appBarBreakpoint: Breakpoints.standard,
       appBar: DmAppBar(
         title: const Text('DmScaffold Demo'),
+        restoreNavigation: true,
         actions: [
+          if (_navigationVisible && !Breakpoints.mediumAndUp.isActive(context))
+            const DmNavigationVisibilityButton(),
           DmIconButton(
             icon: const Icon(Icons.close),
             onPressed: () => Navigator.of(context).pop(),
@@ -514,15 +465,6 @@ class _ScaffoldDemoPageState extends State<_ScaffoldDemoPage> {
               ],
             ),
           ),
-          if (!_navigationVisible || !hasRail)
-            PositionedDirectional(
-              top: 0,
-              start: 0,
-              child: _NavigationVisibilityButton(
-                navigationVisible: _navigationVisible,
-                onToggle: _toggleNavigation,
-              ),
-            ),
         ],
       ),
     );

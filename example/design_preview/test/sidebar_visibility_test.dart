@@ -40,14 +40,15 @@ void main() {
     expect(hideRect.bottom, lessThan(tester.getRect(firstDestination).top));
   }
 
-  void expectShowInDemoBody(WidgetTester tester) {
+  void expectShowInToolbar(WidgetTester tester) {
     final show = find.byTooltip('Show navigation');
-    expect(find.descendant(of: demoBody, matching: show), findsOneWidget);
-    expectNoAppBarVisibilityControls();
+    final header = find.widgetWithText(DmAppBar, 'DmScaffold Demo');
+    expect(find.descendant(of: header, matching: show), findsOneWidget);
+    expect(find.descendant(of: demoBody, matching: show), findsNothing);
     final showRect = tester.getRect(show);
     final bodyRect = tester.getRect(demoBody);
     expect(showRect.left, closeTo(bodyRect.left, 0.01));
-    expect(showRect.top, closeTo(bodyRect.top, 0.01));
+    expect(showRect.bottom, lessThanOrEqualTo(bodyRect.top));
     expect(find.byType(NavigationRail), findsNothing);
   }
 
@@ -141,7 +142,7 @@ void main() {
     expect(find.byType(NavigationRail), findsNothing);
     expect(find.text('Explore'), findsOneWidget);
     expect(find.byTooltip('Show navigation'), findsOneWidget);
-    expectShowInDemoBody(tester);
+    expectShowInToolbar(tester);
     expect(tester.element(demoBody), same(demoBodyElement));
     expect(tester.getRect(demoBody).left, closeTo(0, 0.01));
     expect(tester.getSize(demoBody).width, greaterThan(visibleBodyWidth));
@@ -172,7 +173,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('small demo keeps visibility controls inside its body',
+  testWidgets('small demo keeps visibility controls inside its toolbar',
       (tester) async {
     await pumpScaffoldScreen(tester);
     await tester.scrollUntilVisible(find.text('Open DmScaffold Demo'), 300,
@@ -188,17 +189,17 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(NavigationRail), findsNothing);
     final hide = find.byTooltip('Hide navigation');
-    expect(find.descendant(of: demoBody, matching: hide), findsOneWidget);
-    expectNoAppBarVisibilityControls();
-    expect(tester.getTopLeft(hide), tester.getTopLeft(demoBody));
+    final header = find.widgetWithText(DmAppBar, 'DmScaffold Demo');
+    expect(find.descendant(of: header, matching: hide), findsOneWidget);
+    expect(tester.getRect(hide).bottom,
+        lessThanOrEqualTo(tester.getRect(demoBody).top));
 
     await tester.tap(hide);
     await tester.pumpAndSettle();
-    expectShowInDemoBody(tester);
+    expectShowInToolbar(tester);
     await tester.tap(find.byTooltip('Show navigation'));
     await tester.pumpAndSettle();
-    expect(find.descendant(of: demoBody, matching: hide), findsOneWidget);
-    expectNoAppBarVisibilityControls();
+    expect(find.descendant(of: header, matching: hide), findsOneWidget);
     expect(tester.widget<DmScaffold>(find.byType(DmScaffold)).selectedIndex, 0);
     expect(tester.takeException(), isNull);
   });

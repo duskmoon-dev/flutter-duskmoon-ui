@@ -102,6 +102,16 @@ class DmScaffold extends StatelessWidget {
   /// provides a control to restore navigation, such as an app bar action.
   final bool navigationVisible;
 
+  /// Adds reusable top-right hide controls to the rail/drawer.
+  final bool showNavigationToggle;
+
+  /// Requests a change to the caller-controlled navigation visibility.
+  final ValueChanged<bool>? onNavigationVisibleChange;
+
+  /// Suppresses the overlay fallback when the page adopts header restoration.
+  /// Use DmAppBar.restoreNavigation or DmNavigationHeader in the page header.
+  final bool navigationRestoreInHeader;
+
   /// Whether the rail shows its footer collapse/expand button.
   final bool showCollapseToggle;
 
@@ -158,6 +168,9 @@ class DmScaffold extends StatelessWidget {
     this.navigationRailDestinationBuilder,
     this.groupAlignment,
     this.navigationVisible = true,
+    this.showNavigationToggle = false,
+    this.onNavigationVisibleChange,
+    this.navigationRestoreInHeader = false,
     this.showCollapseToggle = false,
     this.isExtendedOverride,
     this.onExtendedChange,
@@ -205,6 +218,9 @@ class DmScaffold extends StatelessWidget {
       navigationRailDestinationBuilder: navigationRailDestinationBuilder,
       groupAlignment: groupAlignment,
       navigationVisible: navigationVisible,
+      showNavigationToggle: showNavigationToggle,
+      onNavigationVisibleChange: onNavigationVisibleChange,
+      navigationRestoreInHeader: navigationRestoreInHeader,
       showCollapseToggle: showCollapseToggle,
       isExtendedOverride: isExtendedOverride,
       onExtendedChange: onExtendedChange,

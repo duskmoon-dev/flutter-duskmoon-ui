@@ -486,71 +486,87 @@ bottom navigation so the body can use the available space. This is separate
 from collapsing the rail to icons only. The selected destination, body state,
 and rail expansion preference are retained when navigation is shown again.
 
-Put **Hide navigation** at the top right inside the sidebar using both rail
-leading slots. When navigation is hidden, put **Show navigation** at the top
-left inside the demonstrated scaffold's body. The rail header should fill its
-available width without fixing the expanded rail width, so it also works
-while the rail collapses. On small layouts without a rail, put **Hide navigation**
-at the body's top left too. Keep the body structure stable across visibility
-changes; the app bar contains only ordinary page navigation:
+Enable `showNavigationToggle` and provide `onNavigationVisibleChange` to add
+**Hide navigation** at the sidebar's top right. This remains separate from the
+collapse/expand footer. Visibility stays caller-controlled: the callback requests
+a value, and the caller updates `navigationVisible`. Existing callers that omit
+these options keep their current behavior.
+
+For a page header, set `navigationRestoreInHeader: true` and explicitly adopt
+`DmAppBar(restoreNavigation: true)` at the header callsite. The restore button
+shares the existing toolbar row with explicit or automatic back/drawer controls,
+the title, and actions. It adds horizontal leading width, without adding a row
+or moving the body vertically. `DmAppBar.leadingWidth` can size a custom leading
+control; restore reserves another 48 logical pixels. This works for Material,
+Cupertino, and Fluent headers, including headers nested inside body builders:
 
 ```dart
-class _MyPageState extends State<MyPage> {
-  int _selectedIndex = 0;
-  bool _navigationVisible = true;
-
-  @override
-  Widget build(BuildContext context) {
-    final hasRail = Breakpoints.mediumAndUp.isActive(context);
-    final hideButton = IconButton(
-      icon: const Icon(Icons.view_sidebar_outlined),
-      tooltip: 'Hide navigation',
-      onPressed: () => setState(() => _navigationVisible = false),
-    );
-    final railHeader = Align(
-      alignment: AlignmentDirectional.topEnd,
-      heightFactor: 1,
-      child: hideButton,
-    );
-    return DmScaffold(
-      destinations: destinations,
-      selectedIndex: _selectedIndex,
-      onSelectedIndexChange: (index) => setState(() => _selectedIndex = index),
-      navigationVisible: _navigationVisible,
-      showCollapseToggle: true,
-      leadingExtendedNavRail: railHeader,
-      leadingUnextendedNavRail: railHeader,
-      appBarBreakpoint: Breakpoints.standard,
-      appBar: const DmAppBar(title: Text('My Page')),
-      body: (_) => Stack(
-        fit: StackFit.expand,
-        children: [
-          const MyContent(),
-          if (!_navigationVisible || !hasRail)
-            PositionedDirectional(
-              top: 0,
-              start: 0,
-              child: _navigationVisible
-                  ? hideButton
-                  : IconButton(
-                      icon: const Icon(Icons.view_sidebar_outlined),
-                      tooltip: 'Show navigation',
-                      onPressed: () =>
-                          setState(() => _navigationVisible = true),
-                    ),
-            ),
-        ],
-      ),
-    );
-  }
-}
+DmScaffold(
+  destinations: destinations,
+  selectedIndex: selectedIndex,
+  onSelectedIndexChange: onSelectedIndexChange,
+  navigationVisible: navigationVisible,
+  showNavigationToggle: true,
+  onNavigationVisibleChange: (visible) =>
+      setState(() => navigationVisible = visible),
+  navigationRestoreInHeader: true,
+  showCollapseToggle: true,
+  body: (_) => Scaffold(
+    appBar: const DmAppBar(
+      title: Text('Chat'),
+      restoreNavigation: true,
+    ),
+    body: const MyContent(),
+  ),
+)
 ```
 
-Open **DmScaffold Demo** on the showcase page at `/widgets/scaffold` to try
-hiding navigation. The demo places the hide button inside its sidebar header
-and the show button at its body's top left after hiding. Its footer button
-collapses labels independently. These controls affect only the demo component;
-the surrounding showcase navigation remains available when the demo closes.
+For Material `AppBar` and scrolling `SliverAppBar`, use `DmNavigationHeader`
+and forward its three leading properties. Keep it inside the scaffold owning the
+header, so the helper can resolve that scaffold's drawer and the current route's
+back/close button. Existing explicit `leading`, `leadingWidth`, and
+`automaticallyImplyLeading` can be supplied to the helper. The builder leaves
+all remaining header options, including pinned/floating/expanded behavior,
+under application control:
+
+```dart
+CustomScrollView(
+  slivers: [
+    DmNavigationHeader(
+      builder: (context, header) => SliverAppBar(
+        leading: header.leading,
+        leadingWidth: header.leadingWidth,
+        automaticallyImplyLeading: header.automaticallyImplyLeading,
+        pinned: true,
+        expandedHeight: 180,
+        title: const Text('Chat'),
+        actions: actions,
+      ),
+    ),
+    // Content slivers...
+  ],
+)
+```
+
+When there is no header, leave `navigationRestoreInHeader` false. A top-left
+safe-area overlay restores hidden navigation without shifting the body. The
+header helpers add no safe-area padding; the header owns its system inset.
+Do not enable the fallback over an existing header. On mobile, where navigation
+may use a bottom bar, applications can place `DmNavigationVisibilityButton`
+in header actions to request hiding as well.
+
+The nearest `DmNavigationVisibilityScope` shares visibility and its callback
+with adopted headers and buttons; nested scaffolds own independent scopes.
+The scope and button are also public for independently composed layouts.
+Hide/restore keeps the body mounted, preserving drafts and scroll state as well
+as the selected destination and rail extension preference. As with ordinary
+responsive layouts, changing to a different breakpoint-specific body builder
+can replace that body's state.
+
+Open **DmScaffold Demo** at `/widgets/scaffold` to try the controls. Its sidebar
+owns hide, its existing toolbar owns restore, and its footer collapses labels
+independently. Only the opened demo controls its navigation; the surrounding
+showcase retains its navigation and scroll position when the demo closes.
 
 ## Dual Screens and Foldables
 
