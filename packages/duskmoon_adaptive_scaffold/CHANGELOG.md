@@ -1,3 +1,7 @@
+## 1.11.1
+
+- Release 1.11.1 (2026-10-09)
+
 ## 1.11.0
 
 - Add reusable controlled navigation visibility controls with a top-right

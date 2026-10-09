@@ -1,3 +1,7 @@
+## 1.11.1
+
+- Release 1.11.1 (2026-10-09)
+
 ## 1.11.0
 
 - Add opt-in sidebar hide/restore controls and `DmAppBar` integration that

@@ -1,4 +1,4 @@
-## Unreleased
+## 1.11.1
 
 - Android `duo_screen` example: automatically launch a normal companion Activity
   and route launcher taps on either screen to the primary viewer.
