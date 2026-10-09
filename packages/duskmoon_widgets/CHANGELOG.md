@@ -1,4 +1,4 @@
-## Unreleased
+## 1.11.0
 
 - Add opt-in sidebar hide/restore controls and `DmAppBar` integration that
   composes restore beside existing leading controls in the same toolbar row.

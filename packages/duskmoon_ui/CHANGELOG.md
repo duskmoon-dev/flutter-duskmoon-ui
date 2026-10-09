@@ -1,4 +1,4 @@
-## Unreleased
+## 1.11.0
 
 - Export reusable sidebar visibility and header integration APIs.
 - Preserve adaptive icon-button tooltips and accessible names across styles.

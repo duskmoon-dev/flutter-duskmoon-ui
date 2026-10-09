@@ -1,4 +1,4 @@
-## Unreleased
+## 1.11.0
 
 - Add reusable controlled navigation visibility controls with a top-right
   sidebar hide button and a safe-area restore fallback.
