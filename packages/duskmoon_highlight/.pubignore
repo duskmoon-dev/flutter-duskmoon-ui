@@ -1,4 +1,6 @@
 vendor/
 tool/
 test/
+build/
+.dart_tool/
 .gitignore

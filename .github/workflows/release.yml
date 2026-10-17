@@ -12,6 +12,11 @@ on:
         required: true
         default: "main"
         type: string
+      publish_packages:
+        description: "Publish packages after preparing the release tag"
+        required: false
+        default: true
+        type: boolean
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -120,6 +125,7 @@ jobs:
           git push origin "v${{ inputs.version }}"
 
       - name: Trigger publish workflow
+        if: ${{ inputs.publish_packages }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run publish.yml --ref "v${{ inputs.version }}" -f tag="v${{ inputs.version }}"
