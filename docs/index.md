@@ -82,6 +82,7 @@ class HomePage extends StatelessWidget {
 | [`duskmoon_theme_bloc`](theme-bloc.md) | BLoC for persisting theme via SharedPreferences |
 | [`duskmoon_adaptive_scaffold`](adaptive-scaffold.md) | Responsive scaffold with M3 adaptive layout and breakpoints; import directly |
 | [`duskmoon_code_engine`](code-engine.md) | Pure Dart code editor engine with 19 language grammars |
+| [`duskmoon_highlight`](../packages/duskmoon_highlight/README.md) | Maintained parser, 194 language grammars, and themes for fenced code highlighting |
 
 ### Individual installation
 

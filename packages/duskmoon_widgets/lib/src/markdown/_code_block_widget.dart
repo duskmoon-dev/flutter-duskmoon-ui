@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:highlighting/highlighting.dart';
+import 'package:duskmoon_highlight/duskmoon_highlight.dart';
+import 'package:duskmoon_highlight/languages/all.dart';
+
+final _codeHighlighter = Highlight()..registerLanguages(builtinAllLanguages);
 
 /// Renders a syntax-highlighted code block with language label and copy button.
 ///
-/// Uses the `highlighting` package (HighlightJS port) for syntax detection.
+/// Uses the maintained `duskmoon_highlight` package for syntax highlighting.
 /// Theme is auto-selected based on ambient brightness unless overridden.
 class CodeBlockWidget extends StatefulWidget {
   /// Creates a code block widget.
@@ -100,58 +103,62 @@ class _CodeBlockWidgetState extends State<CodeBlockWidget> {
   }
 
   Widget _buildHighlightedCode(TextStyle baseStyle, bool isDark) {
-    if (widget.language == null || widget.language!.isEmpty) {
+    final language = widget.language;
+    if (language == null ||
+        language.isEmpty ||
+        _codeHighlighter.getLanguage(language) == null) {
       return Text(widget.code, style: baseStyle);
     }
 
     try {
-      final result = highlight.parse(
-        widget.code,
-        languageId: widget.language!,
+      final result = _codeHighlighter.highlight(
+        code: widget.code,
+        language: language,
+        ignoreIllegals: true,
       );
+      if (result.errorRaised != null || result.illegal) {
+        return Text(widget.code, style: baseStyle);
+      }
+      final renderer = _CodeHighlightRenderer(
+        baseStyle,
+        isDark ? _darkTheme : _lightTheme,
+      );
+      result.render(renderer);
 
       return Text.rich(
-        _buildTextSpanFromResult(result, baseStyle, isDark),
+        TextSpan(style: baseStyle, children: renderer.spans),
       );
     } catch (_) {
       // Fallback: plain unhighlighted text.
       return Text(widget.code, style: baseStyle);
     }
   }
+}
 
-  TextSpan _buildTextSpanFromResult(
-    Result result,
-    TextStyle baseStyle,
-    bool isDark,
-  ) {
-    final theme = isDark ? _darkTheme : _lightTheme;
-    final spans = <TextSpan>[];
-    _processNode(result.rootNode, spans, baseStyle, theme);
-    return TextSpan(style: baseStyle, children: spans);
+/// Converts parser scopes to spans while retaining nested token styles.
+class _CodeHighlightRenderer implements HighlightRenderer {
+  _CodeHighlightRenderer(TextStyle baseStyle, this.theme)
+      : _styles = [baseStyle];
+
+  final Map<String, TextStyle> theme;
+  final List<TextStyle> _styles;
+  final List<TextSpan> spans = [];
+
+  @override
+  void addText(String text) {
+    spans.add(TextSpan(text: text, style: _styles.last));
   }
 
-  void _processNode(
-    Node node,
-    List<TextSpan> spans,
-    TextStyle baseStyle,
-    Map<String, TextStyle> theme,
-  ) {
-    // If it's a leaf node with text value, emit a span.
-    if (node.value != null) {
-      final style = node.className != null
-          ? baseStyle.merge(theme[node.className] ?? const TextStyle())
-          : baseStyle;
-      spans.add(TextSpan(text: node.value, style: style));
-      return;
-    }
+  @override
+  void openNode(DataNode node) {
+    final scope = node.scope ?? '';
+    final style = theme[scope] ?? theme[scope.split('.').first];
+    _styles.add(_styles.last.merge(style));
+  }
 
-    // Otherwise, recurse into children.
-    final childStyle = node.className != null
-        ? baseStyle.merge(theme[node.className] ?? const TextStyle())
-        : baseStyle;
-    for (final child in node.children) {
-      _processNode(child, spans, childStyle, theme);
-    }
+  @override
+  void closeNode(DataNode node) {
+    _styles.removeLast();
   }
 }
 

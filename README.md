@@ -82,6 +82,7 @@ class HomePage extends StatelessWidget {
 | [`duskmoon_code_engine`](packages/duskmoon_code_engine/) | CodeMirror-inspired editor engine with 19 grammar modules | [Version](https://pub.dev/packages/duskmoon_code_engine) |
 | [`duskmoon_adaptive_scaffold`](packages/duskmoon_adaptive_scaffold/) | Responsive Material 3 scaffold and composable slot layouts | [Version](https://pub.dev/packages/duskmoon_adaptive_scaffold) |
 | [`duskmoon_mermaid_renderer`](packages/duskmoon_mermaid_renderer/) | Native Flutter Canvas renderer for 30 Mermaid diagram families | [Version](https://pub.dev/packages/duskmoon_mermaid_renderer) |
+| [`duskmoon_highlight`](packages/duskmoon_highlight/) | Maintained syntax highlighter with 194 languages, aliases, and Flutter text-span rendering | [Version](https://pub.dev/packages/duskmoon_highlight) |
 
 ## Themes and Adaptive Rendering
 
@@ -100,6 +101,8 @@ DmButton(
 ## Markdown and Mermaid
 
 `DmMarkdown` supports GFM, KaTeX, syntax highlighting, CSS color chips, YAML front matter, custom builders, and incremental streaming. Mermaid code blocks are opt-in and render without JavaScript, SVG, or a WebView.
+
+Fenced code highlighting uses the local [`duskmoon_highlight`](packages/duskmoon_highlight/) package, maintained from the MIT-licensed Re-Highlight source. Its parser, 194 language grammars, themes, tests, and generation sources are kept in this repository.
 
 ````dart
 DmMarkdown(
@@ -151,4 +154,5 @@ flutter run -d chrome
 
 ## License
 
-MIT
+MIT. Bundled highlighter components and themes retain the upstream licenses
+described in [their source provenance](packages/duskmoon_highlight/SOURCE.md).

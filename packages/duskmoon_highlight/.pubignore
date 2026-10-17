@@ -1,0 +1,4 @@
+vendor/
+tool/
+test/
+.gitignore

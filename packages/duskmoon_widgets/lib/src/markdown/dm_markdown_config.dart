@@ -59,7 +59,7 @@ class DmMarkdownConfig {
   /// Enable syntax highlighting in fenced code blocks.
   final bool enableCodeHighlight;
 
-  /// Code highlight theme name (maps to `highlighting` package themes).
+  /// Code highlight theme name.
   /// If `null`, automatically selected based on ambient brightness:
   /// dark → `monokai-sublime`, light → `github`.
   final String? codeTheme;

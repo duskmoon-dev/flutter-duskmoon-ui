@@ -1,3 +1,8 @@
+## Unreleased
+
+- Replace the Markdown syntax highlighter with the maintained `duskmoon_highlight`
+  workspace package, preserving 194 languages, aliases, and light/dark styles.
+
 ## 1.11.1
 
 - Release 1.11.1 (2026-10-09)

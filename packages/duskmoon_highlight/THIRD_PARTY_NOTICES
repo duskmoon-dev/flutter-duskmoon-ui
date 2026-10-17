@@ -1,0 +1,5513 @@
+Original grammar and theme notices retained from highlight.js 11.9.0.
+Component licenses: THIRD_PARTY_LICENSES. Theme-specific licenses apply as stated below.
+Kimbie and NNFX themes retain CC BY-SA 4.0; full terms: CC-BY-SA-4.0.txt.
+
+vendor/highlight.js/src/languages/1c.js
+/*
+Language: 1C:Enterprise
+Author: Stanislav Belov <stbelov@gmail.com>
+Description: built-in language 1C:Enterprise (v7, v8)
+Category: enterprise
+*/
+
+vendor/highlight.js/src/languages/abnf.js
+/*
+Language: Augmented Backus-Naur Form
+Author: Alex McKibben <alex@nullscope.net>
+Website: https://tools.ietf.org/html/rfc5234
+Audit: 2020
+*/
+
+vendor/highlight.js/src/languages/accesslog.js
+/*
+ Language: Apache Access Log
+ Author: Oleg Efimov <efimovov@gmail.com>
+ Description: Apache/Nginx Access Logs
+ Website: https://httpd.apache.org/docs/2.4/logs.html#accesslog
+ Category: web, logs
+ Audit: 2020
+ */
+
+vendor/highlight.js/src/languages/actionscript.js
+/*
+Language: ActionScript
+Author: Alexander Myadzel <myadzel@gmail.com>
+Category: scripting
+Audit: 2020
+*/
+
+vendor/highlight.js/src/languages/ada.js
+/*
+Language: Ada
+Author: Lars Schulna <kartoffelbrei.mit.muskatnuss@gmail.org>
+Description: Ada is a general-purpose programming language that has great support for saftey critical and real-time applications.
+             It has been developed by the DoD and thus has been used in military and safety-critical applications (like civil aviation).
+             The first version appeared in the 80s, but it's still actively developed today with
+             the newest standard being Ada2012.
+*/
+
+vendor/highlight.js/src/languages/angelscript.js
+/*
+Language: AngelScript
+Author: Melissa Geels <melissa@nimble.tools>
+Category: scripting
+Website: https://www.angelcode.com/angelscript/
+*/
+
+vendor/highlight.js/src/languages/apache.js
+/*
+Language: Apache config
+Author: Ruslan Keba <rukeba@gmail.com>
+Contributors: Ivan Sagalaev <maniac@softwaremaniacs.org>
+Website: https://httpd.apache.org
+Description: language definition for Apache configuration files (httpd.conf & .htaccess)
+Category: config, web
+Audit: 2020
+*/
+
+vendor/highlight.js/src/languages/applescript.js
+/*
+Language: AppleScript
+Authors: Nathan Grigg <nathan@nathanamy.org>, Dr. Drang <drdrang@gmail.com>
+Category: scripting
+Website: https://developer.apple.com/library/archive/documentation/AppleScript/Conceptual/AppleScriptLangGuide/introduction/ASLR_intro.html
+Audit: 2020
+*/
+
+vendor/highlight.js/src/languages/arcade.js
+/*
+ Language: ArcGIS Arcade
+ Category: scripting
+ Author: John Foster <jfoster@esri.com>
+ Website: https://developers.arcgis.com/arcade/
+ Description: ArcGIS Arcade is an expression language used in many Esri ArcGIS products such as Pro, Online, Server, Runtime, JavaScript, and Python
+*/
+
+vendor/highlight.js/src/languages/arduino.js
+/*
+Language: Arduino
+Author: Stefania Mellai <s.mellai@arduino.cc>
+Description: The Arduino® Language is a superset of C++. This rules are designed to highlight the Arduino® source code. For info about language see http://www.arduino.cc.
+Website: https://www.arduino.cc
+*/
+
+vendor/highlight.js/src/languages/armasm.js
+/*
+Language: ARM Assembly
+Author: Dan Panzarella <alsoelp@gmail.com>
+Description: ARM Assembly including Thumb and Thumb2 instructions
+Category: assembler
+*/
+
+vendor/highlight.js/src/languages/asciidoc.js
+/*
+Language: AsciiDoc
+Requires: xml.js
+Author: Dan Allen <dan.j.allen@gmail.com>
+Website: http://asciidoc.org
+Description: A semantic, text-based document format that can be exported to HTML, DocBook and other backends.
+Category: markup
+*/
+
+vendor/highlight.js/src/languages/aspectj.js
+/*
+Language: AspectJ
+Author: Hakan Ozler <ozler.hakan@gmail.com>
+Website: https://www.eclipse.org/aspectj/
+Description: Syntax Highlighting for the AspectJ Language which is a general-purpose aspect-oriented extension to the Java programming language.
+Audit: 2020
+*/
+
+vendor/highlight.js/src/languages/autohotkey.js
+/*
+Language: AutoHotkey
+Author: Seongwon Lee <dlimpid@gmail.com>
+Description: AutoHotkey language definition
+Category: scripting
+*/
+
+vendor/highlight.js/src/languages/autoit.js
+/*
+Language: AutoIt
+Author: Manh Tuan <junookyo@gmail.com>
+Description: AutoIt language definition
+Category: scripting
+*/
+
+vendor/highlight.js/src/languages/avrasm.js
+/*
+Language: AVR Assembly
+Author: Vladimir Ermakov <vooon341@gmail.com>
+Category: assembler
+Website: https://www.microchip.com/webdoc/avrassembler/avrassembler.wb_instruction_list.html
+*/
+
+vendor/highlight.js/src/languages/awk.js
+/*
+Language: Awk
+Author: Matthew Daly <matthewbdaly@gmail.com>
+Website: https://www.gnu.org/software/gawk/manual/gawk.html
+Description: language definition for Awk scripts
+*/
+
+vendor/highlight.js/src/languages/axapta.js
+/*
+Language: Microsoft X++
+Description: X++ is a language used in Microsoft Dynamics 365, Dynamics AX, and Axapta.
+Author: Dmitri Roudakov <dmitri@roudakov.ru>
+Website: https://dynamics.microsoft.com/en-us/ax-overview/
+Category: enterprise
+*/
+
+vendor/highlight.js/src/languages/bash.js
+/*
+Language: Bash
+Author: vah <vahtenberg@gmail.com>
+Contributrors: Benjamin Pannell <contact@sierrasoftworks.com>
+Website: https://www.gnu.org/software/bash/
+Category: common
+*/
+
+vendor/highlight.js/src/languages/basic.js
+/*
+Language: BASIC
+Author: Raphaël Assénat <raph@raphnet.net>
+Description: Based on the BASIC reference from the Tandy 1000 guide
+Website: https://en.wikipedia.org/wiki/Tandy_1000
+*/
+
+vendor/highlight.js/src/languages/bnf.js
+/*
+Language: Backus–Naur Form
+Website: https://en.wikipedia.org/wiki/Backus–Naur_form
+Author: Oleg Efimov <efimovov@gmail.com>
+*/
+
+vendor/highlight.js/src/languages/brainfuck.js
+/*
+Language: Brainfuck
+Author: Evgeny Stepanischev <imbolk@gmail.com>
+Website: https://esolangs.org/wiki/Brainfuck
+*/
+
+vendor/highlight.js/src/languages/c.js
+/*
+Language: C
+Category: common, system
+Website: https://en.wikipedia.org/wiki/C_(programming_language)
+*/
+
+vendor/highlight.js/src/languages/cal.js
+/*
+Language: C/AL
+Author: Kenneth Fuglsang Christensen <kfuglsang@gmail.com>
+Description: Provides highlighting of Microsoft Dynamics NAV C/AL code files
+Website: https://docs.microsoft.com/en-us/dynamics-nav/programming-in-c-al
+*/
+
+vendor/highlight.js/src/languages/capnproto.js
+/*
+Language: Cap’n Proto
+Author: Oleg Efimov <efimovov@gmail.com>
+Description: Cap’n Proto message definition format
+Website: https://capnproto.org/capnp-tool.html
+Category: protocols
+*/
+
+vendor/highlight.js/src/languages/ceylon.js
+/*
+Language: Ceylon
+Author: Lucas Werkmeister <mail@lucaswerkmeister.de>
+Website: https://ceylon-lang.org
+*/
+
+vendor/highlight.js/src/languages/clean.js
+/*
+Language: Clean
+Author: Camil Staps <info@camilstaps.nl>
+Category: functional
+Website: http://clean.cs.ru.nl
+*/
+
+vendor/highlight.js/src/languages/clojure-repl.js
+/*
+Language: Clojure REPL
+Description: Clojure REPL sessions
+Author: Ivan Sagalaev <maniac@softwaremaniacs.org>
+Requires: clojure.js
+Website: https://clojure.org
+Category: lisp
+*/
+
+vendor/highlight.js/src/languages/clojure.js
+/*
+Language: Clojure
+Description: Clojure syntax (based on lisp.js)
+Author: mfornos
+Website: https://clojure.org
+Category: lisp
+*/
+
+vendor/highlight.js/src/languages/cmake.js
+/*
+Language: CMake
+Description: CMake is an open-source cross-platform system for build automation.
+Author: Igor Kalnitsky <igor@kalnitsky.org>
+Website: https://cmake.org
+*/
+
+vendor/highlight.js/src/languages/coffeescript.js
+/*
+Language: CoffeeScript
+Author: Dmytrii Nagirniak <dnagir@gmail.com>
+Contributors: Oleg Efimov <efimovov@gmail.com>, Cédric Néhémie <cedric.nehemie@gmail.com>
+Description: CoffeeScript is a programming language that transcompiles to JavaScript. For info about language see http://coffeescript.org/
+Category: scripting
+Website: https://coffeescript.org
+*/
+
+vendor/highlight.js/src/languages/coq.js
+/*
+Language: Coq
+Author: Stephan Boyer <stephan@stephanboyer.com>
+Category: functional
+Website: https://coq.inria.fr
+*/
+
+vendor/highlight.js/src/languages/cos.js
+/*
+Language: Caché Object Script
+Author: Nikita Savchenko <zitros.lab@gmail.com>
+Category: enterprise, scripting
+Website: https://cedocs.intersystems.com/latest/csp/docbook/DocBook.UI.Page.cls
+*/
+
+vendor/highlight.js/src/languages/cpp.js
+/*
+Language: C++
+Category: common, system
+Website: https://isocpp.org
+*/
+
+vendor/highlight.js/src/languages/crmsh.js
+/*
+Language: crmsh
+Author: Kristoffer Gronlund <kgronlund@suse.com>
+Website: http://crmsh.github.io
+Description: Syntax Highlighting for the crmsh DSL
+Category: config
+*/
+
+vendor/highlight.js/src/languages/crystal.js
+/*
+Language: Crystal
+Author: TSUYUSATO Kitsune <make.just.on@gmail.com>
+Website: https://crystal-lang.org
+*/
+
+vendor/highlight.js/src/languages/csharp.js
+/*
+Language: C#
+Author: Jason Diamond <jason@diamond.name>
+Contributor: Nicolas LLOBERA <nllobera@gmail.com>, Pieter Vantorre <pietervantorre@gmail.com>, David Pine <david.pine@microsoft.com>
+Website: https://docs.microsoft.com/dotnet/csharp/
+Category: common
+*/
+
+vendor/highlight.js/src/languages/csp.js
+/*
+Language: CSP
+Description: Content Security Policy definition highlighting
+Author: Taras <oxdef@oxdef.info>
+Website: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+
+vim: ts=2 sw=2 st=2
+*/
+
+vendor/highlight.js/src/languages/css.js
+/*
+Language: CSS
+Category: common, css, web
+Website: https://developer.mozilla.org/en-US/docs/Web/CSS
+*/
+
+vendor/highlight.js/src/languages/d.js
+/*
+Language: D
+Author: Aleksandar Ruzicic <aleksandar@ruzicic.info>
+Description: D is a language with C-like syntax and static typing. It pragmatically combines efficiency, control, and modeling power, with safety and programmer productivity.
+Version: 1.0a
+Website: https://dlang.org
+Date: 2012-04-08
+*/
+
+vendor/highlight.js/src/languages/dart.js
+/*
+Language: Dart
+Requires: markdown.js
+Author: Maxim Dikun <dikmax@gmail.com>
+Description: Dart a modern, object-oriented language developed by Google. For more information see https://www.dartlang.org/
+Website: https://dart.dev
+Category: scripting
+*/
+
+vendor/highlight.js/src/languages/delphi.js
+/*
+Language: Delphi
+Website: https://www.embarcadero.com/products/delphi
+*/
+
+vendor/highlight.js/src/languages/diff.js
+/*
+Language: Diff
+Description: Unified and context diff
+Author: Vasily Polovnyov <vast@whiteants.net>
+Website: https://www.gnu.org/software/diffutils/
+Category: common
+*/
+
+vendor/highlight.js/src/languages/django.js
+/*
+Language: Django
+Description: Django is a high-level Python Web framework that encourages rapid development and clean, pragmatic design.
+Requires: xml.js
+Author: Ivan Sagalaev <maniac@softwaremaniacs.org>
+Contributors: Ilya Baryshev <baryshev@gmail.com>
+Website: https://www.djangoproject.com
+Category: template
+*/
+
+vendor/highlight.js/src/languages/dns.js
+/*
+Language: DNS Zone
+Author: Tim Schumacher <tim@datenknoten.me>
+Category: config
+Website: https://en.wikipedia.org/wiki/Zone_file
+*/
+
+vendor/highlight.js/src/languages/dockerfile.js
+/*
+Language: Dockerfile
+Requires: bash.js
+Author: Alexis Hénaut <alexis@henaut.net>
+Description: language definition for Dockerfile files
+Website: https://docs.docker.com/engine/reference/builder/
+Category: config
+*/
+
+vendor/highlight.js/src/languages/dos.js
+/*
+Language: Batch file (DOS)
+Author: Alexander Makarov <sam@rmcreative.ru>
+Contributors: Anton Kochkov <anton.kochkov@gmail.com>
+Website: https://en.wikipedia.org/wiki/Batch_file
+*/
+
+vendor/highlight.js/src/languages/dsconfig.js
+/*
+ Language: dsconfig
+ Description: dsconfig batch configuration language for LDAP directory servers
+ Contributors: Jacob Childress <jacobc@gmail.com>
+ Category: enterprise, config
+ */
+
+vendor/highlight.js/src/languages/dts.js
+/*
+Language: Device Tree
+Description: *.dts files used in the Linux kernel
+Author: Martin Braun <martin.braun@ettus.com>, Moritz Fischer <moritz.fischer@ettus.com>
+Website: https://elinux.org/Device_Tree_Reference
+Category: config
+*/
+
+vendor/highlight.js/src/languages/dust.js
+/*
+Language: Dust
+Requires: xml.js
+Author: Michael Allen <michael.allen@benefitfocus.com>
+Description: Matcher for dust.js templates.
+Website: https://www.dustjs.com
+Category: template
+*/
+
+vendor/highlight.js/src/languages/ebnf.js
+/*
+Language: Extended Backus-Naur Form
+Author: Alex McKibben <alex@nullscope.net>
+Website: https://en.wikipedia.org/wiki/Extended_Backus–Naur_form
+*/
+
+vendor/highlight.js/src/languages/elixir.js
+/*
+Language: Elixir
+Author: Josh Adams <josh@isotope11.com>
+Description: language definition for Elixir source code files (.ex and .exs).  Based on ruby language support.
+Category: functional
+Website: https://elixir-lang.org
+*/
+
+vendor/highlight.js/src/languages/elm.js
+/*
+Language: Elm
+Author: Janis Voigtlaender <janis.voigtlaender@gmail.com>
+Website: https://elm-lang.org
+Category: functional
+*/
+
+vendor/highlight.js/src/languages/erb.js
+/*
+Language: ERB (Embedded Ruby)
+Requires: xml.js, ruby.js
+Author: Lucas Mazza <lucastmazza@gmail.com>
+Contributors: Kassio Borges <kassioborgesm@gmail.com>
+Description: "Bridge" language defining fragments of Ruby in HTML within <% .. %>
+Website: https://ruby-doc.org/stdlib-2.6.5/libdoc/erb/rdoc/ERB.html
+Category: template
+*/
+
+vendor/highlight.js/src/languages/erlang-repl.js
+/*
+Language: Erlang REPL
+Author: Sergey Ignatov <sergey@ignatov.spb.su>
+Website: https://www.erlang.org
+Category: functional
+*/
+
+vendor/highlight.js/src/languages/erlang.js
+/*
+Language: Erlang
+Description: Erlang is a general-purpose functional language, with strict evaluation, single assignment, and dynamic typing.
+Author: Nikolay Zakharov <nikolay.desh@gmail.com>, Dmitry Kovega <arhibot@gmail.com>
+Website: https://www.erlang.org
+Category: functional
+*/
+
+vendor/highlight.js/src/languages/excel.js
+/*
+Language: Excel formulae
+Author: Victor Zhou <OiCMudkips@users.noreply.github.com>
+Description: Excel formulae
+Website: https://products.office.com/en-us/excel/
+*/
+
+vendor/highlight.js/src/languages/fix.js
+/*
+Language: FIX
+Author: Brent Bradbury <brent@brentium.com>
+*/
+
+vendor/highlight.js/src/languages/flix.js
+/*
+ Language: Flix
+ Category: functional
+ Author: Magnus Madsen <mmadsen@uwaterloo.ca>
+ Website: https://flix.dev/
+ */
+
+vendor/highlight.js/src/languages/fortran.js
+/*
+Language: Fortran
+Author: Anthony Scemama <scemama@irsamc.ups-tlse.fr>
+Website: https://en.wikipedia.org/wiki/Fortran
+Category: scientific
+*/
+
+vendor/highlight.js/src/languages/fsharp.js
+/*
+Language: F#
+Author: Jonas Follesø <jonas@follesoe.no>
+Contributors: Troy Kershaw <hello@troykershaw.com>, Henrik Feldt <henrik@haf.se>, Melvyn Laïly <melvyn.laily@gmail.com>
+Website: https://docs.microsoft.com/en-us/dotnet/fsharp/
+Category: functional
+*/
+
+vendor/highlight.js/src/languages/gams.js
+/*
+ Language: GAMS
+ Author: Stefan Bechert <stefan.bechert@gmx.net>
+ Contributors: Oleg Efimov <efimovov@gmail.com>, Mikko Kouhia <mikko.kouhia@iki.fi>
+ Description: The General Algebraic Modeling System language
+ Website: https://www.gams.com
+ Category: scientific
+ */
+
+vendor/highlight.js/src/languages/gauss.js
+/*
+Language: GAUSS
+Author: Matt Evans <matt@aptech.com>
+Description: GAUSS Mathematical and Statistical language
+Website: https://www.aptech.com
+Category: scientific
+*/
+
+vendor/highlight.js/src/languages/gcode.js
+/*
+ Language: G-code (ISO 6983)
+ Contributors: Adam Joseph Cook <adam.joseph.cook@gmail.com>
+ Description: G-code syntax highlighter for Fanuc and other common CNC machine tool controls.
+ Website: https://www.sis.se/api/document/preview/911952/
+ */
+
+vendor/highlight.js/src/languages/gherkin.js
+/*
+ Language: Gherkin
+ Author: Sam Pikesley (@pikesley) <sam.pikesley@theodi.org>
+ Description: Gherkin is the format for cucumber specifications. It is a domain specific language which helps you to describe business behavior without the need to go into detail of implementation.
+ Website: https://cucumber.io/docs/gherkin/
+ */
+
+vendor/highlight.js/src/languages/glsl.js
+/*
+Language: GLSL
+Description: OpenGL Shading Language
+Author: Sergey Tikhomirov <sergey@tikhomirov.io>
+Website: https://en.wikipedia.org/wiki/OpenGL_Shading_Language
+Category: graphics
+*/
+
+vendor/highlight.js/src/languages/gml.js
+/*
+Language: GML
+Author: Meseta <meseta@gmail.com>
+Description: Game Maker Language for GameMaker Studio 2
+Website: https://docs2.yoyogames.com
+Category: scripting
+*/
+
+vendor/highlight.js/src/languages/go.js
+/*
+Language: Go
+Author: Stephan Kountso aka StepLg <steplg@gmail.com>
+Contributors: Evgeny Stepanischev <imbolk@gmail.com>
+Description: Google go language (golang). For info about language
+Website: http://golang.org/
+Category: common, system
+*/
+
+vendor/highlight.js/src/languages/golo.js
+/*
+Language: Golo
+Author: Philippe Charriere <ph.charriere@gmail.com>
+Description: a lightweight dynamic language for the JVM
+Website: http://golo-lang.org/
+*/
+
+vendor/highlight.js/src/languages/gradle.js
+/*
+Language: Gradle
+Description: Gradle is an open-source build automation tool focused on flexibility and performance.
+Website: https://gradle.org
+Author: Damian Mee <mee.damian@gmail.com>
+*/
+
+vendor/highlight.js/src/languages/graphql.js
+/*
+ Language: GraphQL
+ Author: John Foster (GH jf990), and others
+ Description: GraphQL is a query language for APIs
+ Category: web, common
+*/
+
+vendor/highlight.js/src/languages/groovy.js
+/*
+ Language: Groovy
+ Author: Guillaume Laforge <glaforge@gmail.com>
+ Description: Groovy programming language implementation inspired from Vsevolod's Java mode
+ Website: https://groovy-lang.org
+ */
+
+vendor/highlight.js/src/languages/haml.js
+/*
+Language: HAML
+Requires: ruby.js
+Author: Dan Allen <dan.j.allen@gmail.com>
+Website: http://haml.info
+Category: template
+*/
+
+vendor/highlight.js/src/languages/handlebars.js
+/*
+Language: Handlebars
+Requires: xml.js
+Author: Robin Ward <robin.ward@gmail.com>
+Description: Matcher for Handlebars as well as EmberJS additions.
+Website: https://handlebarsjs.com
+Category: template
+*/
+
+vendor/highlight.js/src/languages/haskell.js
+/*
+Language: Haskell
+Author: Jeremy Hull <sourdrums@gmail.com>
+Contributors: Zena Treep <zena.treep@gmail.com>
+Website: https://www.haskell.org
+Category: functional
+*/
+
+vendor/highlight.js/src/languages/haxe.js
+/*
+Language: Haxe
+Description: Haxe is an open source toolkit based on a modern, high level, strictly typed programming language.
+Author: Christopher Kaster <ikasoki@gmail.com> (Based on the actionscript.js language file by Alexander Myadzel)
+Contributors: Kenton Hamaluik <kentonh@gmail.com>
+Website: https://haxe.org
+*/
+
+vendor/highlight.js/src/languages/hsp.js
+/*
+Language: HSP
+Author: prince <MC.prince.0203@gmail.com>
+Website: https://en.wikipedia.org/wiki/Hot_Soup_Processor
+Category: scripting
+*/
+
+vendor/highlight.js/src/languages/http.js
+/*
+Language: HTTP
+Description: HTTP request and response headers with automatic body highlighting
+Author: Ivan Sagalaev <maniac@softwaremaniacs.org>
+Category: protocols, web
+Website: https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview
+*/
+
+vendor/highlight.js/src/languages/hy.js
+/*
+Language: Hy
+Description: Hy is a wonderful dialect of Lisp that’s embedded in Python.
+Author: Sergey Sobko <s.sobko@profitware.ru>
+Website: http://docs.hylang.org/en/stable/
+Category: lisp
+*/
+
+vendor/highlight.js/src/languages/inform7.js
+/*
+Language: Inform 7
+Author: Bruno Dias <bruno.r.dias@gmail.com>
+Description: Language definition for Inform 7, a DSL for writing parser interactive fiction.
+Website: http://inform7.com
+*/
+
+vendor/highlight.js/src/languages/ini.js
+/*
+Language: TOML, also INI
+Description: TOML aims to be a minimal configuration file format that's easy to read due to obvious semantics.
+Contributors: Guillaume Gomez <guillaume1.gomez@gmail.com>
+Category: common, config
+Website: https://github.com/toml-lang/toml
+*/
+
+vendor/highlight.js/src/languages/irpf90.js
+/*
+Language: IRPF90
+Author: Anthony Scemama <scemama@irsamc.ups-tlse.fr>
+Description: IRPF90 is an open-source Fortran code generator
+Website: http://irpf90.ups-tlse.fr
+Category: scientific
+*/
+
+vendor/highlight.js/src/languages/isbl.js
+/*
+Language: ISBL
+Author: Dmitriy Tarasov <dimatar@gmail.com>
+Description: built-in language DIRECTUM
+Category: enterprise
+*/
+
+vendor/highlight.js/src/languages/java.js
+/*
+Language: Java
+Author: Vsevolod Solovyov <vsevolod.solovyov@gmail.com>
+Category: common, enterprise
+Website: https://www.java.com/
+*/
+
+vendor/highlight.js/src/languages/javascript.js
+/*
+Language: JavaScript
+Description: JavaScript (JS) is a lightweight, interpreted, or just-in-time compiled programming language with first-class functions.
+Category: common, scripting, web
+Website: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+*/
+
+vendor/highlight.js/src/languages/jboss-cli.js
+/*
+ Language: JBoss CLI
+ Author: Raphaël Parrëe <rparree@edc4it.com>
+ Description: language definition jboss cli
+ Website: https://docs.jboss.org/author/display/WFLY/Command+Line+Interface
+ Category: config
+ */
+
+vendor/highlight.js/src/languages/json.js
+/*
+Language: JSON
+Description: JSON (JavaScript Object Notation) is a lightweight data-interchange format.
+Author: Ivan Sagalaev <maniac@softwaremaniacs.org>
+Website: http://www.json.org
+Category: common, protocols, web
+*/
+
+vendor/highlight.js/src/languages/julia-repl.js
+/*
+Language: Julia REPL
+Description: Julia REPL sessions
+Author: Morten Piibeleht <morten.piibeleht@gmail.com>
+Website: https://julialang.org
+Requires: julia.js
+
+The Julia REPL code blocks look something like the following:
+
+  julia> function foo(x)
+             x + 1
+         end
+  foo (generic function with 1 method)
+
+They start on a new line with "julia>". Usually there should also be a space after this, but
+we also allow the code to start right after the > character. The code may run over multiple
+lines, but the additional lines must start with six spaces (i.e. be indented to match
+"julia>"). The rest of the code is assumed to be output from the executed code and will be
+left un-highlighted.
+
+Using simply spaces to identify line continuations may get a false-positive if the output
+also prints out six spaces, but such cases should be rare.
+*/
+
+vendor/highlight.js/src/languages/julia.js
+/*
+Language: Julia
+Description: Julia is a high-level, high-performance, dynamic programming language.
+Author: Kenta Sato <bicycle1885@gmail.com>
+Contributors: Alex Arslan <ararslan@comcast.net>, Fredrik Ekre <ekrefredrik@gmail.com>
+Website: https://julialang.org
+*/
+
+vendor/highlight.js/src/languages/kotlin.js
+/*
+ Language: Kotlin
+ Description: Kotlin is an OSS statically typed programming language that targets the JVM, Android, JavaScript and Native.
+ Author: Sergey Mashkov <cy6erGn0m@gmail.com>
+ Website: https://kotlinlang.org
+ Category: common
+ */
+
+vendor/highlight.js/src/languages/lasso.js
+/*
+Language: Lasso
+Author: Eric Knibbe <eric@lassosoft.com>
+Description: Lasso is a language and server platform for database-driven web applications. This definition handles Lasso 9 syntax and LassoScript for Lasso 8.6 and earlier.
+Website: http://www.lassosoft.com/What-Is-Lasso
+*/
+
+vendor/highlight.js/src/languages/latex.js
+/*
+Language: LaTeX
+Author: Benedikt Wilde <bwilde@posteo.de>
+Website: https://www.latex-project.org
+Category: markup
+*/
+
+vendor/highlight.js/src/languages/ldif.js
+/*
+Language: LDIF
+Contributors: Jacob Childress <jacobc@gmail.com>
+Category: enterprise, config
+Website: https://en.wikipedia.org/wiki/LDAP_Data_Interchange_Format
+*/
+
+vendor/highlight.js/src/languages/leaf.js
+/*
+Language: Leaf
+Description: A Swift-based templating language created for the Vapor project.
+Website: https://docs.vapor.codes/leaf/overview
+Category: template
+*/
+
+vendor/highlight.js/src/languages/less.js
+/*
+Language: Less
+Description: It's CSS, with just a little more.
+Author:   Max Mikhailov <seven.phases.max@gmail.com>
+Website: http://lesscss.org
+Category: common, css, web
+*/
+
+vendor/highlight.js/src/languages/lisp.js
+/*
+Language: Lisp
+Description: Generic lisp syntax
+Author: Vasily Polovnyov <vast@whiteants.net>
+Category: lisp
+*/
+
+vendor/highlight.js/src/languages/livecodeserver.js
+/*
+Language: LiveCode
+Author: Ralf Bitter <rabit@revigniter.com>
+Description: Language definition for LiveCode server accounting for revIgniter (a web application framework) characteristics.
+Version: 1.1
+Date: 2019-04-17
+Category: enterprise
+*/
+
+vendor/highlight.js/src/languages/livescript.js
+/*
+Language: LiveScript
+Author: Taneli Vatanen <taneli.vatanen@gmail.com>
+Contributors: Jen Evers-Corvina <jen@sevvie.net>
+Origin: coffeescript.js
+Description: LiveScript is a programming language that transcompiles to JavaScript. For info about language see http://livescript.net/
+Website: https://livescript.net
+Category: scripting
+*/
+
+vendor/highlight.js/src/languages/llvm.js
+/*
+Language: LLVM IR
+Author: Michael Rodler <contact@f0rki.at>
+Description: language used as intermediate representation in the LLVM compiler framework
+Website: https://llvm.org/docs/LangRef.html
+Category: assembler
+Audit: 2020
+*/
+
+vendor/highlight.js/src/languages/lsl.js
+/*
+Language: LSL (Linden Scripting Language)
+Description: The Linden Scripting Language is used in Second Life by Linden Labs.
+Author: Builder's Brewery <buildersbrewery@gmail.com>
+Website: http://wiki.secondlife.com/wiki/LSL_Portal
+Category: scripting
+*/
+
+vendor/highlight.js/src/languages/lua.js
+/*
+Language: Lua
+Description: Lua is a powerful, efficient, lightweight, embeddable scripting language.
+Author: Andrew Fedorov <dmmdrs@mail.ru>
+Category: common, scripting
+Website: https://www.lua.org
+*/
+
+vendor/highlight.js/src/languages/makefile.js
+/*
+Language: Makefile
+Author: Ivan Sagalaev <maniac@softwaremaniacs.org>
+Contributors: Joël Porquet <joel@porquet.org>
+Website: https://www.gnu.org/software/make/manual/html_node/Introduction.html
+Category: common
+*/
+
+vendor/highlight.js/src/languages/markdown.js
+/*
+Language: Markdown
+Requires: xml.js
+Author: John Crepezzi <john.crepezzi@gmail.com>
+Website: https://daringfireball.net/projects/markdown/
+Category: common, markup
+*/
+
+vendor/highlight.js/src/languages/mathematica.js
+/*
+Language: Wolfram Language
+Description: The Wolfram Language is the programming language used in Wolfram Mathematica, a modern technical computing system spanning most areas of technical computing.
+Authors: Patrick Scheibe <patrick@halirutan.de>, Robert Jacobson <robertjacobson@acm.org>
+Website: https://www.wolfram.com/mathematica/
+Category: scientific
+*/
+
+vendor/highlight.js/src/languages/matlab.js
+/*
+Language: Matlab
+Author: Denis Bardadym <bardadymchik@gmail.com>
+Contributors: Eugene Nizhibitsky <nizhibitsky@ya.ru>, Egor Rogov <e.rogov@postgrespro.ru>
+Website: https://www.mathworks.com/products/matlab.html
+Category: scientific
+*/
+
+vendor/highlight.js/src/languages/maxima.js
+/*
+Language: Maxima
+Author: Robert Dodier <robert.dodier@gmail.com>
+Website: http://maxima.sourceforge.net
+Category: scientific
+*/
+
+vendor/highlight.js/src/languages/mel.js
+/*
+Language: MEL
+Description: Maya Embedded Language
+Author: Shuen-Huei Guan <drake.guan@gmail.com>
+Website: http://www.autodesk.com/products/autodesk-maya/overview
+Category: graphics
+*/
+
+vendor/highlight.js/src/languages/mercury.js
+/*
+Language: Mercury
+Author: mucaho <mkucko@gmail.com>
+Description: Mercury is a logic/functional programming language which combines the clarity and expressiveness of declarative programming with advanced static analysis and error detection features.
+Website: https://www.mercurylang.org
+*/
+
+vendor/highlight.js/src/languages/mipsasm.js
+/*
+Language: MIPS Assembly
+Author: Nebuleon Fumika <nebuleon.fumika@gmail.com>
+Description: MIPS Assembly (up to MIPS32R2)
+Website: https://en.wikipedia.org/wiki/MIPS_architecture
+Category: assembler
+*/
+
+vendor/highlight.js/src/languages/mizar.js
+/*
+Language: Mizar
+Description: The Mizar Language is a formal language derived from the mathematical vernacular.
+Author: Kelley van Evert <kelleyvanevert@gmail.com>
+Website: http://mizar.org/language/
+Category: scientific
+*/
+
+vendor/highlight.js/src/languages/mojolicious.js
+/*
+Language: Mojolicious
+Requires: xml.js, perl.js
+Author: Dotan Dimet <dotan@corky.net>
+Description: Mojolicious .ep (Embedded Perl) templates
+Website: https://mojolicious.org
+Category: template
+*/
+
+vendor/highlight.js/src/languages/monkey.js
+/*
+Language: Monkey
+Description: Monkey2 is an easy to use, cross platform, games oriented programming language from Blitz Research.
+Author: Arthur Bikmullin <devolonter@gmail.com>
+Website: https://blitzresearch.itch.io/monkey2
+*/
+
+vendor/highlight.js/src/languages/moonscript.js
+/*
+Language: MoonScript
+Author: Billy Quith <chinbillybilbo@gmail.com>
+Description: MoonScript is a programming language that transcompiles to Lua.
+Origin: coffeescript.js
+Website: http://moonscript.org/
+Category: scripting
+*/
+
+vendor/highlight.js/src/languages/n1ql.js
+/*
+ Language: N1QL
+ Author: Andres Täht <andres.taht@gmail.com>
+ Contributors: Rene Saarsoo <nene@triin.net>
+ Description: Couchbase query language
+ Website: https://www.couchbase.com/products/n1ql
+ */
+
+vendor/highlight.js/src/languages/nestedtext.js
+/*
+Language: NestedText
+Description: NestedText is a file format for holding data that is to be entered, edited, or viewed by people.
+Website: https://nestedtext.org/
+Category: config
+*/
+
+vendor/highlight.js/src/languages/nginx.js
+/*
+Language: Nginx config
+Author: Peter Leonov <gojpeg@yandex.ru>
+Contributors: Ivan Sagalaev <maniac@softwaremaniacs.org>
+Category: config, web
+Website: https://www.nginx.com
+*/
+
+vendor/highlight.js/src/languages/nim.js
+/*
+Language: Nim
+Description: Nim is a statically typed compiled systems programming language.
+Website: https://nim-lang.org
+Category: system
+*/
+
+vendor/highlight.js/src/languages/nix.js
+/*
+Language: Nix
+Author: Domen Kožar <domen@dev.si>
+Description: Nix functional language
+Website: http://nixos.org/nix
+*/
+
+vendor/highlight.js/src/languages/node-repl.js
+/*
+Language: Node REPL
+Requires: javascript.js
+Author: Marat Nagayev <nagaevmt@yandex.ru>
+Category: scripting
+*/
+
+vendor/highlight.js/src/languages/nsis.js
+/*
+Language: NSIS
+Description: Nullsoft Scriptable Install System
+Author: Jan T. Sott <jan.sott@gmail.com>
+Website: https://nsis.sourceforge.io/Main_Page
+*/
+
+vendor/highlight.js/src/languages/objectivec.js
+/*
+Language: Objective-C
+Author: Valerii Hiora <valerii.hiora@gmail.com>
+Contributors: Angel G. Olloqui <angelgarcia.mail@gmail.com>, Matt Diephouse <matt@diephouse.com>, Andrew Farmer <ahfarmer@gmail.com>, Minh Nguyễn <mxn@1ec5.org>
+Website: https://developer.apple.com/documentation/objectivec
+Category: common
+*/
+
+vendor/highlight.js/src/languages/ocaml.js
+/*
+Language: OCaml
+Author: Mehdi Dogguy <mehdi@dogguy.org>
+Contributors: Nicolas Braud-Santoni <nicolas.braud-santoni@ens-cachan.fr>, Mickael Delahaye <mickael.delahaye@gmail.com>
+Description: OCaml language definition.
+Website: https://ocaml.org
+Category: functional
+*/
+
+vendor/highlight.js/src/languages/openscad.js
+/*
+Language: OpenSCAD
+Author: Dan Panzarella <alsoelp@gmail.com>
+Description: OpenSCAD is a language for the 3D CAD modeling software of the same name.
+Website: https://www.openscad.org
+Category: scientific
+*/
+
+vendor/highlight.js/src/languages/oxygene.js
+/*
+Language: Oxygene
+Author: Carlo Kok <ck@remobjects.com>
+Description: Oxygene is built on the foundation of Object Pascal, revamped and extended to be a modern language for the twenty-first century.
+Website: https://www.elementscompiler.com/elements/default.aspx
+*/
+
+vendor/highlight.js/src/languages/parser3.js
+/*
+Language: Parser3
+Requires: xml.js
+Author: Oleg Volchkov <oleg@volchkov.net>
+Website: https://www.parser.ru/en/
+Category: template
+*/
+
+vendor/highlight.js/src/languages/perl.js
+/*
+Language: Perl
+Author: Peter Leonov <gojpeg@yandex.ru>
+Website: https://www.perl.org
+Category: common
+*/
+
+vendor/highlight.js/src/languages/pf.js
+/*
+Language: Packet Filter config
+Description: pf.conf — packet filter configuration file (OpenBSD)
+Author: Peter Piwowarski <oldlaptop654@aol.com>
+Website: http://man.openbsd.org/pf.conf
+Category: config
+*/
+
+vendor/highlight.js/src/languages/pgsql.js
+/*
+Language: PostgreSQL and PL/pgSQL
+Author: Egor Rogov (e.rogov@postgrespro.ru)
+Website: https://www.postgresql.org/docs/11/sql.html
+Description:
+    This language incorporates both PostgreSQL SQL dialect and PL/pgSQL language.
+    It is based on PostgreSQL version 11. Some notes:
+    - Text in double-dollar-strings is _always_ interpreted as some programming code. Text
+      in ordinary quotes is _never_ interpreted that way and highlighted just as a string.
+    - There are quite a bit "special cases". That's because many keywords are not strictly
+      they are keywords in some contexts and ordinary identifiers in others. Only some
+      of such cases are handled; you still can get some of your identifiers highlighted
+      wrong way.
+    - Function names deliberately are not highlighted. There is no way to tell function
+      call from other constructs, hence we can't highlight _all_ function names. And
+      some names highlighted while others not looks ugly.
+*/
+
+vendor/highlight.js/src/languages/php-template.js
+/*
+Language: PHP Template
+Requires: xml.js, php.js
+Author: Josh Goebel <hello@joshgoebel.com>
+Website: https://www.php.net
+Category: common
+*/
+
+vendor/highlight.js/src/languages/php.js
+/*
+Language: PHP
+Author: Victor Karamzin <Victor.Karamzin@enterra-inc.com>
+Contributors: Evgeny Stepanischev <imbolk@gmail.com>, Ivan Sagalaev <maniac@softwaremaniacs.org>
+Website: https://www.php.net
+Category: common
+*/
+
+vendor/highlight.js/src/languages/plaintext.js
+/*
+Language: Plain text
+Author: Egor Rogov (e.rogov@postgrespro.ru)
+Description: Plain text without any highlighting.
+Category: common
+*/
+
+vendor/highlight.js/src/languages/pony.js
+/*
+Language: Pony
+Author: Joe Eli McIlvain <joe.eli.mac@gmail.com>
+Description: Pony is an open-source, object-oriented, actor-model,
+             capabilities-secure, high performance programming language.
+Website: https://www.ponylang.io
+*/
+
+vendor/highlight.js/src/languages/powershell.js
+/*
+Language: PowerShell
+Description: PowerShell is a task-based command-line shell and scripting language built on .NET.
+Author: David Mohundro <david@mohundro.com>
+Contributors: Nicholas Blumhardt <nblumhardt@nblumhardt.com>, Victor Zhou <OiCMudkips@users.noreply.github.com>, Nicolas Le Gall <contact@nlegall.fr>
+Website: https://docs.microsoft.com/en-us/powershell/
+*/
+
+vendor/highlight.js/src/languages/processing.js
+/*
+Language: Processing
+Description: Processing is a flexible software sketchbook and a language for learning how to code within the context of the visual arts.
+Author: Erik Paluka <erik.paluka@gmail.com>
+Website: https://processing.org
+Category: graphics
+*/
+
+vendor/highlight.js/src/languages/profile.js
+/*
+Language: Python profiler
+Description: Python profiler results
+Author: Brian Beck <exogen@gmail.com>
+*/
+
+vendor/highlight.js/src/languages/prolog.js
+/*
+Language: Prolog
+Description: Prolog is a general purpose logic programming language associated with artificial intelligence and computational linguistics.
+Author: Raivo Laanemets <raivo@infdot.com>
+Website: https://en.wikipedia.org/wiki/Prolog
+*/
+
+vendor/highlight.js/src/languages/properties.js
+/*
+Language: .properties
+Contributors: Valentin Aitken <valentin@nalisbg.com>, Egor Rogov <e.rogov@postgrespro.ru>
+Website: https://en.wikipedia.org/wiki/.properties
+Category: config
+*/
+
+vendor/highlight.js/src/languages/protobuf.js
+/*
+Language: Protocol Buffers
+Author: Dan Tao <daniel.tao@gmail.com>
+Description: Protocol buffer message definition format
+Website: https://developers.google.com/protocol-buffers/docs/proto3
+Category: protocols
+*/
+
+vendor/highlight.js/src/languages/puppet.js
+/*
+Language: Puppet
+Author: Jose Molina Colmenero <gaudy41@gmail.com>
+Website: https://puppet.com/docs
+Category: config
+*/
+
+vendor/highlight.js/src/languages/purebasic.js
+/*
+Language: PureBASIC
+Author: Tristano Ajmone <tajmone@gmail.com>
+Description: Syntax highlighting for PureBASIC (v.5.00-5.60). No inline ASM highlighting. (v.1.2, May 2017)
+Credits: I've taken inspiration from the PureBasic language file for GeSHi, created by Gustavo Julio Fiorenza (GuShH).
+Website: https://www.purebasic.com
+*/
+
+vendor/highlight.js/src/languages/python-repl.js
+/*
+Language: Python REPL
+Requires: python.js
+Author: Josh Goebel <hello@joshgoebel.com>
+Category: common
+*/
+
+vendor/highlight.js/src/languages/python.js
+/*
+Language: Python
+Description: Python is an interpreted, object-oriented, high-level programming language with dynamic semantics.
+Website: https://www.python.org
+Category: common
+*/
+
+vendor/highlight.js/src/languages/q.js
+/*
+Language: Q
+Description: Q is a vector-based functional paradigm programming language built into the kdb+ database.
+             (K/Q/Kdb+ from Kx Systems)
+Author: Sergey Vidyuk <svidyuk@gmail.com>
+Website: https://kx.com/connect-with-us/developers/
+*/
+
+vendor/highlight.js/src/languages/qml.js
+/*
+Language: QML
+Requires: javascript.js, xml.js
+Author: John Foster <jfoster@esri.com>
+Description: Syntax highlighting for the Qt Quick QML scripting language, based mostly off
+             the JavaScript parser.
+Website: https://doc.qt.io/qt-5/qmlapplications.html
+Category: scripting
+*/
+
+vendor/highlight.js/src/languages/r.js
+/*
+Language: R
+Description: R is a free software environment for statistical computing and graphics.
+Author: Joe Cheng <joe@rstudio.org>
+Contributors: Konrad Rudolph <konrad.rudolph@gmail.com>
+Website: https://www.r-project.org
+Category: common,scientific
+*/
+
+vendor/highlight.js/src/languages/reasonml.js
+/*
+Language: ReasonML
+Description: Reason lets you write simple, fast and quality type safe code while leveraging both the JavaScript & OCaml ecosystems.
+Website: https://reasonml.github.io
+Author: Gidi Meir Morris <oss@gidi.io>
+Category: functional
+*/
+
+vendor/highlight.js/src/languages/rib.js
+/*
+Language: RenderMan RIB
+Author: Konstantin Evdokimenko <qewerty@gmail.com>
+Contributors: Shuen-Huei Guan <drake.guan@gmail.com>
+Website: https://renderman.pixar.com/resources/RenderMan_20/ribBinding.html
+Category: graphics
+*/
+
+vendor/highlight.js/src/languages/roboconf.js
+/*
+Language: Roboconf
+Author: Vincent Zurczak <vzurczak@linagora.com>
+Description: Syntax highlighting for Roboconf's DSL
+Website: http://roboconf.net
+Category: config
+*/
+
+vendor/highlight.js/src/languages/routeros.js
+/*
+Language: MikroTik RouterOS script
+Author: Ivan Dementev <ivan_div@mail.ru>
+Description: Scripting host provides a way to automate some router maintenance tasks by means of executing user-defined scripts bounded to some event occurrence
+Website: https://wiki.mikrotik.com/wiki/Manual:Scripting
+*/
+
+vendor/highlight.js/src/languages/rsl.js
+/*
+Language: RenderMan RSL
+Author: Konstantin Evdokimenko <qewerty@gmail.com>
+Contributors: Shuen-Huei Guan <drake.guan@gmail.com>
+Website: https://renderman.pixar.com/resources/RenderMan_20/shadingLanguage.html
+Category: graphics
+*/
+
+vendor/highlight.js/src/languages/ruby.js
+/*
+Language: Ruby
+Description: Ruby is a dynamic, open source programming language with a focus on simplicity and productivity.
+Website: https://www.ruby-lang.org/
+Author: Anton Kovalyov <anton@kovalyov.net>
+Contributors: Peter Leonov <gojpeg@yandex.ru>, Vasily Polovnyov <vast@whiteants.net>, Loren Segal <lsegal@soen.ca>, Pascal Hurni <phi@ruby-reactive.org>, Cedric Sohrauer <sohrauer@googlemail.com>
+Category: common
+*/
+
+vendor/highlight.js/src/languages/ruleslanguage.js
+/*
+Language: Oracle Rules Language
+Author: Jason Jacobson <jason.a.jacobson@gmail.com>
+Description: The Oracle Utilities Rules Language is used to program the Oracle Utilities Applications acquired from LODESTAR Corporation.  The products include Billing Component, LPSS, Pricing Component etc. through version 1.6.1.
+Website: https://docs.oracle.com/cd/E17904_01/dev.1111/e10227/rlref.htm
+Category: enterprise
+*/
+
+vendor/highlight.js/src/languages/rust.js
+/*
+Language: Rust
+Author: Andrey Vlasovskikh <andrey.vlasovskikh@gmail.com>
+Contributors: Roman Shmatov <romanshmatov@gmail.com>, Kasper Andersen <kma_untrusted@protonmail.com>
+Website: https://www.rust-lang.org
+Category: common, system
+*/
+
+vendor/highlight.js/src/languages/sas.js
+/*
+Language: SAS
+Author: Mauricio Caceres <mauricio.caceres.bravo@gmail.com>
+Description: Syntax Highlighting for SAS
+*/
+
+vendor/highlight.js/src/languages/scala.js
+/*
+Language: Scala
+Category: functional
+Author: Jan Berkel <jan.berkel@gmail.com>
+Contributors: Erik Osheim <d_m@plastic-idolatry.com>
+Website: https://www.scala-lang.org
+*/
+
+vendor/highlight.js/src/languages/scheme.js
+/*
+Language: Scheme
+Description: Scheme is a programming language in the Lisp family.
+             (keywords based on http://community.schemewiki.org/?scheme-keywords)
+Author: JP Verkamp <me@jverkamp.com>
+Contributors: Ivan Sagalaev <maniac@softwaremaniacs.org>
+Origin: clojure.js
+Website: http://community.schemewiki.org/?what-is-scheme
+Category: lisp
+*/
+
+vendor/highlight.js/src/languages/scilab.js
+/*
+Language: Scilab
+Author: Sylvestre Ledru <sylvestre.ledru@scilab-enterprises.com>
+Origin: matlab.js
+Description: Scilab is a port from Matlab
+Website: https://www.scilab.org
+Category: scientific
+*/
+
+vendor/highlight.js/src/languages/scss.js
+/*
+Language: SCSS
+Description: Scss is an extension of the syntax of CSS.
+Author: Kurt Emch <kurt@kurtemch.com>
+Website: https://sass-lang.com
+Category: common, css, web
+*/
+
+vendor/highlight.js/src/languages/shell.js
+/*
+Language: Shell Session
+Requires: bash.js
+Author: TSUYUSATO Kitsune <make.just.on@gmail.com>
+Category: common
+Audit: 2020
+*/
+
+vendor/highlight.js/src/languages/smali.js
+/*
+Language: Smali
+Author: Dennis Titze <dennis.titze@gmail.com>
+Description: Basic Smali highlighting
+Website: https://github.com/JesusFreke/smali
+*/
+
+vendor/highlight.js/src/languages/smalltalk.js
+/*
+Language: Smalltalk
+Description: Smalltalk is an object-oriented, dynamically typed reflective programming language.
+Author: Vladimir Gubarkov <xonixx@gmail.com>
+Website: https://en.wikipedia.org/wiki/Smalltalk
+*/
+
+vendor/highlight.js/src/languages/sml.js
+/*
+Language: SML (Standard ML)
+Author: Edwin Dalorzo <edwin@dalorzo.org>
+Description: SML language definition.
+Website: https://www.smlnj.org
+Origin: ocaml.js
+Category: functional
+*/
+
+vendor/highlight.js/src/languages/sqf.js
+/*
+Language: SQF
+Author: Søren Enevoldsen <senevoldsen90@gmail.com>
+Contributors: Marvin Saignat <contact@zgmrvn.com>, Dedmen Miller <dedmen@dedmen.de>, Leopard20
+Description: Scripting language for the Arma game series
+Website: https://community.bistudio.com/wiki/SQF_syntax
+Category: scripting
+Last update: 07.01.2023, Arma 3 v2.11
+*/
+/*
+////////////////////////////////////////////////////////////////////////////////////////////
+  * Author: Leopard20
+
+  * Description:
+  This script can be used to dump all commands to the clipboard.
+  Make sure you're using the Diag EXE to dump all of the commands.
+
+  * How to use:
+  Simply replace the _KEYWORDS and _LITERAL arrays with the one from this sqf.js file.
+  Execute the script from the debug console.
+  All commands will be copied to the clipboard.
+////////////////////////////////////////////////////////////////////////////////////////////
+_KEYWORDS = ['if'];                                                //Array of all KEYWORDS
+_LITERALS = ['west'];                                              //Array of all LITERALS
+_allCommands = createHashMap;
+{
+  _type = _x select [0,1];
+  if (_type != "t") then {
+    _command_lowercase = ((_x select [2]) splitString " ")#(((["n", "u", "b"] find _type) - 1) max 0);
+    _command_uppercase = supportInfo ("i:" + _command_lowercase) # 0 # 2;
+    _allCommands set [_command_lowercase, _command_uppercase];
+  };
+} forEach supportInfo "";
+_allCommands = _allCommands toArray false;
+_allCommands sort true;                                            //sort by lowercase
+_allCommands = ((_allCommands apply {_x#1}) -_KEYWORDS)-_LITERALS; //remove KEYWORDS and LITERALS
+copyToClipboard (str (_allCommands select {_x regexMatch "\w+"}) regexReplace ["""", "'"] regexReplace [",", ",\n"]);
+*/
+
+vendor/highlight.js/src/languages/sql.js
+/*
+ Language: SQL
+ Website: https://en.wikipedia.org/wiki/SQL
+ Category: common, database
+ */
+
+vendor/highlight.js/src/languages/stan.js
+/*
+Language: Stan
+Description: The Stan probabilistic programming language
+Author: Sean Pinkney <sean.pinkney@gmail.com>
+Website: http://mc-stan.org/
+Category: scientific
+*/
+
+vendor/highlight.js/src/languages/stata.js
+/*
+Language: Stata
+Author: Brian Quistorff <bquistorff@gmail.com>
+Contributors: Drew McDonald <drewmcdo@gmail.com>
+Description: Stata is a general-purpose statistical software package created in 1985 by StataCorp.
+Website: https://en.wikipedia.org/wiki/Stata
+Category: scientific
+*/
+
+vendor/highlight.js/src/languages/step21.js
+/*
+Language: STEP Part 21
+Contributors: Adam Joseph Cook <adam.joseph.cook@gmail.com>
+Description: Syntax highlighter for STEP Part 21 files (ISO 10303-21).
+Website: https://en.wikipedia.org/wiki/ISO_10303-21
+*/
+
+vendor/highlight.js/src/languages/stylus.js
+/*
+Language: Stylus
+Author: Bryant Williams <b.n.williams@gmail.com>
+Description: Stylus is an expressive, robust, feature-rich CSS language built for nodejs.
+Website: https://github.com/stylus/stylus
+Category: css, web
+*/
+
+vendor/highlight.js/src/languages/subunit.js
+/*
+Language: SubUnit
+Author: Sergey Bronnikov <sergeyb@bronevichok.ru>
+Website: https://pypi.org/project/python-subunit/
+*/
+
+vendor/highlight.js/src/languages/swift.js
+/*
+Language: Swift
+Description: Swift is a general-purpose programming language built using a modern approach to safety, performance, and software design patterns.
+Author: Steven Van Impe <steven.vanimpe@icloud.com>
+Contributors: Chris Eidhof <chris@eidhof.nl>, Nate Cook <natecook@gmail.com>, Alexander Lichter <manniL@gmx.net>, Richard Gibson <gibson042@github>
+Website: https://swift.org
+Category: common, system
+*/
+
+vendor/highlight.js/src/languages/taggerscript.js
+/*
+Language: Tagger Script
+Author: Philipp Wolfer <ph.wolfer@gmail.com>
+Description: Syntax Highlighting for the Tagger Script as used by MusicBrainz Picard.
+Website: https://picard.musicbrainz.org
+ */
+
+vendor/highlight.js/src/languages/tap.js
+/*
+Language: Test Anything Protocol
+Description: TAP, the Test Anything Protocol, is a simple text-based interface between testing modules in a test harness.
+Requires: yaml.js
+Author: Sergey Bronnikov <sergeyb@bronevichok.ru>
+Website: https://testanything.org
+*/
+
+vendor/highlight.js/src/languages/tcl.js
+/*
+Language: Tcl
+Description: Tcl is a very simple programming language.
+Author: Radek Liska <radekliska@gmail.com>
+Website: https://www.tcl.tk/about/language.html
+*/
+
+vendor/highlight.js/src/languages/thrift.js
+/*
+Language: Thrift
+Author: Oleg Efimov <efimovov@gmail.com>
+Description: Thrift message definition format
+Website: https://thrift.apache.org
+Category: protocols
+*/
+
+vendor/highlight.js/src/languages/tp.js
+/*
+Language: TP
+Author: Jay Strybis <jay.strybis@gmail.com>
+Description: FANUC TP programming language (TPP).
+*/
+
+vendor/highlight.js/src/languages/twig.js
+/*
+Language: Twig
+Requires: xml.js
+Author: Luke Holder <lukemh@gmail.com>
+Description: Twig is a templating language for PHP
+Website: https://twig.symfony.com
+Category: template
+*/
+
+vendor/highlight.js/src/languages/typescript.js
+/*
+Language: TypeScript
+Author: Panu Horsmalahti <panu.horsmalahti@iki.fi>
+Contributors: Ike Ku <dempfi@yahoo.com>
+Description: TypeScript is a strict superset of JavaScript
+Website: https://www.typescriptlang.org
+Category: common, scripting
+*/
+
+vendor/highlight.js/src/languages/vala.js
+/*
+Language: Vala
+Author: Antono Vasiljev <antono.vasiljev@gmail.com>
+Description: Vala is a new programming language that aims to bring modern programming language features to GNOME developers without imposing any additional runtime requirements and without using a different ABI compared to applications and libraries written in C.
+Website: https://wiki.gnome.org/Projects/Vala
+*/
+
+vendor/highlight.js/src/languages/vbnet.js
+/*
+Language: Visual Basic .NET
+Description: Visual Basic .NET (VB.NET) is a multi-paradigm, object-oriented programming language, implemented on the .NET Framework.
+Authors: Poren Chiang <ren.chiang@gmail.com>, Jan Pilzer
+Website: https://docs.microsoft.com/dotnet/visual-basic/getting-started
+Category: common
+*/
+
+vendor/highlight.js/src/languages/vbscript-html.js
+/*
+Language: VBScript in HTML
+Requires: xml.js, vbscript.js
+Author: Ivan Sagalaev <maniac@softwaremaniacs.org>
+Description: "Bridge" language defining fragments of VBScript in HTML within <% .. %>
+Website: https://en.wikipedia.org/wiki/VBScript
+Category: scripting
+*/
+
+vendor/highlight.js/src/languages/vbscript.js
+/*
+Language: VBScript
+Description: VBScript ("Microsoft Visual Basic Scripting Edition") is an Active Scripting language developed by Microsoft that is modeled on Visual Basic.
+Author: Nikita Ledyaev <lenikita@yandex.ru>
+Contributors: Michal Gabrukiewicz <mgabru@gmail.com>
+Website: https://en.wikipedia.org/wiki/VBScript
+Category: scripting
+*/
+
+vendor/highlight.js/src/languages/verilog.js
+/*
+Language: Verilog
+Author: Jon Evans <jon@craftyjon.com>
+Contributors: Boone Severson <boone.severson@gmail.com>
+Description: Verilog is a hardware description language used in electronic design automation to describe digital and mixed-signal systems. This highlighter supports Verilog and SystemVerilog through IEEE 1800-2012.
+Website: http://www.verilog.com
+*/
+
+vendor/highlight.js/src/languages/vhdl.js
+/*
+Language: VHDL
+Author: Igor Kalnitsky <igor@kalnitsky.org>
+Contributors: Daniel C.K. Kho <daniel.kho@tauhop.com>, Guillaume Savaton <guillaume.savaton@eseo.fr>
+Description: VHDL is a hardware description language used in electronic design automation to describe digital and mixed-signal systems.
+Website: https://en.wikipedia.org/wiki/VHDL
+*/
+
+vendor/highlight.js/src/languages/vim.js
+/*
+Language: Vim Script
+Author: Jun Yang <yangjvn@126.com>
+Description: full keyword and built-in from http://vimdoc.sourceforge.net/htmldoc/
+Website: https://www.vim.org
+Category: scripting
+*/
+
+vendor/highlight.js/src/languages/wasm.js
+/*
+Language: WebAssembly
+Website: https://webassembly.org
+Description:  Wasm is designed as a portable compilation target for programming languages, enabling deployment on the web for client and server applications.
+Category: web, common
+Audit: 2020
+*/
+
+vendor/highlight.js/src/languages/wren.js
+/*
+Language: Wren
+Description: Think Smalltalk in a Lua-sized package with a dash of Erlang and wrapped up in a familiar, modern syntax.
+Category: scripting
+Author: @joshgoebel
+Maintainer: @joshgoebel
+Website: https://wren.io/
+*/
+
+vendor/highlight.js/src/languages/x86asm.js
+/*
+Language: Intel x86 Assembly
+Author: innocenat <innocenat@gmail.com>
+Description: x86 assembly language using Intel's mnemonic and NASM syntax
+Website: https://en.wikipedia.org/wiki/X86_assembly_language
+Category: assembler
+*/
+
+vendor/highlight.js/src/languages/xl.js
+/*
+Language: XL
+Author: Christophe de Dinechin <christophe@taodyne.com>
+Description: An extensible programming language, based on parse tree rewriting
+Website: http://xlr.sf.net
+*/
+
+vendor/highlight.js/src/languages/xml.js
+/*
+Language: HTML, XML
+Website: https://www.w3.org/XML/
+Category: common, web
+Audit: 2020
+*/
+/*
+        The lookahead pattern (?=...) ensures that 'begin' only matches
+        '<style' as a single word, followed by a whitespace or an
+        ending bracket.
+        */
+
+vendor/highlight.js/src/languages/xquery.js
+/*
+Language: XQuery
+Author: Dirk Kirsten <dk@basex.org>
+Contributor: Duncan Paterson
+Description: Supports XQuery 3.1 including XQuery Update 3, so also XPath (as it is a superset)
+Refactored to process xml constructor syntax and function-bodies. Added missing data-types, xpath operands, inbuilt functions, and query prologs
+Website: https://www.w3.org/XML/Query/
+Category: functional
+Audit: 2020
+*/
+
+vendor/highlight.js/src/languages/yaml.js
+/*
+Language: YAML
+Description: Yet Another Markdown Language
+Author: Stefan Wienert <stwienert@gmail.com>
+Contributors: Carl Baxter <carl@cbax.tech>
+Requires: ruby.js
+Website: https://yaml.org
+Category: common, config
+*/
+
+vendor/highlight.js/src/languages/zephir.js
+/*
+ Language: Zephir
+ Description: Zephir, an open source, high-level language designed to ease the creation and maintainability of extensions for PHP with a focus on type and memory safety.
+ Author: Oleg Efimov <efimovov@gmail.com>
+ Website: https://zephir-lang.com/en
+ Audit: 2020
+ */
+
+vendor/highlight.js/src/lib/modes.js
+/* @author Bob Mcgill */
+
+vendor/highlight.js/src/styles/a11y-dark.css
+/*!
+  Theme: a11y-dark
+  Author: @ericwbailey
+  Maintainer: @ericwbailey
+
+  Based on the Tomorrow Night Eighties theme: https://github.com/isagalaev/highlight.js/blob/master/src/styles/tomorrow-night-eighties.css
+*/
+
+vendor/highlight.js/src/styles/a11y-light.css
+/*!
+  Theme: a11y-light
+  Author: @ericwbailey
+  Maintainer: @ericwbailey
+
+  Based on the Tomorrow Night Eighties theme: https://github.com/isagalaev/highlight.js/blob/master/src/styles/tomorrow-night-eighties.css
+*/
+
+vendor/highlight.js/src/styles/agate.css
+/*!
+   Theme: Agate
+   Author: (c) Taufik Nurrohman <hi@taufik-nurrohman.com>
+   Maintainer: @taufik-nurrohman
+   Updated: 2021-04-24
+
+   #333
+   #62c8f3
+   #7bd694
+   #888
+   #a2fca2
+   #ade5fc
+   #b8d8a2
+   #c6b4f0
+   #d36363
+   #fc9b9b
+   #fcc28c
+   #ffa
+   #fff
+*/
+
+vendor/highlight.js/src/styles/an-old-hope.css
+/*!
+  Theme: An Old Hope – Star Wars Syntax
+  Author: (c) Gustavo Costa <gusbemacbe@gmail.com>
+  Maintainer: @gusbemacbe
+
+  Original theme - Ocean Dark Theme – by https://github.com/gavsiu
+  Based on Jesse Leite's Atom syntax theme 'An Old Hope'
+    https://github.com/JesseLeite/an-old-hope-syntax-atom
+*/
+
+vendor/highlight.js/src/styles/androidstudio.css
+/*
+Date: 24 Fev 2015
+Author: Pedro Oliveira <kanytu@gmail . com>
+*/
+
+vendor/highlight.js/src/styles/arduino-light.css
+/*
+
+Arduino® Light Theme - Stefania Mellai <s.mellai@arduino.cc>
+
+*/
+
+vendor/highlight.js/src/styles/arta.css
+/*
+Date: 17.V.2011
+Author: pumbur <pumbur@pumbur.net>
+*/
+
+vendor/highlight.js/src/styles/ascetic.css
+/*
+
+Original style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org>
+
+*/
+
+vendor/highlight.js/src/styles/atom-one-dark-reasonable.css
+/*
+
+Atom One Dark With support for ReasonML by Gidi Morris, based off work by Daniel Gamage
+
+Original One Dark Syntax theme from https://github.com/atom/one-dark-syntax
+
+*/
+
+vendor/highlight.js/src/styles/atom-one-dark.css
+/*
+
+Atom One Dark by Daniel Gamage
+Original One Dark Syntax theme from https://github.com/atom/one-dark-syntax
+
+base:    #282c34
+mono-1:  #abb2bf
+mono-2:  #818896
+mono-3:  #5c6370
+hue-1:   #56b6c2
+hue-2:   #61aeee
+hue-3:   #c678dd
+hue-4:   #98c379
+hue-5:   #e06c75
+hue-5-2: #be5046
+hue-6:   #d19a66
+hue-6-2: #e6c07b
+
+*/
+
+vendor/highlight.js/src/styles/atom-one-light.css
+/*
+
+Atom One Light by Daniel Gamage
+Original One Light Syntax theme from https://github.com/atom/one-light-syntax
+
+base:    #fafafa
+mono-1:  #383a42
+mono-2:  #686b77
+mono-3:  #a0a1a7
+hue-1:   #0184bb
+hue-2:   #4078f2
+hue-3:   #a626a4
+hue-4:   #50a14f
+hue-5:   #e45649
+hue-5-2: #c91243
+hue-6:   #986801
+hue-6-2: #c18401
+
+*/
+
+vendor/highlight.js/src/styles/base16/3024.css
+/*!
+  Theme: 3024
+  Author: Jan T. Sott (http://github.com/idleberg)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme 3024
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/apathy.css
+/*!
+  Theme: Apathy
+  Author: Jannik Siebert (https://github.com/janniks)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme apathy
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/apprentice.css
+/*!
+  Theme: Apprentice
+  Author: romainl
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme apprentice
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/ashes.css
+/*!
+  Theme: Ashes
+  Author: Jannik Siebert (https://github.com/janniks)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme ashes
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-cave-light.css
+/*!
+  Theme: Atelier Cave Light
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-cave-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-cave.css
+/*!
+  Theme: Atelier Cave
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-cave
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-dune-light.css
+/*!
+  Theme: Atelier Dune Light
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-dune-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-dune.css
+/*!
+  Theme: Atelier Dune
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-dune
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-estuary-light.css
+/*!
+  Theme: Atelier Estuary Light
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-estuary-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-estuary.css
+/*!
+  Theme: Atelier Estuary
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-estuary
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-forest-light.css
+/*!
+  Theme: Atelier Forest Light
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-forest-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-forest.css
+/*!
+  Theme: Atelier Forest
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-forest
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-heath-light.css
+/*!
+  Theme: Atelier Heath Light
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-heath-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-heath.css
+/*!
+  Theme: Atelier Heath
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-heath
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-lakeside-light.css
+/*!
+  Theme: Atelier Lakeside Light
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-lakeside-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-lakeside.css
+/*!
+  Theme: Atelier Lakeside
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-lakeside
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-plateau-light.css
+/*!
+  Theme: Atelier Plateau Light
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-plateau-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-plateau.css
+/*!
+  Theme: Atelier Plateau
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-plateau
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-savanna-light.css
+/*!
+  Theme: Atelier Savanna Light
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-savanna-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-savanna.css
+/*!
+  Theme: Atelier Savanna
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-savanna
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-seaside-light.css
+/*!
+  Theme: Atelier Seaside Light
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-seaside-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-seaside.css
+/*!
+  Theme: Atelier Seaside
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-seaside
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-sulphurpool-light.css
+/*!
+  Theme: Atelier Sulphurpool Light
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-sulphurpool-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atelier-sulphurpool.css
+/*!
+  Theme: Atelier Sulphurpool
+  Author: Bram de Haan (http://atelierbramdehaan.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atelier-sulphurpool
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/atlas.css
+/*!
+  Theme: Atlas
+  Author: Alex Lende (https://ajlende.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme atlas
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/bespin.css
+/*!
+  Theme: Bespin
+  Author: Jan T. Sott
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme bespin
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/black-metal-bathory.css
+/*!
+  Theme: Black Metal (Bathory)
+  Author: metalelf0 (https://github.com/metalelf0)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme black-metal-bathory
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/black-metal-burzum.css
+/*!
+  Theme: Black Metal (Burzum)
+  Author: metalelf0 (https://github.com/metalelf0)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme black-metal-burzum
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/black-metal-dark-funeral.css
+/*!
+  Theme: Black Metal (Dark Funeral)
+  Author: metalelf0 (https://github.com/metalelf0)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme black-metal-dark-funeral
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/black-metal-gorgoroth.css
+/*!
+  Theme: Black Metal (Gorgoroth)
+  Author: metalelf0 (https://github.com/metalelf0)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme black-metal-gorgoroth
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/black-metal-immortal.css
+/*!
+  Theme: Black Metal (Immortal)
+  Author: metalelf0 (https://github.com/metalelf0)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme black-metal-immortal
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/black-metal-khold.css
+/*!
+  Theme: Black Metal (Khold)
+  Author: metalelf0 (https://github.com/metalelf0)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme black-metal-khold
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/black-metal-marduk.css
+/*!
+  Theme: Black Metal (Marduk)
+  Author: metalelf0 (https://github.com/metalelf0)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme black-metal-marduk
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/black-metal-mayhem.css
+/*!
+  Theme: Black Metal (Mayhem)
+  Author: metalelf0 (https://github.com/metalelf0)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme black-metal-mayhem
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/black-metal-nile.css
+/*!
+  Theme: Black Metal (Nile)
+  Author: metalelf0 (https://github.com/metalelf0)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme black-metal-nile
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/black-metal-venom.css
+/*!
+  Theme: Black Metal (Venom)
+  Author: metalelf0 (https://github.com/metalelf0)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme black-metal-venom
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/black-metal.css
+/*!
+  Theme: Black Metal
+  Author: metalelf0 (https://github.com/metalelf0)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme black-metal
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/brewer.css
+/*!
+  Theme: Brewer
+  Author: Timothée Poisot (http://github.com/tpoisot)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme brewer
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/bright.css
+/*!
+  Theme: Bright
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme bright
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/brogrammer.css
+/*!
+  Theme: Brogrammer
+  Author: Vik Ramanujam (http://github.com/piggyslasher)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme brogrammer
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/brush-trees-dark.css
+/*!
+  Theme: Brush Trees Dark
+  Author: Abraham White <abelincoln.white@gmail.com>
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme brush-trees-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/brush-trees.css
+/*!
+  Theme: Brush Trees
+  Author: Abraham White <abelincoln.white@gmail.com>
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme brush-trees
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/chalk.css
+/*!
+  Theme: Chalk
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme chalk
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/circus.css
+/*!
+  Theme: Circus
+  Author: Stephan Boyer (https://github.com/stepchowfun) and Esther Wang (https://github.com/ewang12)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme circus
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/classic-dark.css
+/*!
+  Theme: Classic Dark
+  Author: Jason Heeris (http://heeris.id.au)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme classic-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/classic-light.css
+/*!
+  Theme: Classic Light
+  Author: Jason Heeris (http://heeris.id.au)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme classic-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/codeschool.css
+/*!
+  Theme: Codeschool
+  Author: blockloop
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme codeschool
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/colors.css
+/*!
+  Theme: Colors
+  Author: mrmrs (http://clrs.cc)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme colors
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/cupcake.css
+/*!
+  Theme: Cupcake
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme cupcake
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/cupertino.css
+/*!
+  Theme: Cupertino
+  Author: Defman21
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme cupertino
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/danqing.css
+/*!
+  Theme: DanQing
+  Author: Wenhan Zhu (Cosmos) (zhuwenhan950913@gmail.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme danqing
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/darcula.css
+/*!
+  Theme: Darcula
+  Author: jetbrains
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme darcula
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/dark-violet.css
+/*!
+  Theme: Dark Violet
+  Author: ruler501 (https://github.com/ruler501/base16-darkviolet)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme dark-violet
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/darkmoss.css
+/*!
+  Theme: darkmoss
+  Author: Gabriel Avanzi (https://github.com/avanzzzi)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme darkmoss
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/darktooth.css
+/*!
+  Theme: Darktooth
+  Author: Jason Milkins (https://github.com/jasonm23)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme darktooth
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/decaf.css
+/*!
+  Theme: Decaf
+  Author: Alex Mirrington (https://github.com/alexmirrington)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme decaf
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/default-dark.css
+/*!
+  Theme: Default Dark
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme default-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/default-light.css
+/*!
+  Theme: Default Light
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme default-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/dirtysea.css
+/*!
+  Theme: dirtysea
+  Author: Kahlil (Kal) Hodgson
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme dirtysea
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/dracula.css
+/*!
+  Theme: Dracula
+  Author: Mike Barkmin (http://github.com/mikebarkmin) based on Dracula Theme (http://github.com/dracula)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme dracula
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/edge-dark.css
+/*!
+  Theme: Edge Dark
+  Author: cjayross (https://github.com/cjayross)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme edge-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/edge-light.css
+/*!
+  Theme: Edge Light
+  Author: cjayross (https://github.com/cjayross)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme edge-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/eighties.css
+/*!
+  Theme: Eighties
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme eighties
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/embers.css
+/*!
+  Theme: Embers
+  Author: Jannik Siebert (https://github.com/janniks)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme embers
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/equilibrium-dark.css
+/*!
+  Theme: Equilibrium Dark
+  Author: Carlo Abelli
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme equilibrium-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/equilibrium-gray-dark.css
+/*!
+  Theme: Equilibrium Gray Dark
+  Author: Carlo Abelli
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme equilibrium-gray-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/equilibrium-gray-light.css
+/*!
+  Theme: Equilibrium Gray Light
+  Author: Carlo Abelli
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme equilibrium-gray-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/equilibrium-light.css
+/*!
+  Theme: Equilibrium Light
+  Author: Carlo Abelli
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme equilibrium-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/espresso.css
+/*!
+  Theme: Espresso
+  Author: Unknown. Maintained by Alex Mirrington (https://github.com/alexmirrington)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme espresso
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/eva-dim.css
+/*!
+  Theme: Eva Dim
+  Author: kjakapat (https://github.com/kjakapat)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme eva-dim
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/eva.css
+/*!
+  Theme: Eva
+  Author: kjakapat (https://github.com/kjakapat)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme eva
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/flat.css
+/*!
+  Theme: Flat
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme flat
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/framer.css
+/*!
+  Theme: Framer
+  Author: Framer (Maintained by Jesse Hoyos)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme framer
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/fruit-soda.css
+/*!
+  Theme: Fruit Soda
+  Author: jozip
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme fruit-soda
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/gigavolt.css
+/*!
+  Theme: Gigavolt
+  Author: Aidan Swope (http://github.com/Whillikers)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme gigavolt
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/github.css
+/*!
+  Theme: Github
+  Author: Defman21
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme github
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/google-dark.css
+/*!
+  Theme: Google Dark
+  Author: Seth Wright (http://sethawright.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme google-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/google-light.css
+/*!
+  Theme: Google Light
+  Author: Seth Wright (http://sethawright.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme google-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/grayscale-dark.css
+/*!
+  Theme: Grayscale Dark
+  Author: Alexandre Gavioli (https://github.com/Alexx2/)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme grayscale-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/grayscale-light.css
+/*!
+  Theme: Grayscale Light
+  Author: Alexandre Gavioli (https://github.com/Alexx2/)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme grayscale-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/green-screen.css
+/*!
+  Theme: Green Screen
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme green-screen
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/gruvbox-dark-hard.css
+/*!
+  Theme: Gruvbox dark, hard
+  Author: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme gruvbox-dark-hard
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/gruvbox-dark-medium.css
+/*!
+  Theme: Gruvbox dark, medium
+  Author: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme gruvbox-dark-medium
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/gruvbox-dark-pale.css
+/*!
+  Theme: Gruvbox dark, pale
+  Author: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme gruvbox-dark-pale
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/gruvbox-dark-soft.css
+/*!
+  Theme: Gruvbox dark, soft
+  Author: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme gruvbox-dark-soft
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/gruvbox-light-hard.css
+/*!
+  Theme: Gruvbox light, hard
+  Author: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme gruvbox-light-hard
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/gruvbox-light-medium.css
+/*!
+  Theme: Gruvbox light, medium
+  Author: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme gruvbox-light-medium
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/gruvbox-light-soft.css
+/*!
+  Theme: Gruvbox light, soft
+  Author: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme gruvbox-light-soft
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/hardcore.css
+/*!
+  Theme: Hardcore
+  Author: Chris Caller
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme hardcore
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/harmonic16-dark.css
+/*!
+  Theme: Harmonic16 Dark
+  Author: Jannik Siebert (https://github.com/janniks)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme harmonic16-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/harmonic16-light.css
+/*!
+  Theme: Harmonic16 Light
+  Author: Jannik Siebert (https://github.com/janniks)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme harmonic16-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/heetch-dark.css
+/*!
+  Theme: Heetch Dark
+  Author: Geoffrey Teale (tealeg@gmail.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme heetch-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/heetch-light.css
+/*!
+  Theme: Heetch Light
+  Author: Geoffrey Teale (tealeg@gmail.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme heetch-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/helios.css
+/*!
+  Theme: Helios
+  Author: Alex Meyer (https://github.com/reyemxela)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme helios
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/hopscotch.css
+/*!
+  Theme: Hopscotch
+  Author: Jan T. Sott
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme hopscotch
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/horizon-dark.css
+/*!
+  Theme: Horizon Dark
+  Author: Michaël Ball (http://github.com/michael-ball/)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme horizon-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/horizon-light.css
+/*!
+  Theme: Horizon Light
+  Author: Michaël Ball (http://github.com/michael-ball/)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme horizon-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/humanoid-dark.css
+/*!
+  Theme: Humanoid dark
+  Author: Thomas (tasmo) Friese
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme humanoid-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/humanoid-light.css
+/*!
+  Theme: Humanoid light
+  Author: Thomas (tasmo) Friese
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme humanoid-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/ia-dark.css
+/*!
+  Theme: iA Dark
+  Author: iA Inc. (modified by aramisgithub)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme ia-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/ia-light.css
+/*!
+  Theme: iA Light
+  Author: iA Inc. (modified by aramisgithub)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme ia-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/icy-dark.css
+/*!
+  Theme: Icy Dark
+  Author: icyphox (https://icyphox.ga)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme icy-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/ir-black.css
+/*!
+  Theme: IR Black
+  Author: Timothée Poisot (http://timotheepoisot.fr)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme ir-black
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/isotope.css
+/*!
+  Theme: Isotope
+  Author: Jan T. Sott
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme isotope
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/kimber.css
+/*!
+  Theme: Kimber
+  Author: Mishka Nguyen (https://github.com/akhsiM)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme kimber
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/london-tube.css
+/*!
+  Theme: London Tube
+  Author: Jan T. Sott
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme london-tube
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/macintosh.css
+/*!
+  Theme: Macintosh
+  Author: Rebecca Bettencourt (http://www.kreativekorp.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme macintosh
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/marrakesh.css
+/*!
+  Theme: Marrakesh
+  Author: Alexandre Gavioli (http://github.com/Alexx2/)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme marrakesh
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/materia.css
+/*!
+  Theme: Materia
+  Author: Defman21
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme materia
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/material-darker.css
+/*!
+  Theme: Material Darker
+  Author: Nate Peterson
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme material-darker
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/material-lighter.css
+/*!
+  Theme: Material Lighter
+  Author: Nate Peterson
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme material-lighter
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/material-palenight.css
+/*!
+  Theme: Material Palenight
+  Author: Nate Peterson
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme material-palenight
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/material-vivid.css
+/*!
+  Theme: Material Vivid
+  Author: joshyrobot
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme material-vivid
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/material.css
+/*!
+  Theme: Material
+  Author: Nate Peterson
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme material
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/mellow-purple.css
+/*!
+  Theme: Mellow Purple
+  Author: gidsi
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme mellow-purple
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/mexico-light.css
+/*!
+  Theme: Mexico Light
+  Author: Sheldon Johnson
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme mexico-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/mocha.css
+/*!
+  Theme: Mocha
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme mocha
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/monokai.css
+/*!
+  Theme: Monokai
+  Author: Wimer Hazenberg (http://www.monokai.nl)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme monokai
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/nebula.css
+/*!
+  Theme: Nebula
+  Author: Gabriel Fontes (https://github.com/Misterio77)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme nebula
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/nord.css
+/*!
+  Theme: Nord
+  Author: arcticicestudio
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme nord
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/nova.css
+/*!
+  Theme: Nova
+  Author: George Essig (https://github.com/gessig), Trevor D. Miller (https://trevordmiller.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme nova
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/ocean.css
+/*!
+  Theme: Ocean
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme ocean
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/oceanicnext.css
+/*!
+  Theme: OceanicNext
+  Author: https://github.com/voronianski/oceanic-next-color-scheme
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme oceanicnext
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/one-light.css
+/*!
+  Theme: One Light
+  Author: Daniel Pfeifer (http://github.com/purpleKarrot)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme one-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/onedark.css
+/*!
+  Theme: OneDark
+  Author: Lalit Magant (http://github.com/tilal6991)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme onedark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/outrun-dark.css
+/*!
+  Theme: Outrun Dark
+  Author: Hugo Delahousse (http://github.com/hugodelahousse/)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme outrun-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/papercolor-dark.css
+/*!
+  Theme: PaperColor Dark
+  Author: Jon Leopard (http://github.com/jonleopard) based on PaperColor Theme (https://github.com/NLKNguyen/papercolor-theme)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme papercolor-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/papercolor-light.css
+/*!
+  Theme: PaperColor Light
+  Author: Jon Leopard (http://github.com/jonleopard) based on PaperColor Theme (https://github.com/NLKNguyen/papercolor-theme)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme papercolor-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/paraiso.css
+/*!
+  Theme: Paraiso
+  Author: Jan T. Sott
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme paraiso
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/pasque.css
+/*!
+  Theme: Pasque
+  Author: Gabriel Fontes (https://github.com/Misterio77)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme pasque
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/phd.css
+/*!
+  Theme: PhD
+  Author: Hennig Hasemann (http://leetless.de/vim.html)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme phd
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/pico.css
+/*!
+  Theme: Pico
+  Author: PICO-8 (http://www.lexaloffle.com/pico-8.php)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme pico
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/pop.css
+/*!
+  Theme: Pop
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme pop
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/porple.css
+/*!
+  Theme: Porple
+  Author: Niek den Breeje (https://github.com/AuditeMarlow)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme porple
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/qualia.css
+/*!
+  Theme: Qualia
+  Author: isaacwhanson
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme qualia
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/railscasts.css
+/*!
+  Theme: Railscasts
+  Author: Ryan Bates (http://railscasts.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme railscasts
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/rebecca.css
+/*!
+  Theme: Rebecca
+  Author: Victor Borja (http://github.com/vic) based on Rebecca Theme (http://github.com/vic/rebecca-theme)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme rebecca
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/ros-pine-dawn.css
+/*!
+  Theme: Rosé Pine Dawn
+  Author: Emilia Dunfelt <sayhi@dunfelt.se>
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme ros-pine-dawn
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/ros-pine-moon.css
+/*!
+  Theme: Rosé Pine Moon
+  Author: Emilia Dunfelt <sayhi@dunfelt.se>
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme ros-pine-moon
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/ros-pine.css
+/*!
+  Theme: Rosé Pine
+  Author: Emilia Dunfelt <sayhi@dunfelt.se>
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme ros-pine
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/sagelight.css
+/*!
+  Theme: Sagelight
+  Author: Carter Veldhuizen
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme sagelight
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/sandcastle.css
+/*!
+  Theme: Sandcastle
+  Author: George Essig (https://github.com/gessig)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme sandcastle
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/seti-ui.css
+/*!
+  Theme: Seti UI
+  Author:
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme seti-ui
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/shapeshifter.css
+/*!
+  Theme: Shapeshifter
+  Author: Tyler Benziger (http://tybenz.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme shapeshifter
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/silk-dark.css
+/*!
+  Theme: Silk Dark
+  Author: Gabriel Fontes (https://github.com/Misterio77)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme silk-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/silk-light.css
+/*!
+  Theme: Silk Light
+  Author: Gabriel Fontes (https://github.com/Misterio77)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme silk-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/snazzy.css
+/*!
+  Theme: Snazzy
+  Author: Chawye Hsu (https://github.com/chawyehsu) based on Hyper Snazzy Theme (https://github.com/sindresorhus/hyper-snazzy)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme snazzy
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/solar-flare-light.css
+/*!
+  Theme: Solar Flare Light
+  Author: Chuck Harmston (https://chuck.harmston.ch)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme solar-flare-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/solar-flare.css
+/*!
+  Theme: Solar Flare
+  Author: Chuck Harmston (https://chuck.harmston.ch)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme solar-flare
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/solarized-dark.css
+/*!
+  Theme: Solarized Dark
+  Author: Ethan Schoonover (modified by aramisgithub)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme solarized-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/solarized-light.css
+/*!
+  Theme: Solarized Light
+  Author: Ethan Schoonover (modified by aramisgithub)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme solarized-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/spacemacs.css
+/*!
+  Theme: Spacemacs
+  Author: Nasser Alshammari (https://github.com/nashamri/spacemacs-theme)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme spacemacs
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/summercamp.css
+/*!
+  Theme: summercamp
+  Author: zoe firi (zoefiri.github.io)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme summercamp
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/summerfruit-dark.css
+/*!
+  Theme: Summerfruit Dark
+  Author: Christopher Corley (http://christop.club/)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme summerfruit-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/summerfruit-light.css
+/*!
+  Theme: Summerfruit Light
+  Author: Christopher Corley (http://christop.club/)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme summerfruit-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/synth-midnight-terminal-dark.css
+/*!
+  Theme: Synth Midnight Terminal Dark
+  Author: Michaël Ball (http://github.com/michael-ball/)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme synth-midnight-terminal-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/synth-midnight-terminal-light.css
+/*!
+  Theme: Synth Midnight Terminal Light
+  Author: Michaël Ball (http://github.com/michael-ball/)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme synth-midnight-terminal-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/tango.css
+/*!
+  Theme: Tango
+  Author: @Schnouki, based on the Tango Desktop Project
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme tango
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/tender.css
+/*!
+  Theme: tender
+  Author: Jacobo Tabernero (https://github/com/jacoborus/tender.vim)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme tender
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/tomorrow-night.css
+/*!
+  Theme: Tomorrow Night
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme tomorrow-night
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/tomorrow.css
+/*!
+  Theme: Tomorrow
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme tomorrow
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/twilight.css
+/*!
+  Theme: Twilight
+  Author: David Hart (https://github.com/hartbit)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme twilight
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/unikitty-dark.css
+/*!
+  Theme: Unikitty Dark
+  Author: Josh W Lewis (@joshwlewis)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme unikitty-dark
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/unikitty-light.css
+/*!
+  Theme: Unikitty Light
+  Author: Josh W Lewis (@joshwlewis)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme unikitty-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/vulcan.css
+/*!
+  Theme: vulcan
+  Author: Andrey Varfolomeev
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme vulcan
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/windows-10-light.css
+/*!
+  Theme: Windows 10 Light
+  Author: Fergus Collins (https://github.com/C-Fergus)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme windows-10-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/windows-10.css
+/*!
+  Theme: Windows 10
+  Author: Fergus Collins (https://github.com/C-Fergus)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme windows-10
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/windows-95-light.css
+/*!
+  Theme: Windows 95 Light
+  Author: Fergus Collins (https://github.com/C-Fergus)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme windows-95-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/windows-95.css
+/*!
+  Theme: Windows 95
+  Author: Fergus Collins (https://github.com/C-Fergus)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme windows-95
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/windows-high-contrast-light.css
+/*!
+  Theme: Windows High Contrast Light
+  Author: Fergus Collins (https://github.com/C-Fergus)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme windows-high-contrast-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/windows-high-contrast.css
+/*!
+  Theme: Windows High Contrast
+  Author: Fergus Collins (https://github.com/C-Fergus)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme windows-high-contrast
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/windows-nt-light.css
+/*!
+  Theme: Windows NT Light
+  Author: Fergus Collins (https://github.com/C-Fergus)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme windows-nt-light
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/windows-nt.css
+/*!
+  Theme: Windows NT
+  Author: Fergus Collins (https://github.com/C-Fergus)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme windows-nt
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/woodland.css
+/*!
+  Theme: Woodland
+  Author: Jay Cornwall (https://jcornwall.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme woodland
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/xcode-dusk.css
+/*!
+  Theme: XCode Dusk
+  Author: Elsa Gonsiorowski (https://github.com/gonsie)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme xcode-dusk
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/base16/zenburn.css
+/*!
+  Theme: Zenburn
+  Author: elnawe
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+/*
+  WARNING: DO NOT EDIT THIS FILE DIRECTLY.
+
+  This theme file was auto-generated from the Base16 scheme zenburn
+  by the Highlight.js Base16 template builder.
+
+  - https://github.com/highlightjs/base16-highlightjs
+*/
+/* for v10 compatible themes */
+
+vendor/highlight.js/src/styles/brown-paper.css
+/*
+
+Brown Paper style from goldblog.com.ua (c) Zaripov Yura <yur4ik7@ukr.net>
+
+*/
+
+vendor/highlight.js/src/styles/codepen-embed.css
+/*
+  codepen.io Embed Theme
+  Author: Justin Perry <http://github.com/ourmaninamsterdam>
+  Original theme - https://github.com/chriskempson/tomorrow-theme
+*/
+
+vendor/highlight.js/src/styles/color-brewer.css
+/*
+
+Colorbrewer theme
+Original: https://github.com/mbostock/colorbrewer-theme (c) Mike Bostock <mike@ocks.org>
+Ported by Fabrício Tavares de Oliveira
+
+*/
+
+vendor/highlight.js/src/styles/dark.css
+/*
+
+Dark style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org>
+
+*/
+
+vendor/highlight.js/src/styles/default.css
+/*!
+  Theme: Default
+  Description: Original highlight.js style
+  Author: (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
+  Maintainer: @highlightjs/core-team
+  Website: https://highlightjs.org/
+  License: see project LICENSE
+  Touched: 2021
+*/
+
+vendor/highlight.js/src/styles/devibeans.css
+/*!
+    Theme: devibeans (dark)
+    Author: @terminaldweller
+    Maintainer: @terminaldweller
+
+    Inspired by vim's jellybeans theme (https://github.com/nanotech/jellybeans.vim)
+*/
+
+vendor/highlight.js/src/styles/docco.css
+/*
+Docco style used in http://jashkenas.github.com/docco/ converted by Simon Madine (@thingsinjars)
+*/
+
+vendor/highlight.js/src/styles/far.css
+/*
+
+FAR Style (c) MajestiC <majestic2k@gmail.com>
+
+*/
+
+vendor/highlight.js/src/styles/felipec.css
+/*!
+ * Theme: FelipeC
+ * Author: (c) 2021 Felipe Contreras <felipe.contreras@gmail.com>
+ * Website: https://github.com/felipec/vim-felipec
+ *
+ * Autogenerated with vim-felipec's generator.
+*/
+
+vendor/highlight.js/src/styles/foundation.css
+/*
+Description: Foundation 4 docs style for highlight.js
+Author: Dan Allen <dan.j.allen@gmail.com>
+Website: http://foundation.zurb.com/docs/
+Version: 1.0
+Date: 2013-04-02
+*/
+
+vendor/highlight.js/src/styles/github-dark-dimmed.css
+/*!
+  Theme: GitHub Dark Dimmed
+  Description: Dark dimmed theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Colors taken from GitHub's CSS
+*/
+
+vendor/highlight.js/src/styles/github-dark.css
+/*!
+  Theme: GitHub Dark
+  Description: Dark theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-dark
+  Current colors taken from GitHub's CSS
+*/
+
+vendor/highlight.js/src/styles/github.css
+/*!
+  Theme: GitHub
+  Description: Light theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-light
+  Current colors taken from GitHub's CSS
+*/
+
+vendor/highlight.js/src/styles/gml.css
+/*
+
+GML Theme - Meseta <meseta@gmail.com>
+
+*/
+
+vendor/highlight.js/src/styles/googlecode.css
+/*
+
+Google Code style (c) Aahan Krish <geekpanth3r@gmail.com>
+
+*/
+
+vendor/highlight.js/src/styles/grayscale.css
+/*
+
+grayscale style (c) MY Sun <simonmysun@gmail.com>
+
+*/
+
+vendor/highlight.js/src/styles/hybrid.css
+/*
+
+vim-hybrid theme by w0ng (https://github.com/w0ng/vim-hybrid)
+
+*/
+
+vendor/highlight.js/src/styles/intellij-light.css
+/*
+
+Intellij-light style (c) Pegasis <me@pegasis.site>
+
+*/
+
+vendor/highlight.js/src/styles/ir-black.css
+/*
+  IR_Black style (c) Vasily Mikhailitchenko <vaskas@programica.ru>
+*/
+
+vendor/highlight.js/src/styles/isbl-editor-dark.css
+/*
+
+ISBL Editor style dark color scheme (c) Dmitriy Tarasov <dimatar@gmail.com>
+
+*/
+
+vendor/highlight.js/src/styles/isbl-editor-light.css
+/*
+
+ISBL Editor style light color schemec (c) Dmitriy Tarasov <dimatar@gmail.com>
+
+*/
+
+vendor/highlight.js/src/styles/kimbie-dark.css
+/*
+    Name:     Kimbie (dark)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+vendor/highlight.js/src/styles/kimbie-light.css
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+vendor/highlight.js/src/styles/lightfair.css
+/*
+
+Lightfair style (c) Tristian Kelly <tristian.kelly560@gmail.com>
+
+*/
+
+vendor/highlight.js/src/styles/lioshi.css
+/* lioshi Theme */
+/* Original theme - https://github.com/lioshi/vscode-lioshi-theme */
+
+vendor/highlight.js/src/styles/magula.css
+/*
+Description: Magula style for highligh.js
+Author: Ruslan Keba <rukeba@gmail.com>
+Website: http://rukeba.com/
+Version: 1.0
+Date: 2009-01-03
+Music: Aphex Twin / Xtal
+*/
+
+vendor/highlight.js/src/styles/mono-blue.css
+/*
+  Five-color theme from a single blue hue.
+*/
+
+vendor/highlight.js/src/styles/monokai-sublime.css
+/*
+
+Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-license.org/
+
+*/
+
+vendor/highlight.js/src/styles/monokai.css
+/*
+Monokai style - ported by Luigi Maselli - http://grigio.org
+*/
+
+vendor/highlight.js/src/styles/night-owl.css
+/*
+
+Night Owl for highlight.js (c) Carl Baxter <carl@cbax.tech>
+
+An adaptation of Sarah Drasner's Night Owl VS Code Theme
+https://github.com/sdras/night-owl-vscode-theme
+
+Copyright (c) 2018 Sarah Drasner
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
+
+vendor/highlight.js/src/styles/nnfx-dark.css
+/*!
+  Theme: nnfx dark
+  Description: a theme inspired by Netscape Navigator/Firefox
+  Author: (c) 2020-2021 Jim Mason <jmason@ibinx.com>
+  Maintainer: @RocketMan
+  License: https://creativecommons.org/licenses/by-sa/4.0  CC BY-SA 4.0
+  Updated: 2021-05-17
+
+  @version 1.1.0
+*/
+
+vendor/highlight.js/src/styles/nnfx-light.css
+/*!
+  Theme: nnfx light
+  Description: a theme inspired by Netscape Navigator/Firefox
+  Author: (c) 2020-2021 Jim Mason <jmason@ibinx.com>
+  Maintainer: @RocketMan
+  License: https://creativecommons.org/licenses/by-sa/4.0  CC BY-SA 4.0
+  Updated: 2021-05-17
+
+  @version 1.1.0
+*/
+
+vendor/highlight.js/src/styles/nord.css
+/*
+ * Copyright (c) 2017-present Arctic Ice Studio <development@arcticicestudio.com>
+ * Copyright (c) 2017-present Sven Greb <development@svengreb.de>
+ *
+ * Project:    Nord highlight.js
+ * Version:    0.1.0
+ * Repository: https://github.com/arcticicestudio/nord-highlightjs
+ * License:    MIT
+ * References:
+ *   https://github.com/arcticicestudio/nord
+ */
+
+vendor/highlight.js/src/styles/obsidian.css
+/**
+ * Obsidian style
+ * ported by Alexander Marenin (http://github.com/ioncreature)
+ */
+
+vendor/highlight.js/src/styles/panda-syntax-dark.css
+/**
+ * Panda Syntax Theme for Highlight.js
+ * Based on: https://github.com/tinkertrain/panda-syntax-vscode
+ * Author: Annmarie Switzer <https://github.com/annmarie-switzer>
+ */
+
+vendor/highlight.js/src/styles/panda-syntax-light.css
+/**
+ * Panda Syntax Theme for Highlight.js
+ * Based on: https://github.com/tinkertrain/panda-syntax-vscode
+ * Author: Annmarie Switzer <https://github.com/annmarie-switzer>
+ */
+
+vendor/highlight.js/src/styles/pojoaque.css
+/*
+
+Pojoaque Style by Jason Tate
+http://web-cms-designs.com/ftopict-10-pojoaque-style-for-highlight-js-code-highlighter.html
+Based on Solarized Style from http://ethanschoonover.com/solarized
+
+*/
+
+vendor/highlight.js/src/styles/purebasic.css
+/*
+
+PureBASIC native IDE style ( version 1.0 - April 2016 )
+
+by Tristano Ajmone <tajmone@gmail.com>
+
+Public Domain
+
+NOTE_1:	PureBASIC code syntax highlighting only applies the following classes:
+			.hljs-comment
+			.hljs-function
+			.hljs-keywords
+			.hljs-string
+			.hljs-symbol
+
+		Other classes are added here for the benefit of styling other languages with the look and feel of PureBASIC native IDE style.
+		If you need to customize a stylesheet for PureBASIC only, remove all non-relevant classes -- PureBASIC-related classes are followed by
+		a "--- used for PureBASIC ... ---" comment on same line.
+
+NOTE_2:	Color names provided in comments were derived using "Name that Color" online tool:
+			http://chir.ag/projects/name-that-color
+*/
+
+vendor/highlight.js/src/styles/rainbow.css
+/*
+
+Style with support for rainbow parens
+
+*/
+
+vendor/highlight.js/src/styles/routeros.css
+/*
+
+ highlight.js style for MikroTik RouterOS script
+
+*/
+
+vendor/highlight.js/src/styles/school-book.css
+/*
+
+School Book style from goldblog.com.ua (c) Zaripov Yura <yur4ik7@ukr.net>
+
+*/
+
+vendor/highlight.js/src/styles/shades-of-purple.css
+/**
+ * Shades of Purple Theme — for Highlightjs.
+ *
+ * @author (c) Ahmad Awais <https://twitter.com/mrahmadawais/>
+ * @link GitHub Repo → https://github.com/ahmadawais/Shades-of-Purple-HighlightJS
+ * @version 1.5.0
+ */
+
+vendor/highlight.js/src/styles/srcery.css
+/*
+Theme: Srcery
+Description: Srcery dark color scheme for highlight.js
+Author: Chen Bin <chen.bin@gmail.com>
+Maintainer: @redguardtoo
+Website: https://srcery-colors.github.io/
+Date: 2021-04-13
+*/
+
+vendor/highlight.js/src/styles/stackoverflow-dark.css
+/*!
+  Theme: StackOverflow Dark
+  Description: Dark theme as used on stackoverflow.com
+  Author: stackoverflow.com
+  Maintainer: @Hirse
+  Website: https://github.com/StackExchange/Stacks
+  License: MIT
+  Updated: 2021-05-15
+
+  Updated for @stackoverflow/stacks v0.64.0
+  Code Blocks: /blob/v0.64.0/lib/css/components/_stacks-code-blocks.less
+  Colors: /blob/v0.64.0/lib/css/exports/_stacks-constants-colors.less
+*/
+
+vendor/highlight.js/src/styles/stackoverflow-light.css
+/*!
+  Theme: StackOverflow Light
+  Description: Light theme as used on stackoverflow.com
+  Author: stackoverflow.com
+  Maintainer: @Hirse
+  Website: https://github.com/StackExchange/Stacks
+  License: MIT
+  Updated: 2021-05-15
+
+  Updated for @stackoverflow/stacks v0.64.0
+  Code Blocks: /blob/v0.64.0/lib/css/components/_stacks-code-blocks.less
+  Colors: /blob/v0.64.0/lib/css/exports/_stacks-constants-colors.less
+*/
+
+vendor/highlight.js/src/styles/sunburst.css
+/*
+
+Sunburst-like style (c) Vasily Polovnyov <vast@whiteants.net>
+
+*/
+
+vendor/highlight.js/src/styles/tokyo-night-dark.css
+/*!
+  Theme: Tokyo-night-Dark
+  origin: https://github.com/enkia/tokyo-night-vscode-theme
+  Description: Original highlight.js style
+  Author: (c) Henri Vandersleyen <hvandersleyen@gmail.com>
+  License: see project LICENSE
+  Touched: 2022
+*/
+
+vendor/highlight.js/src/styles/tokyo-night-light.css
+/*!
+  Theme: Tokyo-night-light
+  origin: https://github.com/enkia/tokyo-night-vscode-theme
+  Description: Original highlight.js style
+  Author: (c) Henri Vandersleyen <hvandersleyen@gmail.com>
+  License: see project LICENSE
+  Touched: 2022
+*/
+
+vendor/highlight.js/src/styles/tomorrow-night-blue.css
+/* Tomorrow Night Blue Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+
+vendor/highlight.js/src/styles/tomorrow-night-bright.css
+/* Tomorrow Night Bright Theme */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+
+vendor/highlight.js/src/styles/vs.css
+/*
+
+Visual Studio-like style based on original C# coloring by Jason Diamond <jason@diamond.name>
+
+*/
+
+vendor/highlight.js/src/styles/vs2015.css
+/*
+ * Visual Studio 2015 dark style
+ * Author: Nicolas LLOBERA <nllobera@gmail.com>
+ */
+
+vendor/highlight.js/src/styles/xcode.css
+/*
+
+XCode style (c) Angel Garcia <angelgarcia.mail@gmail.com>
+
+*/

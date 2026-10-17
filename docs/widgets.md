@@ -386,6 +386,10 @@ When `hideDisabled` is `true` (default), disabled actions are removed entirely.
 
 Read-only markdown renderer with GFM, KaTeX, optional Mermaid, and syntax highlighting support. Three input modes: `data` (String), `nodes` (`List<md.Node>`), and `stream` (`Stream<String>` for LLM output).
 
+Fenced code blocks use the maintained `duskmoon_highlight` workspace package with
+194 languages and common aliases such as `js`, `py`, `html`, and `sh`. Unknown or
+omitted languages render as plain text.
+
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `data` | `String?` | `null` | Markdown source string |
