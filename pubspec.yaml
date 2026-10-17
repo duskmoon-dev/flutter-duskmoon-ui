@@ -44,6 +44,11 @@ melos:
     upgrade:
       description: "Upgrade all dependencies to latest across workspace"
       run: dart pub upgrade --major-versions
+    outdated:
+      exec:
+        command: dart pub outdated
+        orderDependents: true
+      description: Run `flutter pub outdated` check outdated dependencies in all packages.
     codegen:
       description: "Sync generated theme tokens from the sibling design repository"
       run: bun run tool/sync_design_tokens.ts
