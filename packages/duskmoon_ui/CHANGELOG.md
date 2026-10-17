@@ -1,3 +1,7 @@
+## 1.12.0
+
+- Release 1.12.0 (2026-10-17)
+
 ## 1.11.1
 
 - Android `duo_screen` example: automatically launch a normal companion Activity

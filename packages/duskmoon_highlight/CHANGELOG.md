@@ -1,4 +1,4 @@
-## Unreleased
+## 1.12.0
 
 - Import the re_highlight 0.0.3 parser, 194 grammars and token themes for DuskMoon maintenance.
 - Preserve component MIT/BSD licenses and individual theme licenses and attribution.
