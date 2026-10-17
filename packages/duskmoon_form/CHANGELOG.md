@@ -1,3 +1,7 @@
+## Unreleased
+
+- Upgrade Equatable to 3.0 after removing the legacy syntax highlighter constraint.
+
 ## 1.11.1
 
 - Release 1.11.1 (2026-10-09)

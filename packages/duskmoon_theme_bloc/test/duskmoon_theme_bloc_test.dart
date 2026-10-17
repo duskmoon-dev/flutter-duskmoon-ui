@@ -71,6 +71,16 @@ void main() {
       expect(a, b);
       expect(a, isNot(c));
     });
+
+    test('equal independent states have matching hash codes', () {
+      final first = const DmThemeState(themeName: 'sunshine').copyWith();
+      final second = const DmThemeState(themeName: 'sunshine').copyWith();
+
+      expect(identical(first, second), isFalse);
+      expect(first, second);
+      expect(first.hashCode, second.hashCode);
+      expect({first, second}, hasLength(1));
+    });
   });
 
   group('DmThemeEvent', () {
@@ -98,6 +108,15 @@ void main() {
         const DmSetThemeMode(ThemeMode.dark),
         isNot(const DmSetThemeMode(ThemeMode.light)),
       );
+    });
+
+    test('event equality distinguishes runtime types with identical props', () {
+      const event = DmSetTheme('sunshine');
+      const otherType = _AlternateSetTheme('sunshine');
+
+      expect(event.props, otherType.props);
+      expect(event, isNot(otherType));
+      expect(otherType, isNot(event));
     });
   });
 
@@ -175,5 +194,34 @@ void main() {
         ),
       ],
     );
+
+    blocTest<DmThemeBloc, DmThemeState>(
+      'repeated equal modes are suppressed while changed modes emit',
+      build: () => DmThemeBloc(prefs: prefs),
+      act: (bloc) {
+        for (final mode in [
+          ThemeMode.dark,
+          ThemeMode.dark,
+          ThemeMode.light,
+          ThemeMode.light,
+        ]) {
+          bloc.add(DmSetThemeMode(mode));
+        }
+      },
+      expect: () => [
+        DmThemeState(
+          themeName: DmThemeData.themes.first.name,
+          themeMode: ThemeMode.dark,
+        ),
+        DmThemeState(
+          themeName: DmThemeData.themes.first.name,
+          themeMode: ThemeMode.light,
+        ),
+      ],
+    );
   });
+}
+
+class _AlternateSetTheme extends DmSetTheme {
+  const _AlternateSetTheme(super.name);
 }
