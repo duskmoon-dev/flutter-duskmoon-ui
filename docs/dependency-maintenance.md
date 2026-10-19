@@ -102,7 +102,8 @@ sequentially because Flutter native hooks share a build lock.
 ### Tree-sitter validation (2.1.0, 2026-10-19)
 
 All 14 workspace members passed formatting and fatal-info analysis, and all
-1,937 tests passed. Native archive-consumer checks and actual JavaScript/Wasm
+1,941 tests passed, including four typeahead transition regressions. Native
+archive-consumer checks and actual JavaScript/Wasm
 browser checks covered all 95 grammars. Widget browser checks covered automatic
 loading, Unicode, incremental edits, language changes, themes and disposal.
 Native targets other than Linux and separate minimum SDK installations remain

@@ -1,3 +1,8 @@
+## Unreleased
+
+- Update the typeahead suggestions animation for current Flutter APIs while
+  preserving top-center alignment, custom transitions and suggestion selection.
+
 ## 2.0.0
 
 - Restore original form, typeahead and Flutter Stepper license notices.

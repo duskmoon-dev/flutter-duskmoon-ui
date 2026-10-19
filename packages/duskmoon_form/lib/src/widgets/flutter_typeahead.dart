@@ -1265,21 +1265,20 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
       child = createSuggestionsWidget();
     }
 
-    final suggestionsAnimation = CurvedAnimation(
-      parent: this._animationController!,
-      curve: Curves.fastOutSlowIn,
-    );
-
     var animationChild = widget.transitionBuilder != null
         ? widget.transitionBuilder!(context, child, this._animationController)
         : AnimatedBuilder(
-            animation: suggestionsAnimation,
+            animation: this._animationController!,
             child: child,
             builder: (context, child) {
               return ClipRect(
                 child: Align(
-                  alignment: AlignmentDirectional.topStart,
-                  heightFactor: max(suggestionsAnimation.value, 0.0),
+                  alignment: Alignment.topCenter,
+                  heightFactor: max(
+                    Curves.fastOutSlowIn
+                        .transform(this._animationController!.value),
+                    0.0,
+                  ),
                   child: child,
                 ),
               );
