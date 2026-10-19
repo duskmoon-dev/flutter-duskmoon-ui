@@ -1,3 +1,7 @@
+## 2.1.1
+
+- Release 2.1.1 (2026-10-19)
+
 ## 2.1.0
 
 - Update the typeahead suggestions animation for current Flutter APIs while

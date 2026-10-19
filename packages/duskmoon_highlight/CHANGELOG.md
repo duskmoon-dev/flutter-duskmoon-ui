@@ -1,4 +1,4 @@
-## Unreleased
+## 2.1.1
 
 - Compress bundled parser C sources in hosted archives to fit Pub's 256 MiB
   unpacked size limit while retaining all 95 grammars, sources and licenses.
