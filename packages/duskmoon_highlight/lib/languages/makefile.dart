@@ -9,7 +9,12 @@ final langMakefile = Mode(
             begin: "\\\$\\([a-zA-Z_]\\w*\\)",
             contains: <Mode>[BACKSLASH_ESCAPE]),
         Mode(begin: "\\\$[@%<?\\^\\+\\*]")
-      ])
+      ]),
+      '~contains~2': Mode(
+          className: 'string',
+          begin: "\"",
+          end: "\"",
+          contains: <Mode>[BACKSLASH_ESCAPE, Mode(ref: '~contains~1')])
     },
     name: "Makefile",
     aliases: ["mk", "mak", "make"],
@@ -21,11 +26,7 @@ final langMakefile = Mode(
     contains: <Mode>[
       HASH_COMMENT_MODE,
       Mode(ref: '~contains~1'),
-      Mode(
-          className: 'string',
-          begin: "\"",
-          end: "\"",
-          contains: <Mode>[BACKSLASH_ESCAPE, Mode(ref: '~contains~1')]),
+      Mode(ref: '~contains~2'),
       Mode(
           className: 'variable',
           begin: "\\\$\\([\\w-]+\\s",
@@ -35,7 +36,8 @@ final langMakefile = Mode(
                 "subst patsubst strip findstring filter filter-out sort word wordlist firstword lastword dir notdir suffix basename addsuffix addprefix join wildcard realpath abspath error warning shell origin flavor foreach if or and call eval file value"
           },
           contains: <Mode>[
-            Mode(ref: '~contains~1')
+            Mode(ref: '~contains~1'),
+            Mode(ref: '~contains~2')
           ]),
       Mode(begin: "^[a-zA-Z_]\\w*\\s*(?=[:+?]?=)"),
       Mode(

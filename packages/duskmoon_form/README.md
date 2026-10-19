@@ -19,3 +19,13 @@ import 'package:duskmoon_form/duskmoon_form.dart';
 ```
 
 See the [documentation](https://github.com/duskmoon-dev/flutter_duskmoon_ui) for detailed usage guides.
+
+## Source and licenses
+
+Imported form BLoCs/widgets retain GiancarloCode's MIT notice, the embedded
+autocomplete retains BSD-2-Clause, and the Material Stepper retains Flutter's
+BSD-3-Clause terms. DuskMoon modifications retain their MIT terms.
+
+See [SOURCE.md](SOURCE.md),
+[LICENSE](LICENSE) and [THIRD_PARTY_LICENSES](THIRD_PARTY_LICENSES) for the
+retained notices, import history and known provenance limits.

@@ -1,3 +1,9 @@
+## Unreleased
+
+- Add SharedPreferencesAsync hydration and SharedPreferencesWithCache support
+  while preserving the legacy constructor. Serialize persistence across events.
+- Align declared Dart and Flutter SDK requirements with package dependencies.
+
 ## 1.12.0
 
 - Upgrade Equatable to 3.0 after removing the legacy syntax highlighter constraint.

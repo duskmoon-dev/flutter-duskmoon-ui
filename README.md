@@ -23,7 +23,8 @@ flutter pub add duskmoon_widgets
 flutter pub add duskmoon_mermaid_renderer
 ```
 
-Requires Dart >=3.5.0 and Flutter >=3.24.0.
+The umbrella package requires Dart >=3.12.0 and Flutter >=3.44.0. Individual
+packages have lower requirements; see the [SDK support matrix](docs/dependency-maintenance.md#sdk-support).
 
 ## Quick Start
 
@@ -82,7 +83,7 @@ class HomePage extends StatelessWidget {
 | [`duskmoon_code_engine`](packages/duskmoon_code_engine/) | CodeMirror-inspired editor engine with 19 grammar modules | [Version](https://pub.dev/packages/duskmoon_code_engine) |
 | [`duskmoon_adaptive_scaffold`](packages/duskmoon_adaptive_scaffold/) | Responsive Material 3 scaffold and composable slot layouts | [Version](https://pub.dev/packages/duskmoon_adaptive_scaffold) |
 | [`duskmoon_mermaid_renderer`](packages/duskmoon_mermaid_renderer/) | Native Flutter Canvas renderer for 30 Mermaid diagram families | [Version](https://pub.dev/packages/duskmoon_mermaid_renderer) |
-| [`duskmoon_highlight`](packages/duskmoon_highlight/) | Maintained syntax highlighter with 194 languages, aliases, and Flutter text-span rendering | [Version](https://pub.dev/packages/duskmoon_highlight) |
+| [`duskmoon_highlight`](packages/duskmoon_highlight/) | Maintained syntax highlighter with 195 languages, aliases, and Flutter text-span rendering | [Version](https://pub.dev/packages/duskmoon_highlight) |
 
 ## Themes and Adaptive Rendering
 
@@ -143,6 +144,11 @@ melos run analyze
 melos run test
 ```
 
+The format command and CI pin the formatter's default language version to 3.6
+to preserve the existing source style. Files that require newer syntax declare
+their language version explicitly. This formatting setting does not lower the
+SDK requirements in package manifests.
+
 Run the showcase locally:
 
 ```bash
@@ -154,5 +160,5 @@ flutter run -d chrome
 
 ## License
 
-MIT. Bundled highlighter components and themes retain the upstream licenses
-described in [their source provenance](packages/duskmoon_highlight/SOURCE.md).
+MIT for DuskMoon code. Bundled components retain their upstream licenses and
+source records; see [dependency maintenance](docs/dependency-maintenance.md).

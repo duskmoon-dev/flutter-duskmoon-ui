@@ -41,8 +41,8 @@ void main() {
     highlight = Highlight()..registerLanguages(builtinAllLanguages);
   });
 
-  test('ships and registers all 194 maintained languages', () {
-    expect(builtinAllLanguages, hasLength(194));
+  test('ships and registers all 195 maintained languages', () {
+    expect(builtinAllLanguages, hasLength(195));
     expect(
         highlight.listLanguages(), unorderedEquals(builtinAllLanguages.keys));
     for (final name in builtinAllLanguages.keys) {

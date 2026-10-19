@@ -190,7 +190,11 @@ final langBasic = Mode(
       ]
     },
     contains: <Mode>[
-      QUOTE_STRING_MODE,
+      Mode(
+          scope: 'string',
+          begin: "\"",
+          end: "\"|\$",
+          contains: <Mode>[BACKSLASH_ESCAPE]),
       Mode(
           scope: 'comment',
           begin: "REM",

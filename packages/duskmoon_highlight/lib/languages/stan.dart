@@ -421,14 +421,14 @@ final langStan = Mode(
           begin:
               "\\w*(?:bernoulli|bernoulli_logit|bernoulli_logit_glm|beta|beta_binomial|beta_proportion|binomial|binomial_logit|categorical|categorical_logit|categorical_logit_glm|cauchy|chi_square|dirichlet|discrete_range|double_exponential|exp_mod_normal|exponential|frechet|gamma|gaussian_dlm_obs|gumbel|hmm_latent|hypergeometric|inv_chi_square|inv_gamma|inv_wishart|inv_wishart_cholesky|lkj_corr|lkj_corr_cholesky|logistic|loglogistic|lognormal|multi_gp|multi_gp_cholesky|multinomial|multinomial_logit|multi_normal|multi_normal_cholesky|multi_normal_prec|multi_student_cholesky_t|multi_student_t|multi_student_t_cholesky|neg_binomial|neg_binomial_2|neg_binomial_2_log|neg_binomial_2_log_glm|normal|normal_id_glm|ordered_logistic|ordered_logistic_glm|ordered_probit|pareto|pareto_type_2|poisson|poisson_log|poisson_log_glm|rayleigh|scaled_inv_chi_square|skew_double_exponential|skew_normal|std_normal|std_normal_log|student_t|uniform|von_mises|weibull|wiener|wishart|wishart_cholesky)(_lpdf|_lupdf|_lpmf|_cdf|_lcdf|_lccdf|_qf)(?=\\s*[\\(.*\\)])"),
       Mode(begin: [
-        "\x7e",
+        "~",
         "\\s*",
         "(?:bernoulli|bernoulli_logit|bernoulli_logit_glm|beta|beta_binomial|beta_proportion|binomial|binomial_logit|categorical|categorical_logit|categorical_logit_glm|cauchy|chi_square|dirichlet|discrete_range|double_exponential|exp_mod_normal|exponential|frechet|gamma|gaussian_dlm_obs|gumbel|hmm_latent|hypergeometric|inv_chi_square|inv_gamma|inv_wishart|inv_wishart_cholesky|lkj_corr|lkj_corr_cholesky|logistic|loglogistic|lognormal|multi_gp|multi_gp_cholesky|multinomial|multinomial_logit|multi_normal|multi_normal_cholesky|multi_normal_prec|multi_student_cholesky_t|multi_student_t|multi_student_t_cholesky|neg_binomial|neg_binomial_2|neg_binomial_2_log|neg_binomial_2_log_glm|normal|normal_id_glm|ordered_logistic|ordered_logistic_glm|ordered_probit|pareto|pareto_type_2|poisson|poisson_log|poisson_log_glm|rayleigh|scaled_inv_chi_square|skew_double_exponential|skew_normal|std_normal|std_normal_log|student_t|uniform|von_mises|weibull|wiener|wishart|wishart_cholesky)(?=\\s*[\\(.*\\)])"
       ], scope: <int, String>{
         3: 'built_in',
       }),
       Mode(begin: [
-        "\x7e",
+        "~",
         "\\s*\\w+(?=\\s*[\\(.*\\)])",
         "(?!.*/\b((?:bernoulli|bernoulli_logit|bernoulli_logit_glm|beta|beta_binomial|beta_proportion|binomial|binomial_logit|categorical|categorical_logit|categorical_logit_glm|cauchy|chi_square|dirichlet|discrete_range|double_exponential|exp_mod_normal|exponential|frechet|gamma|gaussian_dlm_obs|gumbel|hmm_latent|hypergeometric|inv_chi_square|inv_gamma|inv_wishart|inv_wishart_cholesky|lkj_corr|lkj_corr_cholesky|logistic|loglogistic|lognormal|multi_gp|multi_gp_cholesky|multinomial|multinomial_logit|multi_normal|multi_normal_cholesky|multi_normal_prec|multi_student_cholesky_t|multi_student_t|multi_student_t_cholesky|neg_binomial|neg_binomial_2|neg_binomial_2_log|neg_binomial_2_log_glm|normal|normal_id_glm|ordered_logistic|ordered_logistic_glm|ordered_probit|pareto|pareto_type_2|poisson|poisson_log|poisson_log_glm|rayleigh|scaled_inv_chi_square|skew_double_exponential|skew_normal|std_normal|std_normal_log|student_t|uniform|von_mises|weibull|wiener|wishart|wishart_cholesky))\b)"
       ], scope: <int, String>{

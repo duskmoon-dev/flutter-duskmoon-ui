@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as md;
 
 import 'dm_markdown_config.dart';
+import '_math_widget.dart';
 
 /// Builds [InlineSpan]s from inline AST nodes.
 ///
@@ -10,11 +11,15 @@ import 'dm_markdown_config.dart';
 class InlineSpanBuilder {
   /// Creates an inline span builder with the given [config] and callbacks.
   const InlineSpanBuilder({
+    required this.context,
     required this.config,
     required this.colorScheme,
     required this.textTheme,
     this.onLinkTap,
   });
+
+  /// The context in which the inline content is rendered.
+  final BuildContext context;
 
   /// Rendering configuration.
   final DmMarkdownConfig config;
@@ -50,12 +55,7 @@ class InlineSpanBuilder {
       // Check for custom builder override.
       final customBuilder = config.inlineBuilders?[node.tag];
       if (customBuilder != null) {
-        // Custom builders need a BuildContext — we pass a WidgetSpan wrapper.
-        return WidgetSpan(
-          child: Builder(
-            builder: (context) => customBuilder(node, context) as Widget,
-          ),
-        );
+        return customBuilder(node, context);
       }
 
       return _visitElement(node, parentStyle: parentStyle);
@@ -252,7 +252,7 @@ class InlineSpanBuilder {
         borderRadius: BorderRadius.circular(4),
         child: Image.network(
           src,
-          errorBuilder: (_, __, ___) => Tooltip(
+          errorBuilder: (_, _, _) => Tooltip(
             message: 'Failed to load: $src',
             child: Container(
               padding: const EdgeInsets.all(8),
@@ -282,84 +282,9 @@ class InlineSpanBuilder {
     }
 
     return WidgetSpan(
-      alignment: PlaceholderAlignment.middle,
-      child: _LatexInlineWidget(
-        tex: element.textContent,
-        colorScheme: colorScheme,
-      ),
-    );
-  }
-}
-
-/// Renders inline LaTeX math using flutter_math_fork.
-class _LatexInlineWidget extends StatelessWidget {
-  const _LatexInlineWidget({
-    required this.tex,
-    required this.colorScheme,
-  });
-
-  final String tex;
-  final ColorScheme colorScheme;
-
-  @override
-  Widget build(BuildContext context) {
-    // Import inline — avoids coupling the span builder to flutter_math_fork
-    // at the class level.
-    try {
-      // ignore: depend_on_referenced_packages
-      // Using dynamic invocation to avoid hard coupling.
-      return _buildMath(context);
-    } catch (e) {
-      return Text(
-        '\$$tex\$',
-        style: TextStyle(
-          fontFamily: 'monospace',
-          color: colorScheme.error,
-        ),
-      );
-    }
-  }
-
-  Widget _buildMath(BuildContext context) {
-    // flutter_math_fork import
-    // ignore: depend_on_referenced_packages
-    return _MathTexWidget(tex: tex, colorScheme: colorScheme);
-  }
-}
-
-/// Dedicated math widget to isolate the flutter_math_fork import.
-class _MathTexWidget extends StatelessWidget {
-  const _MathTexWidget({required this.tex, required this.colorScheme});
-
-  final String tex;
-  final ColorScheme colorScheme;
-
-  @override
-  Widget build(BuildContext context) {
-    // We'll use flutter_math_fork for rendering.
-    // This is imported in the _math_widget.dart file and shared.
-    // For inline math, we reuse the same pattern.
-    return _InlineMathFallback(tex: tex, colorScheme: colorScheme);
-  }
-}
-
-/// Fallback for inline math — shows the TeX source in styled text.
-/// Will be replaced with flutter_math_fork rendering in _math_widget.dart.
-class _InlineMathFallback extends StatelessWidget {
-  const _InlineMathFallback({required this.tex, required this.colorScheme});
-
-  final String tex;
-  final ColorScheme colorScheme;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      tex,
-      style: TextStyle(
-        fontFamily: 'monospace',
-        fontStyle: FontStyle.italic,
-        color: colorScheme.tertiary,
-      ),
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
+      child: MathWidget(tex: element.textContent),
     );
   }
 }

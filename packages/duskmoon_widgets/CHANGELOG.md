@@ -1,3 +1,12 @@
+## Unreleased
+
+- Own the native math renderer and KaTeX fonts, render inline formulas, and
+  update cached glyphs when text scaling changes.
+- Backport three official Markdown parser fixes while retaining hosted AST types.
+- Support custom inline builders returning TextSpan or WidgetSpan with the themed
+  render context.
+- Align declared Dart and Flutter SDK requirements with package dependencies.
+
 ## 1.12.0
 
 - Replace the Markdown syntax highlighter with the maintained `duskmoon_highlight`

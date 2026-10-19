@@ -5,7 +5,7 @@ import 'package:duskmoon_highlight/duskmoon_highlight.dart';
 final langAbnf = Mode(
     refs: {},
     name: "Augmented Backus-Naur Form",
-    illegal: "[!@#\$^&',?+\x7e`|:]",
+    illegal: "[!@#\$^&',?+~`|:]",
     keywords: [
       "ALPHA",
       "BIT",

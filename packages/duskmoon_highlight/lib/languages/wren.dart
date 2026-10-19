@@ -77,7 +77,7 @@ final langWren = Mode(
       '~contains~2~contains~0~contains~4': Mode(
           relevance: 0,
           match:
-              "(?:-|\x7e|\\*|%|\\.\\.\\.|\\.\\.|\\+|<<|>>|>=|<=|<|>|\\^|!=|!|\\bis\\b|==|&&|&|\\|\\||\\||\\?:|=)",
+              "(?:-|~|\\*|%|\\.\\.\\.|\\.\\.|\\+|<<|>>|>=|<=|<|>|\\^|!=|!|\\bis\\b|==|&&|&|\\|\\||\\||\\?:|=)",
           className: 'operator'),
       '~contains~2~contains~0~contains~3':
           Mode(relevance: 0, match: "\\b_[a-zA-Z]\\w*", scope: 'variable')

@@ -7,7 +7,7 @@ import 'lib/common.dart';
 final langTypescript = Mode(
     refs: {
       '~exports~PARAMS_CONTAINS~3': Mode(
-          begin: "html`",
+          begin: ".?html`",
           end: "",
           starts: Mode(
               end: "`",
@@ -59,8 +59,8 @@ final langTypescript = Mode(
                         "from",
                         "export",
                         "extends",
+                        "using",
                         "type",
-                        "namespace",
                         "interface",
                         "public",
                         "private",
@@ -70,7 +70,8 @@ final langTypescript = Mode(
                         "abstract",
                         "readonly",
                         "enum",
-                        "override"
+                        "override",
+                        "satisfies"
                       ],
                       "literal": [
                         "true",
@@ -166,6 +167,7 @@ final langTypescript = Mode(
                         "localStorage",
                         "sessionStorage",
                         "module",
+                        "self",
                         "global"
                       ]
                     },
@@ -174,7 +176,7 @@ final langTypescript = Mode(
                       QUOTE_STRING_MODE,
                       Mode(ref: '~exports~PARAMS_CONTAINS~3'),
                       Mode(
-                          begin: "css`",
+                          begin: ".?css`",
                           end: "",
                           starts: Mode(
                               end: "`",
@@ -187,7 +189,7 @@ final langTypescript = Mode(
                               ],
                               subLanguage: "css")),
                       Mode(
-                          begin: "gql`",
+                          begin: ".?gql`",
                           end: "",
                           starts: Mode(
                               end: "`",
@@ -269,8 +271,8 @@ final langTypescript = Mode(
                           "from",
                           "export",
                           "extends",
+                          "using",
                           "type",
-                          "namespace",
                           "interface",
                           "public",
                           "private",
@@ -280,7 +282,8 @@ final langTypescript = Mode(
                           "abstract",
                           "readonly",
                           "enum",
-                          "override"
+                          "override",
+                          "satisfies"
                         ],
                         "literal": [
                           "true",
@@ -376,6 +379,7 @@ final langTypescript = Mode(
                           "localStorage",
                           "sessionStorage",
                           "module",
+                          "self",
                           "global"
                         ]
                       }, contains: <Mode>[
@@ -444,8 +448,8 @@ final langTypescript = Mode(
           "from",
           "export",
           "extends",
+          "using",
           "type",
-          "namespace",
           "interface",
           "public",
           "private",
@@ -455,7 +459,8 @@ final langTypescript = Mode(
           "abstract",
           "readonly",
           "enum",
-          "override"
+          "override",
+          "satisfies"
         ],
         "literal": ["true", "false", "null", "undefined", "NaN", "Infinity"],
         "built_in": [
@@ -544,6 +549,7 @@ final langTypescript = Mode(
           "localStorage",
           "sessionStorage",
           "module",
+          "self",
           "global"
         ]
       }, contains: <Mode>[
@@ -551,7 +557,7 @@ final langTypescript = Mode(
         QUOTE_STRING_MODE,
         Mode(ref: '~exports~PARAMS_CONTAINS~3'),
         Mode(
-            begin: "css`",
+            begin: ".?css`",
             end: "",
             starts: Mode(
                 end: "`",
@@ -562,7 +568,7 @@ final langTypescript = Mode(
                 ],
                 subLanguage: "css")),
         Mode(
-            begin: "gql`",
+            begin: ".?gql`",
             end: "",
             starts: Mode(
                 end: "`",
@@ -634,8 +640,8 @@ final langTypescript = Mode(
             "from",
             "export",
             "extends",
+            "using",
             "type",
-            "namespace",
             "interface",
             "public",
             "private",
@@ -645,7 +651,8 @@ final langTypescript = Mode(
             "abstract",
             "readonly",
             "enum",
-            "override"
+            "override",
+            "satisfies"
           ],
           "literal": ["true", "false", "null", "undefined", "NaN", "Infinity"],
           "built_in": [
@@ -734,6 +741,7 @@ final langTypescript = Mode(
             "localStorage",
             "sessionStorage",
             "module",
+            "self",
             "global"
           ]
         }, contains: <Mode>[
@@ -749,7 +757,7 @@ final langTypescript = Mode(
         ])
       ]),
       '~exports~PARAMS_CONTAINS~3~starts~contains~1~contains~3': Mode(
-          begin: "css`",
+          begin: ".?css`",
           end: "",
           starts: Mode(
               end: "`",
@@ -760,7 +768,7 @@ final langTypescript = Mode(
               ],
               subLanguage: "css")),
       '~exports~PARAMS_CONTAINS~3~starts~contains~1~contains~4': Mode(
-          begin: "gql`",
+          begin: ".?gql`",
           end: "",
           starts: Mode(
               end: "`",
@@ -838,8 +846,8 @@ final langTypescript = Mode(
           "from",
           "export",
           "extends",
+          "using",
           "type",
-          "namespace",
           "interface",
           "public",
           "private",
@@ -849,7 +857,8 @@ final langTypescript = Mode(
           "abstract",
           "readonly",
           "enum",
-          "override"
+          "override",
+          "satisfies"
         ],
         "literal": ["true", "false", "null", "undefined", "NaN", "Infinity"],
         "built_in": [
@@ -938,6 +947,7 @@ final langTypescript = Mode(
           "localStorage",
           "sessionStorage",
           "module",
+          "self",
           "global"
         ]
       }, contains: <Mode>[
@@ -987,7 +997,7 @@ final langTypescript = Mode(
         C_BLOCK_COMMENT_MODE,
         C_LINE_COMMENT_MODE
       ]),
-      '~exports~CLASS_REFERENCE': Mode(
+      '~exports~PARAMS_CONTAINS~12~0': Mode(
           relevance: 0,
           match:
               "(?:\\bJSON|\\b[A-Z][a-z]+([A-Z][a-z]*|\\d)*|\\b[A-Z]{2,}([A-Z][a-z]+|\\d)+([A-Z][a-z]*)*|\\b[A-Z]{2,}[a-z]+([A-Z][a-z]+|\\d)*([A-Z][a-z]*)*)",
@@ -1043,7 +1053,12 @@ final langTypescript = Mode(
               "URIError"
             ]
           }),
-      '~exports~PARAMS_CONTAINS~10': Mode(begin: "\\(", end: "\\)", keywords: {
+      '~exports~PARAMS_CONTAINS~12~1': Mode(
+          scope: 'attr',
+          match: "[A-Za-z\$_][0-9A-Za-z\$_]*(?=:)",
+          relevance: 0),
+      '~exports~PARAMS_CONTAINS~10':
+          Mode(begin: "(\\s*)\\(", end: "\\)", keywords: {
         "\$pattern": "[A-Za-z\$_][0-9A-Za-z\$_]*",
         "keyword": [
           "as",
@@ -1084,8 +1099,8 @@ final langTypescript = Mode(
           "from",
           "export",
           "extends",
+          "using",
           "type",
-          "namespace",
           "interface",
           "public",
           "private",
@@ -1095,7 +1110,8 @@ final langTypescript = Mode(
           "abstract",
           "readonly",
           "enum",
-          "override"
+          "override",
+          "satisfies"
         ],
         "literal": ["true", "false", "null", "undefined", "NaN", "Infinity"],
         "built_in": [
@@ -1184,6 +1200,7 @@ final langTypescript = Mode(
           "localStorage",
           "sessionStorage",
           "module",
+          "self",
           "global"
         ]
       }, contains: <Mode>[
@@ -1201,9 +1218,13 @@ final langTypescript = Mode(
       ]),
       '~exports~PARAMS_CONTAINS~11':
           Mode(className: 'meta', begin: "@[A-Za-z\$_][0-9A-Za-z\$_]*"),
+      '~exports~PARAMS_CONTAINS~12~2': Mode(
+          scope: 'attr',
+          match: "[A-Za-z\$_][0-9A-Za-z\$_]*(?=\\s*\\?:)",
+          relevance: 0),
       '~contains~13~contains~0': Mode(
           className: 'params',
-          begin: "\\(",
+          begin: "(\\s*)\\(",
           end: "\\)",
           excludeBegin: true,
           excludeEnd: true,
@@ -1248,8 +1269,8 @@ final langTypescript = Mode(
               "from",
               "export",
               "extends",
+              "using",
               "type",
-              "namespace",
               "interface",
               "public",
               "private",
@@ -1259,7 +1280,8 @@ final langTypescript = Mode(
               "abstract",
               "readonly",
               "enum",
-              "override"
+              "override",
+              "satisfies"
             ],
             "literal": [
               "true",
@@ -1355,6 +1377,7 @@ final langTypescript = Mode(
               "localStorage",
               "sessionStorage",
               "module",
+              "self",
               "global"
             ]
           },
@@ -1376,7 +1399,10 @@ final langTypescript = Mode(
             Mode(
                 ref: '~exports~PARAMS_CONTAINS~3~starts~contains~1~contains~8'),
             Mode(ref: '~exports~PARAMS_CONTAINS~10'),
-            Mode(ref: '~exports~PARAMS_CONTAINS~11')
+            Mode(ref: '~exports~PARAMS_CONTAINS~11'),
+            Mode(ref: '~exports~PARAMS_CONTAINS~12~0'),
+            Mode(ref: '~exports~PARAMS_CONTAINS~12~1'),
+            Mode(ref: '~exports~PARAMS_CONTAINS~12~2')
           ])
     },
     name: "TypeScript",
@@ -1422,8 +1448,8 @@ final langTypescript = Mode(
         "from",
         "export",
         "extends",
+        "using",
         "type",
-        "namespace",
         "interface",
         "public",
         "private",
@@ -1433,7 +1459,8 @@ final langTypescript = Mode(
         "abstract",
         "readonly",
         "enum",
-        "override"
+        "override",
+        "satisfies"
       ],
       "literal": ["true", "false", "null", "undefined", "NaN", "Infinity"],
       "built_in": [
@@ -1522,10 +1549,11 @@ final langTypescript = Mode(
         "localStorage",
         "sessionStorage",
         "module",
+        "self",
         "global"
       ]
     },
-    illegal: "#(?![\$_A-z])",
+    illegal: "#(?![\$_A-Za-z])",
     contains: <Mode>[
       Mode(
           scope: 'meta',
@@ -1544,11 +1572,8 @@ final langTypescript = Mode(
       Mode(ref: '~exports~PARAMS_CONTAINS~0'),
       Mode(match: "\\\$\\d+"),
       Mode(ref: '~exports~PARAMS_CONTAINS~3~starts~contains~1~contains~7'),
-      Mode(ref: '~exports~CLASS_REFERENCE'),
-      Mode(
-          className: 'attr',
-          begin: "[A-Za-z\$_][0-9A-Za-z\$_]*(?=:)",
-          relevance: 0),
+      Mode(ref: '~exports~PARAMS_CONTAINS~12~0'),
+      Mode(ref: '~exports~PARAMS_CONTAINS~12~1'),
       Mode(
           match: [
             "const|var|let",
@@ -1584,7 +1609,7 @@ final langTypescript = Mode(
                     Mode(begin: "[a-zA-Z_]\\w*", relevance: 0),
                     Mode(className: 'delete', begin: "\\(\\s*\\)", skip: true),
                     Mode(
-                        begin: "\\(",
+                        begin: "(\\s*)\\(",
                         end: "\\)",
                         excludeBegin: true,
                         excludeEnd: true,
@@ -1629,8 +1654,8 @@ final langTypescript = Mode(
                             "from",
                             "export",
                             "extends",
+                            "using",
                             "type",
-                            "namespace",
                             "interface",
                             "public",
                             "private",
@@ -1640,7 +1665,8 @@ final langTypescript = Mode(
                             "abstract",
                             "readonly",
                             "enum",
-                            "override"
+                            "override",
+                            "satisfies"
                           ],
                           "literal": [
                             "true",
@@ -1736,6 +1762,7 @@ final langTypescript = Mode(
                             "localStorage",
                             "sessionStorage",
                             "module",
+                            "self",
                             "global"
                           ]
                         },
@@ -1763,7 +1790,10 @@ final langTypescript = Mode(
                               ref:
                                   '~exports~PARAMS_CONTAINS~3~starts~contains~1~contains~8'),
                           Mode(ref: '~exports~PARAMS_CONTAINS~10'),
-                          Mode(ref: '~exports~PARAMS_CONTAINS~11')
+                          Mode(ref: '~exports~PARAMS_CONTAINS~11'),
+                          Mode(ref: '~exports~PARAMS_CONTAINS~12~0'),
+                          Mode(ref: '~exports~PARAMS_CONTAINS~12~1'),
+                          Mode(ref: '~exports~PARAMS_CONTAINS~12~2')
                         ])
                   ])
                 ]),
@@ -1837,7 +1867,7 @@ final langTypescript = Mode(
       ]),
       Mode(
           match:
-              "\\b(?!setInterval|setTimeout|clearInterval|clearTimeout|require|exports|eval|isFinite|isNaN|parseFloat|parseInt|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|escape|unescape|super|import)[A-Za-z\$_][0-9A-Za-z\$_]*(?=\\()",
+              "\\b(?!setInterval\\s*\\(|setTimeout\\s*\\(|clearInterval\\s*\\(|clearTimeout\\s*\\(|require\\s*\\(|exports\\s*\\(|eval\\s*\\(|isFinite\\s*\\(|isNaN\\s*\\(|parseFloat\\s*\\(|parseInt\\s*\\(|decodeURI\\s*\\(|decodeURIComponent\\s*\\(|encodeURI\\s*\\(|encodeURIComponent\\s*\\(|escape\\s*\\(|unescape\\s*\\(|super\\s*\\(|import\\s*\\(|await\\s*\\()[A-Za-z\$_][0-9A-Za-z\$_]*(?=\\s*\\()",
           className: 'title.function',
           relevance: 0),
       Mode(
@@ -1882,11 +1912,14 @@ final langTypescript = Mode(
       ]),
       Mode(match: "\\\$[(.]"),
       Mode(ref: '~exports~PARAMS_CONTAINS~11'),
-      Mode(
-          beginKeywords: "namespace",
-          end: "\\{",
-          excludeEnd: true,
-          contains: <Mode>[Mode(ref: '~exports~CLASS_REFERENCE')]),
+      Mode(begin: [
+        "namespace",
+        "\\s+",
+        "[a-zA-Z]\\w*"
+      ], beginScope: <int, String>{
+        1: 'keyword',
+        3: 'title.class',
+      }),
       Mode(beginKeywords: "interface", end: "\\{", excludeEnd: true, keywords: {
         "keyword": "interface extends",
         "built_in": [
@@ -1902,6 +1935,7 @@ final langTypescript = Mode(
           "unknown"
         ]
       }, contains: <Mode>[
-        Mode(ref: '~exports~CLASS_REFERENCE')
-      ])
+        Mode(ref: '~exports~PARAMS_CONTAINS~12~0')
+      ]),
+      Mode(ref: '~exports~PARAMS_CONTAINS~12~2')
     ]);

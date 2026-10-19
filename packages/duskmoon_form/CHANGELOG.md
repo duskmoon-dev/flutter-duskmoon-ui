@@ -1,3 +1,8 @@
+## Unreleased
+
+- Restore original form, typeahead and Flutter Stepper license notices.
+- Align declared Dart and Flutter SDK requirements with package dependencies.
+
 ## 1.12.0
 
 - Upgrade Equatable to 3.0 after removing the legacy syntax highlighter constraint.

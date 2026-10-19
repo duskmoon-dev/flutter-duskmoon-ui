@@ -73,7 +73,7 @@ class _DmMarkdownFieldBlocBuilderState
     return DmSimpleFieldBlocBuilder(
       singleFieldBloc: widget.markdownFieldBloc,
       animateWhenCanShow: widget.animateWhenCanShow,
-      builder: (context, __) {
+      builder: (context, _) {
         return BlocBuilder<MarkdownFieldBloc, MarkdownFieldBlocState>(
           bloc: widget.markdownFieldBloc,
           builder: (context, state) {

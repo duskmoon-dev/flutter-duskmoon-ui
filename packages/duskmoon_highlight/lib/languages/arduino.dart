@@ -5,6 +5,21 @@ import 'lib/common.dart';
 
 final langArduino = Mode(
     refs: {
+      '~contains~0~contains~1~contains~1~variants~0': Mode(
+          begin: "(u8?|U|L)?\"",
+          end: "\"",
+          illegal: "\\n",
+          contains: <Mode>[BACKSLASH_ESCAPE]),
+      '~contains~0~contains~1~contains~1~variants~1': Mode(
+          begin:
+              "(u8?|U|L)?'(\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4,8}|[0-7]{3}|\\S)|.)",
+          end: "'",
+          illegal: "."),
+      '~contains~0~contains~1~contains~1~variants~2': Mode(
+          begin: "(?:u8?|U|L)?R\"([^()\\\\\\s\"]{0,16})\\(",
+          end: "\\)([^()\\\\\\s\"]{0,16})\"",
+          onBegin: callbackOnBegin1,
+          onEnd: callbackOnEnd1),
       '~contains~0~contains~1~contains~3':
           Mode(scope: 'comment', begin: "//", end: "\$", contains: <Mode>[
         Mode(begin: "\\\\\\n"),
@@ -18,21 +33,24 @@ final langArduino = Mode(
             begin:
                 "[ ]+((?:I|a|is|so|us|to|at|if|in|it|on|[A-Za-z]+['](d|ve|re|ll|t|s|n)|[A-Za-z]+[-][a-z]+|[A-Za-z][a-z]{2,})[.]?[:]?([.][ ]|[ ])){3}")
       ]),
-      '~contains~0~contains~1~contains~1~variants~0': Mode(
-          begin: "(u8?|U|L)?\"",
-          end: "\"",
-          illegal: "\\n",
-          contains: <Mode>[BACKSLASH_ESCAPE]),
-      '~contains~0~contains~1~contains~1~variants~1': Mode(
-          begin:
-              "(u8?|U|L)?'(\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4,8}|[0-7]{3}|\\S)|.)",
-          end: "'",
-          illegal: "."),
-      '~contains~0~contains~1~contains~1~variants~2': Mode(
-          begin: "(?:u8?|U|L)?R\"([^()\\\\ ]{0,16})\\(",
-          end: "\\)([^()\\\\ ]{0,16})\"",
-          onBegin: callbackOnBegin1,
-          onEnd: callbackOnEnd1),
+      '~contains~0~contains~1~contains~1':
+          Mode(className: 'string', variants: <Mode>[
+        Mode(
+            begin: "(u8?|U|L)?\"",
+            end: "\"",
+            illegal: "\\n",
+            contains: <Mode>[BACKSLASH_ESCAPE]),
+        Mode(
+            begin:
+                "(u8?|U|L)?'(\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4,8}|[0-7]{3}|\\S)|.)",
+            end: "'",
+            illegal: "."),
+        Mode(
+            begin: "(?:u8?|U|L)?R\"([^()\\\\\\s\"]{0,16})\\(",
+            end: "\\)([^()\\\\\\s\"]{0,16})\"",
+            onBegin: callbackOnBegin1,
+            onEnd: callbackOnEnd1)
+      ]),
       '~contains~0~contains~0': Mode(
           className: 'function.dispatch',
           relevance: 0,
@@ -141,8 +159,45 @@ final langArduino = Mode(
             ]
           },
           begin:
-              "\\b(?!decltype)(?!if)(?!for)(?!switch)(?!while)[a-zA-Z]\\w*(?=(<[^<>]+>|)\\s*\\()"),
-      '~contains~0~contains~1': Mode(
+              "\\b(?!alignas|alignof|and|and_eq|asm|atomic_cancel|atomic_commit|atomic_noexcept|auto|bitand|bitor|break|case|catch|class|co_await|co_return|co_yield|compl|concept|const_cast|10|consteval|constexpr|constinit|continue|decltype|default|delete|do|dynamic_cast|10|else|enum|explicit|export|extern|false|final|for|friend|goto|if|import|inline|module|mutable|namespace|new|noexcept|not|not_eq|nullptr|operator|or|or_eq|override|private|protected|public|reflexpr|register|reinterpret_cast|10|requires|return|sizeof|static_assert|static_cast|10|struct|switch|synchronized|template|this|thread_local|throw|transaction_safe|transaction_safe_dynamic|true|try|typedef|typeid|typename|union|using|virtual|volatile|while|xor|xor_eq)[a-zA-Z]\\w*(?=(<[^<>]+>|)\\s*\\()"),
+      '~contains~0~contains~1':
+          Mode(scope: 'meta', begin: "#\\s*include\\b", end: "\$", keywords: {
+        "keyword": "include"
+      }, contains: <Mode>[
+        Mode(begin: "\\\\\\n"),
+        Mode(className: 'string', variants: <Mode>[
+          Mode(
+              begin: "(u8?|U|L)?\"",
+              end: "\"",
+              illegal: "\\n",
+              contains: <Mode>[BACKSLASH_ESCAPE]),
+          Mode(
+              begin:
+                  "(u8?|U|L)?'(\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4,8}|[0-7]{3}|\\S)|.)",
+              end: "'",
+              illegal: "."),
+          Mode(
+              begin: "(?:u8?|U|L)?R\"([^()\\\\\\s\"]{0,16})\\(",
+              end: "\\)([^()\\\\\\s\"]{0,16})\"",
+              onBegin: callbackOnBegin1,
+              onEnd: callbackOnEnd1)
+        ]),
+        Mode(scope: 'string', begin: "<.*?>"),
+        Mode(scope: 'comment', begin: "//", end: "\$", contains: <Mode>[
+          Mode(begin: "\\\\\\n"),
+          Mode(
+              scope: 'doctag',
+              begin: "[ ]*(?=(TODO|FIXME|NOTE|BUG|OPTIMIZE|HACK|XXX):)",
+              end: "(TODO|FIXME|NOTE|BUG|OPTIMIZE|HACK|XXX):",
+              excludeBegin: true,
+              relevance: 0),
+          Mode(
+              begin:
+                  "[ ]+((?:I|a|is|so|us|to|at|if|in|it|on|[A-Za-z]+['](d|ve|re|ll|t|s|n)|[A-Za-z]+[-][a-z]+|[A-Za-z][a-z]{2,})[.]?[:]?([.][ ]|[ ])){3}")
+        ]),
+        C_BLOCK_COMMENT_MODE
+      ]),
+      '~contains~0~contains~2': Mode(
           className: 'meta',
           begin: "#\\s*[a-z]+\\b",
           end: "\$",
@@ -153,56 +208,26 @@ final langArduino = Mode(
           contains: <Mode>[
             Mode(begin: "\\\\\\n", relevance: 0),
             Mode(className: 'string', variants: <Mode>[
-              Mode(
-                  begin: "(u8?|U|L)?\"",
-                  end: "\"",
-                  illegal: "\\n",
-                  contains: <Mode>[BACKSLASH_ESCAPE]),
-              Mode(
-                  begin:
-                      "(u8?|U|L)?'(\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4,8}|[0-7]{3}|\\S)|.)",
-                  end: "'",
-                  illegal: "."),
-              Mode(
-                  begin: "(?:u8?|U|L)?R\"([^()\\\\ ]{0,16})\\(",
-                  end: "\\)([^()\\\\ ]{0,16})\"",
-                  onBegin: callbackOnBegin1,
-                  onEnd: callbackOnEnd1)
+              Mode(ref: '~contains~0~contains~1~contains~1~variants~0'),
+              Mode(ref: '~contains~0~contains~1~contains~1~variants~1'),
+              Mode(ref: '~contains~0~contains~1~contains~1~variants~2')
             ]),
-            Mode(className: 'string', begin: "<.*?>"),
-            Mode(scope: 'comment', begin: "//", end: "\$", contains: <Mode>[
-              Mode(begin: "\\\\\\n"),
-              Mode(
-                  scope: 'doctag',
-                  begin: "[ ]*(?=(TODO|FIXME|NOTE|BUG|OPTIMIZE|HACK|XXX):)",
-                  end: "(TODO|FIXME|NOTE|BUG|OPTIMIZE|HACK|XXX):",
-                  excludeBegin: true,
-                  relevance: 0),
-              Mode(
-                  begin:
-                      "[ ]+((?:I|a|is|so|us|to|at|if|in|it|on|[A-Za-z]+['](d|ve|re|ll|t|s|n)|[A-Za-z]+[-][a-z]+|[A-Za-z][a-z]{2,})[.]?[:]?([.][ ]|[ ])){3}")
-            ]),
+            Mode(ref: '~contains~0~contains~1~contains~3'),
             C_BLOCK_COMMENT_MODE
           ]),
-      '~contains~0~contains~2':
+      '~contains~0~contains~3':
           Mode(className: 'type', begin: "\\b[a-z\\d_]*_t\\b"),
-      '~contains~0~contains~5': Mode(
+      '~contains~0~contains~6': Mode(
           className: 'number',
           variants: <Mode>[
-            Mode(begin: "\\b(0b[01']+)"),
             Mode(
                 begin:
-                    "(-?)\\b([\\d']+(\\.[\\d']*)?|\\.[\\d']+)((ll|LL|l|L)(u|U)?|(u|U)(ll|LL|l|L)?|f|F|b|B)"),
+                    "[+-]?(?:(?:\\b[0-9](?:'?[0-9])*\\.(?:[0-9](?:'?[0-9])*)?|\\.[0-9](?:'?[0-9])*)(?:[Ee][+-]?[0-9](?:'?[0-9])*)?|\\b[0-9](?:'?[0-9])*[Ee][+-]?[0-9](?:'?[0-9])*|\\b0[Xx](?:[0-9A-Fa-f](?:'?[0-9A-Fa-f])*(?:\\.(?:[0-9A-Fa-f](?:'?[0-9A-Fa-f])*)?)?|\\.[0-9A-Fa-f](?:'?[0-9A-Fa-f])*)[Pp][+-]?[0-9](?:'?[0-9])*)(?:[Ff](?:16|32|64|128)?|(BF|bf)16|[Ll]|)"),
             Mode(
                 begin:
-                    "(-?)(\\b0[xX][a-fA-F0-9']+|(\\b[\\d']+(\\.[\\d']*)?|\\.[\\d']+)([eE][-+]?[\\d']+)?)")
+                    "[+-]?\\b(?:0[Bb][01](?:'?[01])*|0[Xx][0-9A-Fa-f](?:'?[0-9A-Fa-f])*|0(?:'?[0-7])*|[1-9](?:'?[0-9])*)(?:[Uu](?:LL?|ll?)|[Uu][Zz]?|(?:LL?|ll?)[Uu]?|[Zz][Uu]|)")
           ],
-          relevance: 0),
-      '~contains~0~contains~6': Mode(className: 'string', variants: <Mode>[
-        Mode(ref: '~contains~0~contains~1~contains~1~variants~0'),
-        Mode(ref: '~contains~0~contains~1~contains~1~variants~1'),
-        Mode(ref: '~contains~0~contains~1~contains~1~variants~2')
-      ])
+          relevance: 0)
     },
     name: "Arduino",
     aliases: ["ino"],
@@ -414,6 +439,8 @@ final langArduino = Mode(
         "counting_semaphore",
         "deque",
         "false_type",
+        "flat_map",
+        "flat_set",
         "future",
         "imaginary",
         "initializer_list",
@@ -955,6 +982,8 @@ final langArduino = Mode(
           "counting_semaphore",
           "deque",
           "false_type",
+          "flat_map",
+          "flat_set",
           "future",
           "imaginary",
           "initializer_list",
@@ -1284,10 +1313,11 @@ final langArduino = Mode(
         Mode(ref: '~contains~0~contains~0'),
         Mode(ref: '~contains~0~contains~1'),
         Mode(ref: '~contains~0~contains~2'),
+        Mode(ref: '~contains~0~contains~3'),
         Mode(ref: '~contains~0~contains~1~contains~3'),
         C_BLOCK_COMMENT_MODE,
-        Mode(ref: '~contains~0~contains~5'),
         Mode(ref: '~contains~0~contains~6'),
+        Mode(ref: '~contains~0~contains~1~contains~1'),
         Mode(
             begin: "\\(",
             end: "\\)",
@@ -1499,6 +1529,8 @@ final langArduino = Mode(
                 "counting_semaphore",
                 "deque",
                 "false_type",
+                "flat_map",
+                "flat_set",
                 "future",
                 "imaginary",
                 "initializer_list",
@@ -1829,10 +1861,11 @@ final langArduino = Mode(
               Mode(ref: '~contains~0~contains~0'),
               Mode(ref: '~contains~0~contains~1'),
               Mode(ref: '~contains~0~contains~2'),
+              Mode(ref: '~contains~0~contains~3'),
               Mode(ref: '~contains~0~contains~1~contains~3'),
               C_BLOCK_COMMENT_MODE,
-              Mode(ref: '~contains~0~contains~5'),
               Mode(ref: '~contains~0~contains~6'),
+              Mode(ref: '~contains~0~contains~1~contains~1'),
               Mode(self: true)
             ],
             relevance: 0)
@@ -1840,7 +1873,7 @@ final langArduino = Mode(
       Mode(
           className: 'function',
           begin:
-              "((?!struct)(decltype\\(auto\\)|(?:[a-zA-Z_]\\w*::)?[a-zA-Z_]\\w*(?:<[^<>]+>)?)[\\*&\\s]+)+(?:[a-zA-Z_]\\w*::)?[a-zA-Z]\\w*\\s*\\(",
+              "((?!struct)(decltype\\(auto\\)|(?:[a-zA-Z_]\\w*::)?[a-zA-Z_]\\w*(?:<[^<>]+>)?)[\\*&\\s]+){1,12}(?:[a-zA-Z_]\\w*::)?[a-zA-Z]\\w*\\s*\\(",
           returnBegin: true,
           end: "[{;=]",
           excludeEnd: true,
@@ -2052,6 +2085,8 @@ final langArduino = Mode(
               "counting_semaphore",
               "deque",
               "false_type",
+              "flat_map",
+              "flat_set",
               "future",
               "imaginary",
               "initializer_list",
@@ -2590,6 +2625,8 @@ final langArduino = Mode(
                     "counting_semaphore",
                     "deque",
                     "false_type",
+                    "flat_map",
+                    "flat_set",
                     "future",
                     "imaginary",
                     "initializer_list",
@@ -2929,8 +2966,8 @@ final langArduino = Mode(
                 relevance: 0),
             Mode(begin: "::", relevance: 0),
             Mode(begin: ":", endsWithParent: true, contains: <Mode>[
-              Mode(ref: '~contains~0~contains~6'),
-              Mode(ref: '~contains~0~contains~5')
+              Mode(ref: '~contains~0~contains~1~contains~1'),
+              Mode(ref: '~contains~0~contains~6')
             ]),
             Mode(relevance: 0, match: ","),
             Mode(
@@ -3145,6 +3182,8 @@ final langArduino = Mode(
                     "counting_semaphore",
                     "deque",
                     "false_type",
+                    "flat_map",
+                    "flat_set",
                     "future",
                     "imaginary",
                     "initializer_list",
@@ -3475,9 +3514,9 @@ final langArduino = Mode(
                 contains: <Mode>[
                   Mode(ref: '~contains~0~contains~1~contains~3'),
                   C_BLOCK_COMMENT_MODE,
+                  Mode(ref: '~contains~0~contains~1~contains~1'),
                   Mode(ref: '~contains~0~contains~6'),
-                  Mode(ref: '~contains~0~contains~5'),
-                  Mode(ref: '~contains~0~contains~2'),
+                  Mode(ref: '~contains~0~contains~3'),
                   Mode(
                       begin: "\\(",
                       end: "\\)",
@@ -3689,6 +3728,8 @@ final langArduino = Mode(
                           "counting_semaphore",
                           "deque",
                           "false_type",
+                          "flat_map",
+                          "flat_set",
                           "future",
                           "imaginary",
                           "initializer_list",
@@ -4020,28 +4061,31 @@ final langArduino = Mode(
                         Mode(self: true),
                         Mode(ref: '~contains~0~contains~1~contains~3'),
                         C_BLOCK_COMMENT_MODE,
+                        Mode(ref: '~contains~0~contains~1~contains~1'),
                         Mode(ref: '~contains~0~contains~6'),
-                        Mode(ref: '~contains~0~contains~5'),
-                        Mode(ref: '~contains~0~contains~2')
+                        Mode(ref: '~contains~0~contains~3')
                       ])
                 ]),
-            Mode(ref: '~contains~0~contains~2'),
+            Mode(ref: '~contains~0~contains~3'),
             Mode(ref: '~contains~0~contains~1~contains~3'),
             C_BLOCK_COMMENT_MODE,
-            Mode(ref: '~contains~0~contains~1')
+            Mode(ref: '~contains~0~contains~1'),
+            Mode(ref: '~contains~0~contains~2')
           ]),
       Mode(ref: '~contains~0~contains~0'),
       Mode(ref: '~contains~0~contains~0'),
       Mode(ref: '~contains~0~contains~1'),
       Mode(ref: '~contains~0~contains~2'),
+      Mode(ref: '~contains~0~contains~3'),
       Mode(ref: '~contains~0~contains~1~contains~3'),
       C_BLOCK_COMMENT_MODE,
-      Mode(ref: '~contains~0~contains~5'),
       Mode(ref: '~contains~0~contains~6'),
+      Mode(ref: '~contains~0~contains~1~contains~1'),
       Mode(ref: '~contains~0~contains~1'),
+      Mode(ref: '~contains~0~contains~2'),
       Mode(
           begin:
-              "\\b(deque|list|queue|priority_queue|pair|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array|tuple|optional|variant|function)\\s*<(?!<)",
+              "\\b(deque|list|queue|priority_queue|pair|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array|tuple|optional|variant|function|flat_map|flat_set)\\s*<(?!<)",
           end: ">",
           keywords: {
             "type": [
@@ -4251,6 +4295,8 @@ final langArduino = Mode(
               "counting_semaphore",
               "deque",
               "false_type",
+              "flat_map",
+              "flat_set",
               "future",
               "imaginary",
               "initializer_list",
@@ -4579,7 +4625,7 @@ final langArduino = Mode(
           },
           contains: <Mode>[
             Mode(self: true),
-            Mode(ref: '~contains~0~contains~2')
+            Mode(ref: '~contains~0~contains~3')
           ]),
       Mode(begin: "[a-zA-Z]\\w*::", keywords: {
         "type": [
@@ -4789,6 +4835,8 @@ final langArduino = Mode(
           "counting_semaphore",
           "deque",
           "false_type",
+          "flat_map",
+          "flat_set",
           "future",
           "imaginary",
           "initializer_list",

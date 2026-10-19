@@ -71,4 +71,9 @@ DmButton(
 
 ## License
 
-MIT
+MIT for DuskMoon code. The private Markdown parser retains the Dart authors'
+BSD-3-Clause license. The private native math renderer retains its Apache-2.0
+license and KaTeX MIT notices, including bundled fonts. See
+[THIRD_PARTY_LICENSES](THIRD_PARTY_LICENSES),
+[Markdown provenance](lib/src/vendor/markdown/SOURCE.md) and
+[math renderer provenance](lib/src/vendor/flutter_math/SOURCE.md).

@@ -1,4 +1,4 @@
-import 'package:markdown/markdown.dart' as md;
+import '../vendor/markdown/markdown.dart' as md;
 
 import 'math_syntax.dart';
 import '../markdown/dm_markdown_config.dart';

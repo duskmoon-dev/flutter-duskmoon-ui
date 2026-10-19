@@ -107,7 +107,7 @@ class _DmChatViewState extends State<DmChatView> {
       reverse: widget.reverse,
       padding: widget.padding ?? const EdgeInsets.all(16),
       itemCount: reversed.length,
-      separatorBuilder: (_, __) => SizedBox(
+      separatorBuilder: (_, _) => SizedBox(
         height: (Theme.of(context).extension<DmChatTheme>() ??
                 DmChatTheme.withContext(context))
             .rowSpacing,
@@ -139,7 +139,7 @@ class _DmChatViewState extends State<DmChatView> {
               if (widget.showJumpToBottom)
                 AnimatedBuilder(
                   animation: _tracker,
-                  builder: (_, __) {
+                  builder: (_, _) {
                     if (_tracker.pinned) return const SizedBox.shrink();
                     return Positioned(
                       right: 16,
@@ -171,7 +171,7 @@ class _DmChatViewState extends State<DmChatView> {
           Expanded(child: body),
           DmChatInput(
             controller: widget.inputController,
-            onSend: widget.onSend ?? (_, __) {},
+            onSend: widget.onSend ?? (_, _) {},
             onStop: widget.onStop,
             onAttach: widget.onAttach,
             uploadAdapter: widget.uploadAdapter,

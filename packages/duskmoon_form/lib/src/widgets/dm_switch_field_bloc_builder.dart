@@ -138,7 +138,7 @@ class DmSwitchFieldBlocBuilder extends StatelessWidget {
     return DmSimpleFieldBlocBuilder(
       singleFieldBloc: booleanFieldBloc,
       animateWhenCanShow: animateWhenCanShow,
-      builder: (context0, __) {
+      builder: (context0, _) {
         return BlocBuilder<BooleanFieldBloc, BooleanFieldBlocState>(
           bloc: booleanFieldBloc,
           builder: (context, state) {

@@ -14,8 +14,10 @@ This is a maintained source fork, with no runtime dependency on re_highlight.
 ## Included upstream components
 
 - re_highlight 0.0.3 parser/generators: MIT, original notice in `LICENSE`.
-- highlight.js 11.9.0 grammar/style source and markup fixtures: BSD-3-Clause,
-  https://github.com/highlightjs/highlight.js/tree/11.9.0.
+- highlight.js 11.12.0 grammar/style source and markup fixtures: BSD-3-Clause,
+  https://github.com/highlightjs/highlight.js/tree/f7f7d3803bd898e37c017ffb881317f0cde04a70.
+  Verified source archive: https://codeload.github.com/highlightjs/highlight.js/tar.gz/f7f7d3803bd898e37c017ffb881317f0cde04a70;
+  SHA-256: `a1d99a617edfefc7c663804564ee88b361e9c71f88392d80fb2679e1b7db5189`.
 - highlightjs-vue 1.0.0 grammar: BSD-3-Clause,
   https://github.com/highlightjs/highlightjs-vue.
 - highlightjs-GN 0.1.0 grammar: MIT,
@@ -47,5 +49,15 @@ this provenance, all root license/notice files, and all generated Dart runtime s
   vendor source, with deterministic ordering and the renamed Dart facade. Mark
   retained HighlightJS source as ES modules for Node import and regenerate a
   publishable attribution inventory alongside the Dart output.
+
+- Replace deprecated circular-json with typed graph references, preserving shared
+  modes/cycles while keeping literal tilde/escape strings distinct from references.
+- Synchronize HighlightJS helper/runtime inputs to 11.12.0 and port its G-code
+  letter-boundary callback to Dart. Retain every upstream markup fixture.
+- Add `.js` to the JSON grammar's `./lib/ecmascript` import for Node ESM loading;
+  retained source otherwise matches the verified archive, except the documented
+  `src/package.json` module marker. Prefix digit-leading theme identifiers with
+  `theme` so new upstream theme names remain valid public Dart identifiers.
+- Pin generation formatting to Dart language version 3.6 for reproducibility.
 
 See `README.md` for exact generation and validation commands.

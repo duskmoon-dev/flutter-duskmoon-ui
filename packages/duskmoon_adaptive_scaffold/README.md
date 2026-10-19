@@ -84,3 +84,10 @@ The policy remains available to existing callers importing
 ## Additional information
 
 Part of the [DuskMoon UI](https://github.com/duskmoon-dev/flutter_duskmoon_ui) design system.
+
+## Source and licenses
+
+Flutter-derived source retains its BSD-3-Clause license; DuskMoon modifications
+retain their MIT terms. See [SOURCE.md](SOURCE.md),
+[LICENSE](LICENSE) and [THIRD_PARTY_LICENSES](THIRD_PARTY_LICENSES) for the
+retained notices, import history and known provenance limits.

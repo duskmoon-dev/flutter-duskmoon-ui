@@ -6,7 +6,7 @@ import 'lib/common.dart';
 
 final langPhp = Mode(
     refs: {
-      '~contains~0~contains~0~contains~4~variants~0~contains~1': Mode(
+      '~contains~0~contains~0~contains~6~variants~0~contains~1': Mode(
           scope: 'subst',
           variants: <Mode>[
             Mode(begin: "\\\$\\w+"),
@@ -52,7 +52,7 @@ final langPhp = Mode(
           3: 'variable.language',
         })
       ]),
-      '~contains~0~contains~0~contains~4':
+      '~contains~0~contains~0~contains~6':
           Mode(scope: 'string', variants: <Mode>[
         Mode(
             scope: 'string',
@@ -79,7 +79,7 @@ final langPhp = Mode(
               BACKSLASH_ESCAPE,
               Mode(
                   ref:
-                      '~contains~0~contains~0~contains~4~variants~0~contains~1')
+                      '~contains~0~contains~0~contains~6~variants~0~contains~1')
             ],
             onBegin: callbackOnBegin,
             onEnd: callbackOnEnd),
@@ -89,7 +89,7 @@ final langPhp = Mode(
             onBegin: callbackOnBegin1,
             onEnd: callbackOnEnd1)
       ]),
-      '~contains~0~contains~0~contains~5': Mode(
+      '~contains~0~contains~0~contains~7': Mode(
           scope: 'number',
           variants: <Mode>[
             Mode(begin: "\\b0[bB][01]+(?:_[01]+)*\\b"),
@@ -100,7 +100,7 @@ final langPhp = Mode(
                     "(?:\\b\\d+(?:_\\d+)*(\\.(?:\\d+(?:_\\d+)*))?|\\B\\.\\d+)(?:[eE][+-]?\\d+)?")
           ],
           relevance: 0),
-      '~contains~0~contains~0~contains~6': Mode(variants: <Mode>[
+      '~contains~0~contains~0~contains~8': Mode(variants: <Mode>[
         Mode(match: [
           "new",
           "[ \t\n]+",
@@ -313,12 +313,147 @@ final langPhp = Mode(
           Mode(ref: '~contains~7'),
           Mode(ref: '~contains~0~contains~0~contains~2'),
           C_BLOCK_COMMENT_MODE,
-          Mode(ref: '~contains~0~contains~0~contains~4'),
-          Mode(ref: '~contains~0~contains~0~contains~5'),
+          C_LINE_COMMENT_MODE,
+          HASH_COMMENT_MODE,
           Mode(ref: '~contains~0~contains~0~contains~6'),
+          Mode(ref: '~contains~0~contains~0~contains~7'),
+          Mode(ref: '~contains~0~contains~0~contains~8'),
           Mode(ref: '~contains~8')
         ])
-      ])
+      ]),
+      '~contains~0': Mode(
+          begin:
+              "#\\[\\s*\\\\?(?:(\\\\?[A-Z][a-z0-9_\\x7f-\\xff]+|\\\\?[A-Z]+(?=[A-Z][a-z0-9_\\x7f-\\xff])){1,}(?![A-Za-z0-9])(?![\$])|[A-Z]+(?![A-Za-z0-9])(?![\$]))",
+          beginScope: 'meta',
+          end: "]",
+          endScope: 'meta',
+          keywords: {
+            "literal": ["false", "null", "true"],
+            "keyword": ["new", "array"]
+          },
+          contains: <Mode>[
+            Mode(begin: "\\[", end: "]", keywords: {
+              "literal": ["false", "null", "true"],
+              "keyword": ["new", "array"]
+            }, contains: <Mode>[
+              Mode(self: true),
+              Mode(
+                  scope: 'attr',
+                  match:
+                      "[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*(?![A-Za-z0-9])(?![\$])(?=:)(?=(?!::))"),
+              Mode(variants: <Mode>[
+                Mode(match: [
+                  "::(?=(?!class\\b))",
+                  "[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*(?![A-Za-z0-9])(?![\$])\\b(?!\\()"
+                ], scope: <int, String>{
+                  2: 'variable.constant',
+                }),
+                Mode(match: [
+                  "::",
+                  "class"
+                ], scope: <int, String>{
+                  2: 'variable.language',
+                }),
+                Mode(match: [
+                  "(\\\\?[A-Z][a-z0-9_\\x7f-\\xff]+|\\\\?[A-Z]+(?=[A-Z][a-z0-9_\\x7f-\\xff])){1,}(?![A-Za-z0-9])(?![\$])",
+                  "::(?=(?!class\\b))",
+                  "[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*(?![A-Za-z0-9])(?![\$])\\b(?!\\()"
+                ], scope: <int, String>{
+                  1: 'title.class',
+                  3: 'variable.constant',
+                }),
+                Mode(match: [
+                  "(\\\\?[A-Z][a-z0-9_\\x7f-\\xff]+|\\\\?[A-Z]+(?=[A-Z][a-z0-9_\\x7f-\\xff])){1,}(?![A-Za-z0-9])(?![\$])",
+                  "::(?=(?!class\\b))"
+                ], scope: <int, String>{
+                  1: 'title.class',
+                }),
+                Mode(match: [
+                  "(\\\\?[A-Z][a-z0-9_\\x7f-\\xff]+|\\\\?[A-Z]+(?=[A-Z][a-z0-9_\\x7f-\\xff])){1,}(?![A-Za-z0-9])(?![\$])",
+                  "::",
+                  "class"
+                ], scope: <int, String>{
+                  1: 'title.class',
+                  3: 'variable.language',
+                })
+              ]),
+              C_BLOCK_COMMENT_MODE,
+              C_LINE_COMMENT_MODE,
+              HASH_COMMENT_MODE,
+              Mode(scope: 'string', variants: <Mode>[
+                Mode(
+                    scope: 'string',
+                    begin: "\"",
+                    end: "\"",
+                    illegal: null,
+                    contains: <Mode>[
+                      BACKSLASH_ESCAPE,
+                      Mode(scope: 'subst', variants: <Mode>[
+                        Mode(begin: "\\\$\\w+"),
+                        Mode(begin: "\\{\\\$", end: "\\}")
+                      ])
+                    ]),
+                Mode(
+                    scope: 'string',
+                    begin: "'",
+                    end: "'",
+                    illegal: null,
+                    contains: <Mode>[BACKSLASH_ESCAPE]),
+                Mode(
+                    begin: "<<<[ \\t]*(?:(\\w+)|\"(\\w+)\")\\n",
+                    end: "[ \\t]*(\\w+)\\b",
+                    contains: <Mode>[
+                      BACKSLASH_ESCAPE,
+                      Mode(
+                          ref:
+                              '~contains~0~contains~0~contains~6~variants~0~contains~1')
+                    ],
+                    onBegin: callbackOnBegin,
+                    onEnd: callbackOnEnd),
+                Mode(
+                    begin: "<<<[ \\t]*'(\\w+)'\\n",
+                    end: "[ \\t]*(\\w+)\\b",
+                    onBegin: callbackOnBegin1,
+                    onEnd: callbackOnEnd1)
+              ]),
+              Mode(
+                  scope: 'number',
+                  variants: <Mode>[
+                    Mode(begin: "\\b0[bB][01]+(?:_[01]+)*\\b"),
+                    Mode(begin: "\\b0[oO][0-7]+(?:_[0-7]+)*\\b"),
+                    Mode(begin: "\\b0[xX][\\da-fA-F]+(?:_[\\da-fA-F]+)*\\b"),
+                    Mode(
+                        begin:
+                            "(?:\\b\\d+(?:_\\d+)*(\\.(?:\\d+(?:_\\d+)*))?|\\B\\.\\d+)(?:[eE][+-]?\\d+)?")
+                  ],
+                  relevance: 0),
+              Mode(variants: <Mode>[
+                Mode(match: [
+                  "new",
+                  "[ \t\n]+",
+                  "(?!Error\\b|AppendIterator\\b|ArgumentCountError\\b|ArithmeticError\\b|ArrayIterator\\b|ArrayObject\\b|AssertionError\\b|BadFunctionCallException\\b|BadMethodCallException\\b|CachingIterator\\b|CallbackFilterIterator\\b|CompileError\\b|Countable\\b|DirectoryIterator\\b|DivisionByZeroError\\b|DomainException\\b|EmptyIterator\\b|ErrorException\\b|Exception\\b|FilesystemIterator\\b|FilterIterator\\b|GlobIterator\\b|InfiniteIterator\\b|InvalidArgumentException\\b|IteratorIterator\\b|LengthException\\b|LimitIterator\\b|LogicException\\b|MultipleIterator\\b|NoRewindIterator\\b|OutOfBoundsException\\b|OutOfRangeException\\b|OuterIterator\\b|OverflowException\\b|ParentIterator\\b|ParseError\\b|RangeException\\b|RecursiveArrayIterator\\b|RecursiveCachingIterator\\b|RecursiveCallbackFilterIterator\\b|RecursiveDirectoryIterator\\b|RecursiveFilterIterator\\b|RecursiveIterator\\b|RecursiveIteratorIterator\\b|RecursiveRegexIterator\\b|RecursiveTreeIterator\\b|RegexIterator\\b|RuntimeException\\b|SeekableIterator\\b|SplDoublyLinkedList\\b|SplFileInfo\\b|SplFileObject\\b|SplFixedArray\\b|SplHeap\\b|SplMaxHeap\\b|SplMinHeap\\b|SplObjectStorage\\b|SplObserver\\b|SplPriorityQueue\\b|SplQueue\\b|SplStack\\b|SplSubject\\b|SplTempFileObject\\b|TypeError\\b|UnderflowException\\b|UnexpectedValueException\\b|UnhandledMatchError\\b|ArrayAccess\\b|BackedEnum\\b|Closure\\b|Fiber\\b|Generator\\b|Iterator\\b|IteratorAggregate\\b|Serializable\\b|Stringable\\b|Throwable\\b|Traversable\\b|UnitEnum\\b|WeakReference\\b|WeakMap\\b|Directory\\b|__PHP_Incomplete_Class\\b|parent\\b|php_user_filter\\b|self\\b|static\\b|stdClass\\b)",
+                  "(\\\\?[A-Z][a-z0-9_\\x7f-\\xff]+|\\\\?[A-Z]+(?=[A-Z][a-z0-9_\\x7f-\\xff])){1,}(?![A-Za-z0-9])(?![\$])"
+                ], scope: <int, String>{
+                  1: 'keyword',
+                  4: 'title.class',
+                })
+              ])
+            ]),
+            Mode(ref: '~contains~0~contains~0~contains~1'),
+            Mode(ref: '~contains~0~contains~0~contains~2'),
+            C_BLOCK_COMMENT_MODE,
+            C_LINE_COMMENT_MODE,
+            HASH_COMMENT_MODE,
+            Mode(ref: '~contains~0~contains~0~contains~6'),
+            Mode(ref: '~contains~0~contains~0~contains~7'),
+            Mode(ref: '~contains~0~contains~0~contains~8'),
+            Mode(scope: 'meta', variants: <Mode>[
+              Mode(
+                  match:
+                      "(\\\\?[A-Z][a-z0-9_\\x7f-\\xff]+|\\\\?[A-Z]+(?=[A-Z][a-z0-9_\\x7f-\\xff])){1,}(?![A-Za-z0-9])(?![\$])"),
+              Mode(match: "[A-Z]+(?![A-Za-z0-9])(?![\$])")
+            ])
+          ])
     },
     caseInsensitive: false,
     keywords: {
@@ -507,40 +642,7 @@ final langPhp = Mode(
       ]
     },
     contains: <Mode>[
-      Mode(
-          begin:
-              "#\\[\\s*(\\\\?[A-Z][a-z0-9_\\x7f-\\xff]+|\\\\?[A-Z]+(?=[A-Z][a-z0-9_\\x7f-\\xff])){1,}(?![A-Za-z0-9])(?![\$])",
-          beginScope: 'meta',
-          end: "]",
-          endScope: 'meta',
-          keywords: {
-            "literal": ["false", "null", "true"],
-            "keyword": ["new", "array"]
-          },
-          contains: <Mode>[
-            Mode(begin: "\\[", end: "]", keywords: {
-              "literal": ["false", "null", "true"],
-              "keyword": ["new", "array"]
-            }, contains: <Mode>[
-              Mode(self: true),
-              Mode(ref: '~contains~0~contains~0~contains~1'),
-              Mode(ref: '~contains~0~contains~0~contains~2'),
-              C_BLOCK_COMMENT_MODE,
-              Mode(ref: '~contains~0~contains~0~contains~4'),
-              Mode(ref: '~contains~0~contains~0~contains~5'),
-              Mode(ref: '~contains~0~contains~0~contains~6')
-            ]),
-            Mode(ref: '~contains~0~contains~0~contains~1'),
-            Mode(ref: '~contains~0~contains~0~contains~2'),
-            C_BLOCK_COMMENT_MODE,
-            Mode(ref: '~contains~0~contains~0~contains~4'),
-            Mode(ref: '~contains~0~contains~0~contains~5'),
-            Mode(ref: '~contains~0~contains~0~contains~6'),
-            Mode(
-                scope: 'meta',
-                match:
-                    "(\\\\?[A-Z][a-z0-9_\\x7f-\\xff]+|\\\\?[A-Z]+(?=[A-Z][a-z0-9_\\x7f-\\xff])){1,}(?![A-Za-z0-9])(?![\$])")
-          ]),
+      Mode(ref: '~contains~0'),
       HASH_COMMENT_MODE,
       Mode(scope: 'comment', begin: "//", end: "\$", contains: <Mode>[
         Mode(
@@ -589,7 +691,7 @@ final langPhp = Mode(
         1: 'keyword',
         3: 'variable.constant',
       }),
-      Mode(ref: '~contains~0~contains~0~contains~6'),
+      Mode(ref: '~contains~0~contains~0~contains~8'),
       Mode(
           scope: 'function',
           relevance: 0,
@@ -794,11 +896,14 @@ final langPhp = Mode(
                 },
                 contains: <Mode>[
                   Mode(self: true),
+                  Mode(ref: '~contains~0'),
                   Mode(ref: '~contains~7'),
                   Mode(ref: '~contains~0~contains~0~contains~2'),
                   C_BLOCK_COMMENT_MODE,
-                  Mode(ref: '~contains~0~contains~0~contains~4'),
-                  Mode(ref: '~contains~0~contains~0~contains~5')
+                  C_LINE_COMMENT_MODE,
+                  HASH_COMMENT_MODE,
+                  Mode(ref: '~contains~0~contains~0~contains~6'),
+                  Mode(ref: '~contains~0~contains~0~contains~7')
                 ])
           ]),
       Mode(
@@ -826,6 +931,6 @@ final langPhp = Mode(
         Mode(match: "\\b(as|const|function)\\b", scope: 'keyword'),
         UNDERSCORE_TITLE_MODE
       ]),
-      Mode(ref: '~contains~0~contains~0~contains~4'),
-      Mode(ref: '~contains~0~contains~0~contains~5')
+      Mode(ref: '~contains~0~contains~0~contains~6'),
+      Mode(ref: '~contains~0~contains~0~contains~7')
     ]);

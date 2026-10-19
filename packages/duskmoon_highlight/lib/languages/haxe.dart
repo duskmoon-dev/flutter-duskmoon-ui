@@ -48,7 +48,7 @@ final langHaxe = Mode(
           excludeEnd: true),
       Mode(
           className: 'type',
-          begin: "new *",
+          beginKeywords: "new",
           end: "\\W",
           excludeBegin: true,
           excludeEnd: true),

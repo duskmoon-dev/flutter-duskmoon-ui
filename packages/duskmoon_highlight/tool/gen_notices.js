@@ -20,7 +20,7 @@ exports.exec = function() {
       return retained.length ? [`${path.relative('..', file)}\n${retained.join('\n')}`] : [];
     });
   fs.writeFileSync('../THIRD_PARTY_NOTICES',
-    'Original grammar and theme notices retained from highlight.js 11.9.0.\n' +
+    `Original grammar and theme notices retained from highlight.js ${require('../vendor/highlight.js/package.json').version}.\n` +
     'Component licenses: THIRD_PARTY_LICENSES. Theme-specific licenses apply as stated below.\n' +
     'Kimbie and NNFX themes retain CC BY-SA 4.0; full terms: CC-BY-SA-4.0.txt.\n\n' +
     notices.join('\n\n'));

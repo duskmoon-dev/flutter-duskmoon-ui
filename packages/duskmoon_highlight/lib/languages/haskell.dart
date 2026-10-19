@@ -111,7 +111,7 @@ final langHaskell = Mode(
           className: 'class',
           begin: "\\b(data|(new)?type)\\b",
           end: "\$",
-          keywords: "data family type newtype deriving",
+          keywords: "data family type newtype deriving where",
           contains: <Mode>[
             Mode(ref: '~contains~0~contains~0~contains~0'),
             Mode(ref: '~contains~2~contains~0'),

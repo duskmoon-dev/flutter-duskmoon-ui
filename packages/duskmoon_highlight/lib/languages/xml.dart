@@ -120,8 +120,7 @@ final langXml = Mode(
           end: ">",
           keywords: {"name": "style"},
           contains: <Mode>[Mode(ref: '~contains~5~contains~0')],
-          starts: Mode(
-              end: "<\\/style>", returnEnd: true, subLanguage: ["css", "xml"])),
+          starts: Mode(end: "<\\/style>", returnEnd: true, subLanguage: "css")),
       Mode(
           className: 'tag',
           begin: "<script(?=\\s|>)",
@@ -129,9 +128,7 @@ final langXml = Mode(
           keywords: {"name": "script"},
           contains: <Mode>[Mode(ref: '~contains~5~contains~0')],
           starts: Mode(
-              end: "<\\/script>",
-              returnEnd: true,
-              subLanguage: ["javascript", "handlebars", "xml"])),
+              end: "<\\/script>", returnEnd: true, subLanguage: "javascript")),
       Mode(className: 'tag', begin: "<>|<\\/>"),
       Mode(
           className: 'tag',
@@ -140,11 +137,10 @@ final langXml = Mode(
           end: "\\/?>",
           contains: <Mode>[
             Mode(
-              className: 'name',
-              begin: "[\\p{L}_](?:[\\p{L}0-9_.-]*:)?[\\p{L}0-9_.-]*",
-              relevance: 0,
-              starts: Mode(ref: '~contains~5~contains~0'),
-            )
+                className: 'name',
+                begin: "[\\p{L}_](?:[\\p{L}0-9_.-]*:)?[\\p{L}0-9_.-]*",
+                relevance: 0,
+                starts: Mode(ref: '~contains~5~contains~0'))
           ]),
       Mode(
           className: 'tag',

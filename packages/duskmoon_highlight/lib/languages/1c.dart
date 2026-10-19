@@ -91,5 +91,6 @@ final lang1C = Mode(
       Mode(className: 'symbol', begin: "~", end: ";|:", excludeEnd: true),
       Mode(ref: '~contains~1~contains~0~contains~0~contains~0'),
       Mode(ref: '~contains~1~contains~0~contains~0~contains~1'),
-      Mode(ref: '~contains~1~contains~0~contains~0~contains~2')
+      Mode(ref: '~contains~1~contains~0~contains~0~contains~2'),
+      Mode(match: "[;()+\\-:=,]", className: 'punctuation', relevance: 0)
     ]);

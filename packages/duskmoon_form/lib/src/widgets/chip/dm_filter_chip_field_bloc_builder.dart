@@ -190,7 +190,7 @@ class DmFilterChipFieldBlocBuilder<T> extends StatelessWidget {
     final current = DmSimpleFieldBlocBuilder(
       singleFieldBloc: multiSelectFieldBloc,
       animateWhenCanShow: animateWhenCanShow,
-      builder: (context0, __) {
+      builder: (context0, _) {
         return BlocBuilder<MultiSelectFieldBloc<T, dynamic>,
             MultiSelectFieldBlocState<T, dynamic>>(
           bloc: multiSelectFieldBloc,

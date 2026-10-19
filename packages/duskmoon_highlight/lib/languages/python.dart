@@ -5,7 +5,7 @@ import 'package:duskmoon_highlight/duskmoon_highlight.dart';
 final langPython = Mode(
     refs: {
       '~contains~0': Mode(className: 'meta', begin: "^(>>>|\\.\\.\\.) "),
-      '~contains~4': Mode(className: 'string', contains: <Mode>[
+      '~contains~5': Mode(className: 'string', contains: <Mode>[
         BACKSLASH_ESCAPE
       ], variants: <Mode>[
         Mode(
@@ -18,205 +18,219 @@ final langPython = Mode(
             end: "\"\"\"",
             contains: <Mode>[BACKSLASH_ESCAPE, Mode(ref: '~contains~0')],
             relevance: 10),
-        Mode(begin: "([fF][rR]|[rR][fF]|[fF])'''", end: "'''", contains: <Mode>[
-          BACKSLASH_ESCAPE,
-          Mode(ref: '~contains~0'),
-          Mode(begin: "\\{\\{", relevance: 0),
-          Mode(
-              className: 'subst',
-              begin: "\\{",
-              end: "\\}",
-              keywords: {
-                "\$pattern": "[A-Za-z]\\w+|__\\w+__",
-                "keyword": [
-                  "and",
-                  "as",
-                  "assert",
-                  "async",
-                  "await",
-                  "break",
-                  "case",
-                  "class",
-                  "continue",
-                  "def",
-                  "del",
-                  "elif",
-                  "else",
-                  "except",
-                  "finally",
-                  "for",
-                  "from",
-                  "global",
-                  "if",
-                  "import",
-                  "in",
-                  "is",
-                  "lambda",
-                  "match",
-                  "nonlocal|10",
-                  "not",
-                  "or",
-                  "pass",
-                  "raise",
-                  "return",
-                  "try",
-                  "while",
-                  "with",
-                  "yield"
-                ],
-                "built_in": [
-                  "__import__",
-                  "abs",
-                  "all",
-                  "any",
-                  "ascii",
-                  "bin",
-                  "bool",
-                  "breakpoint",
-                  "bytearray",
-                  "bytes",
-                  "callable",
-                  "chr",
-                  "classmethod",
-                  "compile",
-                  "complex",
-                  "delattr",
-                  "dict",
-                  "dir",
-                  "divmod",
-                  "enumerate",
-                  "eval",
-                  "exec",
-                  "filter",
-                  "float",
-                  "format",
-                  "frozenset",
-                  "getattr",
-                  "globals",
-                  "hasattr",
-                  "hash",
-                  "help",
-                  "hex",
-                  "id",
-                  "input",
-                  "int",
-                  "isinstance",
-                  "issubclass",
-                  "iter",
-                  "len",
-                  "list",
-                  "locals",
-                  "map",
-                  "max",
-                  "memoryview",
-                  "min",
-                  "next",
-                  "object",
-                  "oct",
-                  "open",
-                  "ord",
-                  "pow",
-                  "print",
-                  "property",
-                  "range",
-                  "repr",
-                  "reversed",
-                  "round",
-                  "set",
-                  "setattr",
-                  "slice",
-                  "sorted",
-                  "staticmethod",
-                  "str",
-                  "sum",
-                  "super",
-                  "tuple",
-                  "type",
-                  "vars",
-                  "zip"
-                ],
-                "literal": [
-                  "__debug__",
-                  "Ellipsis",
-                  "False",
-                  "None",
-                  "NotImplemented",
-                  "True"
-                ],
-                "type": [
-                  "Any",
-                  "Callable",
-                  "Coroutine",
-                  "Dict",
-                  "List",
-                  "Literal",
-                  "Generic",
-                  "Optional",
-                  "Sequence",
-                  "Set",
-                  "Tuple",
-                  "Type",
-                  "Union"
-                ]
-              },
-              illegal: "#",
-              contains: <Mode>[
-                Mode(ref: '~contains~4'),
-                Mode(ref: '~contains~1'),
-                Mode(ref: '~contains~0')
-              ])
-        ]),
         Mode(
-            begin: "([fF][rR]|[rR][fF]|[fF])\"\"\"",
+            begin: "([fFtT][rR]|[rR][fFtT]|[fFtT])'''",
+            end: "'''",
+            contains: <Mode>[
+              BACKSLASH_ESCAPE,
+              Mode(ref: '~contains~0'),
+              Mode(begin: "\\{\\{", relevance: 0),
+              Mode(
+                  className: 'subst',
+                  begin: "\\{",
+                  end: "\\}",
+                  keywords: {
+                    "\$pattern": "[A-Za-z]\\w+|__\\w+__",
+                    "keyword": [
+                      "and",
+                      "as",
+                      "assert",
+                      "async",
+                      "await",
+                      "break",
+                      "case",
+                      "class",
+                      "continue",
+                      "def",
+                      "del",
+                      "elif",
+                      "else",
+                      "except",
+                      "finally",
+                      "for",
+                      "from",
+                      "global",
+                      "if",
+                      "import",
+                      "in",
+                      "is",
+                      "lambda",
+                      "lazy",
+                      "match",
+                      "nonlocal|10",
+                      "not",
+                      "or",
+                      "pass",
+                      "raise",
+                      "return",
+                      "try",
+                      "while",
+                      "with",
+                      "yield"
+                    ],
+                    "built_in": [
+                      "__import__",
+                      "abs",
+                      "aiter",
+                      "all",
+                      "anext",
+                      "any",
+                      "ascii",
+                      "bin",
+                      "bool",
+                      "breakpoint",
+                      "bytearray",
+                      "bytes",
+                      "callable",
+                      "chr",
+                      "classmethod",
+                      "compile",
+                      "complex",
+                      "delattr",
+                      "dict",
+                      "dir",
+                      "divmod",
+                      "enumerate",
+                      "eval",
+                      "exec",
+                      "filter",
+                      "float",
+                      "format",
+                      "frozendict",
+                      "frozenset",
+                      "getattr",
+                      "globals",
+                      "hasattr",
+                      "hash",
+                      "help",
+                      "hex",
+                      "id",
+                      "input",
+                      "int",
+                      "isinstance",
+                      "issubclass",
+                      "iter",
+                      "len",
+                      "list",
+                      "locals",
+                      "map",
+                      "max",
+                      "memoryview",
+                      "min",
+                      "next",
+                      "object",
+                      "oct",
+                      "open",
+                      "ord",
+                      "pow",
+                      "print",
+                      "property",
+                      "range",
+                      "repr",
+                      "reversed",
+                      "round",
+                      "sentinel",
+                      "set",
+                      "setattr",
+                      "slice",
+                      "sorted",
+                      "staticmethod",
+                      "str",
+                      "sum",
+                      "super",
+                      "tuple",
+                      "type",
+                      "vars",
+                      "zip"
+                    ],
+                    "literal": [
+                      "__debug__",
+                      "Ellipsis",
+                      "False",
+                      "None",
+                      "NotImplemented",
+                      "True"
+                    ],
+                    "type": [
+                      "Any",
+                      "Callable",
+                      "Coroutine",
+                      "Dict",
+                      "List",
+                      "Literal",
+                      "Generic",
+                      "Optional",
+                      "Sequence",
+                      "Set",
+                      "Tuple",
+                      "Type",
+                      "Union"
+                    ]
+                  },
+                  illegal: "#",
+                  contains: <Mode>[
+                    Mode(ref: '~contains~5'),
+                    Mode(ref: '~contains~1'),
+                    Mode(ref: '~contains~0')
+                  ])
+            ]),
+        Mode(
+            begin: "([fFtT][rR]|[rR][fFtT]|[fFtT])\"\"\"",
             end: "\"\"\"",
             contains: <Mode>[
               BACKSLASH_ESCAPE,
               Mode(ref: '~contains~0'),
-              Mode(ref: '~contains~4~variants~2~contains~2'),
-              Mode(ref: '~contains~4~variants~2~contains~3')
+              Mode(ref: '~contains~5~variants~2~contains~2'),
+              Mode(ref: '~contains~5~variants~2~contains~3')
             ]),
         Mode(begin: "([uU]|[rR])'", end: "'", relevance: 10),
         Mode(begin: "([uU]|[rR])\"", end: "\"", relevance: 10),
         Mode(begin: "([bB]|[bB][rR]|[rR][bB])'", end: "'"),
         Mode(begin: "([bB]|[bB][rR]|[rR][bB])\"", end: "\""),
-        Mode(begin: "([fF][rR]|[rR][fF]|[fF])'", end: "'", contains: <Mode>[
-          BACKSLASH_ESCAPE,
-          Mode(ref: '~contains~4~variants~2~contains~2'),
-          Mode(ref: '~contains~4~variants~2~contains~3')
-        ]),
-        Mode(begin: "([fF][rR]|[rR][fF]|[fF])\"", end: "\"", contains: <Mode>[
-          BACKSLASH_ESCAPE,
-          Mode(ref: '~contains~4~variants~2~contains~2'),
-          Mode(ref: '~contains~4~variants~2~contains~3')
-        ]),
+        Mode(
+            begin: "([fFtT][rR]|[rR][fFtT]|[fFtT])'",
+            end: "'",
+            contains: <Mode>[
+              BACKSLASH_ESCAPE,
+              Mode(ref: '~contains~5~variants~2~contains~2'),
+              Mode(ref: '~contains~5~variants~2~contains~3')
+            ]),
+        Mode(
+            begin: "([fFtT][rR]|[rR][fFtT]|[fFtT])\"",
+            end: "\"",
+            contains: <Mode>[
+              BACKSLASH_ESCAPE,
+              Mode(ref: '~contains~5~variants~2~contains~2'),
+              Mode(ref: '~contains~5~variants~2~contains~3')
+            ]),
         APOS_STRING_MODE,
         QUOTE_STRING_MODE
       ]),
       '~contains~1': Mode(className: 'number', relevance: 0, variants: <Mode>[
         Mode(
             begin:
-                "(\\b([0-9](_?[0-9])*)|((\\b([0-9](_?[0-9])*))?\\.([0-9](_?[0-9])*)|\\b([0-9](_?[0-9])*)\\.))[eE][+-]?([0-9](_?[0-9])*)[jJ]?(?=\\b|and|as|assert|async|await|break|case|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|match|nonlocal|10|not|or|pass|raise|return|try|while|with|yield)"),
+                "(\\b([0-9](_?[0-9])*)|((\\b([0-9](_?[0-9])*))?\\.([0-9](_?[0-9])*)|\\b([0-9](_?[0-9])*)\\.))[eE][+-]?([0-9](_?[0-9])*)[jJ]?(?=\\b|and|as|assert|async|await|break|case|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|lazy|match|nonlocal|10|not|or|pass|raise|return|try|while|with|yield)"),
         Mode(
             begin:
                 "((\\b([0-9](_?[0-9])*))?\\.([0-9](_?[0-9])*)|\\b([0-9](_?[0-9])*)\\.)[jJ]?"),
         Mode(
             begin:
-                "\\b([1-9](_?[0-9])*|0+(_?0)*)[lLjJ]?(?=\\b|and|as|assert|async|await|break|case|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|match|nonlocal|10|not|or|pass|raise|return|try|while|with|yield)"),
+                "\\b([1-9](_?[0-9])*|0+(_?0)*)[lLjJ]?(?=\\b|and|as|assert|async|await|break|case|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|lazy|match|nonlocal|10|not|or|pass|raise|return|try|while|with|yield)"),
         Mode(
             begin:
-                "\\b0[bB](_?[01])+[lL]?(?=\\b|and|as|assert|async|await|break|case|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|match|nonlocal|10|not|or|pass|raise|return|try|while|with|yield)"),
+                "\\b0[bB](_?[01])+[lL]?(?=\\b|and|as|assert|async|await|break|case|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|lazy|match|nonlocal|10|not|or|pass|raise|return|try|while|with|yield)"),
         Mode(
             begin:
-                "\\b0[oO](_?[0-7])+[lL]?(?=\\b|and|as|assert|async|await|break|case|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|match|nonlocal|10|not|or|pass|raise|return|try|while|with|yield)"),
+                "\\b0[oO](_?[0-7])+[lL]?(?=\\b|and|as|assert|async|await|break|case|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|lazy|match|nonlocal|10|not|or|pass|raise|return|try|while|with|yield)"),
         Mode(
             begin:
-                "\\b0[xX](_?[0-9a-fA-F])+[lL]?(?=\\b|and|as|assert|async|await|break|case|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|match|nonlocal|10|not|or|pass|raise|return|try|while|with|yield)"),
+                "\\b0[xX](_?[0-9a-fA-F])+[lL]?(?=\\b|and|as|assert|async|await|break|case|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|lazy|match|nonlocal|10|not|or|pass|raise|return|try|while|with|yield)"),
         Mode(
             begin:
-                "\\b([0-9](_?[0-9])*)[jJ](?=\\b|and|as|assert|async|await|break|case|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|match|nonlocal|10|not|or|pass|raise|return|try|while|with|yield)")
+                "\\b([0-9](_?[0-9])*)[jJ](?=\\b|and|as|assert|async|await|break|case|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|lazy|match|nonlocal|10|not|or|pass|raise|return|try|while|with|yield)")
       ]),
-      '~contains~4~variants~2~contains~2': Mode(begin: "\\{\\{", relevance: 0),
-      '~contains~4~variants~2~contains~3': Mode(
+      '~contains~5~variants~2~contains~2': Mode(begin: "\\{\\{", relevance: 0),
+      '~contains~5~variants~2~contains~3': Mode(
           className: 'subst',
           begin: "\\{",
           end: "\\}",
@@ -246,6 +260,7 @@ final langPython = Mode(
               "in",
               "is",
               "lambda",
+              "lazy",
               "match",
               "nonlocal|10",
               "not",
@@ -261,7 +276,9 @@ final langPython = Mode(
             "built_in": [
               "__import__",
               "abs",
+              "aiter",
               "all",
+              "anext",
               "any",
               "ascii",
               "bin",
@@ -284,6 +301,7 @@ final langPython = Mode(
               "filter",
               "float",
               "format",
+              "frozendict",
               "frozenset",
               "getattr",
               "globals",
@@ -316,6 +334,7 @@ final langPython = Mode(
               "repr",
               "reversed",
               "round",
+              "sentinel",
               "set",
               "setattr",
               "slice",
@@ -355,11 +374,11 @@ final langPython = Mode(
           },
           illegal: "#",
           contains: <Mode>[
-            Mode(ref: '~contains~4'),
+            Mode(ref: '~contains~5'),
             Mode(ref: '~contains~1'),
             Mode(ref: '~contains~0')
           ]),
-      '~contains~7~contains~0': Mode(className: 'params', variants: <Mode>[
+      '~contains~8~contains~0': Mode(className: 'params', variants: <Mode>[
         Mode(className: '', begin: "\\(\\s*\\)", skip: true),
         Mode(
             begin: "\\(",
@@ -392,6 +411,7 @@ final langPython = Mode(
                 "in",
                 "is",
                 "lambda",
+                "lazy",
                 "match",
                 "nonlocal|10",
                 "not",
@@ -407,7 +427,9 @@ final langPython = Mode(
               "built_in": [
                 "__import__",
                 "abs",
+                "aiter",
                 "all",
+                "anext",
                 "any",
                 "ascii",
                 "bin",
@@ -430,6 +452,7 @@ final langPython = Mode(
                 "filter",
                 "float",
                 "format",
+                "frozendict",
                 "frozenset",
                 "getattr",
                 "globals",
@@ -462,6 +485,7 @@ final langPython = Mode(
                 "repr",
                 "reversed",
                 "round",
+                "sentinel",
                 "set",
                 "setattr",
                 "slice",
@@ -503,7 +527,7 @@ final langPython = Mode(
               Mode(self: true),
               Mode(ref: '~contains~0'),
               Mode(ref: '~contains~1'),
-              Mode(ref: '~contains~4'),
+              Mode(ref: '~contains~5'),
               HASH_COMMENT_MODE
             ])
       ])
@@ -537,6 +561,7 @@ final langPython = Mode(
         "in",
         "is",
         "lambda",
+        "lazy",
         "match",
         "nonlocal|10",
         "not",
@@ -552,7 +577,9 @@ final langPython = Mode(
       "built_in": [
         "__import__",
         "abs",
+        "aiter",
         "all",
+        "anext",
         "any",
         "ascii",
         "bin",
@@ -575,6 +602,7 @@ final langPython = Mode(
         "filter",
         "float",
         "format",
+        "frozendict",
         "frozenset",
         "getattr",
         "globals",
@@ -607,6 +635,7 @@ final langPython = Mode(
         "repr",
         "reversed",
         "round",
+        "sentinel",
         "set",
         "setattr",
         "slice",
@@ -648,9 +677,10 @@ final langPython = Mode(
     contains: <Mode>[
       Mode(ref: '~contains~0'),
       Mode(ref: '~contains~1'),
-      Mode(begin: "\\bself\\b"),
+      Mode(scope: 'variable.language', match: "\\bself\\b"),
       Mode(beginKeywords: "if", relevance: 0),
-      Mode(ref: '~contains~4'),
+      Mode(match: "\\bor\\b", scope: 'keyword'),
+      Mode(ref: '~contains~5'),
       Mode(className: 'comment', begin: "(?=# type:)", end: "\$", keywords: {
         "\$pattern": "[A-Za-z]\\w+|__\\w+__",
         "keyword": [
@@ -677,6 +707,7 @@ final langPython = Mode(
           "in",
           "is",
           "lambda",
+          "lazy",
           "match",
           "nonlocal|10",
           "not",
@@ -692,7 +723,9 @@ final langPython = Mode(
         "built_in": [
           "__import__",
           "abs",
+          "aiter",
           "all",
+          "anext",
           "any",
           "ascii",
           "bin",
@@ -715,6 +748,7 @@ final langPython = Mode(
           "filter",
           "float",
           "format",
+          "frozendict",
           "frozenset",
           "getattr",
           "globals",
@@ -747,6 +781,7 @@ final langPython = Mode(
           "repr",
           "reversed",
           "round",
+          "sentinel",
           "set",
           "setattr",
           "slice",
@@ -796,7 +831,7 @@ final langPython = Mode(
         1: 'keyword',
         3: 'title.function',
       }, contains: <Mode>[
-        Mode(ref: '~contains~7~contains~0')
+        Mode(ref: '~contains~8~contains~0')
       ]),
       Mode(variants: <Mode>[
         Mode(match: [
@@ -820,7 +855,7 @@ final langPython = Mode(
           end: "(?=#)|\$",
           contains: <Mode>[
             Mode(ref: '~contains~1'),
-            Mode(ref: '~contains~7~contains~0'),
-            Mode(ref: '~contains~4')
+            Mode(ref: '~contains~8~contains~0'),
+            Mode(ref: '~contains~5')
           ])
     ]);

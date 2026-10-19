@@ -62,7 +62,7 @@ void main() {
       routes: [
         GoRoute(
           path: '/widgets/scaffold',
-          builder: (_, __) => const ScaffoldScreen(),
+          builder: (_, _) => const ScaffoldScreen(),
         ),
       ],
     );

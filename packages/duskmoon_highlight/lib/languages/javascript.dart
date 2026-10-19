@@ -7,7 +7,7 @@ import 'lib/common.dart';
 final langJavascript = Mode(
     refs: {
       '~exports~PARAMS_CONTAINS~3': Mode(
-          begin: "html`",
+          begin: ".?html`",
           end: "",
           starts: Mode(
               end: "`",
@@ -58,7 +58,8 @@ final langJavascript = Mode(
                         "import",
                         "from",
                         "export",
-                        "extends"
+                        "extends",
+                        "using"
                       ],
                       "literal": [
                         "true",
@@ -144,6 +145,7 @@ final langJavascript = Mode(
                         "localStorage",
                         "sessionStorage",
                         "module",
+                        "self",
                         "global"
                       ]
                     },
@@ -152,7 +154,7 @@ final langJavascript = Mode(
                       QUOTE_STRING_MODE,
                       Mode(ref: '~exports~PARAMS_CONTAINS~3'),
                       Mode(
-                          begin: "css`",
+                          begin: ".?css`",
                           end: "",
                           starts: Mode(
                               end: "`",
@@ -165,7 +167,7 @@ final langJavascript = Mode(
                               ],
                               subLanguage: "css")),
                       Mode(
-                          begin: "gql`",
+                          begin: ".?gql`",
                           end: "",
                           starts: Mode(
                               end: "`",
@@ -246,7 +248,8 @@ final langJavascript = Mode(
                           "import",
                           "from",
                           "export",
-                          "extends"
+                          "extends",
+                          "using"
                         ],
                         "literal": [
                           "true",
@@ -332,6 +335,7 @@ final langJavascript = Mode(
                           "localStorage",
                           "sessionStorage",
                           "module",
+                          "self",
                           "global"
                         ]
                       }, contains: <Mode>[
@@ -399,7 +403,8 @@ final langJavascript = Mode(
           "import",
           "from",
           "export",
-          "extends"
+          "extends",
+          "using"
         ],
         "literal": ["true", "false", "null", "undefined", "NaN", "Infinity"],
         "built_in": [
@@ -478,6 +483,7 @@ final langJavascript = Mode(
           "localStorage",
           "sessionStorage",
           "module",
+          "self",
           "global"
         ]
       }, contains: <Mode>[
@@ -485,7 +491,7 @@ final langJavascript = Mode(
         QUOTE_STRING_MODE,
         Mode(ref: '~exports~PARAMS_CONTAINS~3'),
         Mode(
-            begin: "css`",
+            begin: ".?css`",
             end: "",
             starts: Mode(
                 end: "`",
@@ -496,7 +502,7 @@ final langJavascript = Mode(
                 ],
                 subLanguage: "css")),
         Mode(
-            begin: "gql`",
+            begin: ".?gql`",
             end: "",
             starts: Mode(
                 end: "`",
@@ -567,7 +573,8 @@ final langJavascript = Mode(
             "import",
             "from",
             "export",
-            "extends"
+            "extends",
+            "using"
           ],
           "literal": ["true", "false", "null", "undefined", "NaN", "Infinity"],
           "built_in": [
@@ -646,6 +653,7 @@ final langJavascript = Mode(
             "localStorage",
             "sessionStorage",
             "module",
+            "self",
             "global"
           ]
         }, contains: <Mode>[
@@ -661,7 +669,7 @@ final langJavascript = Mode(
         ])
       ]),
       '~exports~PARAMS_CONTAINS~3~starts~contains~1~contains~3': Mode(
-          begin: "css`",
+          begin: ".?css`",
           end: "",
           starts: Mode(
               end: "`",
@@ -672,7 +680,7 @@ final langJavascript = Mode(
               ],
               subLanguage: "css")),
       '~exports~PARAMS_CONTAINS~3~starts~contains~1~contains~4': Mode(
-          begin: "gql`",
+          begin: ".?gql`",
           end: "",
           starts: Mode(
               end: "`",
@@ -749,7 +757,8 @@ final langJavascript = Mode(
           "import",
           "from",
           "export",
-          "extends"
+          "extends",
+          "using"
         ],
         "literal": ["true", "false", "null", "undefined", "NaN", "Infinity"],
         "built_in": [
@@ -828,6 +837,7 @@ final langJavascript = Mode(
           "localStorage",
           "sessionStorage",
           "module",
+          "self",
           "global"
         ]
       }, contains: <Mode>[
@@ -933,7 +943,8 @@ final langJavascript = Mode(
               "URIError"
             ]
           }),
-      '~exports~PARAMS_CONTAINS~10': Mode(begin: "\\(", end: "\\)", keywords: {
+      '~exports~PARAMS_CONTAINS~10':
+          Mode(begin: "(\\s*)\\(", end: "\\)", keywords: {
         "\$pattern": "[A-Za-z\$_][0-9A-Za-z\$_]*",
         "keyword": [
           "as",
@@ -973,7 +984,8 @@ final langJavascript = Mode(
           "import",
           "from",
           "export",
-          "extends"
+          "extends",
+          "using"
         ],
         "literal": ["true", "false", "null", "undefined", "NaN", "Infinity"],
         "built_in": [
@@ -1052,6 +1064,7 @@ final langJavascript = Mode(
           "localStorage",
           "sessionStorage",
           "module",
+          "self",
           "global"
         ]
       }, contains: <Mode>[
@@ -1069,7 +1082,7 @@ final langJavascript = Mode(
       ]),
       '~contains~13~contains~0': Mode(
           className: 'params',
-          begin: "\\(",
+          begin: "(\\s*)\\(",
           end: "\\)",
           excludeBegin: true,
           excludeEnd: true,
@@ -1113,7 +1126,8 @@ final langJavascript = Mode(
               "import",
               "from",
               "export",
-              "extends"
+              "extends",
+              "using"
             ],
             "literal": [
               "true",
@@ -1199,6 +1213,7 @@ final langJavascript = Mode(
               "localStorage",
               "sessionStorage",
               "module",
+              "self",
               "global"
             ]
           },
@@ -1264,7 +1279,8 @@ final langJavascript = Mode(
         "import",
         "from",
         "export",
-        "extends"
+        "extends",
+        "using"
       ],
       "literal": ["true", "false", "null", "undefined", "NaN", "Infinity"],
       "built_in": [
@@ -1343,10 +1359,11 @@ final langJavascript = Mode(
         "localStorage",
         "sessionStorage",
         "module",
+        "self",
         "global"
       ]
     },
-    illegal: "#(?![\$_A-z])",
+    illegal: "#(?![\$_A-Za-z])",
     contains: <Mode>[
       Mode(
         scope: 'meta',
@@ -1372,8 +1389,8 @@ final langJavascript = Mode(
       Mode(ref: '~exports~PARAMS_CONTAINS~3~starts~contains~1~contains~7'),
       Mode(ref: '~exports~CLASS_REFERENCE'),
       Mode(
-          className: 'attr',
-          begin: "[A-Za-z\$_][0-9A-Za-z\$_]*(?=:)",
+          scope: 'attr',
+          match: "[A-Za-z\$_][0-9A-Za-z\$_]*(?=:)",
           relevance: 0),
       Mode(
           match: [
@@ -1410,7 +1427,7 @@ final langJavascript = Mode(
                     Mode(begin: "[a-zA-Z_]\\w*", relevance: 0),
                     Mode(className: 'delete', begin: "\\(\\s*\\)", skip: true),
                     Mode(
-                        begin: "\\(",
+                        begin: "(\\s*)\\(",
                         end: "\\)",
                         excludeBegin: true,
                         excludeEnd: true,
@@ -1454,7 +1471,8 @@ final langJavascript = Mode(
                             "import",
                             "from",
                             "export",
-                            "extends"
+                            "extends",
+                            "using"
                           ],
                           "literal": [
                             "true",
@@ -1540,6 +1558,7 @@ final langJavascript = Mode(
                             "localStorage",
                             "sessionStorage",
                             "module",
+                            "self",
                             "global"
                           ]
                         },
@@ -1639,7 +1658,7 @@ final langJavascript = Mode(
       ]),
       Mode(
           match:
-              "\\b(?!setInterval|setTimeout|clearInterval|clearTimeout|require|exports|eval|isFinite|isNaN|parseFloat|parseInt|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|escape|unescape|super|import)[A-Za-z\$_][0-9A-Za-z\$_]*(?=\\()",
+              "\\b(?!setInterval\\s*\\(|setTimeout\\s*\\(|clearInterval\\s*\\(|clearTimeout\\s*\\(|require\\s*\\(|exports\\s*\\(|eval\\s*\\(|isFinite\\s*\\(|isNaN\\s*\\(|parseFloat\\s*\\(|parseInt\\s*\\(|decodeURI\\s*\\(|decodeURIComponent\\s*\\(|encodeURI\\s*\\(|encodeURIComponent\\s*\\(|escape\\s*\\(|unescape\\s*\\(|super\\s*\\(|import\\s*\\(|await\\s*\\()[A-Za-z\$_][0-9A-Za-z\$_]*(?=\\s*\\()",
           className: 'title.function',
           relevance: 0),
       Mode(

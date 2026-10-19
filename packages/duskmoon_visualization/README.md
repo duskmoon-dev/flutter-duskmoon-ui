@@ -106,3 +106,13 @@ If you are starting a new DuskMoon-facing screen or package, prefer the curated
 - Curated wrappers are covered by widget smoke tests
 - Full migrated `dv_*` compatibility surface is preserved behind the compat import
 - Migration checklist is tracked in `docs/visualization-migration.md`
+
+## Source and licenses
+
+Imported `dv_*` program code retains the GSMLG Limited MIT notice alongside
+DuskMoon's own MIT terms. Embedded Natural Earth data provenance and known
+generation steps are documented separately from source-code licensing.
+
+See [SOURCE.md](SOURCE.md),
+[LICENSE](LICENSE) and [THIRD_PARTY_LICENSES](THIRD_PARTY_LICENSES) for the
+retained notices, import history and known provenance limits.

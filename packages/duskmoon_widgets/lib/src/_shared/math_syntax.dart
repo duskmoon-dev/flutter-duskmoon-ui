@@ -1,4 +1,4 @@
-import 'package:markdown/markdown.dart';
+import '../vendor/markdown/markdown.dart';
 
 /// Custom [InlineSyntax] for inline math: `$...$`.
 ///

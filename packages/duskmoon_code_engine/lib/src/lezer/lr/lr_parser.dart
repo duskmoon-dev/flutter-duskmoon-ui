@@ -22,6 +22,7 @@ class LRParser extends Parser {
     required List<int> gotoTable,
     required List<int> tokenData,
     required int topRuleIndex,
+    int tokenPrec = 0,
     Map<int, Map<NodeProp<dynamic>, dynamic>>? nodeProps,
     List<int> skippedNodes = const [],
   }) {
@@ -32,12 +33,13 @@ class LRParser extends Parser {
 
     final grammar = GrammarData(
       nodeSet: NodeSet(types),
-      states: Uint16List.fromList(states),
+      states: Uint32List.fromList(states),
       stateData: Uint16List.fromList(stateData),
       gotoTable: Uint16List.fromList(gotoTable),
       nodeNames: nodeNames,
       tokenData: Uint16List.fromList(tokenData),
       topRuleIndex: topRuleIndex,
+      tokenPrec: tokenPrec,
       skippedNodes: skippedNodes,
     );
 

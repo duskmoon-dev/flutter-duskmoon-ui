@@ -5,6 +5,21 @@ import 'lib/common.dart';
 
 final langC = Mode(
   refs: {
+    '~contains~0~contains~0~contains~1~variants~0': Mode(
+        begin: "(u8?|U|L)?\"",
+        end: "\"",
+        illegal: "\\n",
+        contains: <Mode>[BACKSLASH_ESCAPE]),
+    '~contains~0~contains~0~contains~1~variants~1': Mode(
+        begin:
+            "(u8?|U|L)?'(\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4,8}|[0-7]{3}|\\S)|.)",
+        end: "'",
+        illegal: "."),
+    '~contains~0~contains~0~contains~1~variants~2': Mode(
+        begin: "(?:u8?|U|L)?R\"([^()\\\\\\s\"]{0,16})\\(",
+        end: "\\)([^()\\\\\\s\"]{0,16})\"",
+        onBegin: callbackOnBegin1,
+        onEnd: callbackOnEnd1),
     '~contains~0~contains~0~contains~3':
         Mode(scope: 'comment', begin: "//", end: "\$", contains: <Mode>[
       Mode(begin: "\\\\\\n"),
@@ -18,27 +33,29 @@ final langC = Mode(
           begin:
               "[ ]+((?:I|a|is|so|us|to|at|if|in|it|on|[A-Za-z]+['](d|ve|re|ll|t|s|n)|[A-Za-z]+[-][a-z]+|[A-Za-z][a-z]{2,})[.]?[:]?([.][ ]|[ ])){3}")
     ]),
-    '~contains~0~contains~0~contains~1~variants~0': Mode(
-        begin: "(u8?|U|L)?\"",
-        end: "\"",
-        illegal: "\\n",
-        contains: <Mode>[BACKSLASH_ESCAPE]),
-    '~contains~0~contains~0~contains~1~variants~1': Mode(
-        begin:
-            "(u8?|U|L)?'(\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4,8}|[0-7]{3}|\\S)|.)",
-        end: "'",
-        illegal: "."),
-    '~contains~0~contains~0~contains~1~variants~2': Mode(
-        begin: "(?:u8?|U|L)?R\"([^()\\\\ ]{0,16})\\(",
-        end: "\\)([^()\\\\ ]{0,16})\"",
-        onBegin: callbackOnBegin1,
-        onEnd: callbackOnEnd1),
+    '~contains~0~contains~0~contains~1':
+        Mode(className: 'string', variants: <Mode>[
+      Mode(
+          begin: "(u8?|U|L)?\"",
+          end: "\"",
+          illegal: "\\n",
+          contains: <Mode>[BACKSLASH_ESCAPE]),
+      Mode(
+          begin:
+              "(u8?|U|L)?'(\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4,8}|[0-7]{3}|\\S)|.)",
+          end: "'",
+          illegal: "."),
+      Mode(
+          begin: "(?:u8?|U|L)?R\"([^()\\\\\\s\"]{0,16})\\(",
+          end: "\\)([^()\\\\\\s\"]{0,16})\"",
+          onBegin: callbackOnBegin1,
+          onEnd: callbackOnEnd1)
+    ]),
     '~contains~0~contains~0':
-        Mode(className: 'meta', begin: "#\\s*[a-z]+\\b", end: "\$", keywords: {
-      "keyword":
-          "if else elif endif define undef warning error line pragma _Pragma ifdef ifndef include"
+        Mode(scope: 'meta', begin: "#\\s*include\\b", end: "\$", keywords: {
+      "keyword": "include"
     }, contains: <Mode>[
-      Mode(begin: "\\\\\\n", relevance: 0),
+      Mode(begin: "\\\\\\n"),
       Mode(className: 'string', variants: <Mode>[
         Mode(
             begin: "(u8?|U|L)?\"",
@@ -51,12 +68,12 @@ final langC = Mode(
             end: "'",
             illegal: "."),
         Mode(
-            begin: "(?:u8?|U|L)?R\"([^()\\\\ ]{0,16})\\(",
-            end: "\\)([^()\\\\ ]{0,16})\"",
+            begin: "(?:u8?|U|L)?R\"([^()\\\\\\s\"]{0,16})\\(",
+            end: "\\)([^()\\\\\\s\"]{0,16})\"",
             onBegin: callbackOnBegin1,
             onEnd: callbackOnEnd1)
       ]),
-      Mode(className: 'string', begin: "<.*?>"),
+      Mode(scope: 'string', begin: "<.*?>"),
       Mode(scope: 'comment', begin: "//", end: "\$", contains: <Mode>[
         Mode(begin: "\\\\\\n"),
         Mode(
@@ -71,27 +88,41 @@ final langC = Mode(
       ]),
       C_BLOCK_COMMENT_MODE
     ]),
-    '~contains~0~contains~1': Mode(className: 'type', variants: <Mode>[
-      Mode(begin: "\\b[a-z\\d_]*_t\\b"),
-      Mode(match: "\\batomic_[a-z]{3,6}\\b")
+    '~contains~0~contains~1':
+        Mode(className: 'meta', begin: "#\\s*[a-z]+\\b", end: "\$", keywords: {
+      "keyword":
+          "if else elif endif define undef warning error line pragma _Pragma ifdef ifndef elifdef elifndef include"
+    }, contains: <Mode>[
+      Mode(begin: "\\\\\\n", relevance: 0),
+      Mode(className: 'string', variants: <Mode>[
+        Mode(ref: '~contains~0~contains~0~contains~1~variants~0'),
+        Mode(ref: '~contains~0~contains~0~contains~1~variants~1'),
+        Mode(ref: '~contains~0~contains~0~contains~1~variants~2')
+      ]),
+      Mode(ref: '~contains~0~contains~0~contains~3'),
+      C_BLOCK_COMMENT_MODE
     ]),
-    '~contains~0~contains~4': Mode(
+    '~contains~0~contains~2': Mode(className: 'type', variants: <Mode>[
+      Mode(begin: "\\b[a-z\\d_]*_t\\b"),
+      Mode(
+          match:
+              "\\batomic_(?:bool|char|schar|uchar|short|ushort|int|uint|long|ulong|llong|ullong|char16_t|char32_t|wchar_t|int_least8_t|uint_least8_t|int_least16_t|uint_least16_t|int_least32_t|uint_least32_t|int_least64_t|uint_least64_t|int_fast8_t|uint_fast8_t|int_fast16_t|uint_fast16_t|int_fast32_t|uint_fast32_t|int_fast64_t|uint_fast64_t|intptr_t|uintptr_t|size_t|ptrdiff_t|intmax_t|uintmax_t)\\b")
+    ]),
+    '~contains~0~contains~5': Mode(
         className: 'number',
         variants: <Mode>[
-          Mode(begin: "\\b(0b[01']+)"),
+          Mode(match: "\\b(0b[01']+)"),
           Mode(
-              begin:
+              match:
                   "(-?)\\b([\\d']+(\\.[\\d']*)?|\\.[\\d']+)((ll|LL|l|L)(u|U)?|(u|U)(ll|LL|l|L)?|f|F|b|B)"),
           Mode(
-              begin:
-                  "(-?)(\\b0[xX][a-fA-F0-9']+|(\\b[\\d']+(\\.[\\d']*)?|\\.[\\d']+)([eE][-+]?[\\d']+)?)")
+              match:
+                  "(-?)\\b(0[xX][a-fA-F0-9]+(?:'[a-fA-F0-9]+)*(?:\\.[a-fA-F0-9]*(?:'[a-fA-F0-9]*)*)?(?:[pP][-+]?[0-9]+)?(l|L)?(u|U)?)"),
+          Mode(
+              match:
+                  "(-?)\\b\\d+(?:'\\d+)*(?:\\.\\d*(?:'\\d*)*)?(?:[eE][-+]?\\d+)?")
         ],
-        relevance: 0),
-    '~contains~0~contains~5': Mode(className: 'string', variants: <Mode>[
-      Mode(ref: '~contains~0~contains~0~contains~1~variants~0'),
-      Mode(ref: '~contains~0~contains~0~contains~1~variants~1'),
-      Mode(ref: '~contains~0~contains~0~contains~1~variants~2')
-    ])
+        relevance: 0)
   },
   name: "C",
   aliases: ["h"],
@@ -116,6 +147,8 @@ final langC = Mode(
       "restrict",
       "return",
       "sizeof",
+      "typeof",
+      "typeof_unqual",
       "struct",
       "switch",
       "typedef",
@@ -147,13 +180,25 @@ final langC = Mode(
       "char",
       "void",
       "_Bool",
+      "_BitInt",
       "_Complex",
       "_Imaginary",
       "_Decimal32",
       "_Decimal64",
+      "_Decimal96",
       "_Decimal128",
+      "_Decimal64x",
+      "_Decimal128x",
+      "_Float16",
+      "_Float32",
+      "_Float64",
+      "_Float128",
+      "_Float32x",
+      "_Float64x",
+      "_Float128x",
       "const",
       "static",
+      "constexpr",
       "complex",
       "bool",
       "imaginary"
@@ -190,6 +235,8 @@ final langC = Mode(
         "restrict",
         "return",
         "sizeof",
+        "typeof",
+        "typeof_unqual",
         "struct",
         "switch",
         "typedef",
@@ -221,13 +268,25 @@ final langC = Mode(
         "char",
         "void",
         "_Bool",
+        "_BitInt",
         "_Complex",
         "_Imaginary",
         "_Decimal32",
         "_Decimal64",
+        "_Decimal96",
         "_Decimal128",
+        "_Decimal64x",
+        "_Decimal128x",
+        "_Float16",
+        "_Float32",
+        "_Float64",
+        "_Float128",
+        "_Float32x",
+        "_Float64x",
+        "_Float128x",
         "const",
         "static",
+        "constexpr",
         "complex",
         "bool",
         "imaginary"
@@ -238,10 +297,11 @@ final langC = Mode(
     }, contains: <Mode>[
       Mode(ref: '~contains~0~contains~0'),
       Mode(ref: '~contains~0~contains~1'),
+      Mode(ref: '~contains~0~contains~2'),
       Mode(ref: '~contains~0~contains~0~contains~3'),
       C_BLOCK_COMMENT_MODE,
-      Mode(ref: '~contains~0~contains~4'),
       Mode(ref: '~contains~0~contains~5'),
+      Mode(ref: '~contains~0~contains~0~contains~1'),
       Mode(
           begin: "\\(",
           end: "\\)",
@@ -266,6 +326,8 @@ final langC = Mode(
               "restrict",
               "return",
               "sizeof",
+              "typeof",
+              "typeof_unqual",
               "struct",
               "switch",
               "typedef",
@@ -297,13 +359,25 @@ final langC = Mode(
               "char",
               "void",
               "_Bool",
+              "_BitInt",
               "_Complex",
               "_Imaginary",
               "_Decimal32",
               "_Decimal64",
+              "_Decimal96",
               "_Decimal128",
+              "_Decimal64x",
+              "_Decimal128x",
+              "_Float16",
+              "_Float32",
+              "_Float64",
+              "_Float128",
+              "_Float32x",
+              "_Float64x",
+              "_Float128x",
               "const",
               "static",
+              "constexpr",
               "complex",
               "bool",
               "imaginary"
@@ -315,17 +389,18 @@ final langC = Mode(
           contains: <Mode>[
             Mode(ref: '~contains~0~contains~0'),
             Mode(ref: '~contains~0~contains~1'),
+            Mode(ref: '~contains~0~contains~2'),
             Mode(ref: '~contains~0~contains~0~contains~3'),
             C_BLOCK_COMMENT_MODE,
-            Mode(ref: '~contains~0~contains~4'),
             Mode(ref: '~contains~0~contains~5'),
+            Mode(ref: '~contains~0~contains~0~contains~1'),
             Mode(self: true)
           ],
           relevance: 0)
     ], relevance: 0),
     Mode(
         begin:
-            "((decltype\\(auto\\)|(?:[a-zA-Z_]\\w*::)?[a-zA-Z_]\\w*(?:<[^<>]+>)?)[\\*&\\s]+)+(?:[a-zA-Z_]\\w*::)?[a-zA-Z]\\w*\\s*\\(",
+            "((decltype\\(auto\\)|(?:[a-zA-Z_]\\w*::)?[a-zA-Z_]\\w*(?:<[^<>]+>)?)[\\*&\\s]+){1,12}(?:[a-zA-Z_]\\w*::)?[a-zA-Z]\\w*\\s*\\(",
         returnBegin: true,
         end: "[{;=]",
         excludeEnd: true,
@@ -350,6 +425,8 @@ final langC = Mode(
             "restrict",
             "return",
             "sizeof",
+            "typeof",
+            "typeof_unqual",
             "struct",
             "switch",
             "typedef",
@@ -381,13 +458,25 @@ final langC = Mode(
             "char",
             "void",
             "_Bool",
+            "_BitInt",
             "_Complex",
             "_Imaginary",
             "_Decimal32",
             "_Decimal64",
+            "_Decimal96",
             "_Decimal128",
+            "_Decimal64x",
+            "_Decimal128x",
+            "_Float16",
+            "_Float32",
+            "_Float64",
+            "_Float128",
+            "_Float32x",
+            "_Float64x",
+            "_Float128x",
             "const",
             "static",
+            "constexpr",
             "complex",
             "bool",
             "imaginary"
@@ -421,6 +510,8 @@ final langC = Mode(
                   "restrict",
                   "return",
                   "sizeof",
+                  "typeof",
+                  "typeof_unqual",
                   "struct",
                   "switch",
                   "typedef",
@@ -452,13 +543,25 @@ final langC = Mode(
                   "char",
                   "void",
                   "_Bool",
+                  "_BitInt",
                   "_Complex",
                   "_Imaginary",
                   "_Decimal32",
                   "_Decimal64",
+                  "_Decimal96",
                   "_Decimal128",
+                  "_Decimal64x",
+                  "_Decimal128x",
+                  "_Float16",
+                  "_Float32",
+                  "_Float64",
+                  "_Float128",
+                  "_Float32x",
+                  "_Float64x",
+                  "_Float128x",
                   "const",
                   "static",
+                  "constexpr",
                   "complex",
                   "bool",
                   "imaginary"
@@ -504,6 +607,8 @@ final langC = Mode(
                   "restrict",
                   "return",
                   "sizeof",
+                  "typeof",
+                  "typeof_unqual",
                   "struct",
                   "switch",
                   "typedef",
@@ -535,13 +640,25 @@ final langC = Mode(
                   "char",
                   "void",
                   "_Bool",
+                  "_BitInt",
                   "_Complex",
                   "_Imaginary",
                   "_Decimal32",
                   "_Decimal64",
+                  "_Decimal96",
                   "_Decimal128",
+                  "_Decimal64x",
+                  "_Decimal128x",
+                  "_Float16",
+                  "_Float32",
+                  "_Float64",
+                  "_Float128",
+                  "_Float32x",
+                  "_Float64x",
+                  "_Float128x",
                   "const",
                   "static",
+                  "constexpr",
                   "complex",
                   "bool",
                   "imaginary"
@@ -554,9 +671,9 @@ final langC = Mode(
               contains: <Mode>[
                 Mode(ref: '~contains~0~contains~0~contains~3'),
                 C_BLOCK_COMMENT_MODE,
+                Mode(ref: '~contains~0~contains~0~contains~1'),
                 Mode(ref: '~contains~0~contains~5'),
-                Mode(ref: '~contains~0~contains~4'),
-                Mode(ref: '~contains~0~contains~1'),
+                Mode(ref: '~contains~0~contains~2'),
                 Mode(
                     begin: "\\(",
                     end: "\\)",
@@ -581,6 +698,8 @@ final langC = Mode(
                         "restrict",
                         "return",
                         "sizeof",
+                        "typeof",
+                        "typeof_unqual",
                         "struct",
                         "switch",
                         "typedef",
@@ -612,13 +731,25 @@ final langC = Mode(
                         "char",
                         "void",
                         "_Bool",
+                        "_BitInt",
                         "_Complex",
                         "_Imaginary",
                         "_Decimal32",
                         "_Decimal64",
+                        "_Decimal96",
                         "_Decimal128",
+                        "_Decimal64x",
+                        "_Decimal128x",
+                        "_Float16",
+                        "_Float32",
+                        "_Float64",
+                        "_Float128",
+                        "_Float32x",
+                        "_Float64x",
+                        "_Float128x",
                         "const",
                         "static",
+                        "constexpr",
                         "complex",
                         "bool",
                         "imaginary"
@@ -632,23 +763,26 @@ final langC = Mode(
                       Mode(self: true),
                       Mode(ref: '~contains~0~contains~0~contains~3'),
                       C_BLOCK_COMMENT_MODE,
+                      Mode(ref: '~contains~0~contains~0~contains~1'),
                       Mode(ref: '~contains~0~contains~5'),
-                      Mode(ref: '~contains~0~contains~4'),
-                      Mode(ref: '~contains~0~contains~1')
+                      Mode(ref: '~contains~0~contains~2')
                     ])
               ]),
-          Mode(ref: '~contains~0~contains~1'),
+          Mode(ref: '~contains~0~contains~2'),
           Mode(ref: '~contains~0~contains~0~contains~3'),
           C_BLOCK_COMMENT_MODE,
-          Mode(ref: '~contains~0~contains~0')
+          Mode(ref: '~contains~0~contains~0'),
+          Mode(ref: '~contains~0~contains~1')
         ]),
     Mode(ref: '~contains~0~contains~0'),
     Mode(ref: '~contains~0~contains~1'),
+    Mode(ref: '~contains~0~contains~2'),
     Mode(ref: '~contains~0~contains~0~contains~3'),
     C_BLOCK_COMMENT_MODE,
-    Mode(ref: '~contains~0~contains~4'),
     Mode(ref: '~contains~0~contains~5'),
+    Mode(ref: '~contains~0~contains~0~contains~1'),
     Mode(ref: '~contains~0~contains~0'),
+    Mode(ref: '~contains~0~contains~1'),
     Mode(begin: "[a-zA-Z]\\w*::", keywords: {
       "keyword": [
         "asm",
@@ -670,6 +804,8 @@ final langC = Mode(
         "restrict",
         "return",
         "sizeof",
+        "typeof",
+        "typeof_unqual",
         "struct",
         "switch",
         "typedef",
@@ -701,13 +837,25 @@ final langC = Mode(
         "char",
         "void",
         "_Bool",
+        "_BitInt",
         "_Complex",
         "_Imaginary",
         "_Decimal32",
         "_Decimal64",
+        "_Decimal96",
         "_Decimal128",
+        "_Decimal64x",
+        "_Decimal128x",
+        "_Float16",
+        "_Float32",
+        "_Float64",
+        "_Float128",
+        "_Float32x",
+        "_Float64x",
+        "_Float128x",
         "const",
         "static",
+        "constexpr",
         "complex",
         "bool",
         "imaginary"

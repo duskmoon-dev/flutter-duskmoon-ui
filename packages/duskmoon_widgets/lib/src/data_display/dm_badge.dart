@@ -1,3 +1,5 @@
+// @dart = 3.8
+
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 
@@ -35,41 +37,37 @@ class DmBadge extends StatelessWidget with AdaptiveWidget {
   Widget build(BuildContext context) {
     return switch (resolveStyle(context)) {
       DmPlatformStyle.material => Badge(
-          label: label != null ? Text(label!) : null,
-          backgroundColor: backgroundColor,
-          textColor: textColor,
-          child: child,
-        ),
+        label: label != null ? Text(label!) : null,
+        backgroundColor: backgroundColor,
+        textColor: textColor,
+        child: child,
+      ),
       DmPlatformStyle.cupertino => Stack(
-          clipBehavior: Clip.none,
-          children: [
-            if (child != null) child!,
-            if (label != null)
-              Positioned(
-                right: -4,
-                top: -4,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color:
-                        backgroundColor ?? Theme.of(context).colorScheme.error,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    label!,
-                    style: TextStyle(
-                      color: textColor ?? Theme.of(context).colorScheme.onError,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                    ),
+        clipBehavior: Clip.none,
+        children: [
+          ?child,
+          if (label != null)
+            Positioned(
+              right: -4,
+              top: -4,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: backgroundColor ?? Theme.of(context).colorScheme.error,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  label!,
+                  style: TextStyle(
+                    color: textColor ?? Theme.of(context).colorScheme.onError,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
+      ),
       DmPlatformStyle.fluent => _buildFluent(context),
     };
   }

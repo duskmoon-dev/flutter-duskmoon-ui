@@ -23,7 +23,7 @@ dependencies:
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 ```
 
-> **Requirements:** Dart >= 3.5.0, Flutter >= 3.24.0
+> **Requirements:** Dart >= 3.12.0, Flutter >= 3.44.0 for the umbrella package. See the [per-package SDK matrix](dependency-maintenance.md#sdk-support).
 
 ### Minimal app
 

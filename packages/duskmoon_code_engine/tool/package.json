@@ -3,11 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "compile": "node compile_grammar.mjs"
+    "compile": "node compile_grammar.mjs",
+    "test": "node --test *.test.mjs test/*.test.mjs"
   },
   "dependencies": {
-    "@lezer/generator": "^1.8.1",
-    "@lezer/common": "^1.5.3",
-    "@lezer/lr": "^1.4.10"
+    "@lezer/generator": "1.8.1",
+    "@lezer/common": "1.5.3",
+    "@lezer/lr": "1.4.11"
   }
 }

@@ -36,7 +36,7 @@ void main() {
       expect(
           result.toHtml(),
           '<span class="hljs-keyword">public</span> '
-          '<span class="hljs-keyword">void</span> <span class="hljs-title function_">moveTo</span>'
+          '<span class="hljs-type">void</span> <span class="hljs-title function_">moveTo</span>'
           '<span class="hljs-params">(<span class="hljs-type">int</span> x, '
           '<span class="hljs-type">int</span> y, '
           '<span class="hljs-type">int</span> z)</span>;');
@@ -49,7 +49,7 @@ void main() {
       expect(
           result.toHtml(),
           '<span class="hljs-keyword">public</span> '
-          '<span class="hljs-keyword">void</span> <span class="hljs-title function_">moveTo</span>'
+          '<span class="hljs-type">void</span> <span class="hljs-title function_">moveTo</span>'
           '<span class="hljs-params">(<span class="hljs-type">int</span> x, '
           '<span class="hljs-type">int</span> y, '
           '<span class="hljs-type">int</span> z)</span>;');

@@ -31,7 +31,7 @@ final langLisp = Mode(
       '~contains~5': Mode(contains: <Mode>[
         Mode(ref: '~contains~0'),
         Mode(ref: '~contains~3'),
-        Mode(begin: "\\*", end: "\\*"),
+        Mode(scope: 'variable', match: "\\*[^\\s()*]+\\*"),
         Mode(
             className: 'symbol',
             begin: "[:&][a-zA-Z_\\-+\\*\\/<=>&#][a-zA-Z0-9_\\-+*\\/<=>&#!]*"),
@@ -93,7 +93,8 @@ final langLisp = Mode(
                     "[ ]+((?:I|a|is|so|us|to|at|if|in|it|on|[A-Za-z]+['](d|ve|re|ll|t|s|n)|[A-Za-z]+[-][a-z]+|[A-Za-z][a-z]{2,})[.]?[:]?([.][ ]|[ ])){3}")
           ],
           relevance: 0),
-      '~contains~5~contains~2': Mode(begin: "\\*", end: "\\*"),
+      '~contains~5~contains~2':
+          Mode(scope: 'variable', match: "\\*[^\\s()*]+\\*"),
       '~contains~5~contains~3': Mode(
           className: 'symbol',
           begin: "[:&][a-zA-Z_\\-+\\*\\/<=>&#][a-zA-Z0-9_\\-+*\\/<=>&#!]*")

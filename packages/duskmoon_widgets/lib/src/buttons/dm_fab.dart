@@ -1,3 +1,5 @@
+// @dart = 3.8
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -47,10 +49,7 @@ class DmFab extends StatelessWidget with AdaptiveWidget {
         label: label!,
       );
     }
-    return FloatingActionButton(
-      onPressed: onPressed,
-      child: child ?? icon,
-    );
+    return FloatingActionButton(onPressed: onPressed, child: child ?? icon);
   }
 
   Widget _buildCupertino(BuildContext context) {
@@ -58,16 +57,11 @@ class DmFab extends StatelessWidget with AdaptiveWidget {
       padding: const EdgeInsets.all(16),
       borderRadius: BorderRadius.circular(28),
       onPressed: onPressed,
-      child: child ??
+      child:
+          child ??
           icon ??
           (label != null
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (icon != null) icon!,
-                    if (label != null) label!,
-                  ],
-                )
+              ? Row(mainAxisSize: MainAxisSize.min, children: [?icon, ?label])
               : const SizedBox.shrink()),
     );
   }

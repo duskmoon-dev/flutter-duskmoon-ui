@@ -1,3 +1,13 @@
+## Unreleased
+
+- Pin Lezer generation dependencies and add a reproducible lockfile.
+- Correct grammar metadata export and verify that generated Dart compiles and
+  preserves node properties, token precedence and 32-bit states.
+- `GrammarData.states` now uses `Uint32List`; direct callers must update their
+  constructor arguments. `LRParser.deserialize` keeps its `List<int>` inputs.
+- Align declared SDK requirements. The LR runtime remains a JSON tokenizer;
+  generated metadata does not yet enable arbitrary Lezer grammar parsing.
+
 ## 1.12.0
 
 - Release 1.12.0 (2026-10-17)

@@ -36,9 +36,28 @@ final langGroovy = Mode(
       ]),
       '~contains~3': Mode(
           className: 'regexp',
-          begin: "\x7e?\\/[^\\/\\n]+\\/",
+          begin: "~?\\/[^\\/\\n]+\\/",
           contains: <Mode>[BACKSLASH_ESCAPE]),
-      '~contains~4': Mode(variants: <Mode>[BINARY_NUMBER_MODE, C_NUMBER_MODE])
+      '~contains~4': Mode(
+          className: 'number',
+          variants: <Mode>[
+            Mode(
+                begin:
+                    "(\\b([0-9](_*[0-9])*)((\\.([0-9](_*[0-9])*))|\\.)?|(\\.([0-9](_*[0-9])*)))[eE][+-]?([0-9](_*[0-9])*)[fFdD]?\\b"),
+            Mode(
+                begin:
+                    "\\b([0-9](_*[0-9])*)((\\.([0-9](_*[0-9])*))[fFdD]?\\b|\\.([fFdD]\\b)?)"),
+            Mode(begin: "(\\.([0-9](_*[0-9])*))[fFdD]?\\b"),
+            Mode(begin: "\\b([0-9](_*[0-9])*)[fFdD]\\b"),
+            Mode(
+                begin:
+                    "\\b0[xX](([0-9a-fA-F](_*[0-9a-fA-F])*)\\.?|([0-9a-fA-F](_*[0-9a-fA-F])*)?\\.([0-9a-fA-F](_*[0-9a-fA-F])*))[pP][+-]?([0-9](_*[0-9])*)[fFdD]?\\b"),
+            Mode(begin: "\\b(0|[1-9](_*[0-9])*)[lL]?\\b"),
+            Mode(begin: "\\b0[xX]([0-9a-fA-F](_*[0-9a-fA-F])*)[lL]?\\b"),
+            Mode(begin: "\\b0(_*[0-7])*[lL]?\\b"),
+            Mode(begin: "\\b0[bB][01](_*[01])*[lL]?\\b")
+          ],
+          relevance: 0)
     },
     name: "Groovy",
     keywords: {

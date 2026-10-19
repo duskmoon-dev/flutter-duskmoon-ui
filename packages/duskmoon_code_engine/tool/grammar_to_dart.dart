@@ -62,7 +62,7 @@ void main(List<String> args) {
 
   // Node props
   if (nodeProps.isNotEmpty) {
-    buf.writeln('const _nodeProps = <int, Map<NodeProp<dynamic>, dynamic>>{');
+    buf.writeln('final _nodeProps = <int, Map<NodeProp<dynamic>, dynamic>>{');
     for (final entry in nodeProps.entries) {
       final props = entry.value as Map<String, dynamic>;
       final parts = <String>[];

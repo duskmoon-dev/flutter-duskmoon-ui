@@ -86,10 +86,20 @@ final langGo = Mode(
       ]),
       Mode(className: 'number', variants: <Mode>[
         Mode(
-            begin:
-                "(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)[i]",
-            relevance: 1),
-        C_NUMBER_MODE
+            match:
+                "-?\\b0[xX]\\.[a-fA-F0-9](_?[a-fA-F0-9])*[pP][+-]?\\d(_?\\d)*i?",
+            relevance: 0),
+        Mode(
+            match:
+                "-?\\b0[xX](_?[a-fA-F0-9])+((\\.([a-fA-F0-9](_?[a-fA-F0-9])*)?)?[pP][+-]?\\d(_?\\d)*)?i?",
+            relevance: 0),
+        Mode(match: "-?\\b0[oO](_?[0-7])*i?", relevance: 0),
+        Mode(match: "-?\\b0[bB](_?[01])*i?", relevance: 0),
+        Mode(match: "-?\\.\\d(_?\\d)*([eE][+-]?\\d(_?\\d)*)?i?", relevance: 0),
+        Mode(
+            match:
+                "-?\\b\\d(_?\\d)*(\\.(\\d(_?\\d)*)?)?([eE][+-]?\\d(_?\\d)*)?i?",
+            relevance: 0)
       ]),
       Mode(begin: ":="),
       Mode(

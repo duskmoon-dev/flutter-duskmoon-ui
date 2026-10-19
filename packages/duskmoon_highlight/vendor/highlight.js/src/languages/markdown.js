@@ -14,10 +14,10 @@ export default function(hljs) {
     subLanguage: 'xml',
     relevance: 0
   };
-  const HORIZONTAL_RULE = {
-    begin: '^[-\\*]{3,}',
-    end: '$'
-  };
+  // https://spec.commonmark.org/0.31.2/#thematic-breaks
+  // three or more `-`, `*` or `_`, all the same character, optionally
+  // separated and followed by spaces or tabs, and nothing else on the line
+  const HORIZONTAL_RULE = { match: /^ {0,3}([-*_])[ \t]*(?:\1[ \t]*){2,}$/ };
   const CODE = {
     className: 'code',
     variants: [
@@ -216,6 +216,12 @@ export default function(hljs) {
     end: '$'
   };
 
+  const ENTITY = {
+    //https://spec.commonmark.org/0.31.2/#entity-references
+    scope: 'literal',
+    match: /&([a-zA-Z0-9]+|#[0-9]{1,7}|#[Xx][0-9a-fA-F]{1,6});/
+  };
+
   return {
     name: 'Markdown',
     aliases: [
@@ -227,13 +233,16 @@ export default function(hljs) {
       HEADER,
       INLINE_HTML,
       LIST,
+      // must come before BOLD/ITALIC so that a `***` or `___` thematic break
+      // isn't mistaken for the start of bold text
+      HORIZONTAL_RULE,
       BOLD,
       ITALIC,
       BLOCKQUOTE,
       CODE,
-      HORIZONTAL_RULE,
       LINK,
-      LINK_REFERENCE
+      LINK_REFERENCE,
+      ENTITY
     ]
   };
 }

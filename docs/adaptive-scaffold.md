@@ -29,7 +29,7 @@ dependencies:
 import 'package:duskmoon_adaptive_scaffold/duskmoon_adaptive_scaffold.dart';
 ```
 
-> **Requirements:** Dart >= 3.5.0, Flutter >= 3.24.0
+> **Requirements:** Dart >= 3.6.0, Flutter >= 3.24.0
 
 ## Quick Start
 

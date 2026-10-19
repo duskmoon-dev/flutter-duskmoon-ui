@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_math_fork/flutter_math.dart';
+import '../vendor/flutter_math/flutter_math.dart';
 
-/// Renders a KaTeX math expression using `flutter_math_fork`.
+/// Renders a KaTeX math expression using the owned Flutter math renderer.
 ///
 /// Supports both inline and display modes. Falls back to showing raw TeX
 /// source in monospace if parsing fails.

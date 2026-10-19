@@ -1,6 +1,6 @@
 # DuskMoon Highlight
 
-DuskMoon-maintained Dart syntax highlighting for Flutter. The parser, 194 language
+DuskMoon-maintained Dart syntax highlighting for Flutter. The parser, 195 language
 grammars, aliases and light/dark token themes are maintained in this repository.
 No JavaScript engine or platform plugin is needed at runtime.
 
@@ -34,18 +34,20 @@ retain their original attribution comments; inherited themes keep those licenses
 
 Run from the workspace root with the development environment available. Node 18+
 and npm are required only for maintenance. `npm ci` uses the checked-in lockfile;
-the HighlightJS helper runtime is pinned to 11.9.0. Grammar definitions and CSS
+the HighlightJS helper runtime is pinned to 11.12.0. Grammar definitions and CSS
 styles are read from this package's `vendor/highlight.js/src`, with Vue/GN source
 under their adjacent vendor directories. Edit those inputs rather than generated
 Dart grammars or themes.
 
 ```sh
 npm ci --prefix packages/duskmoon_highlight/tool --ignore-scripts --no-audit --no-fund
+npm test --prefix packages/duskmoon_highlight/tool
+npm audit --prefix packages/duskmoon_highlight/tool
 DART="$PWD/.devenv/profile/bin/dart" npm run generate --prefix packages/duskmoon_highlight/tool
 ```
 
 The generator works independently of the current shell directory, renames imports
-to this package and formats generated output. Running it twice with the same input
+to this package and formats generated output with Dart language version 3.6. Running it twice with the same input
 and Dart formatter must produce identical `lib/` bytes. Keep the Node lockfile,
 source grammars/styles and generated Dart changes together when updating inputs.
 The upstream HighlightJS source version is recorded in `vendor/highlight.js/package.json`.

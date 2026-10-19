@@ -98,18 +98,20 @@ final langCrystal = Mode(
                       Mode(begin: "%r\\|", end: "\\|")
                     ],
                     relevance: 0),
+                Mode(begin: "\\/\\/=?", relevance: 0),
                 Mode(
                     begin:
                         "(?!%\\})(!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~|\\n|\\b(case|if|select|unless|until|when|while)\\b)\\s*",
                     keywords: "case if select unless until when while",
                     contains: <Mode>[
-                      Mode(className: 'regexp', contains: <Mode>[
-                        BACKSLASH_ESCAPE,
-                        Mode(ref: '~contains~0~contains~0~contains~1')
-                      ], variants: <Mode>[
-                        Mode(begin: "//[a-z]*", relevance: 0),
-                        Mode(begin: "/(?!\\/)", end: "/[a-z]*")
-                      ])
+                      Mode(
+                          className: 'regexp',
+                          contains: <Mode>[
+                            BACKSLASH_ESCAPE,
+                            Mode(ref: '~contains~0~contains~0~contains~1')
+                          ],
+                          begin: "/(?!\\/)",
+                          end: "/[a-z]*")
                     ],
                     relevance: 0),
                 Mode(
@@ -256,15 +258,16 @@ final langCrystal = Mode(
         Mode(ref: '~contains~0~contains~0~contains~1~contains~4'),
         Mode(ref: '~contains~0~contains~0~contains~1~contains~5'),
         Mode(ref: '~contains~0~contains~0~contains~1~contains~6'),
+        Mode(ref: '~contains~0~contains~0~contains~1~contains~7'),
         HASH_COMMENT_MODE,
-        Mode(ref: '~contains~0~contains~0~contains~1~contains~8'),
         Mode(ref: '~contains~0~contains~0~contains~1~contains~9'),
         Mode(ref: '~contains~0~contains~0~contains~1~contains~10'),
         Mode(ref: '~contains~0~contains~0~contains~1~contains~11'),
         Mode(ref: '~contains~0~contains~0~contains~1~contains~12'),
         Mode(ref: '~contains~0~contains~0~contains~1~contains~13'),
         Mode(ref: '~contains~0~contains~0~contains~1~contains~14'),
-        Mode(ref: '~contains~0~contains~0~contains~1~contains~15')
+        Mode(ref: '~contains~0~contains~0~contains~1~contains~15'),
+        Mode(ref: '~contains~0~contains~0~contains~1~contains~16')
       ]),
       '~contains~0~contains~0': Mode(
           className: 'string',
@@ -351,18 +354,20 @@ final langCrystal = Mode(
                     Mode(begin: "%r\\|", end: "\\|")
                   ],
                   relevance: 0),
+              Mode(begin: "\\/\\/=?", relevance: 0),
               Mode(
                   begin:
                       "(?!%\\})(!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~|\\n|\\b(case|if|select|unless|until|when|while)\\b)\\s*",
                   keywords: "case if select unless until when while",
                   contains: <Mode>[
-                    Mode(className: 'regexp', contains: <Mode>[
-                      BACKSLASH_ESCAPE,
-                      Mode(ref: '~contains~0~contains~0~contains~1')
-                    ], variants: <Mode>[
-                      Mode(begin: "//[a-z]*", relevance: 0),
-                      Mode(begin: "/(?!\\/)", end: "/[a-z]*")
-                    ])
+                    Mode(
+                        className: 'regexp',
+                        contains: <Mode>[
+                          BACKSLASH_ESCAPE,
+                          Mode(ref: '~contains~0~contains~0~contains~1')
+                        ],
+                        begin: "/(?!\\/)",
+                        end: "/[a-z]*")
                   ],
                   relevance: 0),
               Mode(
@@ -608,18 +613,20 @@ final langCrystal = Mode(
               Mode(begin: "%r\\|", end: "\\|")
             ],
             relevance: 0),
+        Mode(begin: "\\/\\/=?", relevance: 0),
         Mode(
             begin:
                 "(?!%\\})(!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~|\\n|\\b(case|if|select|unless|until|when|while)\\b)\\s*",
             keywords: "case if select unless until when while",
             contains: <Mode>[
-              Mode(className: 'regexp', contains: <Mode>[
-                BACKSLASH_ESCAPE,
-                Mode(ref: '~contains~0~contains~0~contains~1')
-              ], variants: <Mode>[
-                Mode(begin: "//[a-z]*", relevance: 0),
-                Mode(begin: "/(?!\\/)", end: "/[a-z]*")
-              ])
+              Mode(
+                  className: 'regexp',
+                  contains: <Mode>[
+                    BACKSLASH_ESCAPE,
+                    Mode(ref: '~contains~0~contains~0~contains~1')
+                  ],
+                  begin: "/(?!\\/)",
+                  end: "/[a-z]*")
             ],
             relevance: 0),
         Mode(className: 'meta', begin: "@\\[", end: "\\]", contains: <Mode>[
@@ -844,21 +851,24 @@ final langCrystal = Mode(
             Mode(begin: "%r\\|", end: "\\|")
           ],
           relevance: 0),
-      '~contains~0~contains~0~contains~1~contains~4': Mode(
+      '~contains~0~contains~0~contains~1~contains~4':
+          Mode(begin: "\\/\\/=?", relevance: 0),
+      '~contains~0~contains~0~contains~1~contains~5': Mode(
           begin:
-              "(?!%\\})(!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||\x7e|\\n|\\b(case|if|select|unless|until|when|while)\\b)\\s*",
+              "(?!%\\})(!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~|\\n|\\b(case|if|select|unless|until|when|while)\\b)\\s*",
           keywords: "case if select unless until when while",
           contains: <Mode>[
-            Mode(className: 'regexp', contains: <Mode>[
-              BACKSLASH_ESCAPE,
-              Mode(ref: '~contains~0~contains~0~contains~1')
-            ], variants: <Mode>[
-              Mode(begin: "//[a-z]*", relevance: 0),
-              Mode(begin: "/(?!\\/)", end: "/[a-z]*")
-            ])
+            Mode(
+                className: 'regexp',
+                contains: <Mode>[
+                  BACKSLASH_ESCAPE,
+                  Mode(ref: '~contains~0~contains~0~contains~1')
+                ],
+                begin: "/(?!\\/)",
+                end: "/[a-z]*")
           ],
           relevance: 0),
-      '~contains~0~contains~0~contains~1~contains~5':
+      '~contains~0~contains~0~contains~1~contains~6':
           Mode(className: 'meta', begin: "@\\[", end: "\\]", contains: <Mode>[
         Mode(
             scope: 'string',
@@ -868,11 +878,11 @@ final langCrystal = Mode(
             contains: <Mode>[BACKSLASH_ESCAPE],
             className: 'string')
       ]),
-      '~contains~0~contains~0~contains~1~contains~6': Mode(
+      '~contains~0~contains~0~contains~1~contains~7': Mode(
           className: 'variable',
           begin:
               "(\\\$\\W)|((\\\$|@@?)(\\w+))(?=[^@\$?])(?![A-Za-z])(?![@\$?'])"),
-      '~contains~0~contains~0~contains~1~contains~8': Mode(
+      '~contains~0~contains~0~contains~1~contains~9': Mode(
           className: 'class',
           beginKeywords: "class module struct",
           end: "\$|;",
@@ -885,7 +895,7 @@ final langCrystal = Mode(
                 relevance: 0),
             Mode(begin: "<")
           ]),
-      '~contains~0~contains~0~contains~1~contains~9': Mode(
+      '~contains~0~contains~0~contains~1~contains~10': Mode(
           className: 'class',
           beginKeywords: "lib enum union",
           end: "\$|;",
@@ -897,7 +907,7 @@ final langCrystal = Mode(
                 begin: "[A-Za-z_]\\w*(::\\w+)*(\\?|!)?",
                 relevance: 0)
           ]),
-      '~contains~0~contains~0~contains~1~contains~10': Mode(
+      '~contains~0~contains~0~contains~1~contains~11': Mode(
           beginKeywords: "annotation",
           end: "\$|;",
           illegal: "=",
@@ -909,7 +919,7 @@ final langCrystal = Mode(
                 relevance: 0)
           ],
           relevance: 2),
-      '~contains~0~contains~0~contains~1~contains~11': Mode(
+      '~contains~0~contains~0~contains~1~contains~12': Mode(
           className: 'function',
           beginKeywords: "def",
           end: "\\B\\b",
@@ -921,7 +931,7 @@ final langCrystal = Mode(
                 relevance: 0,
                 endsParent: true)
           ]),
-      '~contains~0~contains~0~contains~1~contains~12': Mode(
+      '~contains~0~contains~0~contains~1~contains~13': Mode(
           className: 'function',
           beginKeywords: "fun macro",
           end: "\\B\\b",
@@ -934,9 +944,9 @@ final langCrystal = Mode(
                 endsParent: true)
           ],
           relevance: 2),
-      '~contains~0~contains~0~contains~1~contains~13': Mode(
-          className: 'symbol', begin: "[a-zA-Z_]\\w*(!|\\?)?:", relevance: 0),
       '~contains~0~contains~0~contains~1~contains~14': Mode(
+          className: 'symbol', begin: "[a-zA-Z_]\\w*(!|\\?)?:", relevance: 0),
+      '~contains~0~contains~0~contains~1~contains~15': Mode(
           className: 'symbol',
           begin: ":",
           contains: <Mode>[
@@ -946,7 +956,7 @@ final langCrystal = Mode(
                     "[a-zA-Z_]\\w*[!?=]?|[-+~]@|<<|>>|[=!]~|===?|<=>|[<>]=?|\\*\\*|[-/+%^&*~|]|//|//=|&[-+*]=?|&\\*\\*|\\[\\][=?]?")
           ],
           relevance: 0),
-      '~contains~0~contains~0~contains~1~contains~15': Mode(
+      '~contains~0~contains~0~contains~1~contains~16': Mode(
           className: 'number',
           variants: <Mode>[
             Mode(begin: "\\b0b([01_]+)(_?[ui](8|16|32|64|128))?"),
@@ -975,13 +985,14 @@ final langCrystal = Mode(
       Mode(ref: '~contains~0~contains~0~contains~1~contains~4'),
       Mode(ref: '~contains~0~contains~0~contains~1~contains~5'),
       Mode(ref: '~contains~0~contains~0~contains~1~contains~6'),
+      Mode(ref: '~contains~0~contains~0~contains~1~contains~7'),
       HASH_COMMENT_MODE,
-      Mode(ref: '~contains~0~contains~0~contains~1~contains~8'),
       Mode(ref: '~contains~0~contains~0~contains~1~contains~9'),
       Mode(ref: '~contains~0~contains~0~contains~1~contains~10'),
       Mode(ref: '~contains~0~contains~0~contains~1~contains~11'),
       Mode(ref: '~contains~0~contains~0~contains~1~contains~12'),
       Mode(ref: '~contains~0~contains~0~contains~1~contains~13'),
       Mode(ref: '~contains~0~contains~0~contains~1~contains~14'),
-      Mode(ref: '~contains~0~contains~0~contains~1~contains~15')
+      Mode(ref: '~contains~0~contains~0~contains~1~contains~15'),
+      Mode(ref: '~contains~0~contains~0~contains~1~contains~16')
     ]);

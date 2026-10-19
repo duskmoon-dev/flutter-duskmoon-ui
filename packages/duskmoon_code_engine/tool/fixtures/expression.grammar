@@ -1,0 +1,10 @@
+@top Program { Expression }
+
+Expression { Number ("+" Number)* }
+
+@tokens {
+  Number { @digit+ }
+  space { @whitespace+ }
+}
+
+@skip { space }

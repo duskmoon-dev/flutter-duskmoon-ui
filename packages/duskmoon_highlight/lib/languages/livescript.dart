@@ -55,6 +55,7 @@ final langLivescript = Mode(
               "from",
               "export",
               "extends",
+              "using",
               "then",
               "unless",
               "until",
@@ -231,6 +232,7 @@ final langLivescript = Mode(
                   "from",
                   "export",
                   "extends",
+                  "using",
                   "then",
                   "unless",
                   "until",
@@ -394,6 +396,7 @@ final langLivescript = Mode(
           "from",
           "export",
           "extends",
+          "using",
           "then",
           "unless",
           "until",
@@ -570,6 +573,7 @@ final langLivescript = Mode(
               "from",
               "export",
               "extends",
+              "using",
               "then",
               "unless",
               "until",
@@ -743,6 +747,7 @@ final langLivescript = Mode(
         "from",
         "export",
         "extends",
+        "using",
         "then",
         "unless",
         "until",
@@ -930,6 +935,7 @@ final langLivescript = Mode(
                       "from",
                       "export",
                       "extends",
+                      "using",
                       "then",
                       "unless",
                       "until",
@@ -1063,11 +1069,11 @@ final langLivescript = Mode(
             Mode(
                 begin:
                     "([A-Za-z\$_](?:-[0-9A-Za-z\$_]|[0-9A-Za-z\$_])*\\s*(?:=|:=)\\s*)?!?(\\(.*\\)\\s*)?\\B[-~]{1,2}>\\*?",
-                end: "[-\~]{1,2}>\\*?"),
+                end: "[-~]{1,2}>\\*?"),
             Mode(
                 begin:
                     "([A-Za-z\$_](?:-[0-9A-Za-z\$_]|[0-9A-Za-z\$_])*\\s*(?:=|:=)\\s*)?(\\(.*\\)\\s*)?\\B!?[-~]{1,2}>\\*?",
-                end: "!?[-\~]{1,2}>\\*?")
+                end: "!?[-~]{1,2}>\\*?")
           ]),
       Mode(variants: <Mode>[
         Mode(match: [
@@ -1123,6 +1129,7 @@ final langLivescript = Mode(
           "from",
           "export",
           "extends",
+          "using",
           "then",
           "unless",
           "until",

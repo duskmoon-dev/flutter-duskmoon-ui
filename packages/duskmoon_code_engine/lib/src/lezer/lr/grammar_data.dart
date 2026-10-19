@@ -16,7 +16,7 @@ class GrammarData {
   });
 
   final NodeSet nodeSet;
-  final Uint16List states;
+  final Uint32List states;
   final Uint16List stateData;
   final Uint16List gotoTable;
   final List<String> nodeNames;

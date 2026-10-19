@@ -20,7 +20,7 @@ final langLeaf = Mode(
               Mode(ref: '~contains~0~contains~0')
             ]),
             Mode(scope: 'string', begin: "\"", end: "\""),
-            Mode(scope: 'keyword', match: "true|false|in"),
+            Mode(scope: 'keyword', match: "\\b(?:true|false|in)\\b"),
             Mode(scope: 'variable', match: "[A-Za-z_][A-Za-z_0-9]*"),
             Mode(
                 scope: 'operator',

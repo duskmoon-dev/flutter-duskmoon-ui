@@ -1,0 +1,10 @@
+@top Program { (Keyword | Identifier)+ }
+
+@tokens {
+  Keyword { "if" }
+  Identifier { @asciiLetter+ }
+  space { @whitespace+ }
+  @precedence { Keyword, Identifier }
+}
+
+@skip { space }

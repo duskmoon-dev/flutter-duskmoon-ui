@@ -63,6 +63,7 @@ import 'excel.dart';
 import 'fix.dart';
 import 'flix.dart';
 import 'fortran.dart';
+import 'freedesktop.dart';
 import 'fsharp.dart';
 import 'gams.dart';
 import 'gauss.dart';
@@ -263,6 +264,7 @@ final builtinLanguages = {
   'fix': langFix,
   'flix': langFlix,
   'fortran': langFortran,
+  'freedesktop': langFreedesktop,
   'fsharp': langFsharp,
   'gams': langGams,
   'gauss': langGauss,

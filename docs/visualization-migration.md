@@ -5,7 +5,7 @@ This checklist tracks the migration of `/home/gao/Workspace/gsmlg-app/data_visua
 ## Decisions
 
 - [ ] Confirm the target package is a single public package: `duskmoon_visualization`
-- [ ] Decide whether the repo baseline moves from Dart `>=3.5.0` to `>=3.8.0`, or the imported code is backported
+- [x] Declare visualization's actual SDK floor: Dart `>=3.10.0`, Flutter `>=3.38.0` (see [SDK matrix](dependency-maintenance.md#sdk-support))
 - [ ] Decide whether the first public API is compatibility-first or DuskMoon-renamed
 - [ ] Decide which source examples become part of the existing `example/` app
 
@@ -25,7 +25,8 @@ This checklist tracks the migration of `/home/gao/Workspace/gsmlg-app/data_visua
 - [x] Copy the selected source code into `packages/duskmoon_visualization/lib/src/vendor/`
 - [x] Rewrite `package:dv_*` imports to internal package imports
 - [ ] Copy any required assets and example data files
-- [ ] Preserve source licenses and attribution where required
+- [x] Preserve imported GSMLG source-code license and attribution in package `THIRD_PARTY_LICENSES`
+- [x] Record known map-data sources and generation process, with unknown historical release/hashes explicit in package `SOURCE.md`
 Current imported domains: core, scales, curves, stats, geo-core, delaunay, voronoi, group, glyph, gradient, pattern, clip-path, shape, text, axis, grid, legend, annotation, bounds, responsive, event, tooltip, drag, brush, zoom, xychart, threshold, heatmap, geo, map, network, mock-data
 
 ## API Shaping

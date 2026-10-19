@@ -8,6 +8,7 @@ final langFortran = Mode(
     caseInsensitive: true,
     aliases: ["f90", "f95"],
     keywords: {
+      "\$pattern": "\\b[a-z][a-z0-9_]+\\b|\\.[a-z][a-z0-9_]+\\.",
       "keyword": [
         "kind",
         "do",

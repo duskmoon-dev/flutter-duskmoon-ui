@@ -129,7 +129,7 @@ class DmCheckboxFieldBlocBuilder extends StatelessWidget {
     return DmCanShowFieldBlocBuilder(
       fieldBloc: booleanFieldBloc,
       animate: animateWhenCanShow,
-      builder: (context0, __) {
+      builder: (context0, _) {
         return BlocBuilder<BooleanFieldBloc, BooleanFieldBlocState>(
           bloc: booleanFieldBloc,
           builder: (context, state) {

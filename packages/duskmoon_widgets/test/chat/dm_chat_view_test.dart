@@ -25,7 +25,7 @@ void main() {
                 blocks: [DmChatTextBlock(text: 'second')],
               ),
             ],
-            onSend: (_, __) {},
+            onSend: (_, _) {},
           ),
         ),
       );
@@ -44,7 +44,7 @@ void main() {
           height: 400,
           child: DmChatView(
             messages: const [],
-            onSend: (_, __) {},
+            onSend: (_, _) {},
             emptyBuilder: (_) => const Text('no messages yet'),
           ),
         ),
@@ -59,7 +59,7 @@ void main() {
           height: 400,
           child: DmChatView(
             messages: const [],
-            onSend: (_, __) {},
+            onSend: (_, _) {},
             inputPlaceholder: 'Say hi',
           ),
         ),
@@ -76,7 +76,7 @@ void main() {
           height: 500,
           child: DmChatView(
             messages: const [],
-            onSend: (_, __) {},
+            onSend: (_, _) {},
             inputMinLines: 6,
             inputMaxLines: 6,
           ),

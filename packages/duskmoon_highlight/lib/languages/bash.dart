@@ -26,7 +26,7 @@ final langBash = Mode(
       ])
     },
     name: "Bash",
-    aliases: ["sh"],
+    aliases: ["sh", "zsh"],
     keywords: {
       "\$pattern": "\\b[a-z][a-z0-9._-]+\\b",
       "keyword": [
@@ -35,6 +35,7 @@ final langBash = Mode(
         "else",
         "elif",
         "fi",
+        "time",
         "for",
         "while",
         "until",
@@ -43,6 +44,7 @@ final langBash = Mode(
         "done",
         "case",
         "esac",
+        "coproc",
         "function",
         "select"
       ],
@@ -83,6 +85,7 @@ final langBash = Mode(
         "read",
         "readarray",
         "source",
+        "sudo",
         "type",
         "typeset",
         "ulimit",
@@ -287,7 +290,22 @@ final langBash = Mode(
         NUMBER_MODE,
         Mode(ref: '~contains~3~contains~2')
       ]),
-      HASH_COMMENT_MODE,
+      Mode(scope: <int, String>{
+        2: 'comment',
+      }, contains: <Mode>[
+        Mode(
+            scope: 'doctag',
+            begin: "[ ]*(?=(TODO|FIXME|NOTE|BUG|OPTIMIZE|HACK|XXX):)",
+            end: "(TODO|FIXME|NOTE|BUG|OPTIMIZE|HACK|XXX):",
+            excludeBegin: true,
+            relevance: 0),
+        Mode(
+            begin:
+                "[ ]+((?:I|a|is|so|us|to|at|if|in|it|on|[A-Za-z]+['](d|ve|re|ll|t|s|n)|[A-Za-z]+[-][a-z]+|[A-Za-z][a-z]{2,})[.]?[:]?([.][ ]|[ ])){3}")
+      ], match: [
+        "(^|\\s)",
+        "#.*\$"
+      ]),
       Mode(
           begin: "<<-?\\s*(?=\\w+)",
           starts: Mode(contains: <Mode>[

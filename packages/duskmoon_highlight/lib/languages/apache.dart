@@ -51,6 +51,7 @@ final langApache = Mode(
           starts: Mode(end: "\$", relevance: 0, keywords: {
             "literal": "on off all deny allow"
           }, contains: <Mode>[
+            Mode(scope: 'punctuation', match: "\\\\\\n"),
             Mode(className: 'meta', begin: "\\s\\[", end: "\\]\$"),
             Mode(
                 className: 'variable',

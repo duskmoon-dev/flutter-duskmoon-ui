@@ -82,7 +82,7 @@ class _DmCodeEditorFieldBlocBuilderState
     return DmSimpleFieldBlocBuilder(
       singleFieldBloc: widget.codeEditorFieldBloc,
       animateWhenCanShow: widget.animateWhenCanShow,
-      builder: (context, __) {
+      builder: (context, _) {
         return BlocBuilder<CodeEditorFieldBloc, CodeEditorFieldBlocState>(
           bloc: widget.codeEditorFieldBloc,
           builder: (context, state) {

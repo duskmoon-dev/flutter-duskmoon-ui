@@ -36,6 +36,7 @@ final langNsis = Mode(
         "CompletedText",
         "ComponentText",
         "CopyFiles",
+        "CPU",
         "CRCCheck",
         "CreateDirectory",
         "CreateFont",
@@ -91,12 +92,15 @@ final langNsis = Mode(
         "GetInstDirError",
         "GetKnownFolderPath",
         "GetLabelAddress",
+        "GetRegView",
+        "GetShellVarContext",
         "GetTempFileName",
         "GetWinVer",
         "Goto",
         "HideWindow",
         "Icon",
         "IfAbort",
+        "IfAltRegView",
         "IfErrors",
         "IfFileExists",
         "IfRebootFlag",
@@ -134,7 +138,11 @@ final langNsis = Mode(
         "LockWindow",
         "LogSet",
         "LogText",
+        "ManifestAppendCustomString",
+        "ManifestDisableWindowFiltering",
         "ManifestDPIAware",
+        "ManifestDPIAwareness",
+        "ManifestGdiScaling",
         "ManifestLongPathAware",
         "ManifestMaxVersionTested",
         "ManifestSupportedOS",
@@ -154,6 +162,7 @@ final langNsis = Mode(
         "Quit",
         "ReadEnvStr",
         "ReadINIStr",
+        "ReadMemory",
         "ReadRegDWORD",
         "ReadRegStr",
         "Reboot",
@@ -179,6 +188,7 @@ final langNsis = Mode(
         "SetCompress",
         "SetCompressor",
         "SetCompressorDictSize",
+        "SetCompressionLevel",
         "SetCtlColors",
         "SetCurInstType",
         "SetDatablockOptimize",
@@ -207,7 +217,9 @@ final langNsis = Mode(
         "StrCpy",
         "StrLen",
         "SubCaption",
+        "Target",
         "Unicode",
+        "UnsafeStrCpy",
         "UninstallButtonText",
         "UninstallCaption",
         "UninstallIcon",
@@ -325,7 +337,7 @@ final langNsis = Mode(
       }),
       Mode(
           beginKeywords:
-              "Function PageEx Section SectionGroup FunctionEnd SectionEnd"),
+              "Function PageEx Section SectionGroup FunctionEnd PageExEnd SectionEnd SectionGroupEnd"),
       Mode(
           className: 'string',
           variants: <Mode>[
@@ -347,14 +359,14 @@ final langNsis = Mode(
       Mode(
           className: 'keyword',
           begin:
-              "!(?:addincludedir|addplugindir|appendfile|assert|cd|define|delfile|echo|else|endif|error|execute|finalize|getdllversion|gettlbversion|if|ifdef|ifmacrodef|ifmacrondef|ifndef|include|insertmacro|macro|macroend|makensis|packhdr|searchparse|searchreplace|system|tempfile|undef|uninstfinalize|verbose|warning)"),
+              "!(?:addincludedir|addplugindir|appendfile|appendmemfile|assert|cd|define|delfile|echo|else|elseif|elseifdef|elseifmacrodef|elseifmacrondef|elseifndef|endif|error|execute|finalize|getdllversion|gettlbversion|if|ifdef|ifmacrodef|ifmacrondef|ifndef|include|insertmacro|macro|macroend|macroundef|makensis|packhdr|pragma|searchparse|searchreplace|system|tempfile|undef|uninstfinalize|verbose|warning)\\b"),
       Mode(ref: '~contains~6~contains~2'),
       Mode(ref: '~contains~6~contains~3'),
       Mode(ref: '~contains~6~contains~4'),
       Mode(
           className: 'params',
           begin:
-              "(?:ARCHIVE|FILE_ATTRIBUTE_ARCHIVE|FILE_ATTRIBUTE_NORMAL|FILE_ATTRIBUTE_OFFLINE|FILE_ATTRIBUTE_READONLY|FILE_ATTRIBUTE_SYSTEM|FILE_ATTRIBUTE_TEMPORARY|HKCR|HKCU|HKDD|HKEY_CLASSES_ROOT|HKEY_CURRENT_CONFIG|HKEY_CURRENT_USER|HKEY_DYN_DATA|HKEY_LOCAL_MACHINE|HKEY_PERFORMANCE_DATA|HKEY_USERS|HKLM|HKPD|HKU|IDABORT|IDCANCEL|IDIGNORE|IDNO|IDOK|IDRETRY|IDYES|MB_ABORTRETRYIGNORE|MB_DEFBUTTON1|MB_DEFBUTTON2|MB_DEFBUTTON3|MB_DEFBUTTON4|MB_ICONEXCLAMATION|MB_ICONINFORMATION|MB_ICONQUESTION|MB_ICONSTOP|MB_OK|MB_OKCANCEL|MB_RETRYCANCEL|MB_RIGHT|MB_RTLREADING|MB_SETFOREGROUND|MB_TOPMOST|MB_USERICON|MB_YESNO|NORMAL|OFFLINE|READONLY|SHCTX|SHELL_CONTEXT|SYSTEM|TEMPORARY)"),
+              "(?:ARCHIVE|FILE_ATTRIBUTE_ARCHIVE|FILE_ATTRIBUTE_NORMAL|FILE_ATTRIBUTE_OFFLINE|FILE_ATTRIBUTE_READONLY|FILE_ATTRIBUTE_SYSTEM|FILE_ATTRIBUTE_TEMPORARY|HKCC|HKCR|HKCR32|HKCR64|HKCU|HKCU32|HKCU64|HKDD|HKEY_CLASSES_ROOT|HKEY_CURRENT_CONFIG|HKEY_CURRENT_USER|HKEY_DYN_DATA|HKEY_LOCAL_MACHINE|HKEY_PERFORMANCE_DATA|HKEY_USERS|HKLM|HKLM32|HKLM64|HKPD|HKU|IDABORT|IDCANCEL|IDIGNORE|IDNO|IDOK|IDRETRY|IDYES|MB_ABORTRETRYIGNORE|MB_DEFBUTTON1|MB_DEFBUTTON2|MB_DEFBUTTON3|MB_DEFBUTTON4|MB_ICONEXCLAMATION|MB_ICONINFORMATION|MB_ICONQUESTION|MB_ICONSTOP|MB_OK|MB_OKCANCEL|MB_RETRYCANCEL|MB_RIGHT|MB_RTLREADING|MB_SETFOREGROUND|MB_TOPMOST|MB_USERICON|MB_YESNO|MB_YESNOCANCEL|OFFLINE|READONLY|SHCTX|SHELL_CONTEXT|SW_HIDE|SW_SHOW|SW_SHOWMAXIMIZED|SW_SHOWMINIMIZED|SW_SHOWNORMAL)\\b"),
       Mode(className: 'title.function', begin: "\\w+::\\w+"),
-      NUMBER_MODE
+      C_NUMBER_MODE
     ]);

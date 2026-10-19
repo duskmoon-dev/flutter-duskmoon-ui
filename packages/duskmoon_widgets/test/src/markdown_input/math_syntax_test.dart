@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:markdown/markdown.dart' as md;
+import 'package:duskmoon_widgets/src/vendor/markdown/markdown.dart' as md;
 
 import 'package:duskmoon_widgets/src/_shared/math_syntax.dart';
 

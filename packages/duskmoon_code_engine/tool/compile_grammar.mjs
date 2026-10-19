@@ -23,16 +23,16 @@ try {
   const serialized = {
     nodeNames: parser.nodeSet.types.map(t => t.name),
     states: Array.from(parser.states),
-    stateData: Array.from(parser.stateData),
+    stateData: Array.from(parser.data),
     goto: Array.from(parser.goto),
-    tokenData: Array.from(parser.tokenData),
+    tokenData: Array.from(parser.tokenizers.find(tokenizer => tokenizer.data)?.data || []),
     topRuleIndex: parser.topNode
       ? parser.nodeSet.types.findIndex(t => t.name === parser.topNode.name)
       : 0,
     skippedNodes: parser.nodeSet.types
       .filter(t => t.isSkipped)
       .map(t => t.id),
-    tokenPrec: parser.tokenPrec || 0,
+    tokenPrec: parser.tokenPrecTable || 0,
     nodeProps: {},
   };
 

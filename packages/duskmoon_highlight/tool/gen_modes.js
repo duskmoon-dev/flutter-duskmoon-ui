@@ -3,7 +3,7 @@ const hljs = require('highlight.js');
 const fs = require('fs');
 const { pathToFileURL } = require('url');
 const lodash = require("lodash");
-const flatted = require('circular-json');
+const { ModeReference, normalizeGraph } = require('./mode_graph');
 
 const NOTICE_COMMENT = '// GENERATED CODE - DO NOT MODIFY BY HAND\n\n';
 
@@ -85,7 +85,7 @@ async function _generateLanguageModes() {
     let code = `${NOTICE_COMMENT}import 'package:duskmoon_highlight/duskmoon_highlight.dart';`;
     let findOwnCallback = false;
     let findCommonCallback = false;
-    const json = flatted.stringify(item.factory(hljs), (key, value) => {
+    const { root: mode, references: refs } = normalizeGraph(item.factory(hljs), (key, value) => {
       if (value instanceof RegExp) {
         return value.source;
       }
@@ -130,9 +130,6 @@ async function _generateLanguageModes() {
     if (findCommonCallback) {
       code += `import 'lib/common.dart';`;
     }
-    const mode = JSON.parse(json);
-    const refs = {};
-    _parseRefs(mode, mode, refs);
     code += 'final ';
     code += `lang${lodash.camelCase(item.name).capitalize()}`;
     code += ' = ';
@@ -158,6 +155,9 @@ function _generateModeCode(obj, refs, useRef) {
   if (obj === null) {
     return 'null';
   }
+  if (obj instanceof ModeReference) {
+    return `Mode(ref: '${obj.path}')`;
+  }
   if (typeof obj === 'string') {
     if (obj === 'self') {
       return 'Mode(self: true)';
@@ -166,9 +166,6 @@ function _generateModeCode(obj, refs, useRef) {
       if (entry[0] === obj) {
         return entry[0];
       }
-    }
-    if (obj.startsWith('~')) {
-      return `Mode(ref: '${obj}')`;
     }
     throw `String '${obj}' should not be here`;
   }
@@ -262,42 +259,7 @@ function _generateModeCode(obj, refs, useRef) {
     }
   });
   code += ')';
-  // Fixed `~` escape issue, see circular-json.node.js
-  return code.replace('\\\\x7e', '<x7e>').replace('\\x7e', '~').replace('<x7e>', '\\x7e');
-}
-
-function _parseRefs(root, node, refs) {
-  if (!node) {
-    return;
-  }
-  if (typeof node === 'string' && node.startsWith('~')) {
-    if (refs[node] === undefined) {
-      refs[node] = _findInstance(root, node);
-    }
-    return;
-  }
-  if (Array.isArray(node)) {
-    node.forEach((e) => _parseRefs(root, e, refs));
-    return;
-  }
-  if (!(node instanceof Object)) {
-    return;
-  }
-  Object.entries(node).forEach(([key, value]) => {
-    _parseRefs(root, value, refs);
-  });
-}
-
-function _findInstance(root, ref) {
-  let path = '';
-  const pieces = ref.split('~').slice(1).forEach((e) => {
-    if (isNaN(e)) {
-      path += '.' + e;
-    } else {
-      path += '[' + e + ']';
-    }
-  });
-  return lodash.get(root, path.slice(1));
+  return code;
 }
 
 function _flatArray(array) {

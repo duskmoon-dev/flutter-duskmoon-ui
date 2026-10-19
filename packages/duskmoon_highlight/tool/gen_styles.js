@@ -15,7 +15,7 @@ function _generateAllStyles() {
     let fileName = file.slice(0, file.length - 4)
     return {
       path: path.join(stylesDir, file),
-      name: lodash.camelCase(fileName),
+      name: lodash.camelCase(fileName).replace(/^(?=\d)/, 'theme'),
       fileName: fileName
     }
   });
@@ -26,7 +26,7 @@ function _generateAllStyles() {
     let fileName = file.slice(0, file.length - 4)
     return {
       path: path.join(stylesDir, 'base16', file),
-      name: lodash.camelCase(fileName),
+      name: lodash.camelCase(fileName).replace(/^(?=\d)/, 'theme'),
       dirName: 'base16',
       fileName: fileName
     }

@@ -9,14 +9,19 @@ final langDelphi = Mode(
           begin: "'",
           end: "'",
           contains: <Mode>[Mode(begin: "''")]),
-      '~contains~1': Mode(className: 'string', begin: "(#\\d+)+"),
-      '~contains~5~contains~1~contains~2': Mode(
+      '~contains~1': Mode(className: 'string', variants: <Mode>[
+        Mode(match: "#\\d[\\d_]*"),
+        Mode(match: "#\\\$[\\dA-Fa-f][\\dA-Fa-f_]*"),
+        Mode(match: "#&[0-7][0-7_]*"),
+        Mode(match: "#%[01][01_]*")
+      ]),
+      '~contains~4~contains~1~contains~2': Mode(
           className: 'meta',
           variants: <Mode>[
             Mode(begin: "\\{\\\$", end: "\\}"),
             Mode(begin: "\\(\\*\\\$", end: "\\*\\)")
           ]),
-      '~contains~5~contains~1~contains~4': Mode(
+      '~contains~4~contains~1~contains~4': Mode(
           scope: 'comment',
           begin: "\\{",
           end: "\\}",
@@ -32,7 +37,7 @@ final langDelphi = Mode(
                     "[ ]+((?:I|a|is|so|us|to|at|if|in|it|on|[A-Za-z]+['](d|ve|re|ll|t|s|n)|[A-Za-z]+[-][a-z]+|[A-Za-z][a-z]{2,})[.]?[:]?([.][ ]|[ ])){3}")
           ],
           relevance: 0),
-      '~contains~5~contains~1~contains~5': Mode(
+      '~contains~4~contains~1~contains~5': Mode(
           scope: 'comment',
           begin: "\\(\\*",
           end: "\\*\\)",
@@ -185,11 +190,13 @@ final langDelphi = Mode(
     contains: <Mode>[
       Mode(ref: '~contains~0'),
       Mode(ref: '~contains~1'),
-      NUMBER_MODE,
       Mode(className: 'number', relevance: 0, variants: <Mode>[
-        Mode(begin: "\\\$[0-9A-Fa-f]+"),
-        Mode(begin: "&[0-7]+"),
-        Mode(begin: "%[01]+")
+        Mode(match: "\\b\\d[\\d_]*(\\.\\d[\\d_]*)?"),
+        Mode(match: "\\\$[\\dA-Fa-f_]+"),
+        Mode(match: "\\\$", relevance: 0),
+        Mode(match: "&[0-7][0-7_]*"),
+        Mode(match: "%[01_]+"),
+        Mode(match: "%", relevance: 0)
       ]),
       Mode(
           begin: "[a-zA-Z]\\w*\\s*=\\s*class\\s*\\(",
@@ -333,18 +340,18 @@ final langDelphi = Mode(
             ], contains: <Mode>[
               Mode(ref: '~contains~0'),
               Mode(ref: '~contains~1'),
-              Mode(ref: '~contains~5~contains~1~contains~2'),
+              Mode(ref: '~contains~4~contains~1~contains~2'),
               C_LINE_COMMENT_MODE,
-              Mode(ref: '~contains~5~contains~1~contains~4'),
-              Mode(ref: '~contains~5~contains~1~contains~5')
+              Mode(ref: '~contains~4~contains~1~contains~4'),
+              Mode(ref: '~contains~4~contains~1~contains~5')
             ]),
-            Mode(ref: '~contains~5~contains~1~contains~2'),
+            Mode(ref: '~contains~4~contains~1~contains~2'),
             C_LINE_COMMENT_MODE,
-            Mode(ref: '~contains~5~contains~1~contains~4'),
-            Mode(ref: '~contains~5~contains~1~contains~5')
+            Mode(ref: '~contains~4~contains~1~contains~4'),
+            Mode(ref: '~contains~4~contains~1~contains~5')
           ]),
-      Mode(ref: '~contains~5~contains~1~contains~2'),
+      Mode(ref: '~contains~4~contains~1~contains~2'),
       C_LINE_COMMENT_MODE,
-      Mode(ref: '~contains~5~contains~1~contains~4'),
-      Mode(ref: '~contains~5~contains~1~contains~5')
+      Mode(ref: '~contains~4~contains~1~contains~4'),
+      Mode(ref: '~contains~4~contains~1~contains~5')
     ]);

@@ -264,7 +264,7 @@ class _StreamingCursorState extends State<_StreamingCursor>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _controller,
-      builder: (_, __) => Opacity(
+      builder: (_, _) => Opacity(
         opacity: _controller.value,
         child: Container(
           width: 8,

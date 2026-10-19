@@ -2,7 +2,7 @@ name: flutter_duskmoon_ui_workspace
 publish_to: none
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ">=3.12.0 <4.0.0"
 
 workspace:
   - packages/duskmoon_theme
@@ -29,19 +29,13 @@ dev_dependencies:
 melos:
   repository: https://github.com/duskmoon-dev/flutter_duskmoon_ui
 
-  command:
-    bootstrap:
-      environment:
-        sdk: ">=3.5.0 <4.0.0"
-        flutter: ">=3.24.0"
-
   scripts:
     analyze:
       run: melos exec -- dart analyze --fatal-infos
     test:
       run: melos exec -- flutter test
     format:
-      run: melos exec -- dart format --set-exit-if-changed .
+      run: melos exec -- dart format --language-version=3.6 --set-exit-if-changed .
     upgrade:
       description: "Upgrade all dependencies to latest across workspace"
       run: dart pub upgrade --major-versions

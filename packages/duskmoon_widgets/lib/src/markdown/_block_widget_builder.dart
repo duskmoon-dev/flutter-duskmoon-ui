@@ -50,12 +50,19 @@ class BlockWidgetBuilder {
   /// Custom image error builder.
   final Widget Function(String src, String? alt)? imageErrorBuilder;
 
-  late final InlineSpanBuilder _inlineBuilder = InlineSpanBuilder(
-    config: config,
-    colorScheme: colorScheme,
-    textTheme: textTheme,
-    onLinkTap: onLinkTap,
-  );
+  Widget _buildInlineContent(List<md.Node> nodes, {TextStyle? parentStyle}) {
+    return Builder(
+      builder: (context) => Text.rich(
+        InlineSpanBuilder(
+          context: context,
+          config: config,
+          colorScheme: colorScheme,
+          textTheme: textTheme,
+          onLinkTap: onLinkTap,
+        ).buildSpan(nodes, parentStyle: parentStyle),
+      ),
+    );
+  }
 
   /// Builds a list of widgets from top-level AST [nodes].
   List<Widget> buildAll(List<md.Node> nodes) {
@@ -160,13 +167,11 @@ class BlockWidgetBuilder {
     return Padding(
       key: key,
       padding: const EdgeInsets.only(top: 16, bottom: 8),
-      child: Text.rich(
-        _inlineBuilder.buildSpan(
-          element.children ?? [],
-          parentStyle: style?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: colorScheme.onSurface,
-          ),
+      child: _buildInlineContent(
+        element.children ?? [],
+        parentStyle: style?.copyWith(
+          fontWeight: FontWeight.bold,
+          color: colorScheme.onSurface,
         ),
       ),
     );
@@ -175,11 +180,9 @@ class BlockWidgetBuilder {
   Widget _buildParagraph(md.Element element) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Text.rich(
-        _inlineBuilder.buildSpan(
-          element.children ?? [],
-          parentStyle: textTheme.bodyMedium,
-        ),
+      child: _buildInlineContent(
+        element.children ?? [],
+        parentStyle: textTheme.bodyMedium,
       ),
     );
   }
@@ -270,12 +273,12 @@ class BlockWidgetBuilder {
               child.tag == 'blockquote')) {
         // Flush any accumulated inline nodes.
         if (inlineNodes.isNotEmpty) {
-          widgets.add(Text.rich(
-            _inlineBuilder.buildSpan(
+          widgets.add(
+            _buildInlineContent(
               List.from(inlineNodes),
               parentStyle: textTheme.bodyMedium,
             ),
-          ));
+          );
           inlineNodes.clear();
         }
         widgets.add(_buildBlock(child));
@@ -285,10 +288,9 @@ class BlockWidgetBuilder {
     }
 
     if (inlineNodes.isNotEmpty) {
-      widgets.add(Text.rich(
-        _inlineBuilder.buildSpan(inlineNodes,
-            parentStyle: textTheme.bodyMedium),
-      ));
+      widgets.add(
+        _buildInlineContent(inlineNodes, parentStyle: textTheme.bodyMedium),
+      );
     }
 
     return widgets;
@@ -395,13 +397,11 @@ class BlockWidgetBuilder {
   Widget _buildTableCell(md.Element cell, {required bool isHeader}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Text.rich(
-        _inlineBuilder.buildSpan(
-          cell.children ?? [],
-          parentStyle: isHeader
-              ? textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)
-              : textTheme.bodyMedium,
-        ),
+      child: _buildInlineContent(
+        cell.children ?? [],
+        parentStyle: isHeader
+            ? textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)
+            : textTheme.bodyMedium,
       ),
     );
   }
@@ -471,7 +471,7 @@ class BlockWidgetBuilder {
           borderRadius: BorderRadius.circular(8),
           child: Image.network(
             src,
-            errorBuilder: (_, __, ___) =>
+            errorBuilder: (_, _, _) =>
                 imageErrorBuilder?.call(src, alt) ??
                 Container(
                   padding: const EdgeInsets.all(16),

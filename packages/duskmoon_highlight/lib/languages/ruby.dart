@@ -302,7 +302,7 @@ final langRuby = Mode(
               Mode(ref: '~contains~1~starts~contains~0~contains~1~contains~4'),
               Mode(ref: '~contains~1~starts~contains~0~contains~1~contains~5'),
               Mode(ref: '~contains~1~starts~contains~0~contains~1~contains~6'),
-              Mode(begin: "[a-zA-Z]\\w*::"),
+              Mode(begin: "::"),
               Mode(
                   className: 'symbol',
                   begin: "[a-zA-Z_]\\w*(!|\\?)?:",
@@ -333,7 +333,7 @@ final langRuby = Mode(
                       "(\\\$\\W)|((\\\$|@@?)(\\w+))(?=[^@\$?])(?![A-Za-z])(?![@\$?'])"),
               Mode(
                   className: 'params',
-                  begin: "\\|",
+                  begin: "\\|(?!=)",
                   end: "\\|",
                   excludeBegin: true,
                   excludeEnd: true,
@@ -541,11 +541,11 @@ final langRuby = Mode(
         Mode(
             begin:
                 "\\B\\?(\\\\M-\\\\C-|\\\\M-\\\\c|\\\\c\\\\M-|\\\\M-|\\\\C-\\\\M-)[\\x20-\\x7e]"),
-        Mode(begin: "\\B\\?\\\\(c|C-)[\\x20-\\~]"),
+        Mode(begin: "\\B\\?\\\\(c|C-)[\\x20-\\x7e]"),
         Mode(begin: "\\B\\?\\\\?\\S"),
         Mode(
             begin:
-                "<<[-\x7e]?'?(?=(\\w+)(?=\\W)[^\\n]*\\n(?:[^\\n]*\\n)*?\\s*\\1\\b)",
+                "<<[-~]?'?(?=(\\w+)(?=\\W)[^\\n]*\\n(?:[^\\n]*\\n)*?\\s*\\1\\b)",
             contains: <Mode>[
               Mode(
                   begin: "(\\w+)",
@@ -712,7 +712,7 @@ final langRuby = Mode(
       '~contains~1~starts~contains~0~contains~1~contains~6': Mode(match: [
         "def",
         "\\s+",
-        "([a-zA-Z_]\\w*[!?=]?|[-+\x7e]@|<<|>>|=~|===?|<=>|[<>]=?|\\*\\*|[-/+%^&*~`|]|\\[\\]=?)"
+        "([a-zA-Z_]\\w*[!?=]?|[-+~]@|<<|>>|=~|===?|<=>|[<>]=?|\\*\\*|[-/+%^&*~`|]|\\[\\]=?)"
       ], scope: <int, String>{
         1: 'keyword',
         3: 'title.function',
@@ -791,7 +791,7 @@ final langRuby = Mode(
           Mode(ref: '~contains~1~starts~contains~0~contains~1~contains~4'),
           Mode(ref: '~contains~1~starts~contains~0~contains~1~contains~5'),
           Mode(ref: '~contains~1~starts~contains~0~contains~1~contains~6'),
-          Mode(begin: "[a-zA-Z]\\w*::"),
+          Mode(begin: "::"),
           Mode(
               className: 'symbol',
               begin: "[a-zA-Z_]\\w*(!|\\?)?:",
@@ -822,7 +822,7 @@ final langRuby = Mode(
                   "(\\\$\\W)|((\\\$|@@?)(\\w+))(?=[^@\$?])(?![A-Za-z])(?![@\$?'])"),
           Mode(
               className: 'params',
-              begin: "\\|",
+              begin: "\\|(?!=)",
               end: "\\|",
               excludeBegin: true,
               excludeEnd: true,
@@ -1260,7 +1260,7 @@ final langRuby = Mode(
             Mode(ref: '~contains~1~starts~contains~0~contains~1~contains~4'),
             Mode(ref: '~contains~1~starts~contains~0~contains~1~contains~5'),
             Mode(ref: '~contains~1~starts~contains~0~contains~1~contains~6'),
-            Mode(begin: "[a-zA-Z]\\w*::"),
+            Mode(begin: "::"),
             Mode(
                 className: 'symbol',
                 begin: "[a-zA-Z_]\\w*(!|\\?)?:",
@@ -1291,7 +1291,7 @@ final langRuby = Mode(
                     "(\\\$\\W)|((\\\$|@@?)(\\w+))(?=[^@\$?])(?![A-Za-z])(?![@\$?'])"),
             Mode(
                 className: 'params',
-                begin: "\\|",
+                begin: "\\|(?!=)",
                 end: "\\|",
                 excludeBegin: true,
                 excludeEnd: true,
@@ -1531,7 +1531,7 @@ final langRuby = Mode(
                     "[ ]+((?:I|a|is|so|us|to|at|if|in|it|on|[A-Za-z]+['](d|ve|re|ll|t|s|n)|[A-Za-z]+[-][a-z]+|[A-Za-z][a-z]{2,})[.]?[:]?([.][ ]|[ ])){3}")
           ]),
       '~contains~1~starts~contains~0~contains~1~contains~6~contains~0~contains~7':
-          Mode(begin: "[a-zA-Z]\\w*::"),
+          Mode(begin: "::"),
       '~contains~1~starts~contains~0~contains~1~contains~6~contains~0~contains~8':
           Mode(
               className: 'symbol',
@@ -1567,7 +1567,7 @@ final langRuby = Mode(
       '~contains~1~starts~contains~0~contains~1~contains~6~contains~0~contains~12':
           Mode(
               className: 'params',
-              begin: "\\|",
+              begin: "\\|(?!=)",
               end: "\\|",
               excludeBegin: true,
               excludeEnd: true,
@@ -1633,7 +1633,7 @@ final langRuby = Mode(
       '~contains~1~starts~contains~0~contains~1~contains~6~contains~0~contains~13':
           Mode(
               begin:
-                  "(!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||\x7e|unless)\\s*",
+                  "(!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~|unless)\\s*",
               keywords: "unless",
               contains: <Mode>[
                 Mode(

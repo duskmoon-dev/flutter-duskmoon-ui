@@ -1,5 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+import '1c-light.dart';
 import 'a11y-dark.dart';
 import 'a11y-light.dart';
 import 'agate.dart';
@@ -14,10 +15,15 @@ import 'atom-one-light.dart';
 import 'brown-paper.dart';
 import 'codepen-embed.dart';
 import 'color-brewer.dart';
+import 'cybertopia-cherry.dart';
+import 'cybertopia-dimmer.dart';
+import 'cybertopia-icecap.dart';
+import 'cybertopia-saturated.dart';
 import 'dark.dart';
 import 'default.dart';
 import 'devibeans.dart';
 import 'docco.dart';
+import 'equinox.dart';
 import 'far.dart';
 import 'felipec.dart';
 import 'foundation.dart';
@@ -57,6 +63,9 @@ import 'purebasic.dart';
 import 'qtcreator-dark.dart';
 import 'qtcreator-light.dart';
 import 'rainbow.dart';
+import 'rose-pine-dawn.dart';
+import 'rose-pine-moon.dart';
+import 'rose-pine.dart';
 import 'routeros.dart';
 import 'school-book.dart';
 import 'shades-of-purple.dart';
@@ -68,6 +77,7 @@ import 'tokyo-night-dark.dart';
 import 'tokyo-night-light.dart';
 import 'tomorrow-night-blue.dart';
 import 'tomorrow-night-bright.dart';
+import 'vs-dark.dart';
 import 'vs.dart';
 import 'vs2015.dart';
 import 'xcode.dart';
@@ -250,6 +260,7 @@ import 'base16/xcode-dusk.dart' as base16;
 import 'base16/zenburn.dart' as base16;
 
 final builtThemes = {
+  '1c-light': theme1CLightTheme,
   'a11y-dark': a11YDarkTheme,
   'a11y-light': a11YLightTheme,
   'agate': agateTheme,
@@ -264,10 +275,15 @@ final builtThemes = {
   'brown-paper': brownPaperTheme,
   'codepen-embed': codepenEmbedTheme,
   'color-brewer': colorBrewerTheme,
+  'cybertopia-cherry': cybertopiaCherryTheme,
+  'cybertopia-dimmer': cybertopiaDimmerTheme,
+  'cybertopia-icecap': cybertopiaIcecapTheme,
+  'cybertopia-saturated': cybertopiaSaturatedTheme,
   'dark': darkTheme,
   'default': defaultTheme,
   'devibeans': devibeansTheme,
   'docco': doccoTheme,
+  'equinox': equinoxTheme,
   'far': farTheme,
   'felipec': felipecTheme,
   'foundation': foundationTheme,
@@ -307,6 +323,9 @@ final builtThemes = {
   'qtcreator-dark': qtcreatorDarkTheme,
   'qtcreator-light': qtcreatorLightTheme,
   'rainbow': rainbowTheme,
+  'rose-pine-dawn': rosePineDawnTheme,
+  'rose-pine-moon': rosePineMoonTheme,
+  'rose-pine': rosePineTheme,
   'routeros': routerosTheme,
   'school-book': schoolBookTheme,
   'shades-of-purple': shadesOfPurpleTheme,
@@ -318,6 +337,7 @@ final builtThemes = {
   'tokyo-night-light': tokyoNightLightTheme,
   'tomorrow-night-blue': tomorrowNightBlueTheme,
   'tomorrow-night-bright': tomorrowNightBrightTheme,
+  'vs-dark': vsDarkTheme,
   'vs': vsTheme,
   'vs2015': vs2015Theme,
   'xcode': xcodeTheme,

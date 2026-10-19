@@ -18,7 +18,15 @@ final langDart = Mode(
               className: 'subst',
               variants: <Mode>[Mode(begin: "\\\$\\{", end: "\\}")],
               keywords: "true false null this is new super",
-              contains: <Mode>[C_NUMBER_MODE, Mode(ref: '~contains~0')])
+              contains: <Mode>[
+                Mode(className: 'number', relevance: 0, variants: <Mode>[
+                  Mode(
+                      match:
+                          "\\b[0-9][0-9_]*(\\.[0-9][0-9_]*)?([eE][+-]?[0-9][0-9_]*)?\\b"),
+                  Mode(match: "\\b0[xX][0-9A-Fa-f][0-9A-Fa-f_]*\\b")
+                ]),
+                Mode(ref: '~contains~0')
+              ])
         ]),
         Mode(begin: "\"\"\"", end: "\"\"\"", contains: <Mode>[
           BACKSLASH_ESCAPE,
@@ -43,7 +51,22 @@ final langDart = Mode(
           className: 'subst',
           variants: <Mode>[Mode(begin: "\\\$\\{", end: "\\}")],
           keywords: "true false null this is new super",
-          contains: <Mode>[C_NUMBER_MODE, Mode(ref: '~contains~0')])
+          contains: <Mode>[
+            Mode(className: 'number', relevance: 0, variants: <Mode>[
+              Mode(
+                  match:
+                      "\\b[0-9][0-9_]*(\\.[0-9][0-9_]*)?([eE][+-]?[0-9][0-9_]*)?\\b"),
+              Mode(match: "\\b0[xX][0-9A-Fa-f][0-9A-Fa-f_]*\\b")
+            ]),
+            Mode(ref: '~contains~0')
+          ]),
+      '~contains~0~variants~4~contains~2~contains~0':
+          Mode(className: 'number', relevance: 0, variants: <Mode>[
+        Mode(
+            match:
+                "\\b[0-9][0-9_]*(\\.[0-9][0-9_]*)?([eE][+-]?[0-9][0-9_]*)?\\b"),
+        Mode(match: "\\b0[xX][0-9A-Fa-f][0-9A-Fa-f_]*\\b")
+      ])
     },
     name: "Dart",
     keywords: {
@@ -221,7 +244,14 @@ final langDart = Mode(
             Mode(beginKeywords: "extends implements"),
             UNDERSCORE_TITLE_MODE
           ]),
-      C_NUMBER_MODE,
-      Mode(className: 'meta', begin: "@[A-Za-z]+"),
-      Mode(begin: "=>")
+      Mode(
+          match:
+              "\\b_?(?:(?:[A-Z]+[a-z0-9]+)+|(?:[A-Z]+[a-z0-9]+)+[A-Z]+)(?![A-Za-z0-9_])",
+          scope: 'title.class'),
+      Mode(
+          match:
+              "\\b(?!(?:assert|catch|for|if|switch|while)\\b)[a-z_][A-Za-z0-9_]*(?=\\()",
+          scope: 'title.function'),
+      Mode(ref: '~contains~0~variants~4~contains~2~contains~0'),
+      Mode(className: 'meta', begin: "@[A-Za-z]+")
     ]);

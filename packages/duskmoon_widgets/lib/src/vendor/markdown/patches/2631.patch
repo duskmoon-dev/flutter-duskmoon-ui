@@ -1,0 +1,153 @@
+--- a/pkgs/markdown/lib/src/block_parser.dart
++++ b/pkgs/markdown/lib/src/block_parser.dart
+@@ -171,13 +171,13 @@ class BlockParser {
+     // For example the `TableSyntax` might not advance the `_pos` in `parse`
+     // method, beause of the header row does not match the delimiter row in the
+     // number of cells, which makes a table like structure not be recognized.
+-    BlockSyntax? neverMatch;
++    final neverMatch = <BlockSyntax>[];
+ 
+     var iterationsWithoutProgress = 0;
+     while (!isDone) {
+       final positionBefore = _pos;
+       for (final syntax in blockSyntaxes) {
+-        if (neverMatch == syntax) {
++        if (neverMatch.contains(syntax)) {
+           continue;
+         }
+ 
+@@ -188,7 +188,11 @@ class BlockParser {
+           if (block != null) {
+             blocks.add(block);
+           }
+-          neverMatch = _pos != positionBefore ? null : syntax;
++          if (_pos != positionBefore) {
++            neverMatch.clear();
++          } else {
++            neverMatch.add(syntax);
++          }
+ 
+           if (block != null ||
+               syntax is EmptyBlockSyntax ||
+--- a/pkgs/markdown/lib/src/block_syntaxes/list_syntax.dart
++++ b/pkgs/markdown/lib/src/block_syntaxes/list_syntax.dart
+@@ -305,7 +305,7 @@ abstract class ListSyntax extends BlockSyntax {
+       }
+     }
+ 
+-    final listElement = Element(ordered ? 'ol' : 'ul', itemNodes);
++    final listElement = Element(ordered ? 'ol' : 'ul', <Node>[...itemNodes]);
+     if (ordered && startNumber != 1) {
+       listElement.attributes['start'] = '$startNumber';
+     }
+--- a/pkgs/markdown/lib/src/block_syntaxes/table_syntax.dart
++++ b/pkgs/markdown/lib/src/block_syntaxes/table_syntax.dart
+@@ -44,21 +44,16 @@ class TableSyntax extends BlockSyntax {
+     // Advance past the divider of hyphens.
+     parser.advance();
+ 
+-    final rows = <Element>[];
++    final rows = <Node>[];
+     while (!parser.isDone && !BlockSyntax.isAtBlockEnd(parser)) {
+       final row = _parseRow(parser, alignments, 'td');
+-      final children = row.children;
+-      if (children != null) {
+-        while (children.length < columnCount) {
+-          // Insert synthetic empty cells.
+-          children.add(Element('td', []));
+-        }
+-        while (children.length > columnCount) {
+-          children.removeLast();
+-        }
++      final children = row.children!;
++      while (children.length < columnCount) {
++        // Insert synthetic empty cells.
++        children.add(Element('td', []));
+       }
+-      while (row.children!.length > columnCount) {
+-        row.children!.removeLast();
++      while (children.length > columnCount) {
++        children.removeLast();
+       }
+       rows.add(row);
+     }
+@@ -183,7 +178,7 @@ class TableSyntax extends BlockSyntax {
+       row[i].attributes['align'] = '${alignments[i]}';
+     }
+ 
+-    return Element('tr', row);
++    return Element('tr', <Node>[...row]);
+   }
+ 
+   /// Walks past whitespace in [line] starting at [index].
+--- a/pkgs/markdown/lib/src/document.dart
++++ b/pkgs/markdown/lib/src/document.dart
+@@ -152,7 +152,7 @@ class Document {
+         final idr = r.attributes['id']?.toLowerCase() ?? '';
+         return (ordinal[idl] ?? 0) - (ordinal[idr] ?? 0);
+       });
+-      final list = Element('ol', footnotes);
++      final list = Element('ol', <Node>[...footnotes]);
+ 
+       // Ignore GFM attribute: <data-footnotes>.
+       final section = Element('section', [list])
+@@ -174,8 +174,10 @@ class Document {
+       children.addAll(refs);
+     } else {
+       final last = children.last;
+-      if (last is Element) {
+-        last.children?.addAll(refs);
++      if (last is Element && last.children != null) {
++        last.children!.addAll(refs);
++      } else if (last is Element) {
++        children.addAll(refs);
+       } else {
+         children.last = Element('p', [last, ...refs]);
+       }
+--- a/pkgs/markdown/lib/src/inline_parser.dart
++++ b/pkgs/markdown/lib/src/inline_parser.dart
+@@ -359,7 +359,7 @@ class InlineParser {
+   /// Push [delimiter] onto the stack of [Delimiter]s.
+   void pushDelimiter(Delimiter delimiter) => _delimiterStack.add(delimiter);
+ 
+-  bool get isDone => pos == source.length;
++  bool get isDone => pos >= source.length;
+ 
+   void advanceBy(int length) {
+     pos += length;
+--- a/pkgs/markdown/lib/src/link_parser.dart
++++ b/pkgs/markdown/lib/src/link_parser.dart
+@@ -299,9 +299,8 @@ class LinkParser {
+         parenCount++;
+       } else if (char == $rparen) {
+         parenCount--;
+-        if (parenCount == 0) {
+-          advance();
+-          break;
++        if (parenCount < 0) {
++          return false;
+         }
+       }
+       advance();
+@@ -313,6 +312,10 @@ class LinkParser {
+       }
+     }
+ 
++    if (parenCount != 0) {
++      return false;
++    }
++
+     _destination = substring(start, pos);
+     return true;
+   }
+--- a/pkgs/markdown/lib/src/text_parser.dart
++++ b/pkgs/markdown/lib/src/text_parser.dart
+@@ -14,7 +14,7 @@ class TextParser {
+   int get pos => _position;
+ 
+   /// Whether the read position has reached the end of [source].
+-  bool get isDone => _position == length;
++  bool get isDone => _position >= length;
+ 
+   /// The length of [source].
+   int get length => source.length;

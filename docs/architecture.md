@@ -117,7 +117,7 @@ This is a Dart native workspace with Melos 7.x. Configuration lives in the root 
 dart pub get                   # Install all workspace dependencies
 melos run analyze              # dart analyze --fatal-infos in all packages
 melos run test                 # flutter test in all packages
-melos run format               # dart format --set-exit-if-changed in all packages
+melos run format               # dart format --language-version=3.6 --set-exit-if-changed in all packages
 melos run codegen              # Regenerate design tokens from external repo
 ```
 

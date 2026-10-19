@@ -19,7 +19,7 @@ final langAda = Mode(
       '~contains~6~contains~2': Mode(
           begin: "\\s+:\\s+",
           end: "\\s*(:=|;|\\)|=>|\$)",
-          illegal: "[]\\{\\}%#'\"",
+          illegal: "\\{\\}%#'\"",
           contains: <Mode>[
             Mode(beginKeywords: "loop for declare others", endsParent: true),
             Mode(
@@ -107,7 +107,8 @@ final langAda = Mode(
         "do",
         "mod",
         "requeue",
-        "xor"
+        "xor",
+        "parallel"
       ],
       "literal": ["True", "False"]
     },
@@ -132,7 +133,7 @@ final langAda = Mode(
           keywords: "package body",
           excludeBegin: true,
           excludeEnd: true,
-          illegal: "[]\\{\\}%#'\""),
+          illegal: "\\{\\}%#'\""),
       Mode(
           begin: "(\\b(with|overriding)\\s+)?\\b(function|procedure)\\s+",
           end: "(\\bis|\\bwith|\\brenames|\\)\\s*;)",
@@ -146,7 +147,7 @@ final langAda = Mode(
                 end: "(\\(|\\s+|\$)",
                 excludeBegin: true,
                 excludeEnd: true,
-                illegal: "[]\\{\\}%#'\""),
+                illegal: "\\{\\}%#'\""),
             Mode(ref: '~contains~6~contains~2'),
             Mode(
                 className: 'type',
@@ -156,7 +157,7 @@ final langAda = Mode(
                 excludeBegin: true,
                 excludeEnd: true,
                 endsParent: true,
-                illegal: "[]\\{\\}%#'\"")
+                illegal: "\\{\\}%#'\"")
           ]),
       Mode(
           className: 'type',
@@ -164,6 +165,6 @@ final langAda = Mode(
           end: "\\s+",
           keywords: "type",
           excludeBegin: true,
-          illegal: "[]\\{\\}%#'\""),
+          illegal: "\\{\\}%#'\""),
       Mode(ref: '~contains~6~contains~2')
     ]);

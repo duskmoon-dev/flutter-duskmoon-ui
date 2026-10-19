@@ -4,7 +4,7 @@ import 'package:duskmoon_highlight/duskmoon_highlight.dart';
 
 final langCsharp = Mode(
     refs: {
-      '~contains~4~variants~0': Mode(
+      '~contains~4~variants~1': Mode(
           className: 'string',
           begin: "\\\$@\"",
           end: "\"",
@@ -75,11 +75,14 @@ final langCsharp = Mode(
                 "alias",
                 "and",
                 "ascending",
+                "args",
                 "async",
                 "await",
                 "by",
                 "descending",
+                "dynamic",
                 "equals",
+                "file",
                 "from",
                 "get",
                 "global",
@@ -95,7 +98,10 @@ final langCsharp = Mode(
                 "or",
                 "orderby",
                 "partial",
+                "record",
                 "remove",
+                "required",
+                "scoped",
                 "select",
                 "set",
                 "unmanaged",
@@ -130,7 +136,7 @@ final langCsharp = Mode(
               ],
               "literal": ["default", "false", "null", "true"]
             }, contains: <Mode>[
-              Mode(ref: '~contains~4~variants~0'),
+              Mode(ref: '~contains~4~variants~1'),
               Mode(
                   className: 'string',
                   begin: "\\\$\"",
@@ -207,11 +213,14 @@ final langCsharp = Mode(
                             "alias",
                             "and",
                             "ascending",
+                            "args",
                             "async",
                             "await",
                             "by",
                             "descending",
+                            "dynamic",
                             "equals",
+                            "file",
                             "from",
                             "get",
                             "global",
@@ -227,7 +236,10 @@ final langCsharp = Mode(
                             "or",
                             "orderby",
                             "partial",
+                            "record",
                             "remove",
+                            "required",
+                            "scoped",
                             "select",
                             "set",
                             "unmanaged",
@@ -274,12 +286,12 @@ final langCsharp = Mode(
                                 Mode(begin: "\"\""),
                                 Mode(
                                     ref:
-                                        '~contains~4~variants~0~contains~3~contains~1~contains~3')
+                                        '~contains~4~variants~1~contains~3~contains~1~contains~3')
                               ],
                               illegal: "\\n"),
                           Mode(
                               ref:
-                                  '~contains~4~variants~0~contains~3~contains~1'),
+                                  '~contains~4~variants~1~contains~3~contains~1'),
                           Mode(
                               className: 'string',
                               begin: "@\"",
@@ -291,13 +303,15 @@ final langCsharp = Mode(
                           Mode(
                               className: 'number',
                               variants: <Mode>[
-                                Mode(begin: "\\b(0b[01']+)"),
                                 Mode(
                                     begin:
-                                        "(-?)\\b([\\d']+(\\.[\\d']*)?|\\.[\\d']+)(u|U|l|L|ul|UL|f|F|b|B)"),
+                                        "\\b0[bB]_*[01](_*[01])*([uU][lL]?|[lL][uU]?)?"),
                                 Mode(
                                     begin:
-                                        "(-?)(\\b0[xX][a-fA-F0-9']+|(\\b[\\d']+(\\.[\\d']*)?|\\.[\\d']+)([eE][-+]?[\\d']+)?)")
+                                        "(-?)\\b0[xX]_*[a-fA-F0-9](_*[a-fA-F0-9])*([uU][lL]?|[lL][uU]?)?"),
+                                Mode(
+                                    begin:
+                                        "(-?)(\\b\\d(_*\\d)*(\\.(\\d(_*\\d)*)?)?|\\.\\d(_*\\d)*)([eE][-+]?\\d(_*\\d)*)?([fFdDmM]|[uU][lL]?|[lL][uU]?)?")
                               ],
                               relevance: 0),
                           Mode(
@@ -327,17 +341,17 @@ final langCsharp = Mode(
                   contains: <Mode>[
                     Mode(
                         ref:
-                            '~contains~4~variants~0~contains~3~contains~1~contains~3~contains~2~contains~0')
+                            '~contains~4~variants~1~contains~3~contains~1~contains~3~contains~2~contains~0')
                   ]),
               APOS_STRING_MODE,
               QUOTE_STRING_MODE,
               Mode(
                   ref:
-                      '~contains~4~variants~0~contains~3~contains~1~contains~3~contains~5'),
+                      '~contains~4~variants~1~contains~3~contains~1~contains~3~contains~5'),
               C_BLOCK_COMMENT_MODE
             ])
           ]),
-      '~contains~4~variants~0~contains~3~contains~1~contains~3': Mode(
+      '~contains~4~variants~1~contains~3~contains~1~contains~3': Mode(
           className: 'subst',
           begin: "\\{",
           end: "\\}",
@@ -404,11 +418,14 @@ final langCsharp = Mode(
               "alias",
               "and",
               "ascending",
+              "args",
               "async",
               "await",
               "by",
               "descending",
+              "dynamic",
               "equals",
+              "file",
               "from",
               "get",
               "global",
@@ -424,7 +441,10 @@ final langCsharp = Mode(
               "or",
               "orderby",
               "partial",
+              "record",
               "remove",
+              "required",
+              "scoped",
               "select",
               "set",
               "unmanaged",
@@ -471,10 +491,10 @@ final langCsharp = Mode(
                   Mode(begin: "\"\""),
                   Mode(
                       ref:
-                          '~contains~4~variants~0~contains~3~contains~1~contains~3')
+                          '~contains~4~variants~1~contains~3~contains~1~contains~3')
                 ],
                 illegal: "\\n"),
-            Mode(ref: '~contains~4~variants~0~contains~3~contains~1'),
+            Mode(ref: '~contains~4~variants~1~contains~3~contains~1'),
             Mode(
                 className: 'string',
                 begin: "@\"",
@@ -486,13 +506,13 @@ final langCsharp = Mode(
             Mode(
                 className: 'number',
                 variants: <Mode>[
-                  Mode(begin: "\\b(0b[01']+)"),
+                  Mode(begin: "\\b0[bB]_*[01](_*[01])*([uU][lL]?|[lL][uU]?)?"),
                   Mode(
                       begin:
-                          "(-?)\\b([\\d']+(\\.[\\d']*)?|\\.[\\d']+)(u|U|l|L|ul|UL|f|F|b|B)"),
+                          "(-?)\\b0[xX]_*[a-fA-F0-9](_*[a-fA-F0-9])*([uU][lL]?|[lL][uU]?)?"),
                   Mode(
                       begin:
-                          "(-?)(\\b0[xX][a-fA-F0-9']+|(\\b[\\d']+(\\.[\\d']*)?|\\.[\\d']+)([eE][-+]?[\\d']+)?)")
+                          "(-?)(\\b\\d(_*\\d)*(\\.(\\d(_*\\d)*)?)?|\\.\\d(_*\\d)*)([eE][-+]?\\d(_*\\d)*)?([fFdDmM]|[uU][lL]?|[lL][uU]?)?")
                 ],
                 relevance: 0),
             Mode(
@@ -512,7 +532,7 @@ final langCsharp = Mode(
                 ],
                 illegal: "\\n")
           ]),
-      '~contains~4~variants~0~contains~3~contains~1': Mode(
+      '~contains~4~variants~1~contains~3~contains~1': Mode(
           className: 'string',
           begin: "\\\$\"",
           end: "\"",
@@ -588,11 +608,14 @@ final langCsharp = Mode(
                     "alias",
                     "and",
                     "ascending",
+                    "args",
                     "async",
                     "await",
                     "by",
                     "descending",
+                    "dynamic",
                     "equals",
+                    "file",
                     "from",
                     "get",
                     "global",
@@ -608,7 +631,10 @@ final langCsharp = Mode(
                     "or",
                     "orderby",
                     "partial",
+                    "record",
                     "remove",
+                    "required",
+                    "scoped",
                     "select",
                     "set",
                     "unmanaged",
@@ -655,10 +681,10 @@ final langCsharp = Mode(
                         Mode(begin: "\"\""),
                         Mode(
                             ref:
-                                '~contains~4~variants~0~contains~3~contains~1~contains~3')
+                                '~contains~4~variants~1~contains~3~contains~1~contains~3')
                       ],
                       illegal: "\\n"),
-                  Mode(ref: '~contains~4~variants~0~contains~3~contains~1'),
+                  Mode(ref: '~contains~4~variants~1~contains~3~contains~1'),
                   Mode(
                       className: 'string',
                       begin: "@\"",
@@ -670,13 +696,15 @@ final langCsharp = Mode(
                   Mode(
                       className: 'number',
                       variants: <Mode>[
-                        Mode(begin: "\\b(0b[01']+)"),
                         Mode(
                             begin:
-                                "(-?)\\b([\\d']+(\\.[\\d']*)?|\\.[\\d']+)(u|U|l|L|ul|UL|f|F|b|B)"),
+                                "\\b0[bB]_*[01](_*[01])*([uU][lL]?|[lL][uU]?)?"),
                         Mode(
                             begin:
-                                "(-?)(\\b0[xX][a-fA-F0-9']+|(\\b[\\d']+(\\.[\\d']*)?|\\.[\\d']+)([eE][-+]?[\\d']+)?)")
+                                "(-?)\\b0[xX]_*[a-fA-F0-9](_*[a-fA-F0-9])*([uU][lL]?|[lL][uU]?)?"),
+                        Mode(
+                            begin:
+                                "(-?)(\\b\\d(_*\\d)*(\\.(\\d(_*\\d)*)?)?|\\.\\d(_*\\d)*)([eE][-+]?\\d(_*\\d)*)?([fFdDmM]|[uU][lL]?|[lL][uU]?)?")
                       ],
                       relevance: 0),
                   Mode(
@@ -698,26 +726,26 @@ final langCsharp = Mode(
                       illegal: "\\n")
                 ])
           ]),
-      '~contains~4~variants~0~contains~3~contains~1~contains~3~contains~2~contains~0':
+      '~contains~4~variants~1~contains~3~contains~1~contains~3~contains~2~contains~0':
           Mode(begin: "\"\""),
-      '~contains~4~variants~0~contains~3~contains~1~contains~3~contains~5':
+      '~contains~4~variants~1~contains~3~contains~1~contains~3~contains~5':
           Mode(
               className: 'number',
               variants: <Mode>[
-                Mode(begin: "\\b(0b[01']+)"),
+                Mode(begin: "\\b0[bB]_*[01](_*[01])*([uU][lL]?|[lL][uU]?)?"),
                 Mode(
                     begin:
-                        "(-?)\\b([\\d']+(\\.[\\d']*)?|\\.[\\d']+)(u|U|l|L|ul|UL|f|F|b|B)"),
+                        "(-?)\\b0[xX]_*[a-fA-F0-9](_*[a-fA-F0-9])*([uU][lL]?|[lL][uU]?)?"),
                 Mode(
                     begin:
-                        "(-?)(\\b0[xX][a-fA-F0-9']+|(\\b[\\d']+(\\.[\\d']*)?|\\.[\\d']+)([eE][-+]?[\\d']+)?)")
+                        "(-?)(\\b\\d(_*\\d)*(\\.(\\d(_*\\d)*)?)?|\\.\\d(_*\\d)*)([eE][-+]?\\d(_*\\d)*)?([fFdDmM]|[uU][lL]?|[lL][uU]?)?")
               ],
               relevance: 0),
-      '~contains~4~variants~0~contains~3~contains~2':
+      '~contains~4~variants~1~contains~3~contains~2':
           Mode(className: 'string', begin: "@\"", end: "\"", contains: <Mode>[
         Mode(
             ref:
-                '~contains~4~variants~0~contains~3~contains~1~contains~3~contains~2~contains~0')
+                '~contains~4~variants~1~contains~3~contains~1~contains~3~contains~2~contains~0')
       ]),
       '~contains~6~contains~1':
           Mode(scope: 'title', begin: "[a-zA-Z](\\.?\\w)*", relevance: 0),
@@ -726,6 +754,10 @@ final langCsharp = Mode(
         Mode(ref: '~contains~6~contains~1')
       ]),
       '~contains~4': Mode(variants: <Mode>[
+        Mode(
+            className: 'string',
+            begin: "\"\"\"(\"*)(?!\")(.|\\n)*?\"\"\"\\1",
+            relevance: 1),
         Mode(className: 'string', begin: "\\\$@\"", end: "\"", contains: <Mode>[
           Mode(begin: "\\{\\{"),
           Mode(begin: "\\}\\}"),
@@ -793,11 +825,14 @@ final langCsharp = Mode(
               "alias",
               "and",
               "ascending",
+              "args",
               "async",
               "await",
               "by",
               "descending",
+              "dynamic",
               "equals",
+              "file",
               "from",
               "get",
               "global",
@@ -813,7 +848,10 @@ final langCsharp = Mode(
               "or",
               "orderby",
               "partial",
+              "record",
               "remove",
+              "required",
+              "scoped",
               "select",
               "set",
               "unmanaged",
@@ -848,7 +886,7 @@ final langCsharp = Mode(
             ],
             "literal": ["default", "false", "null", "true"]
           }, contains: <Mode>[
-            Mode(ref: '~contains~4~variants~0'),
+            Mode(ref: '~contains~4~variants~1'),
             Mode(
                 className: 'string',
                 begin: "\\\$\"",
@@ -925,11 +963,14 @@ final langCsharp = Mode(
                           "alias",
                           "and",
                           "ascending",
+                          "args",
                           "async",
                           "await",
                           "by",
                           "descending",
+                          "dynamic",
                           "equals",
+                          "file",
                           "from",
                           "get",
                           "global",
@@ -945,7 +986,10 @@ final langCsharp = Mode(
                           "or",
                           "orderby",
                           "partial",
+                          "record",
                           "remove",
+                          "required",
+                          "scoped",
                           "select",
                           "set",
                           "unmanaged",
@@ -992,12 +1036,12 @@ final langCsharp = Mode(
                               Mode(begin: "\"\""),
                               Mode(
                                   ref:
-                                      '~contains~4~variants~0~contains~3~contains~1~contains~3')
+                                      '~contains~4~variants~1~contains~3~contains~1~contains~3')
                             ],
                             illegal: "\\n"),
                         Mode(
                             ref:
-                                '~contains~4~variants~0~contains~3~contains~1'),
+                                '~contains~4~variants~1~contains~3~contains~1'),
                         Mode(
                             className: 'string',
                             begin: "@\"",
@@ -1009,13 +1053,15 @@ final langCsharp = Mode(
                         Mode(
                             className: 'number',
                             variants: <Mode>[
-                              Mode(begin: "\\b(0b[01']+)"),
                               Mode(
                                   begin:
-                                      "(-?)\\b([\\d']+(\\.[\\d']*)?|\\.[\\d']+)(u|U|l|L|ul|UL|f|F|b|B)"),
+                                      "\\b0[bB]_*[01](_*[01])*([uU][lL]?|[lL][uU]?)?"),
                               Mode(
                                   begin:
-                                      "(-?)(\\b0[xX][a-fA-F0-9']+|(\\b[\\d']+(\\.[\\d']*)?|\\.[\\d']+)([eE][-+]?[\\d']+)?)")
+                                      "(-?)\\b0[xX]_*[a-fA-F0-9](_*[a-fA-F0-9])*([uU][lL]?|[lL][uU]?)?"),
+                              Mode(
+                                  begin:
+                                      "(-?)(\\b\\d(_*\\d)*(\\.(\\d(_*\\d)*)?)?|\\.\\d(_*\\d)*)([eE][-+]?\\d(_*\\d)*)?([fFdDmM]|[uU][lL]?|[lL][uU]?)?")
                             ],
                             relevance: 0),
                         Mode(
@@ -1041,18 +1087,18 @@ final langCsharp = Mode(
             Mode(className: 'string', begin: "@\"", end: "\"", contains: <Mode>[
               Mode(
                   ref:
-                      '~contains~4~variants~0~contains~3~contains~1~contains~3~contains~2~contains~0')
+                      '~contains~4~variants~1~contains~3~contains~1~contains~3~contains~2~contains~0')
             ]),
             APOS_STRING_MODE,
             QUOTE_STRING_MODE,
             Mode(
                 ref:
-                    '~contains~4~variants~0~contains~3~contains~1~contains~3~contains~5'),
+                    '~contains~4~variants~1~contains~3~contains~1~contains~3~contains~5'),
             C_BLOCK_COMMENT_MODE
           ])
         ]),
-        Mode(ref: '~contains~4~variants~0~contains~3~contains~1'),
-        Mode(ref: '~contains~4~variants~0~contains~3~contains~2'),
+        Mode(ref: '~contains~4~variants~1~contains~3~contains~1'),
+        Mode(ref: '~contains~4~variants~1~contains~3~contains~2'),
         APOS_STRING_MODE,
         QUOTE_STRING_MODE
       ])
@@ -1122,11 +1168,14 @@ final langCsharp = Mode(
         "alias",
         "and",
         "ascending",
+        "args",
         "async",
         "await",
         "by",
         "descending",
+        "dynamic",
         "equals",
+        "file",
         "from",
         "get",
         "global",
@@ -1142,7 +1191,10 @@ final langCsharp = Mode(
         "or",
         "orderby",
         "partial",
+        "record",
         "remove",
+        "required",
+        "scoped",
         "select",
         "set",
         "unmanaged",
@@ -1209,7 +1261,7 @@ final langCsharp = Mode(
       Mode(ref: '~contains~4'),
       Mode(
           ref:
-              '~contains~4~variants~0~contains~3~contains~1~contains~3~contains~5'),
+              '~contains~4~variants~1~contains~3~contains~1~contains~3~contains~5'),
       Mode(
           beginKeywords: "class interface",
           relevance: 0,
@@ -1321,11 +1373,14 @@ final langCsharp = Mode(
               "alias",
               "and",
               "ascending",
+              "args",
               "async",
               "await",
               "by",
               "descending",
+              "dynamic",
               "equals",
+              "file",
               "from",
               "get",
               "global",
@@ -1341,7 +1396,10 @@ final langCsharp = Mode(
               "or",
               "orderby",
               "partial",
+              "record",
               "remove",
+              "required",
+              "scoped",
               "select",
               "set",
               "unmanaged",
@@ -1459,11 +1517,14 @@ final langCsharp = Mode(
                     "alias",
                     "and",
                     "ascending",
+                    "args",
                     "async",
                     "await",
                     "by",
                     "descending",
+                    "dynamic",
                     "equals",
+                    "file",
                     "from",
                     "get",
                     "global",
@@ -1479,7 +1540,10 @@ final langCsharp = Mode(
                     "or",
                     "orderby",
                     "partial",
+                    "record",
                     "remove",
+                    "required",
+                    "scoped",
                     "select",
                     "set",
                     "unmanaged",
@@ -1519,7 +1583,7 @@ final langCsharp = Mode(
                   Mode(ref: '~contains~4'),
                   Mode(
                       ref:
-                          '~contains~4~variants~0~contains~3~contains~1~contains~3~contains~5'),
+                          '~contains~4~variants~1~contains~3~contains~1~contains~3~contains~5'),
                   C_BLOCK_COMMENT_MODE
                 ]),
             C_LINE_COMMENT_MODE,

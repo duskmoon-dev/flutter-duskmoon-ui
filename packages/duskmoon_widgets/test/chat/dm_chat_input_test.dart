@@ -12,7 +12,7 @@ void main() {
     ) async {
       await pumpThemed(
         tester,
-        DmChatInput(onSend: (_, __) {}),
+        DmChatInput(onSend: (_, _) {}),
       );
 
       expect(find.byType(DmMarkdownInput), findsOneWidget);
@@ -25,7 +25,7 @@ void main() {
     ) async {
       await pumpThemed(
         tester,
-        DmChatInput(onSend: (_, __) {}),
+        DmChatInput(onSend: (_, _) {}),
       );
 
       var sendButton = tester.widget<IconButton>(
@@ -95,7 +95,7 @@ void main() {
       await pumpThemed(
         tester,
         DmChatInput(
-          onSend: (_, __) {},
+          onSend: (_, _) {},
           onStop: () => stopped = true,
           isStreaming: true,
         ),
@@ -109,7 +109,7 @@ void main() {
     testWidgets('attach button hidden when onAttach is null', (tester) async {
       await pumpThemed(
         tester,
-        DmChatInput(onSend: (_, __) {}),
+        DmChatInput(onSend: (_, _) {}),
       );
       expect(find.byTooltip('Attach'), findsNothing);
     });
@@ -120,7 +120,7 @@ void main() {
       await pumpThemed(
         tester,
         DmChatInput(
-          onSend: (_, __) => sent = true,
+          onSend: (_, _) => sent = true,
           pendingAttachments: const [
             DmChatAttachment(
               id: 'a1',

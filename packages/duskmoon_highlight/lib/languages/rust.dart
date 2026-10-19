@@ -21,8 +21,10 @@ final langRust = Mode(
         "u64",
         "u128",
         "usize",
+        "f16",
         "f32",
         "f64",
+        "f128",
         "str",
         "char",
         "bool",
@@ -65,6 +67,7 @@ final langRust = Mode(
         "override",
         "priv",
         "pub",
+        "raw",
         "ref",
         "return",
         "self",
@@ -77,6 +80,7 @@ final langRust = Mode(
         "try",
         "type",
         "typeof",
+        "union",
         "unsafe",
         "unsized",
         "use",
@@ -173,43 +177,61 @@ final langRust = Mode(
           end: "\"",
           illegal: null,
           contains: <Mode>[BACKSLASH_ESCAPE]),
-      Mode(className: 'string', variants: <Mode>[
+      Mode(scope: 'symbol', begin: "'[a-zA-Z_][a-zA-Z0-9_]*(?!')"),
+      Mode(scope: 'string', variants: <Mode>[
         Mode(begin: "b?r(#*)\"(.|\\n)*?\"\\1(?!#)"),
-        Mode(begin: "b?'\\\\?(x\\w{2}|u\\w{4}|U\\w{8}|.)'")
+        Mode(begin: "b?'", end: "'", contains: <Mode>[
+          Mode(
+              scope: 'char.escape',
+              match: "\\\\('|\"|\\\\|\\w|x\\w{2}|u\\w{4}|U\\w{8})")
+        ])
       ]),
-      Mode(className: 'symbol', begin: "'[a-zA-Z_][a-zA-Z0-9_]*"),
       Mode(
-          className: 'number',
+          scope: 'number',
           variants: <Mode>[
-            Mode(begin: "\\b0b([01_]+)([ui](8|16|32|64|128|size)|f(32|64))?"),
-            Mode(begin: "\\b0o([0-7_]+)([ui](8|16|32|64|128|size)|f(32|64))?"),
             Mode(
                 begin:
-                    "\\b0x([A-Fa-f0-9_]+)([ui](8|16|32|64|128|size)|f(32|64))?"),
+                    "\\b0b([01_]+)([ui](8|16|32|64|128|size)|f(16|32|64|128))?"),
             Mode(
                 begin:
-                    "\\b(\\d[\\d_]*(\\.[0-9_]+)?([eE][+-]?[0-9_]+)?)([ui](8|16|32|64|128|size)|f(32|64))?")
+                    "\\b0o([0-7_]+)([ui](8|16|32|64|128|size)|f(16|32|64|128))?"),
+            Mode(
+                begin:
+                    "\\b0x([A-Fa-f0-9_]+)([ui](8|16|32|64|128|size)|f(16|32|64|128))?"),
+            Mode(
+                begin:
+                    "\\b(\\d[\\d_]*(\\.[0-9_]+)?([eE][+-]?[0-9_]+)?)([ui](8|16|32|64|128|size)|f(16|32|64|128))?")
           ],
           relevance: 0),
       Mode(begin: [
+        "\\bsafe",
+        "\\s+",
+        "extern"
+      ], scope: <int, String>{
+        1: 'keyword',
+        3: 'keyword',
+      }),
+      Mode(begin: [
         "fn",
         "\\s+",
-        "[a-zA-Z_]\\w*"
-      ], className: <int, String>{
+        "(r#)?[a-zA-Z_]\\w*"
+      ], scope: <int, String>{
         1: 'keyword',
         3: 'title.function',
       }),
-      Mode(
-          className: 'meta',
-          begin: "#!?\\[",
-          end: "\\]",
-          contains: <Mode>[Mode(className: 'string', begin: "\"", end: "\"")]),
+      Mode(scope: 'meta', begin: "#!?\\[", end: "\\]", contains: <Mode>[
+        Mode(
+            scope: 'string',
+            begin: "\"",
+            end: "\"",
+            contains: <Mode>[BACKSLASH_ESCAPE])
+      ]),
       Mode(begin: [
         "let",
         "\\s+",
         "(?:mut\\s+)?",
-        "[a-zA-Z_]\\w*"
-      ], className: <int, String>{
+        "(r#)?[a-zA-Z_]\\w*"
+      ], scope: <int, String>{
         1: 'keyword',
         3: 'keyword',
         4: 'variable',
@@ -217,10 +239,10 @@ final langRust = Mode(
       Mode(begin: [
         "for",
         "\\s+",
-        "[a-zA-Z_]\\w*",
+        "(r#)?[a-zA-Z_]\\w*",
         "\\s+",
         "in"
-      ], className: <int, String>{
+      ], scope: <int, String>{
         1: 'keyword',
         3: 'variable',
         5: 'keyword',
@@ -228,16 +250,16 @@ final langRust = Mode(
       Mode(begin: [
         "type",
         "\\s+",
-        "[a-zA-Z_]\\w*"
-      ], className: <int, String>{
+        "(r#)?[a-zA-Z_]\\w*"
+      ], scope: <int, String>{
         1: 'keyword',
         3: 'title.class',
       }),
       Mode(begin: [
         "(?:trait|enum|struct|union|impl|for)",
         "\\s+",
-        "[a-zA-Z_]\\w*"
-      ], className: <int, String>{
+        "(r#)?[a-zA-Z_]\\w*"
+      ], scope: <int, String>{
         1: 'keyword',
         3: 'title.class',
       }),
@@ -321,8 +343,10 @@ final langRust = Mode(
           "u64",
           "u128",
           "usize",
+          "f16",
           "f32",
           "f64",
+          "f128",
           "str",
           "char",
           "bool",
@@ -333,9 +357,10 @@ final langRust = Mode(
           "Vec"
         ]
       }),
-      Mode(className: 'punctuation', begin: "->"),
+      Mode(scope: 'punctuation', begin: "->"),
       Mode(
-          className: 'title.function.invoke',
+          scope: 'title.function.invoke',
           relevance: 0,
-          begin: "\\b(?!let|for|while|if|else|match\\b)[a-zA-Z]\\w*(?=\\s*\\()")
+          begin:
+              "\\b(?!(?:let|for|while|if|else|match)\\b)(r#)?[a-zA-Z]\\w*(?=\\s*\\()")
     ]);

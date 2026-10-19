@@ -109,6 +109,7 @@ final langMarkdown = Mode(
           begin: "^[ \t]*([*+-]|(\\d+\\.))(?=\\s+)",
           end: "\\s+",
           excludeEnd: true),
+      Mode(match: "^ {0,3}([-*_])[ \\t]*(?:\\1[ \\t]*){2,}\$"),
       Mode(ref: '~contains~0~variants~0~contains~2'),
       Mode(ref: '~contains~0~variants~0~contains~3'),
       Mode(
@@ -125,14 +126,13 @@ final langMarkdown = Mode(
         Mode(begin: "(`{3,})[^`](.|\\n)*?\\1`*[ ]*"),
         Mode(begin: "(~{3,})[^~](.|\\n)*?\\1~*[ ]*"),
         Mode(begin: "```", end: "```+[ ]*\$"),
-        Mode(begin: "~~~", end: "\~~~+[ ]*\$"),
+        Mode(begin: "~~~", end: "~~~+[ ]*\$"),
         Mode(begin: "`.+?`"),
         Mode(
             begin: "(?=^( {4}|\\t))",
             contains: <Mode>[Mode(begin: "^( {4}|\\t)", end: "(\\n)\$")],
             relevance: 0)
       ]),
-      Mode(begin: "^[-\\*]{3,}", end: "\$"),
       Mode(ref: '~contains~0~variants~0~contains~1'),
       Mode(begin: "^\\[[^\\n]+\\]:", returnBegin: true, contains: <Mode>[
         Mode(
@@ -142,5 +142,8 @@ final langMarkdown = Mode(
             excludeBegin: true,
             excludeEnd: true),
         Mode(className: 'link', begin: ":\\s*", end: "\$", excludeBegin: true)
-      ])
+      ]),
+      Mode(
+          scope: 'literal',
+          match: "&([a-zA-Z0-9]+|#[0-9]{1,7}|#[Xx][0-9a-fA-F]{1,6});")
     ]);

@@ -5,9 +5,9 @@ import 'package:duskmoon_highlight/duskmoon_highlight.dart';
 final langYaml = Mode(
     refs: {
       '~contains~0': Mode(className: 'attr', variants: <Mode>[
-        Mode(begin: "\\w[\\w :\\/.-]*:(?=[ \t]|\$)"),
-        Mode(begin: "\"\\w[\\w :\\/.-]*\":(?=[ \t]|\$)"),
-        Mode(begin: "'\\w[\\w :\\/.-]*':(?=[ \t]|\$)")
+        Mode(begin: "[\\w*@][\\w*@ :()\\./-]*:(?=[ \\t]|\$)"),
+        Mode(begin: "\"[\\w*@][\\w*@ :()\\./-]*\":(?=[ \\t]|\$)"),
+        Mode(begin: "'[\\w*@][\\w*@ :()\\./-]*':(?=[ \\t]|\$)")
       ]),
       '~contains~1':
           Mode(className: 'meta', begin: "^---\\s*\$", relevance: 10),
@@ -22,14 +22,14 @@ final langYaml = Mode(
           excludeBegin: true,
           excludeEnd: true,
           relevance: 0),
-      '~contains~4': Mode(
-          className: 'type', begin: "!\\w+![\\w#;/?:@&=+\$,.\x7e*'()[\\]]+"),
+      '~contains~4':
+          Mode(className: 'type', begin: "!\\w+![\\w#;/?:@&=+\$,.~*'()[\\]]+"),
       '~contains~5':
-          Mode(className: 'type', begin: "!<[\\w#;/?:@&=+\$,.\x7e*'()[\\]]+>"),
+          Mode(className: 'type', begin: "!<[\\w#;/?:@&=+\$,.~*'()[\\]]+>"),
       '~contains~6':
-          Mode(className: 'type', begin: "![\\w#;/?:@&=+\$,.\x7e*'()[\\]]+"),
+          Mode(className: 'type', begin: "![\\w#;/?:@&=+\$,.~*'()[\\]]+"),
       '~contains~7':
-          Mode(className: 'type', begin: "!![\\w#;/?:@&=+\$,.\x7e*'()[\\]]+"),
+          Mode(className: 'type', begin: "!![\\w#;/?:@&=+\$,.~*'()[\\]]+"),
       '~contains~8': Mode(className: 'meta', begin: "&[a-zA-Z_]\\w*\$"),
       '~contains~9': Mode(className: 'meta', begin: "\\*[a-zA-Z_]\\w*\$"),
       '~contains~10':
@@ -79,8 +79,19 @@ final langYaml = Mode(
                       contains: <Mode>[Mode(ref: '~contains~15~contains~0')],
                       illegal: "\\n",
                       relevance: 0),
+                  Mode(
+                      className: 'string',
+                      relevance: 0,
+                      begin: "'",
+                      end: "'",
+                      contains: <Mode>[
+                        Mode(match: "''", scope: 'char.escape', relevance: 0)
+                      ]),
                   Mode(className: 'string', relevance: 0, variants: <Mode>[
-                    Mode(begin: "'", end: "'"),
+                    Mode(
+                        begin: "'",
+                        end: "'",
+                        contains: <Mode>[Mode(begin: "''", relevance: 0)]),
                     Mode(begin: "\"", end: "\""),
                     Mode(begin: "[^\\s,{}[\\]]+")
                   ], contains: <Mode>[
@@ -123,8 +134,19 @@ final langYaml = Mode(
                 contains: <Mode>[Mode(ref: '~contains~15~contains~0')],
                 illegal: "\\n",
                 relevance: 0),
+            Mode(
+                className: 'string',
+                relevance: 0,
+                begin: "'",
+                end: "'",
+                contains: <Mode>[
+                  Mode(match: "''", scope: 'char.escape', relevance: 0)
+                ]),
             Mode(className: 'string', relevance: 0, variants: <Mode>[
-              Mode(begin: "'", end: "'"),
+              Mode(
+                  begin: "'",
+                  end: "'",
+                  contains: <Mode>[Mode(begin: "''", relevance: 0)]),
               Mode(begin: "\"", end: "\""),
               Mode(begin: "[^\\s,{}[\\]]+")
             ], contains: <Mode>[
@@ -141,7 +163,15 @@ final langYaml = Mode(
           contains: <Mode>[Mode(ref: '~contains~15~contains~0')],
           illegal: "\\n",
           relevance: 0),
-      '~contains~15~contains~0~contains~17~contains~1': Mode(
+      '~contains~15~contains~0~contains~17': Mode(
+          className: 'string',
+          relevance: 0,
+          begin: "'",
+          end: "'",
+          contains: <Mode>[
+            Mode(match: "''", scope: 'char.escape', relevance: 0)
+          ]),
+      '~contains~15~contains~0~contains~18~contains~1': Mode(
           className: 'template-variable',
           variants: <Mode>[
             Mode(begin: "\\{\\{", end: "\\}\\}"),
@@ -169,12 +199,12 @@ final langYaml = Mode(
       Mode(ref: '~contains~14'),
       Mode(ref: '~contains~15'),
       Mode(ref: '~contains~15~contains~0~contains~16'),
+      Mode(ref: '~contains~15~contains~0~contains~17'),
       Mode(className: 'string', relevance: 0, variants: <Mode>[
-        Mode(begin: "'", end: "'"),
         Mode(begin: "\"", end: "\""),
         Mode(begin: "\\S+")
       ], contains: <Mode>[
         BACKSLASH_ESCAPE,
-        Mode(ref: '~contains~15~contains~0~contains~17~contains~1')
+        Mode(ref: '~contains~15~contains~0~contains~18~contains~1')
       ])
     ]);

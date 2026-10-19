@@ -35,29 +35,26 @@ final langMatlab = Mode(
       ),
       Mode(begin: "[a-zA-Z][a-zA-Z_0-9]*('|\\.')+", relevance: 0),
       Mode(
-        className: 'number',
-        begin:
-            "(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)",
-        relevance: 0,
-        starts: Mode(ref: '~contains~1~starts'),
-      ),
+          className: 'number',
+          begin:
+              "(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)",
+          relevance: 0,
+          starts: Mode(ref: '~contains~1~starts')),
       Mode(
           className: 'string',
           begin: "'",
           end: "'",
           contains: <Mode>[Mode(begin: "''")]),
       Mode(
-        begin: "\\]|\\}|\\)",
-        relevance: 0,
-        starts: Mode(ref: '~contains~1~starts'),
-      ),
+          begin: "\\]|\\}|\\)",
+          relevance: 0,
+          starts: Mode(ref: '~contains~1~starts')),
       Mode(
-        className: 'string',
-        begin: "\"",
-        end: "\"",
-        contains: <Mode>[Mode(begin: "\"\"")],
-        starts: Mode(ref: '~contains~1~starts'),
-      ),
+          className: 'string',
+          begin: "\"",
+          end: "\"",
+          contains: <Mode>[Mode(begin: "\"\"")],
+          starts: Mode(ref: '~contains~1~starts')),
       Mode(
           scope: 'comment',
           begin: "^\\s*%\\{\\s*\$",

@@ -6,7 +6,7 @@ issue_tracker: https://github.com/duskmoon-dev/flutter-duskmoon-ui/issues
 resolution: workspace
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
   flutter: ">=3.24.0"
 
 dependencies:

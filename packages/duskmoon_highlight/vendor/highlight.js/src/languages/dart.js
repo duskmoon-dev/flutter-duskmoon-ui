@@ -9,6 +9,9 @@ Category: scripting
 
 /** @type LanguageFn */
 export default function(hljs) {
+
+  const regex = hljs.regex;
+
   const SUBST = {
     className: 'subst',
     variants: [ { begin: '\\$[A-Za-z0-9_]+' } ]
@@ -23,6 +26,15 @@ export default function(hljs) {
       }
     ],
     keywords: 'true false null this is new super'
+  };
+
+  const NUMBER = {
+    className: 'number',
+    relevance: 0,
+    variants: [
+      { match: /\b[0-9][0-9_]*(\.[0-9][0-9_]*)?([eE][+-]?[0-9][0-9_]*)?\b/ },
+      { match: /\b0[xX][0-9A-Fa-f][0-9A-Fa-f_]*\b/ }
+    ]
   };
 
   const STRING = {
@@ -87,7 +99,7 @@ export default function(hljs) {
     ]
   };
   BRACED_SUBST.contains = [
-    hljs.C_NUMBER_MODE,
+    NUMBER,
     STRING
   ];
 
@@ -212,6 +224,25 @@ export default function(hljs) {
     $pattern: /[A-Za-z][A-Za-z0-9_]*\??/
   };
 
+  const CLASS_NAME_RE = regex.concat(
+    /\b_?/,
+    regex.either(
+      /(?:[A-Z]+[a-z0-9]+)+/,
+      /(?:[A-Z]+[a-z0-9]+)+[A-Z]+/
+    ),
+    /(?![A-Za-z0-9_])/
+  );
+
+  const CLASS_REFERENCE = {
+    match: CLASS_NAME_RE,
+    scope: "title.class"
+  };
+
+  const FUNCTION_REFERENCE = {
+    match: /\b(?!(?:assert|catch|for|if|switch|while)\b)[a-z_][A-Za-z0-9_]*(?=\()/,
+    scope: "title.function"
+  };
+
   return {
     name: 'Dart',
     keywords: KEYWORDS,
@@ -248,12 +279,12 @@ export default function(hljs) {
           hljs.UNDERSCORE_TITLE_MODE
         ]
       },
-      hljs.C_NUMBER_MODE,
+      CLASS_REFERENCE,
+      FUNCTION_REFERENCE,
+      NUMBER,
       {
         className: 'meta',
         begin: '@[A-Za-z]+'
-      },
-      { begin: '=>' // No markup, just a relevance booster
       }
     ]
   };

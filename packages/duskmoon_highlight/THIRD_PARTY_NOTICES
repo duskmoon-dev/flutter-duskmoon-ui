@@ -1,4 +1,4 @@
-Original grammar and theme notices retained from highlight.js 11.9.0.
+Original grammar and theme notices retained from highlight.js 11.12.0.
 Component licenses: THIRD_PARTY_LICENSES. Theme-specific licenses apply as stated below.
 Kimbie and NNFX themes retain CC BY-SA 4.0; full terms: CC-BY-SA-4.0.txt.
 
@@ -15,6 +15,7 @@ vendor/highlight.js/src/languages/abnf.js
 Language: Augmented Backus-Naur Form
 Author: Alex McKibben <alex@nullscope.net>
 Website: https://tools.ietf.org/html/rfc5234
+Category: syntax
 Audit: 2020
 */
 
@@ -78,7 +79,6 @@ vendor/highlight.js/src/languages/arcade.js
 /*
  Language: ArcGIS Arcade
  Category: scripting
- Author: John Foster <jfoster@esri.com>
  Website: https://developers.arcgis.com/arcade/
  Description: ArcGIS Arcade is an expression language used in many Esri ArcGIS products such as Pro, Online, Server, Runtime, JavaScript, and Python
 */
@@ -89,6 +89,7 @@ Language: Arduino
 Author: Stefania Mellai <s.mellai@arduino.cc>
 Description: The Arduino® Language is a superset of C++. This rules are designed to highlight the Arduino® source code. For info about language see http://www.arduino.cc.
 Website: https://www.arduino.cc
+Category: system
 */
 
 vendor/highlight.js/src/languages/armasm.js
@@ -115,6 +116,7 @@ Language: AspectJ
 Author: Hakan Ozler <ozler.hakan@gmail.com>
 Website: https://www.eclipse.org/aspectj/
 Description: Syntax Highlighting for the AspectJ Language which is a general-purpose aspect-oriented extension to the Java programming language.
+Category: system
 Audit: 2020
 */
 
@@ -148,6 +150,7 @@ Language: Awk
 Author: Matthew Daly <matthewbdaly@gmail.com>
 Website: https://www.gnu.org/software/gawk/manual/gawk.html
 Description: language definition for Awk scripts
+Category: scripting
 */
 
 vendor/highlight.js/src/languages/axapta.js
@@ -165,7 +168,7 @@ Language: Bash
 Author: vah <vahtenberg@gmail.com>
 Contributrors: Benjamin Pannell <contact@sierrasoftworks.com>
 Website: https://www.gnu.org/software/bash/
-Category: common
+Category: common, scripting
 */
 
 vendor/highlight.js/src/languages/basic.js
@@ -174,12 +177,14 @@ Language: BASIC
 Author: Raphaël Assénat <raph@raphnet.net>
 Description: Based on the BASIC reference from the Tandy 1000 guide
 Website: https://en.wikipedia.org/wiki/Tandy_1000
+Category: system
 */
 
 vendor/highlight.js/src/languages/bnf.js
 /*
 Language: Backus–Naur Form
 Website: https://en.wikipedia.org/wiki/Backus–Naur_form
+Category: syntax
 Author: Oleg Efimov <efimovov@gmail.com>
 */
 
@@ -203,6 +208,7 @@ Language: C/AL
 Author: Kenneth Fuglsang Christensen <kfuglsang@gmail.com>
 Description: Provides highlighting of Microsoft Dynamics NAV C/AL code files
 Website: https://docs.microsoft.com/en-us/dynamics-nav/programming-in-c-al
+Category: enterprise
 */
 
 vendor/highlight.js/src/languages/capnproto.js
@@ -219,6 +225,7 @@ vendor/highlight.js/src/languages/ceylon.js
 Language: Ceylon
 Author: Lucas Werkmeister <mail@lucaswerkmeister.de>
 Website: https://ceylon-lang.org
+Category: system
 */
 
 vendor/highlight.js/src/languages/clean.js
@@ -254,6 +261,7 @@ Language: CMake
 Description: CMake is an open-source cross-platform system for build automation.
 Author: Igor Kalnitsky <igor@kalnitsky.org>
 Website: https://cmake.org
+Category: build-system
 */
 
 vendor/highlight.js/src/languages/coffeescript.js
@@ -303,6 +311,7 @@ vendor/highlight.js/src/languages/crystal.js
 Language: Crystal
 Author: TSUYUSATO Kitsune <make.just.on@gmail.com>
 Website: https://crystal-lang.org
+Category: system
 */
 
 vendor/highlight.js/src/languages/csharp.js
@@ -320,6 +329,7 @@ Language: CSP
 Description: Content Security Policy definition highlighting
 Author: Taras <oxdef@oxdef.info>
 Website: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+Category: web
 
 vim: ts=2 sw=2 st=2
 */
@@ -338,6 +348,7 @@ Author: Aleksandar Ruzicic <aleksandar@ruzicic.info>
 Description: D is a language with C-like syntax and static typing. It pragmatically combines efficiency, control, and modeling power, with safety and programmer productivity.
 Version: 1.0a
 Website: https://dlang.org
+Category: system
 Date: 2012-04-08
 */
 
@@ -355,6 +366,7 @@ vendor/highlight.js/src/languages/delphi.js
 /*
 Language: Delphi
 Website: https://www.embarcadero.com/products/delphi
+Category: system
 */
 
 vendor/highlight.js/src/languages/diff.js
@@ -401,6 +413,7 @@ Language: Batch file (DOS)
 Author: Alexander Makarov <sam@rmcreative.ru>
 Contributors: Anton Kochkov <anton.kochkov@gmail.com>
 Website: https://en.wikipedia.org/wiki/Batch_file
+Category: scripting
 */
 
 vendor/highlight.js/src/languages/dsconfig.js
@@ -435,6 +448,7 @@ vendor/highlight.js/src/languages/ebnf.js
 Language: Extended Backus-Naur Form
 Author: Alex McKibben <alex@nullscope.net>
 Website: https://en.wikipedia.org/wiki/Extended_Backus–Naur_form
+Category: syntax
 */
 
 vendor/highlight.js/src/languages/elixir.js
@@ -488,6 +502,7 @@ Language: Excel formulae
 Author: Victor Zhou <OiCMudkips@users.noreply.github.com>
 Description: Excel formulae
 Website: https://products.office.com/en-us/excel/
+Category: enterprise
 */
 
 vendor/highlight.js/src/languages/fix.js
@@ -510,6 +525,14 @@ Language: Fortran
 Author: Anthony Scemama <scemama@irsamc.ups-tlse.fr>
 Website: https://en.wikipedia.org/wiki/Fortran
 Category: scientific
+*/
+
+vendor/highlight.js/src/languages/freedesktop.js
+/*
+Language: FreeDesktop Configs
+Description: FreeDesktop Config Specification file format
+Category: config
+Website: https://www.freedesktop.org/
 */
 
 vendor/highlight.js/src/languages/fsharp.js
@@ -546,6 +569,7 @@ vendor/highlight.js/src/languages/gcode.js
  Contributors: Adam Joseph Cook <adam.joseph.cook@gmail.com>
  Description: G-code syntax highlighter for Fanuc and other common CNC machine tool controls.
  Website: https://www.sis.se/api/document/preview/911952/
+ Category: hardware
  */
 
 vendor/highlight.js/src/languages/gherkin.js
@@ -568,9 +592,8 @@ Category: graphics
 vendor/highlight.js/src/languages/gml.js
 /*
 Language: GML
-Author: Meseta <meseta@gmail.com>
-Description: Game Maker Language for GameMaker Studio 2
-Website: https://docs2.yoyogames.com
+Description: Game Maker Language for GameMaker (rev. 2023.1)
+Website: https://manual.yoyogames.com/
 Category: scripting
 */
 
@@ -590,6 +613,7 @@ Language: Golo
 Author: Philippe Charriere <ph.charriere@gmail.com>
 Description: a lightweight dynamic language for the JVM
 Website: http://golo-lang.org/
+Category: system
 */
 
 vendor/highlight.js/src/languages/gradle.js
@@ -598,6 +622,7 @@ Language: Gradle
 Description: Gradle is an open-source build automation tool focused on flexibility and performance.
 Website: https://gradle.org
 Author: Damian Mee <mee.damian@gmail.com>
+Category: build-system
 */
 
 vendor/highlight.js/src/languages/graphql.js
@@ -614,6 +639,7 @@ vendor/highlight.js/src/languages/groovy.js
  Author: Guillaume Laforge <glaforge@gmail.com>
  Description: Groovy programming language implementation inspired from Vsevolod's Java mode
  Website: https://groovy-lang.org
+ Category: system
  */
 
 vendor/highlight.js/src/languages/haml.js
@@ -651,6 +677,7 @@ Description: Haxe is an open source toolkit based on a modern, high level, stric
 Author: Christopher Kaster <ikasoki@gmail.com> (Based on the actionscript.js language file by Alexander Myadzel)
 Contributors: Kenton Hamaluik <kentonh@gmail.com>
 Website: https://haxe.org
+Category: system
 */
 
 vendor/highlight.js/src/languages/hsp.js
@@ -685,6 +712,7 @@ Language: Inform 7
 Author: Bruno Dias <bruno.r.dias@gmail.com>
 Description: Language definition for Inform 7, a DSL for writing parser interactive fiction.
 Website: http://inform7.com
+Category: gaming
 */
 
 vendor/highlight.js/src/languages/ini.js
@@ -742,8 +770,7 @@ vendor/highlight.js/src/languages/json.js
 /*
 Language: JSON
 Description: JSON (JavaScript Object Notation) is a lightweight data-interchange format.
-Author: Ivan Sagalaev <maniac@softwaremaniacs.org>
-Website: http://www.json.org
+Websites: http://www.json.org, https://www.json5.org
 Category: common, protocols, web
 */
 
@@ -754,6 +781,7 @@ Description: Julia REPL sessions
 Author: Morten Piibeleht <morten.piibeleht@gmail.com>
 Website: https://julialang.org
 Requires: julia.js
+Category: scientific
 
 The Julia REPL code blocks look something like the following:
 
@@ -779,6 +807,7 @@ Description: Julia is a high-level, high-performance, dynamic programming langua
 Author: Kenta Sato <bicycle1885@gmail.com>
 Contributors: Alex Arslan <ararslan@comcast.net>, Fredrik Ekre <ekrefredrik@gmail.com>
 Website: https://julialang.org
+Category: scientific
 */
 
 vendor/highlight.js/src/languages/kotlin.js
@@ -796,6 +825,7 @@ Language: Lasso
 Author: Eric Knibbe <eric@lassosoft.com>
 Description: Lasso is a language and server platform for database-driven web applications. This definition handles Lasso 9 syntax and LassoScript for Lasso 8.6 and earlier.
 Website: http://www.lassosoft.com/What-Is-Lasso
+Category: database, web
 */
 
 vendor/highlight.js/src/languages/latex.js
@@ -884,7 +914,7 @@ vendor/highlight.js/src/languages/lua.js
 Language: Lua
 Description: Lua is a powerful, efficient, lightweight, embeddable scripting language.
 Author: Andrew Fedorov <dmmdrs@mail.ru>
-Category: common, scripting
+Category: common, gaming, scripting
 Website: https://www.lua.org
 */
 
@@ -894,7 +924,7 @@ Language: Makefile
 Author: Ivan Sagalaev <maniac@softwaremaniacs.org>
 Contributors: Joël Porquet <joel@porquet.org>
 Website: https://www.gnu.org/software/make/manual/html_node/Introduction.html
-Category: common
+Category: common, build-system
 */
 
 vendor/highlight.js/src/languages/markdown.js
@@ -947,6 +977,7 @@ Language: Mercury
 Author: mucaho <mkucko@gmail.com>
 Description: Mercury is a logic/functional programming language which combines the clarity and expressiveness of declarative programming with advanced static analysis and error detection features.
 Website: https://www.mercurylang.org
+Category: functional
 */
 
 vendor/highlight.js/src/languages/mipsasm.js
@@ -983,6 +1014,7 @@ Language: Monkey
 Description: Monkey2 is an easy to use, cross platform, games oriented programming language from Blitz Research.
 Author: Arthur Bikmullin <devolonter@gmail.com>
 Website: https://blitzresearch.itch.io/monkey2
+Category: gaming
 */
 
 vendor/highlight.js/src/languages/moonscript.js
@@ -1002,6 +1034,7 @@ vendor/highlight.js/src/languages/n1ql.js
  Contributors: Rene Saarsoo <nene@triin.net>
  Description: Couchbase query language
  Website: https://www.couchbase.com/products/n1ql
+ Category: database
  */
 
 vendor/highlight.js/src/languages/nestedtext.js
@@ -1035,6 +1068,7 @@ Language: Nix
 Author: Domen Kožar <domen@dev.si>
 Description: Nix functional language
 Website: http://nixos.org/nix
+Category: system
 */
 
 vendor/highlight.js/src/languages/node-repl.js
@@ -1051,6 +1085,7 @@ Language: NSIS
 Description: Nullsoft Scriptable Install System
 Author: Jan T. Sott <jan.sott@gmail.com>
 Website: https://nsis.sourceforge.io/Main_Page
+Category: scripting
 */
 
 vendor/highlight.js/src/languages/objectivec.js
@@ -1087,6 +1122,7 @@ Language: Oxygene
 Author: Carlo Kok <ck@remobjects.com>
 Description: Oxygene is built on the foundation of Object Pascal, revamped and extended to be a modern language for the twenty-first century.
 Website: https://www.elementscompiler.com/elements/default.aspx
+Category: build-system
 */
 
 vendor/highlight.js/src/languages/parser3.js
@@ -1132,6 +1168,7 @@ Description:
     - Function names deliberately are not highlighted. There is no way to tell function
       call from other constructs, hence we can't highlight _all_ function names. And
       some names highlighted while others not looks ugly.
+Category: database
 */
 
 vendor/highlight.js/src/languages/php-template.js
@@ -1140,6 +1177,9 @@ Language: PHP Template
 Requires: xml.js, php.js
 Author: Josh Goebel <hello@joshgoebel.com>
 Website: https://www.php.net
+Description: Use this for HTML (or other markup) with embedded PHP, i.e. code
+             that includes the `<?php ... ?>` (or `<?= ... ?>`) tags. For
+             plain PHP code without the surrounding tags, use `php` instead.
 Category: common
 */
 
@@ -1149,6 +1189,10 @@ Language: PHP
 Author: Victor Karamzin <Victor.Karamzin@enterra-inc.com>
 Contributors: Evgeny Stepanischev <imbolk@gmail.com>, Ivan Sagalaev <maniac@softwaremaniacs.org>
 Website: https://www.php.net
+Description: Use this for plain PHP code, i.e. code that does not include the
+             surrounding `<?php ... ?>` tags. If your snippet mixes PHP with
+             HTML markup and the opening/closing tags, use `php-template`
+             instead.
 Category: common
 */
 
@@ -1167,6 +1211,7 @@ Author: Joe Eli McIlvain <joe.eli.mac@gmail.com>
 Description: Pony is an open-source, object-oriented, actor-model,
              capabilities-secure, high performance programming language.
 Website: https://www.ponylang.io
+Category: system
 */
 
 vendor/highlight.js/src/languages/powershell.js
@@ -1176,6 +1221,7 @@ Description: PowerShell is a task-based command-line shell and scripting languag
 Author: David Mohundro <david@mohundro.com>
 Contributors: Nicholas Blumhardt <nblumhardt@nblumhardt.com>, Victor Zhou <OiCMudkips@users.noreply.github.com>, Nicolas Le Gall <contact@nlegall.fr>
 Website: https://docs.microsoft.com/en-us/powershell/
+Category: scripting
 */
 
 vendor/highlight.js/src/languages/processing.js
@@ -1200,6 +1246,7 @@ Language: Prolog
 Description: Prolog is a general purpose logic programming language associated with artificial intelligence and computational linguistics.
 Author: Raivo Laanemets <raivo@infdot.com>
 Website: https://en.wikipedia.org/wiki/Prolog
+Category: functional
 */
 
 vendor/highlight.js/src/languages/properties.js
@@ -1234,6 +1281,7 @@ Author: Tristano Ajmone <tajmone@gmail.com>
 Description: Syntax highlighting for PureBASIC (v.5.00-5.60). No inline ASM highlighting. (v.1.2, May 2017)
 Credits: I've taken inspiration from the PureBasic language file for GeSHi, created by Gustavo Julio Fiorenza (GuShH).
 Website: https://www.purebasic.com
+Category: system
 */
 
 vendor/highlight.js/src/languages/python-repl.js
@@ -1259,6 +1307,7 @@ Description: Q is a vector-based functional paradigm programming language built 
              (K/Q/Kdb+ from Kx Systems)
 Author: Sergey Vidyuk <svidyuk@gmail.com>
 Website: https://kx.com/connect-with-us/developers/
+Category: enterprise, functional, database
 */
 
 vendor/highlight.js/src/languages/qml.js
@@ -1315,6 +1364,7 @@ Language: MikroTik RouterOS script
 Author: Ivan Dementev <ivan_div@mail.ru>
 Description: Scripting host provides a way to automate some router maintenance tasks by means of executing user-defined scripts bounded to some event occurrence
 Website: https://wiki.mikrotik.com/wiki/Manual:Scripting
+Category: scripting
 */
 
 vendor/highlight.js/src/languages/rsl.js
@@ -1333,7 +1383,7 @@ Description: Ruby is a dynamic, open source programming language with a focus on
 Website: https://www.ruby-lang.org/
 Author: Anton Kovalyov <anton@kovalyov.net>
 Contributors: Peter Leonov <gojpeg@yandex.ru>, Vasily Polovnyov <vast@whiteants.net>, Loren Segal <lsegal@soen.ca>, Pascal Hurni <phi@ruby-reactive.org>, Cedric Sohrauer <sohrauer@googlemail.com>
-Category: common
+Category: common, scripting
 */
 
 vendor/highlight.js/src/languages/ruleslanguage.js
@@ -1359,6 +1409,7 @@ vendor/highlight.js/src/languages/sas.js
 Language: SAS
 Author: Mauricio Caceres <mauricio.caceres.bravo@gmail.com>
 Description: Syntax Highlighting for SAS
+Category: scientific
 */
 
 vendor/highlight.js/src/languages/scala.js
@@ -1416,6 +1467,7 @@ Language: Smali
 Author: Dennis Titze <dennis.titze@gmail.com>
 Description: Basic Smali highlighting
 Website: https://github.com/JesusFreke/smali
+Category: assembler
 */
 
 vendor/highlight.js/src/languages/smalltalk.js
@@ -1424,6 +1476,7 @@ Language: Smalltalk
 Description: Smalltalk is an object-oriented, dynamically typed reflective programming language.
 Author: Vladimir Gubarkov <xonixx@gmail.com>
 Website: https://en.wikipedia.org/wiki/Smalltalk
+Category: system
 */
 
 vendor/highlight.js/src/languages/sml.js
@@ -1440,11 +1493,11 @@ vendor/highlight.js/src/languages/sqf.js
 /*
 Language: SQF
 Author: Søren Enevoldsen <senevoldsen90@gmail.com>
-Contributors: Marvin Saignat <contact@zgmrvn.com>, Dedmen Miller <dedmen@dedmen.de>, Leopard20
-Description: Scripting language for the Arma game series
+Contributors: Marvin Saignat <contact@zgmrvn.com>, Dedmen Miller <dedmen@dedmen.de>, Leopard20, Lou Montana
+Description: Scripting language for the Real Virtuality engine (Arma game series, Argo, Take On Helicopters)
 Website: https://community.bistudio.com/wiki/SQF_syntax
 Category: scripting
-Last update: 07.01.2023, Arma 3 v2.11
+Last update: 05.08.2026, all titles up to Arma 3 v2.22 (not yet released)
 */
 /*
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1459,20 +1512,20 @@ Last update: 07.01.2023, Arma 3 v2.11
   Execute the script from the debug console.
   All commands will be copied to the clipboard.
 ////////////////////////////////////////////////////////////////////////////////////////////
-_KEYWORDS = ['if'];                                                //Array of all KEYWORDS
-_LITERALS = ['west'];                                              //Array of all LITERALS
-_allCommands = createHashMap;
+private _KEYWORDS = ['if'];                                           // array of all KEYWORDS
+private _LITERALS = ['west'];                                         // array of all LITERALS
+private _allCommands = createHashMap;
 {
-  _type = _x select [0,1];
+  _type = _x select [0, 1];
   if (_type != "t") then {
-    _command_lowercase = ((_x select [2]) splitString " ")#(((["n", "u", "b"] find _type) - 1) max 0);
+    _command_lowercase = ((_x select [2]) splitString " ") # (((["n", "u", "b"] find _type) - 1) max 0);
     _command_uppercase = supportInfo ("i:" + _command_lowercase) # 0 # 2;
     _allCommands set [_command_lowercase, _command_uppercase];
   };
 } forEach supportInfo "";
 _allCommands = _allCommands toArray false;
-_allCommands sort true;                                            //sort by lowercase
-_allCommands = ((_allCommands apply {_x#1}) -_KEYWORDS)-_LITERALS; //remove KEYWORDS and LITERALS
+_allCommands sort true;                                               // sort by lowercase
+_allCommands = ((_allCommands apply {_x#1}) - _KEYWORDS) - _LITERALS; // remove KEYWORDS and LITERALS
 copyToClipboard (str (_allCommands select {_x regexMatch "\w+"}) regexReplace ["""", "'"] regexReplace [",", ",\n"]);
 */
 
@@ -1508,6 +1561,7 @@ Language: STEP Part 21
 Contributors: Adam Joseph Cook <adam.joseph.cook@gmail.com>
 Description: Syntax highlighter for STEP Part 21 files (ISO 10303-21).
 Website: https://en.wikipedia.org/wiki/ISO_10303-21
+Category: syntax
 */
 
 vendor/highlight.js/src/languages/stylus.js
@@ -1524,6 +1578,7 @@ vendor/highlight.js/src/languages/subunit.js
 Language: SubUnit
 Author: Sergey Bronnikov <sergeyb@bronevichok.ru>
 Website: https://pypi.org/project/python-subunit/
+Category: protocols
 */
 
 vendor/highlight.js/src/languages/swift.js
@@ -1542,6 +1597,7 @@ Language: Tagger Script
 Author: Philipp Wolfer <ph.wolfer@gmail.com>
 Description: Syntax Highlighting for the Tagger Script as used by MusicBrainz Picard.
 Website: https://picard.musicbrainz.org
+Category: scripting
  */
 
 vendor/highlight.js/src/languages/tap.js
@@ -1559,6 +1615,7 @@ Language: Tcl
 Description: Tcl is a very simple programming language.
 Author: Radek Liska <radekliska@gmail.com>
 Website: https://www.tcl.tk/about/language.html
+Category: scripting
 */
 
 vendor/highlight.js/src/languages/thrift.js
@@ -1575,6 +1632,7 @@ vendor/highlight.js/src/languages/tp.js
 Language: TP
 Author: Jay Strybis <jay.strybis@gmail.com>
 Description: FANUC TP programming language (TPP).
+Category: hardware
 */
 
 vendor/highlight.js/src/languages/twig.js
@@ -1603,6 +1661,7 @@ Language: Vala
 Author: Antono Vasiljev <antono.vasiljev@gmail.com>
 Description: Vala is a new programming language that aims to bring modern programming language features to GNOME developers without imposing any additional runtime requirements and without using a different ABI compared to applications and libraries written in C.
 Website: https://wiki.gnome.org/Projects/Vala
+Category: system
 */
 
 vendor/highlight.js/src/languages/vbnet.js
@@ -1641,6 +1700,7 @@ Author: Jon Evans <jon@craftyjon.com>
 Contributors: Boone Severson <boone.severson@gmail.com>
 Description: Verilog is a hardware description language used in electronic design automation to describe digital and mixed-signal systems. This highlighter supports Verilog and SystemVerilog through IEEE 1800-2012.
 Website: http://www.verilog.com
+Category: hardware
 */
 
 vendor/highlight.js/src/languages/vhdl.js
@@ -1650,6 +1710,7 @@ Author: Igor Kalnitsky <igor@kalnitsky.org>
 Contributors: Daniel C.K. Kho <daniel.kho@tauhop.com>, Guillaume Savaton <guillaume.savaton@eseo.fr>
 Description: VHDL is a hardware description language used in electronic design automation to describe digital and mixed-signal systems.
 Website: https://en.wikipedia.org/wiki/VHDL
+Category: hardware
 */
 
 vendor/highlight.js/src/languages/vim.js
@@ -1739,11 +1800,23 @@ vendor/highlight.js/src/languages/zephir.js
  Description: Zephir, an open source, high-level language designed to ease the creation and maintainability of extensions for PHP with a focus on type and memory safety.
  Author: Oleg Efimov <efimovov@gmail.com>
  Website: https://zephir-lang.com/en
+ Category: web
  Audit: 2020
  */
 
 vendor/highlight.js/src/lib/modes.js
 /* @author Bob Mcgill */
+
+vendor/highlight.js/src/styles/1c-light.css
+/*!
+  Theme: 1c-light
+  Description: Style IDE 1C:Enterprise 8
+  Author: (c) Barilko Vitaliy <barilkovetal@gmail.com>
+  Maintainer: @Diversus23
+  Website: https://softonit.ru/
+  License: see project LICENSE
+  Touched: 2023
+*/
 
 vendor/highlight.js/src/styles/a11y-dark.css
 /*!
@@ -5064,6 +5137,34 @@ Ported by Fabrício Tavares de Oliveira
 
 */
 
+vendor/highlight.js/src/styles/cybertopia-cherry.css
+/*
+  Theme: Cybertopia Cherry
+  Author: Alexandre ZANNI (noraj)
+  Repository: https://github.com/noraj/cybertopia-highlightjs
+*/
+
+vendor/highlight.js/src/styles/cybertopia-dimmer.css
+/*
+  Theme: Cybertopia Dimmer
+  Author: Alexandre ZANNI (noraj)
+  Repository: https://github.com/noraj/cybertopia-highlightjs
+*/
+
+vendor/highlight.js/src/styles/cybertopia-icecap.css
+/*
+  Theme: Cybertopia Icecap
+  Author: Alexandre ZANNI (noraj)
+  Repository: https://github.com/noraj/cybertopia-highlightjs
+*/
+
+vendor/highlight.js/src/styles/cybertopia-saturated.css
+/*
+  Theme: Cybertopia Saturated
+  Author: Alexandre ZANNI (noraj)
+  Repository: https://github.com/noraj/cybertopia-highlightjs
+*/
+
 vendor/highlight.js/src/styles/dark.css
 /*
 
@@ -5391,6 +5492,24 @@ Style with support for rainbow parens
 
 */
 
+vendor/highlight.js/src/styles/rose-pine-dawn.css
+/*!
+  Theme: Rose Pine
+  Origin: https://rosepinetheme.com/
+*/
+
+vendor/highlight.js/src/styles/rose-pine-moon.css
+/*!
+  Theme: Rose Pine
+  Origin: https://rosepinetheme.com/
+*/
+
+vendor/highlight.js/src/styles/rose-pine.css
+/*!
+  Theme: Rose Pine
+  Origin: https://rosepinetheme.com/
+*/
+
 vendor/highlight.js/src/styles/routeros.css
 /*
 
@@ -5491,6 +5610,13 @@ vendor/highlight.js/src/styles/tomorrow-night-bright.css
 /* Tomorrow Night Bright Theme */
 /* Original theme - https://github.com/chriskempson/tomorrow-theme */
 /* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+
+vendor/highlight.js/src/styles/vs-dark.css
+/*
+
+VS Dark theme based off the theme distributed with the Monaco editor by Twineee <twineee@tutamail.com>
+
+*/
 
 vendor/highlight.js/src/styles/vs.css
 /*

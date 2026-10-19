@@ -22,7 +22,7 @@ final langDos = Mode(
           relevance: 10)
     },
     name: "Batch file (DOS)",
-    aliases: ["bat", "cmd"],
+    aliases: ["bat", "batch", "cmd"],
     caseInsensitive: true,
     illegal: "\\/\\*",
     keywords: {

@@ -38,7 +38,7 @@ import 'package:duskmoon_form/duskmoon_form.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart';
 ```
 
-> **Requirements:** Dart >= 3.5.0, Flutter >= 3.24.0
+> **Requirements:** Dart >= 3.11.0, Flutter >= 3.41.0
 
 ## Overview
 

@@ -1,3 +1,10 @@
+## Unreleased
+
+- Sync HighlightJS 11.12.0, 195 languages, updated themes and upstream fixtures.
+- Upgrade generation tools and replace deprecated circular-json with tested graph
+  normalization.
+- Align declared Dart and Flutter SDK requirements with package dependencies.
+
 ## 1.12.0
 
 - Import the re_highlight 0.0.3 parser, 194 grammars and token themes for DuskMoon maintenance.

@@ -1,3 +1,5 @@
+// @dart = 3.8
+
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as md;
 
@@ -184,8 +186,9 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
 
   void _onTabChanged() {
     if (_tabController.indexIsChanging) return;
-    final tab =
-        _tabController.index == 0 ? DmMarkdownTab.write : DmMarkdownTab.preview;
+    final tab = _tabController.index == 0
+        ? DmMarkdownTab.write
+        : DmMarkdownTab.preview;
     widget.onTabChanged?.call(tab);
     if (tab == DmMarkdownTab.preview) {
       // Show shimmer immediately, then render after the frame.
@@ -212,7 +215,8 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: widget.bottom ??
+      child:
+          widget.bottom ??
           Row(
             children: [
               if (widget.bottomLeft != null) widget.bottomLeft!,
@@ -268,10 +272,7 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
           decoration: BoxDecoration(
             color: colorScheme.surfaceContainer,
             border: Border(
-              bottom: BorderSide(
-                color: colorScheme.outlineVariant,
-                width: 1,
-              ),
+              bottom: BorderSide(color: colorScheme.outlineVariant, width: 1),
             ),
           ),
           child: TabBar(
@@ -287,8 +288,11 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.edit_note,
-                        size: 18, color: colorScheme.onSurfaceVariant),
+                    Icon(
+                      Icons.edit_note,
+                      size: 18,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                     const SizedBox(width: 6),
                     Text(widget.tabLabelWrite),
                   ],
@@ -298,8 +302,11 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.visibility,
-                        size: 18, color: colorScheme.onSurfaceVariant),
+                    Icon(
+                      Icons.visibility,
+                      size: 18,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                     const SizedBox(width: 6),
                     Text(widget.tabLabelPreview),
                   ],
@@ -313,10 +320,7 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
           child: Container(
             decoration: BoxDecoration(
               color: colorScheme.surface,
-              border: Border.all(
-                color: colorScheme.outlineVariant,
-                width: 1,
-              ),
+              border: Border.all(color: colorScheme.outlineVariant, width: 1),
               borderRadius: const BorderRadius.vertical(
                 bottom: Radius.circular(8),
               ),
@@ -345,10 +349,7 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
                   layoutBuilder: (currentChild, previousChildren) {
                     return Stack(
                       alignment: Alignment.topLeft,
-                      children: [
-                        ...previousChildren,
-                        if (currentChild != null) currentChild,
-                      ],
+                      children: [...previousChildren, ?currentChild],
                     );
                   },
                   child: _previewReady
@@ -360,9 +361,7 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
                             onLinkTap: widget.onLinkTap,
                           ),
                         )
-                      : const ShimmerPlaceholder(
-                          key: ValueKey('shimmer'),
-                        ),
+                      : const ShimmerPlaceholder(key: ValueKey('shimmer')),
                 ),
               ],
             ),
