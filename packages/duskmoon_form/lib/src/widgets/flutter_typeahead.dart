@@ -1265,16 +1265,25 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
       child = createSuggestionsWidget();
     }
 
+    final suggestionsAnimation = CurvedAnimation(
+      parent: this._animationController!,
+      curve: Curves.fastOutSlowIn,
+    );
+
     var animationChild = widget.transitionBuilder != null
         ? widget.transitionBuilder!(context, child, this._animationController)
-        : SizeTransition(
-            // ignore: deprecated_member_use
-            axisAlignment: -1.0,
-            sizeFactor: CurvedAnimation(
-              parent: this._animationController!,
-              curve: Curves.fastOutSlowIn,
-            ),
+        : AnimatedBuilder(
+            animation: suggestionsAnimation,
             child: child,
+            builder: (context, child) {
+              return ClipRect(
+                child: Align(
+                  alignment: AlignmentDirectional.topStart,
+                  heightFactor: max(suggestionsAnimation.value, 0.0),
+                  child: child,
+                ),
+              );
+            },
           );
 
     BoxConstraints constraints;
