@@ -1,4 +1,0 @@
-unsafe extern "C" {
-unsafe fn foo();
-safe fn foo();
-}

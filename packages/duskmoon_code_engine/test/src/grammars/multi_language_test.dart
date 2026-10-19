@@ -2,6 +2,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:duskmoon_code_engine/duskmoon_code_engine.dart';
 
 void main() {
+  setUpAll(() => TreeSitterRuntime.ensureInitialized(languages: {
+        'javascript',
+        'python',
+        'html',
+        'css',
+        'markdown',
+        'rust',
+        'go',
+        'yaml',
+        'c',
+        'elixir'
+      }));
   setUp(() => LanguageRegistry.clear());
 
   final grammars = <String, LanguageSupport Function()>{
@@ -31,34 +43,20 @@ void main() {
   };
 
   for (final entry in grammars.entries) {
-    group(entry.key, () {
-      test('registers by name', () {
-        entry.value();
-        expect(LanguageRegistry.byName(entry.key), isNotNull);
-      });
-
-      test('parses sample code', () {
-        final support = entry.value();
-        final state = EditorState.create(
-          docString: sampleCode[entry.key]!,
-          extensions: [support.extension],
-        );
-        final tree = syntaxTree(state);
-        expect(tree, isNotNull);
-        expect(tree!.type.isTop, true);
-        expect(tree.children, isNotEmpty);
-      });
-
-      test('has comment tokens', () {
-        final support = entry.value();
-        final ct = support.language.data.commentTokens;
-        if (entry.key == 'markdown') {
-          // Markdown may not have comment tokens
-          return;
-        }
-        expect(ct?.line != null || ct?.block != null, true,
-            reason: '${entry.key} needs comment tokens');
-      });
+    test('${entry.key} uses its real grammar and query captures', () {
+      final controller = EditorViewController(
+          text: sampleCode[entry.key], language: entry.value());
+      addTearDown(controller.dispose);
+      final tree = syntaxTree(controller.state)!;
+      expect(tree.language, entry.key);
+      expect(tree.rootNode.children, isNotEmpty);
+      expect(tree.rootNode.to, controller.text.length);
+      expect(tree.captures, isNotEmpty);
+    });
+    test('${entry.key} preserves comment metadata', () {
+      final ct = entry.value().language.data.commentTokens;
+      if (entry.key == 'markdown') return;
+      expect(ct?.line != null || ct?.block != null, isTrue);
     });
   }
 }

@@ -23,11 +23,17 @@ duskmoon_theme                  <-- Pure theme, zero external dependencies
             |
         duskmoon_ui             <-- Umbrella: re-exports all packages
 
-duskmoon_code_engine            <-- Pure Dart code editor (standalone)
+duskmoon_code_engine            <-- Tree-sitter code editor (standalone theme)
 duskmoon_adaptive_scaffold      <-- Responsive scaffold (forked, independently versioned)
 ```
 
 All packages depend on `duskmoon_theme` for consistent color tokens and theme data. `duskmoon_form` additionally depends on `duskmoon_widgets`. `duskmoon_widgets` depends on `duskmoon_code_engine` for code editor functionality. `duskmoon_visualization` uses `DmColorExtension` for palette derivation. The umbrella `duskmoon_ui` re-exports all packages, including `duskmoon_theme_bloc` and `duskmoon_code_engine`. `duskmoon_code_engine` and `duskmoon_adaptive_scaffold` are standalone packages with no DuskMoon theme dependency.
+
+`duskmoon_code_engine` and Markdown in `duskmoon_widgets` both depend on
+`duskmoon_highlight`, which owns official Tree-sitter C/native build hooks,
+the browser ESM/Wasm runtime, pinned grammar sources, queries and assets.
+Each editor/code block owns its parser; immutable snapshots use UTF-16 offsets.
+Browser initialization is asynchronous and shared, with no CDN dependency.
 
 ## Design Decisions
 

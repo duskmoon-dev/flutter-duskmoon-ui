@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:duskmoon_highlight/duskmoon_highlight.dart';
-import 'package:duskmoon_highlight/languages/all.dart';
+import 'dart:async';
+import 'dart:collection';
 
-final _codeHighlighter = Highlight()..registerLanguages(builtinAllLanguages);
+import 'package:duskmoon_highlight/tree_sitter.dart';
 
 /// Renders a syntax-highlighted code block with language label and copy button.
 ///
@@ -34,11 +34,77 @@ class CodeBlockWidget extends StatefulWidget {
 
 class _CodeBlockWidgetState extends State<CodeBlockWidget> {
   bool _copied = false;
+  TreeSitterSession? _session;
+  SyntaxSnapshot? _syntax;
+  String? _language;
+  int _loadGeneration = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateSyntax();
+  }
+
+  @override
+  void didUpdateWidget(CodeBlockWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.code != widget.code ||
+        oldWidget.language != widget.language) {
+      _updateSyntax();
+    }
+  }
+
+  void _updateSyntax() {
+    final generation = ++_loadGeneration;
+    final language = TreeSitterRuntime.resolveLanguage(widget.language ?? '');
+    if (_language != language) {
+      _session?.dispose();
+      _session = null;
+      _language = language;
+    }
+    _syntax = null;
+    if (language == null) return;
+    if (TreeSitterRuntime.isInitialized(language)) {
+      _parse();
+    } else {
+      unawaited(_loadSyntax(language, generation));
+    }
+  }
+
+  Future<void> _loadSyntax(String language, int generation) async {
+    try {
+      await TreeSitterRuntime.ensureInitialized(languages: {language});
+      if (!mounted || generation != _loadGeneration) return;
+      setState(_parse);
+    } catch (_) {
+      // Asset loading failures leave the exact source visible as plain text.
+    }
+  }
+
+  void _parse() {
+    try {
+      _session ??= TreeSitterSession(language: _language!);
+      _syntax = _session!.parse(widget.code);
+    } catch (_) {
+      _syntax = null;
+    }
+  }
+
+  @override
+  void dispose() {
+    ++_loadGeneration;
+    _session?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = switch (widget.codeTheme) {
+      'github' => false,
+      'monokai-sublime' => true,
+      _ => Theme.of(context).brightness == Brightness.dark,
+    };
     final textStyle = TextStyle(
       fontFamily: 'monospace',
       fontSize: 13,
@@ -103,63 +169,74 @@ class _CodeBlockWidgetState extends State<CodeBlockWidget> {
   }
 
   Widget _buildHighlightedCode(TextStyle baseStyle, bool isDark) {
-    final language = widget.language;
-    if (language == null ||
-        language.isEmpty ||
-        _codeHighlighter.getLanguage(language) == null) {
-      return Text(widget.code, style: baseStyle);
-    }
-
-    try {
-      final result = _codeHighlighter.highlight(
-        code: widget.code,
-        language: language,
-        ignoreIllegals: true,
-      );
-      if (result.errorRaised != null || result.illegal) {
-        return Text(widget.code, style: baseStyle);
-      }
-      final renderer = _CodeHighlightRenderer(
-        baseStyle,
+    final syntax = _syntax;
+    if (syntax == null) return Text(widget.code, style: baseStyle);
+    return Text.rich(TextSpan(
+      style: baseStyle,
+      children: _highlightSpans(
+        syntax,
         isDark ? _darkTheme : _lightTheme,
-      );
-      result.render(renderer);
-
-      return Text.rich(
-        TextSpan(style: baseStyle, children: renderer.spans),
-      );
-    } catch (_) {
-      // Fallback: plain unhighlighted text.
-      return Text(widget.code, style: baseStyle);
-    }
+      ),
+    ));
   }
 }
 
-/// Converts parser scopes to spans while retaining nested token styles.
-class _CodeHighlightRenderer implements HighlightRenderer {
-  _CodeHighlightRenderer(TextStyle baseStyle, this.theme)
-      : _styles = [baseStyle];
-
-  final Map<String, TextStyle> theme;
-  final List<TextStyle> _styles;
-  final List<TextSpan> spans = [];
-
-  @override
-  void addText(String text) {
-    spans.add(TextSpan(text: text, style: _styles.last));
+/// Resolve overlapping captures without changing any source code units.
+List<TextSpan> _highlightSpans(
+  SyntaxSnapshot syntax,
+  Map<String, TextStyle> theme,
+) {
+  TextStyle? captureStyle(String name) {
+    if (name.startsWith('_')) return null;
+    var key = name;
+    while (true) {
+      final style = theme[key];
+      if (style != null) return style;
+      final dot = key.lastIndexOf('.');
+      if (dot < 0) return null;
+      key = key.substring(0, dot);
+    }
   }
 
-  @override
-  void openNode(DataNode node) {
-    final scope = node.scope ?? '';
-    final style = theme[scope] ?? theme[scope.split('.').first];
-    _styles.add(_styles.last.merge(style));
+  final captures = syntax.captures
+      .where((c) =>
+          c.to > c.from && (c.name == 'none' || captureStyle(c.name) != null))
+      .toList();
+  final events = <int, List<({int index, bool start})>>{};
+  for (var i = 0; i < captures.length; i++) {
+    final capture = captures[i];
+    events.putIfAbsent(capture.from, () => []).add((index: i, start: true));
+    events.putIfAbsent(capture.to, () => []).add((index: i, start: false));
   }
-
-  @override
-  void closeNode(DataNode node) {
-    _styles.removeLast();
+  events.putIfAbsent(0, () => []);
+  events.putIfAbsent(syntax.source.length, () => []);
+  final offsets = events.keys.toList()..sort();
+  final active = SplayTreeSet<int>((a, b) {
+    final left = captures[a];
+    final right = captures[b];
+    var order = left.priority.compareTo(right.priority);
+    if (order == 0) {
+      order = (right.to - right.from).compareTo(left.to - left.from);
+    }
+    if (order == 0) order = left.patternIndex.compareTo(right.patternIndex);
+    return order == 0 ? a.compareTo(b) : order;
+  });
+  final spans = <TextSpan>[];
+  for (var i = 0; i + 1 < offsets.length; i++) {
+    final from = offsets[i];
+    for (final event in events[from]!) {
+      if (event.start) {
+        active.add(event.index);
+      } else {
+        active.remove(event.index);
+      }
+    }
+    final to = offsets[i + 1];
+    final style =
+        active.isEmpty ? null : captureStyle(captures[active.last].name);
+    spans.add(TextSpan(text: syntax.source.substring(from, to), style: style));
   }
+  return spans;
 }
 
 /// Copy button for code blocks.
@@ -200,8 +277,13 @@ class _CopyButton extends StatelessWidget {
 
 // ── Syntax highlighting themes ──────────────────────────────────────────────
 
-/// Light theme (GitHub-like) color mapping for highlight.js class names.
+/// Light theme (GitHub-like) color mapping for Tree-sitter captures.
 const Map<String, TextStyle> _lightTheme = {
+  'punctuation.bracket': TextStyle(color: Color(0xFF22863A)),
+  'constant': TextStyle(color: Color(0xFF005CC5)),
+  'boolean': TextStyle(color: Color(0xFF005CC5)),
+  'property': TextStyle(color: Color(0xFF6F42C1)),
+  'operator': TextStyle(color: Color(0xFFD73A49)),
   'keyword': TextStyle(color: Color(0xFFD73A49), fontWeight: FontWeight.bold),
   'built_in': TextStyle(color: Color(0xFF005CC5)),
   'type': TextStyle(color: Color(0xFF005CC5)),
@@ -247,8 +329,13 @@ const Map<String, TextStyle> _lightTheme = {
   ),
 };
 
-/// Dark theme (Monokai Sublime-like) mapping for highlight.js class names.
+/// Dark theme (Monokai Sublime-like) mapping for Tree-sitter captures.
 const Map<String, TextStyle> _darkTheme = {
+  'punctuation.bracket': TextStyle(color: Color(0xFFF92672)),
+  'constant': TextStyle(color: Color(0xFFAE81FF)),
+  'boolean': TextStyle(color: Color(0xFFAE81FF)),
+  'property': TextStyle(color: Color(0xFFA6E22E)),
+  'operator': TextStyle(color: Color(0xFFF92672)),
   'keyword': TextStyle(color: Color(0xFFF92672), fontWeight: FontWeight.bold),
   'built_in': TextStyle(color: Color(0xFF66D9EF)),
   'type': TextStyle(color: Color(0xFF66D9EF), fontStyle: FontStyle.italic),

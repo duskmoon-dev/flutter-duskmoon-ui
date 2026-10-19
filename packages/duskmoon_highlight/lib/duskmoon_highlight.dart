@@ -1,1 +1,4 @@
-export 'src/duskmoon_highlight.dart';
+/// Bundled official Tree-sitter parsing and syntax highlighting.
+library;
+
+export 'tree_sitter.dart';

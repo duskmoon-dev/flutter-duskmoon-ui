@@ -1,171 +1,94 @@
 import 'package:duskmoon_code_engine/duskmoon_code_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-LRParser _createJsonParser() {
-  return LRParser.deserialize(
-    nodeNames: [
-      '',
-      'JsonText',
-      'Number',
-      'String',
-      'Boolean',
-      'Null',
-      '{',
-      '}',
-      '[',
-      ']',
-      ',',
-      ':',
-      '⚠',
-    ],
-    states: [0],
-    stateData: [0],
-    gotoTable: [0],
-    tokenData: [0],
-    topRuleIndex: 1,
-    nodeProps: {
-      1: {NodeProp.top: true},
-      12: {NodeProp.error: true},
-    },
-  );
-}
-
 void main() {
-  group('Language', () {
-    test('has name and parser', () {
-      final parser = _createJsonParser();
-      final language = Language(name: 'json', parser: parser);
-      expect(language.name, equals('json'));
-      expect(language.parser, same(parser));
-      expect(language.data, isA<LanguageData>());
-    });
+  setUpAll(
+      () => TreeSitterRuntime.ensureInitialized(languages: {'json', 'python'}));
+  EditorState create(String text, LanguageSupport language) {
+    final state =
+        EditorState.create(docString: text, extensions: [language.extension]);
+    addTearDown(() => disposeSyntax(state));
+    return state;
+  }
 
-    test('accepts custom LanguageData', () {
-      final parser = _createJsonParser();
-      const data = LanguageData(
-        commentTokens: CommentTokens(line: '//'),
-        indentOnInput: r'\}',
-      );
-      final language = Language(name: 'js', parser: parser, data: data);
-      expect(language.data.commentTokens?.line, equals('//'));
-      expect(language.data.indentOnInput, equals(r'\}'));
-    });
+  test('language preserves editor metadata', () {
+    final language = dartLanguageSupport().language;
+    expect(language.name, 'dart');
+    expect(language.data.commentTokens?.line, '//');
   });
 
-  group('LanguageSupport', () {
-    test('provides Extension', () {
-      final parser = _createJsonParser();
-      final language = Language(name: 'json', parser: parser);
-      final support = LanguageSupport(language: language);
-      final ext = support.extension;
-      expect(ext, isA<Extension>());
-    });
-
-    test('wraps support extensions in ExtensionGroup when non-empty', () {
-      final parser = _createJsonParser();
-      final language = Language(name: 'json', parser: parser);
-      final extraFacet = Facet<int, int>(
-        combine: (values) => values.isEmpty ? 0 : values.last,
-      );
-      final support = LanguageSupport(
-        language: language,
-        support: [extraFacet.of(42)],
-      );
-      final ext = support.extension;
-      expect(ext, isA<ExtensionGroup>());
-    });
+  test('shared field isolates simultaneous editors and old snapshots', () {
+    final json = create('{"one": [1, 2]}', jsonLanguageSupport());
+    final python = create('def hello():\n  return 42', pythonLanguageSupport());
+    final original = syntaxTree(json)!;
+    expect(original.language, 'json');
+    expect(syntaxTree(python)!.language, 'python');
+    final next = json
+        .update(TransactionSpec(
+            changes: ChangeSet.of(json.doc.length, [
+          const ChangeSpec(from: 9, to: 10, insert: '3'),
+        ])))
+        .state;
+    expect(syntaxTree(next)!.incremental, isTrue);
+    expect(syntaxTree(next)!.source, '{"one": [3, 2]}');
+    expect(syntaxTree(json), same(original));
+    expect(original.source, '{"one": [1, 2]}');
+    expect(syntaxTree(python)!.source, 'def hello():\n  return 42');
+    expect(() => original.rootNode.children.clear(), throwsUnsupportedError);
+    expect(() => original.captures.clear(), throwsUnsupportedError);
   });
 
-  group('syntaxTree', () {
-    test('returns tree after state creation with language extension', () {
-      final parser = _createJsonParser();
-      final language = Language(name: 'json', parser: parser);
-      final support = LanguageSupport(language: language);
-      final ext = support.extension;
+  test('incremental Unicode and multiline edits retain UTF16 ranges', () {
+    final controller = EditorViewController(
+        text: '{"emoji": "😀",\n "value": 1}', language: jsonLanguageSupport());
+    addTearDown(controller.dispose);
+    final old = syntaxTree(controller.state)!;
+    controller.replaceRange(11, 13, '🚀\n雪');
+    expect(syntaxTree(controller.state)!.incremental, isTrue);
+    expect(syntaxTree(controller.state)!.rootNode.to, controller.text.length);
+    expect(old.source, '{"emoji": "😀",\n "value": 1}');
+    controller.text = '{"emoji": "🚀",\n "value": 2}';
+    final tree = syntaxTree(controller.state)!;
+    expect(tree.rootNode.hasError, isFalse);
+    for (final capture in tree.captures) {
+      expect(capture.from, greaterThanOrEqualTo(0));
+      expect(capture.to, lessThanOrEqualTo(controller.text.length));
+      expect(controller.text.substring(capture.from, capture.to), isNotEmpty);
+    }
+  });
 
-      final state = EditorState.create(
-        docString: '42',
-        extensions: [ext],
-      );
+  test('raw state readiness returns syntax without replacing document',
+      () async {
+    final state = create('{"x": 1}', jsonLanguageSupport());
+    final ready = await ensureSyntaxTree(state);
+    expect(ready.doc, same(state.doc));
+    expect(syntaxTree(ready)!.rootNode.hasError, isFalse);
+  });
 
-      final tree = syntaxTree(state);
-      expect(tree, isNotNull);
-      expect(tree!.type.name, equals('JsonText'));
-    });
+  test('language facets resolve through compartment and precedence wrappers',
+      () {
+    final state = EditorState.create(docString: '{"value": 1}', extensions: [
+      Compartment()
+          .of(prec(Precedence.override_, jsonLanguageSupport().extension)),
+    ]);
+    addTearDown(() => disposeSyntax(state));
+    expect(syntaxTree(state)!.language, 'json');
+    expect(syntaxTree(state)!.rootNode.hasError, isFalse);
+  });
 
-    test('syntaxTree has correct children for string input', () {
-      final parser = _createJsonParser();
-      final language = Language(name: 'json', parser: parser);
-      final support = LanguageSupport(language: language);
-      final ext = support.extension;
+  test('unrelated effects with language values cannot switch syntax', () {
+    final state = create('42', jsonLanguageSupport());
+    const unrelated = StateEffectType<Language?>();
+    final next = state
+        .update(TransactionSpec(effects: [
+          unrelated.of(pythonLanguageSupport().language),
+        ]))
+        .state;
+    expect(syntaxTree(next)!.language, 'json');
+    expect(syntaxTree(next), same(syntaxTree(state)));
+  });
 
-      final state = EditorState.create(
-        docString: '"hello"',
-        extensions: [ext],
-      );
-
-      final tree = syntaxTree(state);
-      expect(tree, isNotNull);
-      expect(tree!.children.length, equals(1));
-      final child = tree.children.first as Tree;
-      expect(child.type.name, equals('String'));
-    });
-
-    test('syntaxTree updates after transaction (change doc content)', () {
-      final parser = _createJsonParser();
-      final language = Language(name: 'json', parser: parser);
-      final support = LanguageSupport(language: language);
-      final ext = support.extension;
-
-      final state = EditorState.create(
-        docString: '42',
-        extensions: [ext],
-      );
-
-      // Replace "42" (length 2) with "true" (length 4)
-      final tr = state.update(
-        TransactionSpec(
-          changes: ChangeSet.of(
-              2, [const ChangeSpec(from: 0, to: 2, insert: 'true')]),
-        ),
-      );
-      final newState = state.applyTransaction(tr);
-
-      final tree = syntaxTree(newState);
-      expect(tree, isNotNull);
-      expect(tree!.children.length, equals(1));
-      final child = tree.children.first as Tree;
-      expect(child.type.name, equals('Boolean'));
-    });
-
-    test('syntaxTreeAvailable returns true', () {
-      final parser = _createJsonParser();
-      final language = Language(name: 'json', parser: parser);
-      final support = LanguageSupport(language: language);
-      final ext = support.extension;
-
-      final state = EditorState.create(
-        docString: 'null',
-        extensions: [ext],
-      );
-
-      expect(syntaxTreeAvailable(state), isTrue);
-    });
-
-    test('syntaxTree returns null without language extension', () {
-      // Create state with no language extension
-      final state = EditorState.create(docString: '42');
-
-      // syntaxTree accessor was set by a previous LanguageSupport.extension call,
-      // but the state has no language field, so it should return null.
-      final parser = _createJsonParser();
-      final language = Language(name: 'json', parser: parser);
-      final support = LanguageSupport(language: language);
-      // Get extension to register accessor, but don't use it for this state
-      support.extension;
-
-      final result = syntaxTree(state);
-      expect(result, isNull);
-    });
+  test('state with no language has no syntax tree', () {
+    expect(syntaxTree(EditorState.create(docString: 'plain')), isNull);
   });
 }

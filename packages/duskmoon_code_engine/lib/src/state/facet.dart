@@ -40,6 +40,8 @@ class FacetStore {
           }
         case PrecedenceExtension():
           collect(ext.inner);
+        case CompartmentExtension():
+          collect(ext.inner);
         default:
           break;
       }

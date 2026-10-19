@@ -1,5 +1,5 @@
 import 'package:duskmoon_code_engine/duskmoon_code_engine.dart'
-    show CodeEditorWidget;
+    show CodeEditorWidget, syntaxTree;
 import 'package:duskmoon_theme/duskmoon_theme.dart';
 import 'package:duskmoon_widgets/duskmoon_widgets.dart';
 import 'package:flutter/material.dart';
@@ -94,11 +94,38 @@ void main() {
       expect(find.byType(DmCodeEditor), findsOneWidget);
     });
 
+    testWidgets('switches TypeScript, TSX and C++ without losing editor state',
+        (tester) async {
+      final controller = EditorViewController(text: 'const value = 1;');
+      addTearDown(controller.dispose);
+      final view = controller.view;
+      Future<void> showLanguage(String name) async {
+        await tester.pumpWidget(_wrap(DmCodeEditor(
+            key: const ValueKey('editor'),
+            controller: controller,
+            language: name)));
+        await tester.pump();
+        await controller.ready;
+        await tester.pump();
+      }
+
+      await showLanguage('ts');
+      expect(syntaxTree(controller.state)!.language, 'typescript');
+      controller.text = 'const element = <div />;';
+      await showLanguage('tsx');
+      expect(syntaxTree(controller.state)!.language, 'tsx');
+      expect(syntaxTree(controller.state)!.rootNode.hasError, isFalse);
+      await showLanguage('c++');
+      expect(syntaxTree(controller.state)!.language, 'cpp');
+      expect(controller.view, same(view));
+      expect(controller.text, 'const element = <div />;');
+    });
+
     testWidgets('unknown language resolves to null without error',
         (tester) async {
       await tester.pumpWidget(_wrap(
         const DmCodeEditor(
-          language: 'brainfuck',
+          language: 'not-a-language',
           initialDoc: '+++.',
         ),
       ));

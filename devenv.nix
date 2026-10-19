@@ -9,6 +9,7 @@ in
 
   packages = [
     pkgs-stable.git
+    pkgs-stable.clang
     pkgs-stable.figlet
     pkgs-stable.lolcat
     pkgs-stable.watchman

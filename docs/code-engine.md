@@ -1,6 +1,6 @@
 # Code Editor Engine
 
-The `duskmoon_code_engine` package is a pure Dart code editor engine -- a ground-up port of the CodeMirror 6 architecture for Flutter. It provides an immutable document model, state management, incremental parsing with syntax highlighting, and an interactive editor widget. Zero external dependencies beyond Flutter.
+The `duskmoon_code_engine` package provides a Flutter code editor with an immutable document/state model, incremental Tree-sitter parsing, query-based syntax highlighting, and an interactive widget. It shares the bundled native/WebAssembly runtime in `duskmoon_highlight`. Requires Dart 3.10 / Flutter 3.38 and a native C/C++ build toolchain for native apps.
 
 ## Table of Contents
 
@@ -388,7 +388,8 @@ selection.main.isEmpty; // true if collapsed
 | Language | Factory Function |
 |----------|-----------------|
 | Dart | `dartLanguageSupport()` |
-| JavaScript / TypeScript | `javascriptLanguageSupport()` |
+| JavaScript / JSX | `javascriptLanguageSupport()` / `jsxLanguageSupport()` |
+| TypeScript / TSX | `typescriptLanguageSupport()` / `tsxLanguageSupport()` |
 | Python | `pythonLanguageSupport()` |
 | HTML | `htmlLanguageSupport()` |
 | CSS | `cssLanguageSupport()` |
@@ -397,7 +398,7 @@ selection.main.isEmpty; // true if collapsed
 | Rust | `rustLanguageSupport()` |
 | Go | `goLanguageSupport()` |
 | YAML | `yamlLanguageSupport()` |
-| C / C++ | `cLanguageSupport()` |
+| C / C++ | `cLanguageSupport()` / `cppLanguageSupport()` |
 | Elixir | `elixirLanguageSupport()` |
 | Java | `javaLanguageSupport()` |
 | Kotlin | `kotlinLanguageSupport()` |
@@ -422,42 +423,41 @@ Dynamic language lookup by name, file extension, or MIME type.
 
 ```dart
 final lang = LanguageRegistry.byName('dart');
-final lang2 = LanguageRegistry.byExtension('.py');
+final lang2 = LanguageRegistry.byExtension('py');
 final lang3 = LanguageRegistry.byMimeType('application/json');
 final allNames = LanguageRegistry.names; // List<String>
 ```
 
-### StreamLanguage -- Simple Token-Based Languages
-
-For languages that can be tokenized with regular expressions:
+### Additional bundled languages
 
 ```dart
-final myLang = StreamLanguage([
-  TokenRule(RegExp(r'//.*'), Tag.lineComment),
-  TokenRule(RegExp(r'"[^"]*"'), Tag.string),
-  TokenRule(RegExp(r'\b(if|else|while|for|return)\b'), Tag.keyword),
-  TokenRule(RegExp(r'\d+'), Tag.number),
-]);
+final bash = treeSitterLanguageSupport('bash'); // LanguageSupport?
 ```
 
-### Language / LanguageSupport Classes
+The shared runtime bundles 95 grammars. See the [language inventory](../packages/duskmoon_highlight/LANGUAGES.md).
+Unknown names return `null`. Generic languages have syntax highlighting without
+language-specific editor commands/metadata. Adding an unbundled grammar requires
+updating the shared runtime manifest, native sources, Wasm asset and queries.
+
+### Language / LanguageSupport classes
 
 ```dart
-// Language wraps a parser and metadata
 Language(
-  name: 'myLang',
-  parser: myParser,         // Parser instance
-  data: LanguageData(       // Optional metadata
-    commentTokens: CommentTokens(line: '//', block: BlockComment('/*', '*/')),
+  name: 'dart', // A bundled Tree-sitter grammar identifier.
+  data: LanguageData(
+    commentTokens: CommentTokens(line: '//'),
   ),
 )
 
-// LanguageSupport bundles a Language with additional Extensions
 LanguageSupport(
   language: myLanguage,
-  support: [additionalExtension], // Extra extensions for the language
+  support: [additionalExtension],
 )
 ```
+
+Widgets and controllers initialize browser grammar assets automatically.
+Await `controller.ready` when syntax is required immediately after construction.
+A language switch retains the view, document history and listeners.
 
 ## Theming
 
@@ -682,47 +682,49 @@ CodeEditorWidget(
 )
 ```
 
-## Incremental Parser
+## Incremental parser
 
-The editor uses a Lezer-based incremental parser. Language grammars compile to `GrammarData` consumed by `LRParser`.
+Every editor owns an official Tree-sitter parser and previous tree. Edits use
+`tree.edit` followed by incremental parsing; copied Dart syntax snapshots belong
+to their exact document state and remain valid after later edits or disposal.
+JavaScript and Flutter Wasm use the official web-tree-sitter module and bundled
+same-origin grammar assets. Native builds compile the same pinned grammars with
+the official C runtime through Dart native build hooks.
 
-### LRParser
-
-```dart
-final parser = LRParser(grammarData);
-final tree = parser.parse('let x = 42;');
-```
-
-### Syntax Tree Access
+### Syntax tree access
 
 ```dart
-// From editor state
-final tree = syntaxTree(state);             // Tree?
-final available = syntaxTreeAvailable(state); // bool
-```
-
-### Walking the Tree
-
-```dart
-final cursor = tree?.cursor();
-if (cursor != null) {
-  while (cursor.next()) {
-    print('${cursor.type.name}: offset ${cursor.from}-${cursor.to}');
-  }
+final tree = syntaxTree(state); // SyntaxSnapshot?
+final available = syntaxTreeAvailable(state);
+for (final child in tree?.rootNode.children ?? <SyntaxNode>[]) {
+  print('${child.type}: ${child.from}-${child.to}');
 }
 ```
 
-### Key Parser Types
+Offsets are UTF-16 code units, matching Dart strings. Query captures expose
+`name`, `from`, `to`, `priority` and `patternIndex`. Owned style tags map capture
+names and their dotted parents to colors.
 
-| Type | Description |
-|------|-------------|
-| `LRParser` | LR parsing engine |
-| `GrammarData` | Compiled grammar tables |
-| `Tree` | Immutable parse tree |
-| `SyntaxNode` | Node in the tree with type, from, to |
-| `TreeCursor` | Efficient tree traversal |
-| `NodeType` | Type descriptor for syntax nodes |
-| `NodeProp` | Typed property on node types |
+For raw states on web, initialize the language before creation:
+
+```dart
+final support = dartLanguageSupport();
+await support.ensureInitialized();
+final state = EditorState.create(
+  docString: 'final answer = 42;',
+  extensions: [support.extension],
+);
+// ... use state and syntaxTree(state)
+disposeSyntax(state);
+```
+
+Alternatively, retain the state returned by `await ensureSyntaxTree(state)`.
+Controllers and widgets manage this initialization and disposal automatically,
+including edits and language changes made while grammar loading is pending.
+
+`GrammarData`, `LRParser`, Lezer tree types and regex `StreamLanguage` APIs are
+removed. Structural query highlighting does not yet orchestrate embedded-language
+injections or local-scope analysis; see the [runtime guide](../packages/duskmoon_highlight/README.md).
 
 ## Complete Example
 

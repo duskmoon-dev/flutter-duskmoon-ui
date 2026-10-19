@@ -1,2 +1,0 @@
-<span class="hljs-keyword">lazy</span> <span class="hljs-keyword">import</span> foo
-<span class="hljs-keyword">lazy</span> <span class="hljs-keyword">from</span> foo <span class="hljs-keyword">import</span> bar

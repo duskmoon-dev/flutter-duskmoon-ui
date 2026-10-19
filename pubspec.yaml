@@ -33,7 +33,8 @@ melos:
     analyze:
       run: melos exec -- dart analyze --fatal-infos
     test:
-      run: melos exec -- flutter test
+      # Flutter native hooks share a workspace build lock.
+      run: melos exec --concurrency=1 -- flutter test
     format:
       run: melos exec -- dart format --language-version=3.6 --set-exit-if-changed .
     upgrade:

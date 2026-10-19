@@ -1,0 +1,16 @@
+--- a/vendor/grammars/swift/src/scanner.c
++++ b/vendor/grammars/swift/src/scanner.c
+@@ -282,8 +282,13 @@
+ void *tree_sitter_swift_external_scanner_create() {
+     void *payload = calloc(1, sizeof(struct ScannerState));
+     if (!payload) {
++#ifdef __wasm__
++        // The official Wasm runtime has no stdio/process-exit imports.
++        __builtin_trap();
++#else
+         fprintf(stderr, "tree-sitter-swift: out of memory allocating scanner state\n");
+         exit(1);
++#endif
+     }
+     return payload;
+ }

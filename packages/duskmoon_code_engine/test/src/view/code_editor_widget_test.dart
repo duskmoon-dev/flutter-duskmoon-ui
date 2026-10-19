@@ -12,6 +12,32 @@ void main() {
       expect(find.byType(CodeEditorWidget), findsOneWidget);
     });
 
+    testWidgets('language updates keep controller listeners and edited text',
+        (tester) async {
+      final controller = EditorViewController(text: '{"x": 1}');
+      addTearDown(controller.dispose);
+      Future<void> show(LanguageSupport language) async {
+        await tester.pumpWidget(MaterialApp(
+            home: Scaffold(
+                body: CodeEditorWidget(
+                    controller: controller, language: language))));
+        await tester.pump();
+        await controller.ready;
+      }
+
+      await show(jsonLanguageSupport());
+      expect(syntaxTree(controller.state)!.language, 'json');
+      final oldView = controller.view;
+      controller.text = '{"x": 2}';
+      await show(javascriptLanguageSupport());
+      expect(controller.view, same(oldView));
+      expect(controller.text, '{"x": 2}');
+      expect(syntaxTree(controller.state)!.language, 'javascript');
+      controller.text = 'const x = 3;';
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('renders empty by default', (tester) async {
       await tester.pumpWidget(const MaterialApp(
         home: Scaffold(body: CodeEditorWidget()),

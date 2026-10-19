@@ -64,6 +64,27 @@ class EditorState {
     return state;
   }
 
+  /// Reconfigure extensions while retaining fields shared with the old state.
+  /// Document, selection and history snapshots remain unchanged.
+  EditorState reconfigure(List<Extension> extensions) {
+    final fields = _collectStateFields(extensions);
+    final values = <StateField<dynamic>, dynamic>{
+      for (final field in fields)
+        if (_fieldValues.containsKey(field)) field: _fieldValues[field],
+    };
+    final state = EditorState._(
+      doc: doc,
+      selection: selection,
+      facets: FacetStore.resolve(extensions),
+      fieldValues: values,
+      extensions: extensions,
+    );
+    for (final field in fields) {
+      if (!values.containsKey(field)) values[field] = field.create(state);
+    }
+    return state;
+  }
+
   /// Read a resolved facet value.
   Output facet<Input, Output>(Facet<Input, Output> f) => _facets.read(f);
 
@@ -140,7 +161,7 @@ class EditorState {
     void collect(Extension ext) {
       switch (ext) {
         case StateField<dynamic>():
-          fields.add(ext);
+          if (!fields.contains(ext)) fields.add(ext);
         case ExtensionGroup():
           for (final child in ext.extensions) {
             collect(child);

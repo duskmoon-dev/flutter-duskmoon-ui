@@ -1,5 +1,5 @@
 import 'package:flutter/painting.dart';
-import '../lezer/highlight/highlight.dart';
+import '../highlight/highlight.dart';
 import 'default_highlight.dart';
 
 class EditorTheme {

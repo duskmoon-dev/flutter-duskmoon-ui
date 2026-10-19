@@ -1,3 +1,10 @@
+## Unreleased
+
+- Use shared Tree-sitter parsing for Markdown fenced code and the code editor.
+- Automatically load bundled browser grammars, cache per-block syntax and retain
+  exact source text, copy behavior, theme updates and plain-text fallbacks.
+- Resolve TypeScript and C++ to their distinct editor grammars.
+
 ## 2.0.0
 
 - Own the native math renderer and KaTeX fonts, render inline formulas, and

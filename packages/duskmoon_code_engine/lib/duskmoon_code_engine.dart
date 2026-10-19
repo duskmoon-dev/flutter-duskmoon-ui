@@ -1,4 +1,4 @@
-/// Pure Dart code editor engine with incremental parsing.
+/// Tree-sitter code editor engine with incremental parsing.
 ///
 /// A ground-up port of the CodeMirror 6 architecture for Flutter,
 /// providing document model, state management, syntax highlighting,
@@ -19,8 +19,8 @@
 ///
 /// ## Supported Languages
 ///
-/// 19 languages: Dart, JavaScript/TypeScript, Python, HTML, CSS,
-/// JSON, Markdown, Rust, Go, YAML, C/C++, Elixir, Java, Kotlin,
+/// Dart, JavaScript, JSX, TypeScript, TSX, Python, HTML, CSS,
+/// JSON, Markdown, Rust, Go, YAML, C, C++, Elixir, Java, Kotlin,
 /// PHP, Ruby, Erlang, Swift, Zig.
 ///
 /// ## Key Classes
@@ -60,30 +60,22 @@ export 'src/state/state_effect.dart' show StateEffectType, StateEffect;
 export 'src/state/editor_state.dart'
     show EditorState, TransactionSpec, Transaction;
 
-// Lezer common
-export 'src/lezer/common/node_type.dart' show NodeProp, NodeType, NodeSet;
-export 'src/lezer/common/tree.dart'
-    show Tree, TreeBuffer, SyntaxNode, TreeCursor;
-export 'src/lezer/common/parser.dart' show Parser, ChangedRange;
-export 'src/lezer/common/token.dart' show Token, ExternalTokenizer;
-
-// Lezer highlight
-export 'src/lezer/highlight/tags.dart' show Tag;
-export 'src/lezer/highlight/highlight.dart' show TagStyle, HighlightStyle;
-
-// Lezer LR
-export 'src/lezer/lr/grammar_data.dart' show GrammarData;
-export 'src/lezer/lr/lr_parser.dart' show LRParser;
+// Tree-sitter syntax snapshots and owned styling.
+export 'package:duskmoon_highlight/tree_sitter.dart'
+    show SyntaxSnapshot, SyntaxNode, SyntaxCapture, TreeSitterRuntime;
+export 'src/highlight/tags.dart' show Tag;
+export 'src/highlight/highlight.dart' show TagStyle, HighlightStyle;
 
 // Language system
-export 'src/language/language.dart' show Language, LanguageSupport;
+export 'src/language/language.dart'
+    show Language, LanguageSupport, treeSitterLanguageSupport;
 export 'src/language/language_data.dart' show LanguageData, CommentTokens;
-export 'src/language/stream_language.dart' show TokenRule, StreamLanguage;
-export 'src/language/syntax.dart' show syntaxTree, syntaxTreeAvailable;
+export 'src/language/syntax.dart'
+    show syntaxTree, syntaxTreeAvailable, ensureSyntaxTree, disposeSyntax;
 
 // Grammars
 export 'src/grammars/_registry.dart' show LanguageRegistry;
-export 'src/grammars/json.dart' show jsonLanguageSupport, jsonHighlightMapping;
+export 'src/grammars/json.dart' show jsonLanguageSupport;
 export 'src/grammars/dart.dart' show dartLanguageSupport;
 export 'src/grammars/javascript.dart' show javascriptLanguageSupport;
 export 'src/grammars/python.dart' show pythonLanguageSupport;
@@ -102,6 +94,11 @@ export 'src/grammars/ruby.dart' show rubyLanguageSupport;
 export 'src/grammars/erlang.dart' show erlangLanguageSupport;
 export 'src/grammars/swift.dart' show swiftLanguageSupport;
 export 'src/grammars/zig.dart' show zigLanguageSupport;
+
+export 'src/grammars/jsx.dart' show jsxLanguageSupport;
+export 'src/grammars/typescript.dart' show typescriptLanguageSupport;
+export 'src/grammars/tsx.dart' show tsxLanguageSupport;
+export 'src/grammars/cpp.dart' show cppLanguageSupport;
 
 // Theme
 export 'src/theme/editor_theme.dart' show EditorTheme;

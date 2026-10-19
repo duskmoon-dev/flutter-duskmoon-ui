@@ -1,1 +1,2 @@
-tool/node_modules/
+build/
+.dart_tool/

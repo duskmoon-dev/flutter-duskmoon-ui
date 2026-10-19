@@ -1,3 +1,12 @@
+## Unreleased
+
+- Replace Lezer/regex parsing with the shared official Tree-sitter runtime.
+- Use per-editor sessions and immutable syntax snapshots; initialize browser
+  grammar assets automatically and preserve edits made during initialization.
+- Add distinct JSX, TypeScript, TSX and C++ support plus the shared grammar registry.
+- Remove Lezer types, StreamLanguage and the old grammar generator; retain owned
+  style tags. Require Dart 3.10 / Flutter 3.38.
+
 ## 2.0.0
 
 - Pin Lezer generation dependencies and add a reproducible lockfile.

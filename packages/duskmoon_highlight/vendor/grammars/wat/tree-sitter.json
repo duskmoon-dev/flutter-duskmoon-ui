@@ -1,0 +1,44 @@
+{
+  "grammars": [
+    {
+      "name": "wasm",
+      "camelcase": "Wasm",
+      "scope": "source.wat",
+      "path": "wat",
+      "file-types": [
+        "wat"
+      ]
+    },
+    {
+      "name": "wasm",
+      "camelcase": "Wasm",
+      "scope": "source.wast",
+      "path": "wast",
+      "file-types": [
+        "wast"
+      ]
+    }
+  ],
+  "metadata": {
+    "version": "0.0.0",
+    "license": "Apache-2.0 WITH LLVM-exception",
+    "description": "WebAssembly grammars for tree-sitter",
+    "authors": [
+      {
+        "name": "silvanshade",
+        "email": "silvanshade@users.noreply.github.com"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/wasm-lsp/tree-sitter-wasm.git"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true
+  }
+}

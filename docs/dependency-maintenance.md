@@ -4,16 +4,16 @@ This workspace's dependency review was refreshed on 2026-10-19 using Flutter
 3.47.0 and Dart 3.13.0. Pub dependencies remain within normal published version
 constraints; there are no dependency overrides.
 
-## Upgrading to 2.0
+## Upgrading to 2.1
 
-This release raises the declared SDK requirements to match dependencies that
-already need newer SDKs; check the per-package matrix below before upgrading.
+The Tree-sitter migration removes the former Highlight/Mode and
+Lezer/StreamLanguage parser APIs. It introduces immutable
+syntax snapshots and per-editor incremental sessions shared by Markdown and
+the editor. See the [runtime migration guide](../packages/duskmoon_highlight/README.md)
+and [editor migration guide](../packages/duskmoon_code_engine/README.md).
 
-`GrammarData.states` now uses `Uint32List` to retain Lezer's full state values.
-Direct constructor callers must replace `Uint16List` state arrays with
-`Uint32List`. Code using `LRParser.deserialize` can continue to supply
-`List<int>` arrays. The LR runtime limitation described in the generator guide
-still applies.
+The SDK requirements raised in 2.0 still apply, with newer floors for the
+Tree-sitter runtime and editor; check the per-package matrix below before upgrading.
 
 The legacy `DmThemeBloc(prefs: ...)` constructor and hosted Markdown AST types
 remain compatible. Modern preference stores are opt-in and require an
@@ -28,7 +28,8 @@ on separate SDK installations.
 
 | Packages | Dart | Flutter |
 | --- | --- | --- |
-| theme, adaptive_scaffold, code_engine, feedback, highlight, mermaid_renderer | 3.6 | 3.24 |
+| theme, adaptive_scaffold, feedback, mermaid_renderer | 3.6 | 3.24 |
+| code_engine, highlight | 3.10 | 3.38 |
 | visualization | 3.10 | 3.38 |
 | theme_bloc, widgets, form | 3.11 | 3.41 |
 | settings, ui | 3.12 | 3.44 |
@@ -42,7 +43,7 @@ environment floor on all published packages.
 
 | Component | Maintained source and notices | Refresh policy |
 | --- | --- | --- |
-| Highlighting | [HighlightJS 11.12.0 and parser provenance](../packages/duskmoon_highlight/SOURCE.md) | Update vendor grammars, fixtures, generated Dart and notices together. Run Node graph tests, all markup fixtures and two byte-identical generations. |
+| Highlighting and code parsing | [Tree-sitter 0.27.1 runtime and pinned grammars](../packages/duskmoon_highlight/SOURCE.md) | Update pinned source, curated queries, native hook inputs, Wasm assets, hashes and notices together. Verify every grammar on native and web plus incremental/fresh tree parity. |
 | Markdown | [Official 7.3.1 plus three upstream patches](../packages/duskmoon_widgets/lib/src/vendor/markdown/SOURCE.md) | Keep the hosted AST types. Remove the private parser once a released version passes the regressions for EOF handling and bounded parsing work. |
 | Math | [flutter_math_fork 0.7.4 source and KaTeX fonts](../packages/duskmoon_widgets/lib/src/vendor/flutter_math/SOURCE.md) | Private native renderer owned by widgets. Review Flutter API changes, parser/encoder tests, inline/display/error rendering, font bundle and Web/Wasm builds. |
 | Adaptive scaffold | [Source record](../packages/duskmoon_adaptive_scaffold/SOURCE.md) | Preserve Flutter BSD and DuskMoon MIT notices. |
@@ -55,12 +56,11 @@ public AST boundary so existing nodes, visitors and custom builders retain type
 identity. Widget notices are collected in
 [THIRD_PARTY_LICENSES](../packages/duskmoon_widgets/THIRD_PARTY_LICENSES).
 
-Highlighter tooling pins lodash 4.18.1, PostCSS 8.5.31 and HighlightJS 11.12.0.
-Deprecated circular-json was removed; its graph handling is covered by tests for
-cycles, shared references and ordinary tilde strings. These Node dependencies
-are generation tools and are excluded from the published highlighter package.
-Lezer tooling is pinned with a lockfile; see its
-[generator contract and limitations](../packages/duskmoon_code_engine/tool/README.md).
+Tree-sitter maintenance uses CLI 0.26.8 and WASI SDK 29.0. Consumers receive
+bundled native source and browser assets; only maintainers rebuild grammar Wasm.
+The parser/runtime build does not depend on Highlight.js, Lezer or Node package
+lockfiles. See the [source record](../packages/duskmoon_highlight/SOURCE.md) for
+source archives, generator versions and the explicit scanner compatibility patch.
 
 ## Dependencies retained
 
@@ -88,25 +88,29 @@ melos run analyze
 melos run test
 ```
 
-Run the two tool directories' `npm ci`, `npm test` and `npm audit` when changing
-their lockfiles. Generator changes also require generated-code verification;
-successful metadata generation alone does not establish parser compatibility.
+For grammar changes, run the shared runtime's `tool/grammars.py generate` and
+`verify`, affected-package tests, and actual browser checks for both JavaScript
+and Flutter Wasm. Native consumers require a C/C++ toolchain. Package validation
+must include the build hook, manifest, sources, license texts and browser assets.
+The complete bundle intentionally includes all advertised grammars; its build
+and application footprint is larger than the previous regex-only package.
+At this revision, browser assets occupy about 142 MiB unpacked and the Pub archive
+is about 56 MiB. Browsers load grammars on demand, while Flutter includes the
+complete grammar bundle in the application's assets. Workspace package tests run
+sequentially because Flutter native hooks share a build lock.
 
-### Verified on 2026-10-19
+### Tree-sitter validation (2.1.0, 2026-10-19)
 
-- All 14 workspace members pass formatting and fatal-info analysis; 2,684 tests
-  pass across the workspace.
-- Highlighter Node tests (4) and Lezer generator/consumer tests (3) pass. Both
-  npm audits report zero vulnerabilities. Two highlighter generations match the
-  tested output byte for byte across 479 files.
-- The showcase builds in release mode for Web and Wasm. Both asset bundles
-  contain the 12 owned math font families and all 20 original TTF files.
-- Archive-content checks cover widgets, highlighter, adaptive scaffold, form and
-  visualization. Required runtime source, fonts and notices are present; Node
-  dependencies are excluded. Publish dry runs report only uncommitted-file
-  warnings (exit 65); no package was published during this update.
-- `melos run outdated` confirms the newest resolvable dependency set. The ten
-  constrained newer versions listed above remain unchanged.
+All 14 workspace members passed formatting and fatal-info analysis, and all
+1,937 tests passed. Native archive-consumer checks and actual JavaScript/Wasm
+browser checks covered all 95 grammars. Widget browser checks covered automatic
+loading, Unicode, incremental edits, language changes, themes and disposal.
+Native targets other than Linux and separate minimum SDK installations remain
+unvalidated.
 
-Separate browser execution, platform-store migration on Windows and every
-declared minimum SDK combination were not tested in this review.
+### Previous dependency review (2.0.0, 2026-10-19)
+
+The previous release passed all workspace checks, native math asset/archive
+checks and Web/Wasm showcase builds. Those results describe the 2.0.0 release.
+Minimum SDK combinations and native targets other than the tested host still
+require their own platform validation.

@@ -9,11 +9,13 @@ Widget _app({
   required String code,
   String? language,
   Brightness brightness = Brightness.light,
+  String? codeTheme,
 }) {
   return MaterialApp(
     theme: ThemeData(brightness: brightness),
     home: Scaffold(
-      body: CodeBlockWidget(code: code, language: language),
+      body:
+          CodeBlockWidget(code: code, language: language, codeTheme: codeTheme),
     ),
   );
 }
@@ -152,6 +154,43 @@ void main() {
 
     _expectHighlighted(tester, code, 'final');
     expect(_tokenColor(_codeText(tester, code), 'final'), isNot(lightColor));
+  });
+
+  testWidgets('retains independent syntax in simultaneous code blocks',
+      (tester) async {
+    const dartCode = 'final count = 1;';
+    const sqlCode = 'SELECT name FROM users;';
+    await tester.pumpWidget(const MaterialApp(
+      home: Scaffold(
+          body: Column(children: [
+        CodeBlockWidget(
+            key: ValueKey('dart'), code: dartCode, language: 'dart'),
+        CodeBlockWidget(key: ValueKey('sql'), code: sqlCode, language: 'sql'),
+      ])),
+    ));
+    final codeTexts = tester.widgetList<RichText>(find.byType(RichText));
+    final dart = codeTexts.singleWhere((w) => w.text.toPlainText() == dartCode);
+    final sql = codeTexts.singleWhere((w) => w.text.toPlainText() == sqlCode);
+    expect(_tokenColor(dart, 'final'), const Color(0xFFD73A49));
+    expect(_tokenColor(sql, 'SELECT'), const Color(0xFFD73A49));
+  });
+
+  testWidgets('explicit code theme overrides ambient brightness',
+      (tester) async {
+    const code = 'final count = 1;';
+    await tester.pumpWidget(_app(
+      code: code,
+      language: 'dart',
+      brightness: Brightness.dark,
+      codeTheme: 'github',
+    ));
+    final light = _tokenColor(_codeText(tester, code), 'final');
+    await tester.pumpWidget(_app(
+      code: code,
+      language: 'dart',
+      codeTheme: 'monokai-sublime',
+    ));
+    expect(_tokenColor(_codeText(tester, code), 'final'), isNot(light));
   });
 
   testWidgets('updates highlighting when code or language changes',

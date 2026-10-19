@@ -1,6 +1,6 @@
 import 'package:flutter/painting.dart';
-import '../lezer/highlight/highlight.dart';
-import '../lezer/highlight/tags.dart';
+import '../highlight/highlight.dart';
+import '../highlight/tags.dart';
 
 final HighlightStyle defaultLightHighlight = HighlightStyle([
   TagStyle(Tag.keyword,

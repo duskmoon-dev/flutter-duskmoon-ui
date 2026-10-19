@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
+
 import '../commands/commands.dart';
 import '../document/change.dart';
 import '../document/document.dart';
 import '../language/language.dart';
+import '../language/syntax.dart';
 import '../state/editor_state.dart';
 import '../state/extension.dart';
 import '../state/selection.dart';
@@ -18,7 +21,7 @@ class EditorViewController {
   }) {
     final allExtensions = <Extension>[
       ...extensions,
-      if (language != null) language.extension,
+      if (language != null) language.extension else syntaxStateField,
     ];
     _view = EditorView(
       state: EditorState.create(
@@ -26,13 +29,45 @@ class EditorViewController {
         extensions: allExtensions,
       ),
     );
-    _theme = theme;
     _extensions = extensions;
+    _theme = theme;
+    _initializeLanguage();
   }
 
   late EditorView _view;
   EditorTheme? _theme;
-  late List<Extension> _extensions;
+  late final List<Extension> _extensions;
+  bool _disposed = false;
+  int _languageGeneration = 0;
+  Future<void> _ready = Future.value();
+
+  /// Completes when the current language is available (automatic on web).
+  Future<void> get ready => _ready;
+
+  void _initializeLanguage() {
+    final generation = ++_languageGeneration;
+    final language = syntaxState(state)?.language;
+    if (!kIsWeb || language == null) {
+      _ready = Future.value();
+      return;
+    }
+    _ready = LanguageSupport(language: language).ensureInitialized().then((_) {
+      if (_disposed || generation != _languageGeneration) return;
+      _view.dispatch(TransactionSpec(effects: [refreshSyntax.of(null)]));
+    });
+    // The public ready future retains errors for callers that await it, while
+    // automatic widget initialization also reports them through Flutter.
+    _ready.then<void>((_) {}, onError: (Object error, StackTrace stack) {
+      if (!_disposed && generation == _languageGeneration) {
+        FlutterError.reportError(FlutterErrorDetails(
+          exception: error,
+          stack: stack,
+          library: 'duskmoon_code_engine',
+          context: ErrorDescription('initializing a Tree-sitter language'),
+        ));
+      }
+    });
+  }
 
   /// The underlying [EditorView].
   EditorView get view => _view;
@@ -68,21 +103,17 @@ class EditorViewController {
     _view.invalidate();
   }
 
-  /// Switch to a different [LanguageSupport], rebuilding state to apply the
-  /// new language extension while preserving the current text and selection.
+  /// Switch syntax without replacing the view, document, selection or history.
   set language(LanguageSupport? lang) {
-    final allExts = <Extension>[
-      ..._extensions,
-      if (lang != null) lang.extension,
-    ];
-    _view = EditorView(
-      state: EditorState.create(
-        docString: text,
-        selection: state.selection,
-        extensions: allExts,
-      ),
+    if (_disposed) return;
+    _view.dispatch(
+      TransactionSpec(effects: [setSyntaxLanguage.of(lang?.language)]),
+      extensions: [
+        ..._extensions,
+        if (lang != null) lang.extension else syntaxStateField,
+      ],
     );
-    _view.invalidate();
+    _initializeLanguage();
   }
 
   /// Dispatch a [TransactionSpec] to the underlying [EditorView].
@@ -111,5 +142,10 @@ class EditorViewController {
   }
 
   /// Dispose the underlying [EditorView].
-  void dispose() => _view.dispose();
+  void dispose() {
+    if (_disposed) return;
+    _disposed = true;
+    _languageGeneration++;
+    _view.dispose();
+  }
 }

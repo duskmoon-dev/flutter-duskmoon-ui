@@ -8,19 +8,3 @@ analyzer:
     - macos/**
     - linux/**
 include: ../../analysis_options.yaml
-
-# The inherited HighlightJS port intentionally keeps upstream grammar filenames,
-# JavaScript-style mode constants, named library parts and regex documentation.
-# These are style-only exceptions; compiler errors and analyzer warnings retain
-# their workspace severity, and no source files are excluded from analysis.
-linter:
-  rules:
-    file_names: false
-    non_constant_identifier_names: false
-    constant_identifier_names: false
-    use_string_in_part_of_directives: false
-    unnecessary_library_name: false
-    unintended_html_in_doc_comment: false
-    # Generated regex escapes and CSS color literals mirror upstream inputs.
-    unnecessary_string_escapes: false
-    use_full_hex_values_for_flutter_colors: false

@@ -5,7 +5,6 @@ import '../commands/default_keymap.dart';
 import '../commands/keymap.dart';
 import '../language/language.dart';
 import '../language/syntax.dart';
-import '../lezer/common/tree.dart';
 import '../state/editor_state.dart';
 import '../state/extension.dart';
 import '../state/selection.dart';
@@ -116,6 +115,7 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
     if (widget.controller != null) {
       _controller = widget.controller!;
       _ownsController = false;
+      if (widget.language != null) _controller.language = widget.language;
     } else {
       _controller = EditorViewController(
         text: widget.initialDoc ?? '',
@@ -147,6 +147,8 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
 
     // Handle controller swap.
     if (widget.controller != oldWidget.controller) {
+      _inputHandler?.detach();
+      _inputHandler = null;
       _controller.view.removeListener(_onViewChanged);
       if (_ownsController) {
         _controller.dispose();
@@ -154,6 +156,7 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
       if (widget.controller != null) {
         _controller = widget.controller!;
         _ownsController = false;
+        if (widget.language != null) _controller.language = widget.language;
       } else {
         _controller = EditorViewController(
           text: widget.initialDoc ?? '',
@@ -164,6 +167,14 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
         _ownsController = true;
       }
       _controller.view.addListener(_onViewChanged);
+      if (_focusNode.hasFocus && !widget.readOnly) {
+        _inputHandler = InputHandler(_controller.view)..attach();
+      }
+    }
+
+    if (widget.language != oldWidget.language &&
+        widget.controller == oldWidget.controller) {
+      _controller.language = widget.language;
     }
 
     // Handle focus node swap.
@@ -309,7 +320,7 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
     // Materialise the document string once per build — not per visible line.
     final docSource = doc.toString();
 
-    final tree = syntaxTree(state) ?? Tree.empty;
+    final tree = syntaxTree(state);
     final highlightStyle = theme.highlightStyle.specs.isEmpty
         ? defaultLightHighlight
         : theme.highlightStyle;

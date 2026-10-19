@@ -387,8 +387,11 @@ When `hideDisabled` is `true` (default), disabled actions are removed entirely.
 Read-only markdown renderer with GFM, KaTeX, optional Mermaid, and syntax highlighting support. Three input modes: `data` (String), `nodes` (`List<md.Node>`), and `stream` (`Stream<String>` for LLM output).
 
 Fenced code blocks use the maintained `duskmoon_highlight` workspace package with
-195 languages and common aliases such as `js`, `py`, `html`, and `sh`. Unknown or
-omitted languages render as plain text.
+95 bundled Tree-sitter grammars and common aliases such as `js`, `py`, `html`,
+and `sh`. Browser grammar loading is automatic; code remains visible while
+loading. Unknown or omitted languages render as plain text. See the
+[language inventory](../packages/duskmoon_highlight/LANGUAGES.md) for coverage
+and embedded-language limitations.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
@@ -425,7 +428,7 @@ Configuration for markdown rendering features.
 | `enableKatex` | `bool` | `true` | LaTeX math rendering |
 | `enableMermaid` | `bool` | `false` | Mermaid diagram rendering; when disabled, Mermaid blocks render as code |
 | `enableCodeHighlight` | `bool` | `true` | Syntax highlighting in code blocks |
-| `codeTheme` | `String?` | `null` | Highlight theme name; when `null`, selected from brightness |
+| `codeTheme` | `String?` | `null` | `github` or `monokai-sublime`; otherwise selected from brightness |
 | `blockBuilders` | `Map?` | `null` | Custom block builders |
 | `inlineBuilders` | `Map?` | `null` | Custom inline builders |
 

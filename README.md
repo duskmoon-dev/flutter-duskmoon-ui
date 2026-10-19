@@ -83,7 +83,7 @@ class HomePage extends StatelessWidget {
 | [`duskmoon_code_engine`](packages/duskmoon_code_engine/) | CodeMirror-inspired editor engine with 19 grammar modules | [Version](https://pub.dev/packages/duskmoon_code_engine) |
 | [`duskmoon_adaptive_scaffold`](packages/duskmoon_adaptive_scaffold/) | Responsive Material 3 scaffold and composable slot layouts | [Version](https://pub.dev/packages/duskmoon_adaptive_scaffold) |
 | [`duskmoon_mermaid_renderer`](packages/duskmoon_mermaid_renderer/) | Native Flutter Canvas renderer for 30 Mermaid diagram families | [Version](https://pub.dev/packages/duskmoon_mermaid_renderer) |
-| [`duskmoon_highlight`](packages/duskmoon_highlight/) | Maintained syntax highlighter with 195 languages, aliases, and Flutter text-span rendering | [Version](https://pub.dev/packages/duskmoon_highlight) |
+| [`duskmoon_highlight`](packages/duskmoon_highlight/) | Official Tree-sitter runtime with 95 bundled grammars for native and WebAssembly | [Version](https://pub.dev/packages/duskmoon_highlight) |
 
 ## Themes and Adaptive Rendering
 

@@ -1,12 +1,12 @@
 # duskmoon_code_engine
 
-Pure Dart code editor engine -- ground-up port of CodeMirror 6 architecture for Flutter. Provides document model, immutable state management, incremental parsing, syntax highlighting, and an interactive editor widget. No external dependencies beyond Flutter.
+Flutter code editor with an immutable document/state model and official Tree-sitter incremental parsing through `duskmoon_highlight`. Native builds require a C/C++ toolchain; web uses bundled ESM/Wasm assets. Requires Dart 3.10 / Flutter 3.38.
 
 ## Installation
 
 ```yaml
 dependencies:
-  duskmoon_code_engine: ^1.6.0
+  duskmoon_code_engine: ^2.0.0
 ```
 
 ```dart
@@ -285,21 +285,22 @@ range.isEmpty;           // anchor == head
 ```dart
 // Lookup by name, file extension, or MIME type
 final lang = LanguageRegistry.byName('dart');
-final lang2 = LanguageRegistry.byExtension('.py');
+final lang2 = LanguageRegistry.byExtension('py');
 final lang3 = LanguageRegistry.byMimeType('application/json');
 final allNames = LanguageRegistry.names;
 ```
 
-### Custom Language via StreamLanguage
+### Additional bundled grammars
 
 ```dart
-final myLang = StreamLanguage([
-  TokenRule(RegExp(r'//.*'), Tag.lineComment),
-  TokenRule(RegExp(r'"[^"]*"'), Tag.string),
-  TokenRule(RegExp(r'\b(if|else|while|for|return)\b'), Tag.keyword),
-  TokenRule(RegExp(r'\d+'), Tag.number),
-]);
+final support = treeSitterLanguageSupport('bash'); // null if unbundled
 ```
+
+The runtime bundles 95 grammars. Named factories provide editor metadata;
+generic support uses the selected grammar's query captures. Adding an unbundled
+language requires updating `duskmoon_highlight` sources/manifest/Wasm/query assets.
+Widgets and controllers initialize web grammar assets automatically; await
+`controller.ready` before requiring syntax immediately after construction.
 
 ## EditorTheme -- Visual Configuration
 
@@ -390,30 +391,23 @@ prec(Precedence.override_, myExtension)
 enum Precedence { fallback, base, extend, override_ }
 ```
 
-## Lezer Parser -- Incremental Parsing
-
-### LRParser
-
-The `LRParser` is the core parsing engine. Language grammars compile to `GrammarData` consumed by `LRParser`.
+## Tree-sitter incremental parsing
 
 ```dart
-final parser = LRParser(grammarData);
-final tree = parser.parse('let x = 42;');
-```
-
-### SyntaxNode / TreeCursor
-
-```dart
-// Access the parsed syntax tree from editor state
-final tree = syntaxTree(state);
+final tree = syntaxTree(state); // Immutable SyntaxSnapshot?
 final available = syntaxTreeAvailable(state);
-
-// Walk the tree with a cursor
-final cursor = tree?.cursor();
-while (cursor?.next() ?? false) {
-  print('${cursor!.type.name}: ${cursor.from}-${cursor.to}');
+for (final child in tree?.rootNode.children ?? <SyntaxNode>[]) {
+  print('${child.type}: ${child.from}-${child.to}');
 }
 ```
+
+All offsets count UTF-16 code units. Each editor owns a session; snapshots remain
+valid after edits or disposal. Raw-state users on web must await
+`support.ensureInitialized()` before creating state or retain the state returned
+by `await ensureSyntaxTree(state)`. Call `disposeSyntax(state)` when finished;
+controllers/widgets manage this automatically. Lezer/StreamLanguage parser APIs
+are removed. Queries do not yet orchestrate embedded-language injections or
+local-scope analysis.
 
 ## EditorCommands -- Built-In Commands
 

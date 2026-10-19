@@ -1,6 +1,0 @@
-async def first(aiterable):
-    it = aiter(aiterable)
-    return await anext(it)
-
-config = frozendict(role="admin")
-MISSING = sentinel("MISSING")

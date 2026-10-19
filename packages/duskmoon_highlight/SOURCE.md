@@ -1,63 +1,91 @@
 # Source provenance
 
-Imported from the published `re_highlight` **0.0.3** archive, published 2024-02-05.
+DuskMoon owns the Dart adapters, native bridge/build hook, capture styling and
+curated query bundle. The previous Highlight.js/re_highlight-derived parser,
+generated languages/styles and Lezer runtime/generator have been removed.
 
-- Package: https://pub.dev/packages/re_highlight/versions/0.0.3
-- Archive: https://pub.dev/api/archives/re_highlight-0.0.3.tar.gz
-- SHA-256: `6c4ac3f76f939fb7ca9df013df98526634e17d8f7460e028bd23a035870024f2`
-- Repository: https://github.com/reqable/re-highlight
+## Official runtime
 
-The archive SHA-256 was verified against the pub.dev API, then every retained
-cached source file was compared byte-for-byte with that archive before changes.
-This is a maintained source fork, with no runtime dependency on re_highlight.
+- Tree-sitter C runtime **0.27.1**, copied unchanged from the official source
+  archive into `vendor/tree-sitter/lib`, with its original MIT license.
+- Source: https://github.com/tree-sitter/tree-sitter/tree/v0.27.1
+- Archive: https://codeload.github.com/tree-sitter/tree-sitter/tar.gz/refs/tags/v0.27.1
+- SHA-256: `982cd3d4d9eb7be18c243240a622423fd2e4ecb4bec2cd98832c2f3fa1f0f333`.
+- Official `web-tree-sitter` **0.27.1** module and Wasm are copied byte-for-byte
+  from https://registry.npmjs.org/web-tree-sitter/-/web-tree-sitter-0.27.1.tgz.
+  Archive SHA-256: `7346db659eb870a5284242851ab7aedea41d7397b8c7e95ff8d9ec5b5a80270f`.
+  The same upstream MIT license applies. The adjacent DuskMoon loader imports
+  this module from the application's own package assets.
 
-## Included upstream components
+Both archives were downloaded again and all retained runtime files compared
+byte-for-byte. Exact npm integrity and individual file hashes are in
+`grammars.json`.
 
-- re_highlight 0.0.3 parser/generators: MIT, original notice in `LICENSE`.
-- highlight.js 11.12.0 grammar/style source and markup fixtures: BSD-3-Clause,
-  https://github.com/highlightjs/highlight.js/tree/f7f7d3803bd898e37c017ffb881317f0cde04a70.
-  Verified source archive: https://codeload.github.com/highlightjs/highlight.js/tar.gz/f7f7d3803bd898e37c017ffb881317f0cde04a70;
-  SHA-256: `a1d99a617edfefc7c663804564ee88b361e9c71f88392d80fb2679e1b7db5189`.
-- highlightjs-vue 1.0.0 grammar: BSD-3-Clause,
-  https://github.com/highlightjs/highlightjs-vue.
-- highlightjs-GN 0.1.0 grammar: MIT,
-  https://github.com/highlightjs/highlightjs-GN.
+## Grammar source and queries
 
-Component license texts are retained in `THIRD_PARTY_LICENSES`, including in Pub
-packages. `THIRD_PARTY_NOTICES` preserves individual grammar/theme attribution
-and license comments. Kimbie and NNFX themes retain their upstream CC BY-SA 4.0
-license, whose full text is retained in `CC-BY-SA-4.0.txt`; other theme-specific
-notices, including Night Owl/Nord MIT notices, also remain intact. The CC license
-text was obtained from the SPDX license-list-data repository:
-https://github.com/spdx/license-list-data/blob/main/text/CC-BY-SA-4.0.txt. Individual vendor license files are also retained in the repository.
-Theme-specific attribution comments also remain in the original CSS source files.
-The Pub archive omits maintenance tools, vendor input and tests, while retaining
-this provenance, all root license/notice files, and all generated Dart runtime source.
+The initial discovery catalog was `kreuzberg-dev/tree-sitter-language-pack`,
+commit `6af2fb0e3b01336567c6ce574dd15b712eb262bc`. Each of the 95 selected grammars
+has an independent pinned upstream repository revision, source archive URL and
+SHA-256 in `grammars.json`. The source closure includes original generated
+headers/scanners, source grammars, query files and licenses. Runtime sources are
+never fetched during a consumer build.
 
-## Local modifications
+ABNF, GraphQL, LaTeX, Reason, SQL, Swift and XQuery lacked generated parsers in
+their source archives; Less had an unsupported ABI 11 parser. These parsers were
+generated/regenerated with Tree-sitter CLI **0.26.8**. The actual generated ABI
+(13–15) is recorded per grammar. Source grammars and generation inputs remain
+vendored. Some generators fall back to ABI 14 when upstream has no
+`tree-sitter.json`; that output is supported by the official 0.27.1 runtime.
 
-- Rename package imports, facade and library/part identifiers to duskmoon_highlight.
-- Format Dart source using the workspace Dart formatter; annotate private regex
-  matcher string parameters/void return and use Flutter super parameters.
-- Add workspace-compatible package metadata and local analysis configuration.
-- Rename the upstream alias test to `register_alias_test.dart` so test discovery
-  executes it. Keep API/parser tests and all markup fixtures; omit example apps and the upstream
-  auto-detection test whose fixture path points at a nonexistent `highlightjs`
-  directory (it silently returned for every language). Its meaningful compile-all-
-  grammars coverage is retained in the owned `test/maintenance_test.dart`.
-- Pin Node generator dependencies and generate grammars/themes from retained
-  vendor source, with deterministic ordering and the renamed Dart facade. Mark
-  retained HighlightJS source as ES modules for Node import and regenerate a
-  publishable attribution inventory alongside the Dart output.
+`queries/` contains the compiled highlight inputs. Upstream highlight queries
+are combined with explicit inheritance and conservative structural captures
+from each grammar's actual node types. The manifest records source query paths,
+equivalent predicate/operator transformations and every omitted pattern.
+Unsupported local-scope/ancestor predicates are omitted as whole patterns;
+conditions are never silently removed. Invalid inherited patterns are omitted
+with the official query compiler's error recorded. Native and web evaluate
+text predicates over full query matches. Embedded-language injection and locals
+analysis are not implemented.
 
-- Replace deprecated circular-json with typed graph references, preserving shared
-  modes/cycles while keeping literal tilde/escape strings distinct from references.
-- Synchronize HighlightJS helper/runtime inputs to 11.12.0 and port its G-code
-  letter-boundary callback to Dart. Retain every upstream markup fixture.
-- Add `.js` to the JSON grammar's `./lib/ecmascript` import for Node ESM loading;
-  retained source otherwise matches the verified archive, except the documented
-  `src/package.json` module marker. Prefix digit-leading theme identifiers with
-  `theme` so new upstream theme names remain valid public Dart identifiers.
-- Pin generation formatting to Dart language version 3.6 for reproducibility.
+Original license texts remain in each vendor closure and are collected in
+`THIRD_PARTY_LICENSES`; `THIRD_PARTY_NOTICES` lists their paths. DuskMoon-owned
+code is MIT. The hosted package includes vendor C/C++ source, the build hook,
+manifest, curated queries, browser assets and all notices. Maintenance scripts
+and tests are excluded from hosted archives.
 
-See `README.md` for exact generation and validation commands.
+Pub also omits repository metadata such as `.gitignore`, `.gitattributes` and
+`.editorconfig` from the vendored source inventory. These are not build inputs;
+all native sources, headers, scanners and license files remain in the archive.
+
+## Explicit compatibility adaptations
+
+- `patches/swift-wasm-oom.patch`: the Swift external scanner's allocation-failure
+  path calls `__builtin_trap()` on Wasm, because the official runtime does not
+  import stdio or process-exit symbols. Native behavior and successful scanning
+  are unchanged.
+- Nim and Vala retain their original C++ scanners. CLI 0.26.8 discovers only
+  `scanner.c`, so the maintenance tool compiles parser C and scanner C++17
+  separately with the same Wasm shared-module contract. The owned
+  `src/wasm/cpp_scanner_support.cc` supplies malloc/free-backed allocation and
+  traps on unrecoverable C++ library failures. No scanner algorithm is changed.
+- The native hook compiles each grammar against its own generated `parser.h`;
+  C++ scanners use separate archives. This preserves upstream header macros and
+  avoids accidentally compiling C sources as C++.
+
+## Toolchain and reproducibility
+
+Wasm assets use CLI 0.26.8 and **WASI SDK 29.0** (LLVM 21.1.4), with the CLI's
+`-Os` shared/PIC/no-entry compilation contract. The two C++ grammars additionally
+use `-fno-exceptions -fno-rtti -DNDEBUG`. The manifest records the official WASI
+SDK download digest and hashes every retained source, query, patch and asset.
+Run `tool/grammars.py generate` then `verify` with Dart available to verify that
+the embedded Dart query inventory and license collections match these inputs.
+
+LLVM, Vim and x86asm were deliberately excluded from both native and web despite
+working native parsers. Their generated lexer control flow makes LLVM Wasm
+compilation consume excessive memory. Disabling the compiler's irreducible-CFG
+pass allowed compilation, but normal V8 optimizing compilation then fatally
+exhausted memory; those assets are not shipped. Groovy lacked a license grant
+in the selected source; the PostgreSQL source contained an unresolved 97MB Git
+LFS pointer. The complete supported/unsupported inventory is in
+[LANGUAGES.md](LANGUAGES.md).

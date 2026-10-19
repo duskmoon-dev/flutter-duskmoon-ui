@@ -9,31 +9,7 @@ import 'dm_code_editor_theme.dart';
 /// no error thrown). Matching is case-insensitive.
 LanguageSupport? _resolveLanguage(String? language) {
   if (language == null) return null;
-  return switch (language.toLowerCase()) {
-    'dart' => dartLanguageSupport(),
-    'javascript' || 'js' => javascriptLanguageSupport(),
-    // TypeScript uses the JavaScript grammar — duskmoon_code_engine provides
-    // a unified JS/TS grammar via javascriptLanguageSupport().
-    'typescript' || 'ts' => javascriptLanguageSupport(),
-    'python' || 'py' => pythonLanguageSupport(),
-    'html' => htmlLanguageSupport(),
-    'css' => cssLanguageSupport(),
-    'json' => jsonLanguageSupport(),
-    'markdown' || 'md' => markdownLanguageSupport(),
-    'rust' || 'rs' => rustLanguageSupport(),
-    'go' => goLanguageSupport(),
-    'yaml' || 'yml' => yamlLanguageSupport(),
-    'c' || 'cpp' || 'c++' => cLanguageSupport(),
-    'elixir' || 'ex' || 'exs' => elixirLanguageSupport(),
-    'java' => javaLanguageSupport(),
-    'kotlin' || 'kt' => kotlinLanguageSupport(),
-    'php' => phpLanguageSupport(),
-    'ruby' || 'rb' => rubyLanguageSupport(),
-    'erlang' || 'erl' => erlangLanguageSupport(),
-    'swift' => swiftLanguageSupport(),
-    'zig' => zigLanguageSupport(),
-    _ => null,
-  };
+  return LanguageRegistry.byName(language);
 }
 
 /// A code editor widget that integrates with the DuskMoon design system.
