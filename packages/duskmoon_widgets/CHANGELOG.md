@@ -1,4 +1,4 @@
-## Unreleased
+## 2.1.0
 
 - Use shared Tree-sitter parsing for Markdown fenced code and the code editor.
 - Automatically load bundled browser grammars, cache per-block syntax and retain

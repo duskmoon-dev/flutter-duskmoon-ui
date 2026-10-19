@@ -1,4 +1,4 @@
-## Unreleased
+## 2.1.0
 
 - Replace the Highlight.js-derived regex runtime with official Tree-sitter 0.27.1.
 - Bundle 95 pinned native/Wasm grammars, structural queries, sources and licenses.

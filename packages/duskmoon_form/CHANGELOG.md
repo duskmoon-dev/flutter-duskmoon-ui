@@ -1,4 +1,4 @@
-## Unreleased
+## 2.1.0
 
 - Update the typeahead suggestions animation for current Flutter APIs while
   preserving top-center alignment, custom transitions and suggestion selection.

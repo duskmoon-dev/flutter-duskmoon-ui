@@ -1,4 +1,4 @@
-## Unreleased
+## 2.1.0
 
 - Replace Lezer/regex parsing with the shared official Tree-sitter runtime.
 - Use per-editor sessions and immutable syntax snapshots; initialize browser

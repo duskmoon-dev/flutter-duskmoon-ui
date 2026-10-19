@@ -1,3 +1,7 @@
+## 2.1.0
+
+- Release 2.1.0 (2026-10-19)
+
 ## 2.0.0
 
 - Align declared Dart and Flutter SDK requirements with package dependencies.
