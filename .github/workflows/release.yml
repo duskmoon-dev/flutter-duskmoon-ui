@@ -91,6 +91,9 @@ jobs:
       - name: Re-resolve dependencies
         run: dart pub get
 
+      - name: Check package archive sizes
+        run: python3 tool/check_pub_archive_size.py
+
       - name: Analyze
         run: |
           for pkg in packages/*/; do
