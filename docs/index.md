@@ -16,7 +16,7 @@ Add `duskmoon_ui` to your `pubspec.yaml` for access to the primary DuskMoon pack
 
 ```yaml
 dependencies:
-  duskmoon_ui: ^1.6.0
+  duskmoon_ui: ^2.1.0
 ```
 
 ```dart
@@ -90,15 +90,15 @@ If you only need specific functionality:
 
 ```yaml
 dependencies:
-  duskmoon_theme: ^1.6.0      # Theme only
-  duskmoon_widgets: ^1.6.0    # Adaptive widgets, markdown, chat
-  duskmoon_settings: ^1.6.0   # Settings UI
-  duskmoon_feedback: ^1.6.0   # Feedback helpers
-  duskmoon_form: ^1.6.0            # BLoC-based form management
-  duskmoon_visualization: ^1.6.0   # Data visualization charts
-  duskmoon_theme_bloc: ^1.6.0      # BLoC persistence (requires flutter_bloc, shared_preferences)
-  duskmoon_adaptive_scaffold: ^1.6.0  # Responsive scaffold (standalone)
-  duskmoon_code_engine: ^1.6.0     # Code editor engine (standalone)
+  duskmoon_theme: ^2.1.0      # Theme only
+  duskmoon_widgets: ^2.1.0    # Adaptive widgets, markdown, chat
+  duskmoon_settings: ^2.1.0   # Settings UI
+  duskmoon_feedback: ^2.1.0   # Feedback helpers
+  duskmoon_form: ^2.1.0            # BLoC-based form management
+  duskmoon_visualization: ^2.1.0   # Data visualization charts
+  duskmoon_theme_bloc: ^2.1.0      # BLoC persistence (requires flutter_bloc, shared_preferences)
+  duskmoon_adaptive_scaffold: ^2.1.0  # Responsive scaffold (standalone)
+  duskmoon_code_engine: ^2.1.0     # Code editor engine (standalone)
 ```
 
 ## Guides

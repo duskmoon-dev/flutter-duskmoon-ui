@@ -6,7 +6,7 @@ Flutter code editor with an immutable document/state model and official Tree-sit
 
 ```yaml
 dependencies:
-  duskmoon_code_engine: ^2.0.0
+  duskmoon_code_engine: ^2.1.0
 ```
 
 ```dart

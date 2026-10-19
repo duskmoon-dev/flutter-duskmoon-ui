@@ -23,7 +23,7 @@ The `duskmoon_code_engine` package provides a Flutter code editor with an immuta
 
 ```yaml
 dependencies:
-  duskmoon_code_engine: ^1.6.0
+  duskmoon_code_engine: ^2.1.0
 ```
 
 ```dart
