@@ -45,6 +45,8 @@ jobs:
 
       - name: Publish to pub.dev
         run: |
+          set -o pipefail
+
           # Order packages after all their internal dependencies, including dev dependencies.
 
           ALL_PKGS=()
@@ -97,6 +99,14 @@ jobs:
             if curl -s -o /dev/null -w '%{http_code}' "https://pub.dev/api/packages/$PKG_NAME/versions/$PKG_VER" | grep -q '^200$'; then
               echo "::notice::$PKG_NAME $PKG_VER already published — skipping"
             else
+              # GitHub OIDC tokens expire during long, multi-package releases.
+              # setup-dart registered pub.dev to read the current PUB_TOKEN.
+              PUB_TOKEN=$(curl --fail --silent --show-error \
+                -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+                "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=https%3A%2F%2Fpub.dev" |
+                jq -er '.value | select(type == "string" and length > 0)')
+              echo "::add-mask::$PUB_TOKEN"
+              export PUB_TOKEN
               if ! (cd "$pkg" && dart pub publish --force); then
                 echo "::error::$pkg publish failed"
                 exit 1
