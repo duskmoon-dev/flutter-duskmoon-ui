@@ -1,4 +1,4 @@
-## Unreleased
+## 2.0.0
 
 - Pin Lezer generation dependencies and add a reproducible lockfile.
 - Correct grammar metadata export and verify that generated Dart compiles and

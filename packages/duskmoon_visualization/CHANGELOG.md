@@ -1,4 +1,4 @@
-## Unreleased
+## 2.0.0
 
 - Restore original GSMLG attribution and document map/source provenance.
 - Align declared Dart and Flutter SDK requirements with package dependencies.

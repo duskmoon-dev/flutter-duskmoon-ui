@@ -1,4 +1,4 @@
-## Unreleased
+## 2.0.0
 
 - Restore original form, typeahead and Flutter Stepper license notices.
 - Align declared Dart and Flutter SDK requirements with package dependencies.

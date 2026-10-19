@@ -1,4 +1,4 @@
-## Unreleased
+## 2.0.0
 
 - Add SharedPreferencesAsync hydration and SharedPreferencesWithCache support
   while preserving the legacy constructor. Serialize persistence across events.

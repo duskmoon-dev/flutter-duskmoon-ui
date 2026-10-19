@@ -1,4 +1,4 @@
-## Unreleased
+## 2.0.0
 
 - Restore upstream Flutter BSD attribution and document source provenance.
 - Align declared Dart and Flutter SDK requirements with package dependencies.

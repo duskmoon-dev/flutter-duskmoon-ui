@@ -1,4 +1,4 @@
-## Unreleased
+## 2.0.0
 
 - Own the native math renderer and KaTeX fonts, render inline formulas, and
   update cached glyphs when text scaling changes.

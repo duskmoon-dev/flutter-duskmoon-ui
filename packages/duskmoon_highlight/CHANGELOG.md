@@ -1,4 +1,4 @@
-## Unreleased
+## 2.0.0
 
 - Sync HighlightJS 11.12.0, 195 languages, updated themes and upstream fixtures.
 - Upgrade generation tools and replace deprecated circular-json with tested graph
