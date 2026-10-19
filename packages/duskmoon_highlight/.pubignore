@@ -3,3 +3,4 @@ test/
 build/
 .dart_tool/
 .gitignore
+vendor/grammars/**/parser.c

@@ -45,6 +45,26 @@ void main(List<String> args) async {
       }
     }
     final target = input.config.code.targetOS;
+    Future<String> buildSource(String source) async {
+      final original = File.fromUri(input.packageRoot.resolve(source));
+      if (await original.exists() || !source.endsWith('/parser.c')) {
+        return source;
+      }
+      // Hosted archives retain exact parser bytes as gzip to fit Pub's
+      // uncompressed-size limit. Checkout builds use the original C directly.
+      final compressed = File.fromUri(input.packageRoot.resolve('$source.gz'));
+      output.dependencies.add(compressed.uri);
+      final decoded = File.fromUri(
+        input.outputDirectory.resolve('sources/$source'),
+      );
+      await decoded.parent.create(recursive: true);
+      await compressed
+          .openRead()
+          .transform(gzip.decoder)
+          .pipe(decoded.openWrite());
+      return decoded.path;
+    }
+
     Future<void> removeOldArchive(String name) async {
       final file = File.fromUri(
         input.outputDirectory.resolve(
@@ -61,7 +81,10 @@ void main(List<String> args) async {
     var hasCpp = false;
     for (final grammar in grammars.cast<Map>()) {
       final id = grammar['id'] as String;
-      final grammarSources = (grammar['sources'] as List).cast<String>();
+      final grammarSources = <String>[];
+      for (final source in (grammar['sources'] as List).cast<String>()) {
+        grammarSources.add(await buildSource(source));
+      }
       final cpp = grammarSources
           .where((source) => source.endsWith('.cc') || source.endsWith('.cpp'))
           .toList();

@@ -57,6 +57,17 @@ Pub also omits repository metadata such as `.gitignore`, `.gitattributes` and
 `.editorconfig` from the vendored source inventory. These are not build inputs;
 all native sources, headers, scanners and license files remain in the archive.
 
+Generated `parser.c` files remain unchanged in Git. Hosted archives include
+deterministic, timestamp-free `parser.c.gz` copies instead, keeping the archive
+below Pub's 256 MiB uncompressed-size limit without dropping any grammar. The
+native build hook uses raw checkout sources when present; otherwise it streams
+the packaged gzip into its build output and compiles those exact decoded bytes
+against the grammar's original headers. No download is performed. The manifest
+records both raw and compressed hashes, and `generate` / `verify` prove that
+every decoded parser matches its retained source byte-for-byte.
+The vendored AsciiDoc Git attributes mark these gzip files as binary to prevent
+line-ending normalization from changing their bytes when committed.
+
 ## Explicit compatibility adaptations
 
 - `patches/swift-wasm-oom.patch`: the Swift external scanner's allocation-failure

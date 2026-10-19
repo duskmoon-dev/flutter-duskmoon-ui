@@ -1,3 +1,9 @@
+## Unreleased
+
+- Compress bundled parser C sources in hosted archives to fit Pub's 256 MiB
+  unpacked size limit while retaining all 95 grammars, sources and licenses.
+- Unpack native parser sources into the build output before compilation.
+
 ## 2.1.0
 
 - Replace the Highlight.js-derived regex runtime with official Tree-sitter 0.27.1.

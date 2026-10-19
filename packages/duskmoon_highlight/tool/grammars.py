@@ -2,7 +2,9 @@
 """Build and verify the pinned Tree-sitter source/asset inventory."""
 import argparse
 import concurrent.futures
+import gzip
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -24,6 +26,36 @@ def inventory(manifest):
     for folder in ('vendor', 'assets', 'queries', 'patches', 'src'):
         files.update(p for p in (ROOT / folder).rglob('*') if p.is_file())
     return {str(p.relative_to(ROOT)): digest(p) for p in sorted(files)}
+
+
+def parser_sources(manifest):
+    return sorted({source for grammar in manifest['grammars']
+                   for source in grammar['sources']
+                   if Path(source).name == 'parser.c'})
+
+
+def compress_parsers(manifest):
+    for source in parser_sources(manifest):
+        raw = (ROOT / source).read_bytes()
+        buffer = io.BytesIO()
+        # Omit the filename and timestamp so archives are reproducible.
+        with gzip.GzipFile(filename='', mode='wb', fileobj=buffer,
+                           compresslevel=9, mtime=0) as compressed:
+            compressed.write(raw)
+        encoded = buffer.getvalue()
+        assert gzip.decompress(encoded) == raw, source
+        (ROOT / (source + '.gz')).write_bytes(encoded)
+
+
+def verify_compressed_parsers(manifest):
+    for source in parser_sources(manifest):
+        compressed = ROOT / (source + '.gz')
+        encoded = compressed.read_bytes()
+        assert encoded[:4] == b'\x1f\x8b\x08\x00', 'Unexpected gzip header: ' + source
+        assert encoded[4:8] == bytes(4), 'Non-deterministic gzip timestamp: ' + source
+        decoded = gzip.decompress(encoded)
+        assert hashlib.sha256(decoded).hexdigest() == manifest['sha256'][source], source
+        assert decoded == (ROOT / source).read_bytes(), source
 
 
 def dart_source(manifest):
@@ -167,6 +199,7 @@ def main():
     source = dart_source(manifest)
     notices, license_text = licenses(manifest)
     if args.command == 'generate':
+        compress_parsers(manifest)
         manifest['sha256'] = inventory(manifest)
         MANIFEST.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n')
         GENERATED.write_text(source)
@@ -175,6 +208,7 @@ def main():
     else:
         expected = inventory(manifest)
         assert manifest['sha256'] == expected, 'Source/asset hashes differ from grammars.json'
+        verify_compressed_parsers(manifest)
         assert GENERATED.read_text() == source, 'Regenerate the Dart query inventory'
         assert (ROOT / 'THIRD_PARTY_NOTICES').read_text() == notices, 'Regenerate notices'
         assert (ROOT / 'THIRD_PARTY_LICENSES').read_text() == license_text, 'Regenerate licenses'

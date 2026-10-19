@@ -58,6 +58,9 @@ The primary package entrypoint also exports the Tree-sitter API.
 `THIRD_PARTY_LICENSES` record exact revisions, source archive hashes, local
 patches and license texts. Native runtime and grammar source is included in
 published packages because hosted consumers compile it through the build hook.
+Generated parser C files are stored as deterministic gzip files in hosted
+packages and unpacked into the build output before compilation. Raw sources
+remain in this repository; no network access is needed to unpack them.
 
 With Python 3, Dart, Tree-sitter CLI 0.26.8 and WASI SDK 29.0 installed:
 
@@ -72,6 +75,8 @@ Set `TREE_SITTER_WASI_SDK_PATH` for a preinstalled WASI SDK. Keep pinned sources
 curated queries, source/asset hashes, generated Dart and notices together when
 updating a grammar. Generated parsers absent from upstream archives are produced
 with the CLI version recorded in the manifest; their source grammars are retained.
+The `generate` command also refreshes the compressed parsers; `verify` checks
+that they decode to the exact pinned source bytes.
 
 ```sh
 devenv shell -- bash -c 'cd packages/duskmoon_highlight && flutter analyze --no-pub --fatal-infos'
