@@ -1,3 +1,8 @@
+## Unreleased
+
+- Allow `DmChatView(showInput: false)` to omit its built-in composer while
+  preserving message navigation, pinned scrolling and unread indicators.
+
 ## 2.2.0
 
 - Add a compact, centered navigation rail with one tick per user message in

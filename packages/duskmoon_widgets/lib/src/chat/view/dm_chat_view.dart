@@ -16,7 +16,7 @@ import '_scroll_tracker.dart';
 typedef DmChatRetryCallback = void Function(DmChatMessage message);
 
 /// Composed chat view with user-message navigation, pinned auto-scroll,
-/// and an input bar. Messages are ordered from oldest to newest.
+/// and an optional input bar. Messages are ordered from oldest to newest.
 class DmChatView extends StatefulWidget {
   const DmChatView({
     super.key,
@@ -27,6 +27,7 @@ class DmChatView extends StatefulWidget {
     this.onRetry,
     this.uploadAdapter,
     this.isStreaming = false,
+    this.showInput = true,
     this.inputController,
     this.inputPlaceholder = 'Message…',
     this.inputLeading,
@@ -55,6 +56,10 @@ class DmChatView extends StatefulWidget {
   final DmChatRetryCallback? onRetry;
   final DmChatUploadAdapter? uploadAdapter;
   final bool isStreaming;
+
+  /// Builds the input bar below the messages. Defaults to true.
+  /// Set to false when the application provides its own composer.
+  final bool showInput;
   final DmMarkdownInputController? inputController;
   final String inputPlaceholder;
   final Widget? inputLeading;
@@ -377,22 +382,23 @@ class _DmChatViewState extends State<DmChatView> {
               ],
             ),
           ),
-          DmChatInput(
-            controller: widget.inputController,
-            onSend: widget.onSend ?? (_, _) {},
-            onStop: widget.onStop,
-            onAttach: widget.onAttach,
-            uploadAdapter: widget.uploadAdapter,
-            isStreaming: widget.isStreaming,
-            pendingAttachments: widget.pendingAttachments,
-            onRemoveAttachment: widget.onRemoveAttachment,
-            placeholder: widget.inputPlaceholder,
-            leading: widget.inputLeading,
-            trailing: widget.inputTrailing,
-            minLines: widget.inputMinLines,
-            maxLines: widget.inputMaxLines,
-            submitShortcut: widget.submitShortcut,
-          ),
+          if (widget.showInput)
+            DmChatInput(
+              controller: widget.inputController,
+              onSend: widget.onSend ?? (_, _) {},
+              onStop: widget.onStop,
+              onAttach: widget.onAttach,
+              uploadAdapter: widget.uploadAdapter,
+              isStreaming: widget.isStreaming,
+              pendingAttachments: widget.pendingAttachments,
+              onRemoveAttachment: widget.onRemoveAttachment,
+              placeholder: widget.inputPlaceholder,
+              leading: widget.inputLeading,
+              trailing: widget.inputTrailing,
+              minLines: widget.inputMinLines,
+              maxLines: widget.inputMaxLines,
+              submitShortcut: widget.submitShortcut,
+            ),
         ],
       ),
     );

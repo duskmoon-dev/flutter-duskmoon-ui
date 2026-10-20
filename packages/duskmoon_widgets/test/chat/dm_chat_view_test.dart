@@ -64,7 +64,64 @@ void main() {
           ),
         ),
       );
+      expect(find.byType(DmChatInput), findsOneWidget);
       expect(find.text('Say hi'), findsOneWidget);
+    });
+
+    testWidgets('hiding input gives messages the full available height', (
+      tester,
+    ) async {
+      await pumpThemed(
+        tester,
+        const SizedBox(
+          height: 400,
+          child: DmChatView(messages: [], showInput: false),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DmChatInput), findsNothing);
+      expect(find.byType(DmMarkdownInput), findsNothing);
+      expect(tester.getSize(find.byType(ListView)).height, 400);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('input can be toggled without replacing the conversation', (
+      tester,
+    ) async {
+      Future<void> pumpChat(bool showInput) => pumpThemed(
+            tester,
+            SizedBox(
+              height: 400,
+              child: DmChatView(
+                messages: const [],
+                showInput: showInput,
+              ),
+            ),
+          );
+
+      await pumpChat(true);
+      await tester.pumpAndSettle();
+      final state = tester.state(find.byType(DmChatView));
+      final scrollController =
+          tester.widget<ListView>(find.byType(ListView)).controller;
+      expect(find.byType(DmChatInput), findsOneWidget);
+      expect(tester.getSize(find.byType(ListView)).height, lessThan(400));
+
+      await pumpChat(false);
+      await tester.pumpAndSettle();
+      expect(find.byType(DmChatInput), findsNothing);
+      expect(tester.getSize(find.byType(ListView)).height, 400);
+      expect(tester.state(find.byType(DmChatView)), same(state));
+      expect(tester.widget<ListView>(find.byType(ListView)).controller,
+          same(scrollController));
+
+      await pumpChat(true);
+      await tester.pumpAndSettle();
+      expect(find.byType(DmChatInput), findsOneWidget);
+      expect(tester.getSize(find.byType(ListView)).height, lessThan(400));
+      expect(tester.state(find.byType(DmChatView)), same(state));
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('input line limits propagate to DmMarkdownInput', (

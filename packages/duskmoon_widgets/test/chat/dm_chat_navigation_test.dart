@@ -62,6 +62,7 @@ Future<void> _pumpChat(
   List<DmChatMessage> messages, {
   bool reverse = true,
   bool showNavigation = true,
+  bool showInput = true,
   DmPlatformStyle style = DmPlatformStyle.material,
   double textScale = 1,
 }) async {
@@ -82,6 +83,7 @@ Future<void> _pumpChat(
               messages: messages,
               reverse: reverse,
               showMessageNavigation: showNavigation,
+              showInput: showInput,
               theme: DmChatTheme.withContext(context).copyWith(
                 customBuilders: {
                   'height': (_, block) =>
@@ -300,6 +302,45 @@ void main() {
     });
 
     for (final reverse in [true, false]) {
+      testWidgets(
+        'reverse=$reverse preserves navigation, unread and pinned scrolling '
+        'without input',
+        (tester) async {
+          final messages = _turns(12);
+          await _pumpChat(tester, messages, reverse: reverse, showInput: false);
+          expect(find.byType(DmChatInput), findsNothing);
+
+          final unbuiltId = reverse ? 'u0' : 'u11';
+          expect(find.byKey(ValueKey(unbuiltId)), findsNothing);
+          await tester.tap(_marker(unbuiltId));
+          await tester.pumpAndSettle();
+          _expectVisible(tester, unbuiltId);
+
+          await tester.tap(_marker('u1'));
+          await tester.pumpAndSettle();
+          _expectVisible(tester, 'u1', nearTop: true);
+          messages.add(_text('latest', DmChatRole.assistant, 'New answer'));
+          await _pumpChat(tester, messages, reverse: reverse, showInput: false);
+          _expectVisible(tester, 'a1');
+          expect(
+            find.descendant(of: find.byType(Badge), matching: find.text('1')),
+            findsOneWidget,
+          );
+
+          await tester.tap(find.byType(FloatingActionButton));
+          await tester.pumpAndSettle();
+          _expectVisible(tester, 'latest');
+          expect(find.byType(FloatingActionButton), findsNothing);
+
+          messages.add(_text('pinned', DmChatRole.assistant, 'Pinned answer'));
+          await _pumpChat(tester, messages, reverse: reverse, showInput: false);
+          _expectVisible(tester, 'pinned');
+          expect(find.byType(FloatingActionButton), findsNothing);
+          expect(find.byType(DmChatInput), findsNothing);
+          expect(tester.takeException(), isNull);
+        },
+      );
+
       testWidgets(
         'reverse=$reverse reaches unbuilt turns across a very tall reply',
         (tester) async {

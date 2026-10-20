@@ -41,6 +41,11 @@ message count and available height. Very long conversations can scroll the
 rail independently. Keyboard activation is supported. Set
 `showMessageNavigation: false` to hide it.
 
+Set `showInput: false` to omit the built-in composer when the application
+provides its own input or displays the conversation on a companion screen.
+Messages, navigation and scrolling remain available; `showInput` defaults to
+`true` and can change at runtime.
+
 ### Platform Resolution
 
 Three-tier resolution order:
