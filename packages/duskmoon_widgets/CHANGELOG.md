@@ -1,4 +1,4 @@
-## Unreleased
+## 2.2.1
 
 - Allow `DmChatView(showInput: false)` to omit its built-in composer while
   preserving message navigation, pinned scrolling and unread indicators.

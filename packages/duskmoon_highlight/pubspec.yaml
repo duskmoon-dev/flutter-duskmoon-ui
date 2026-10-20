@@ -1,6 +1,6 @@
 name: duskmoon_highlight
 description: Tree-sitter parsing and syntax highlighting for Flutter, with bundled native and WebAssembly grammars.
-version: 2.2.0
+version: 2.2.1
 repository: https://github.com/duskmoon-dev/flutter-duskmoon-ui
 issue_tracker: https://github.com/duskmoon-dev/flutter-duskmoon-ui/issues
 resolution: workspace

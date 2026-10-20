@@ -1,3 +1,7 @@
+## 2.2.1
+
+- Release 2.2.1 (2026-10-20)
+
 ## 2.2.0
 
 - Include compact user-message navigation, turn previews, and click/keyboard

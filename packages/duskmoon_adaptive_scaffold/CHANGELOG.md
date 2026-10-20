@@ -1,4 +1,4 @@
-## Unreleased
+## 2.2.1
 
 - Let single-body layouts span non-occluding folds when no secondary body is
   active at the current breakpoint, including empty-builder overrides.
