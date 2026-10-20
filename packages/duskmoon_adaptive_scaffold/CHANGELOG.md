@@ -1,3 +1,10 @@
+## Unreleased
+
+- Let single-body layouts span non-occluding folds when no secondary body is
+  active at the current breakpoint, including empty-builder overrides.
+- Preserve explicit two-pane layouts, physical hinge and occluding fold
+  avoidance, and navigation-on-secondary behavior.
+
 ## 2.2.0
 
 - Release 2.2.0 (2026-10-20)

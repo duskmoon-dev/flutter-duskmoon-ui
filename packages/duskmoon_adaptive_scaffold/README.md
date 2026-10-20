@@ -34,7 +34,11 @@ DmAdaptiveScaffold(
 `DuoScreenPolicy.splitBody` places the body and secondary body on opposite
 sides of a separating hinge or fold. Horizontal separators split top/bottom;
 vertical separators mirror body reading order in RTL. A zero-width flat fold
-does not split the layout. Half-open folds and physically occluding folds do.
+does not split the layout. A non-occluding half-open fold also lets a single
+body span the continuous display when no secondary body is active at the current
+breakpoint, including `DmAdaptiveScaffold.emptyBuilder` overrides. Active
+secondary bodies still split at the fold. Physical hinges and occluding folds
+always keep content in separate panes.
 Feature selection is deterministic: physical hinges take precedence over folds,
 then bounds are ordered top-to-bottom and left-to-right.
 

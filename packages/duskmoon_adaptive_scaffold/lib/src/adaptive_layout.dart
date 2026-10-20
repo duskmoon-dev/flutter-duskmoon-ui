@@ -174,7 +174,10 @@ class _AdaptiveLayoutState extends State<AdaptiveLayout>
       );
     });
 
-    final Rect? hinge = DuoScreen.hingeOf(context);
+    final Rect? hinge = resolveLayoutHinge(context,
+        includeNonOccludingFolds:
+            widget.duoScreenPolicy != DuoScreenPolicy.splitBody ||
+                chosenWidgets[_SlotIds.secondaryBody.name]?.builder != null);
     final DuoLayoutMode mode = resolveDuoLayoutMode(
       policy: widget.duoScreenPolicy,
       // ignore: deprecated_member_use_from_same_package

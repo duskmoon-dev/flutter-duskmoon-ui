@@ -5,7 +5,9 @@ import 'package:flutter/widgets.dart';
 /// Policy for how an adaptive layout distributes its slots across two
 /// screens.
 enum DuoScreenPolicy {
-  /// Default behavior. Body and secondaryBody split around a separating hinge or fold.
+  /// Body and an active secondaryBody split around a separating hinge or fold.
+  /// A single body spans non-occluding folds; physical hinges and occluding
+  /// folds always keep content in separate panes.
   splitBody,
 
   /// Navigation and secondaryBody move to the second screen while the body
@@ -54,36 +56,7 @@ abstract final class DuoScreen {
   /// the view are ignored. Selection is independent of feature list order:
   /// physical hinges take precedence, then bounds are sorted top-to-bottom
   /// and left-to-right.
-  static Rect? hingeOf(BuildContext context) {
-    final Size size = MediaQuery.sizeOf(context);
-    final features = MediaQuery.displayFeaturesOf(context)
-        .where((feature) =>
-            isSeparating(feature) &&
-            ((feature.bounds.top <= 0 &&
-                    feature.bounds.bottom >= size.height &&
-                    feature.bounds.left > 0 &&
-                    feature.bounds.right < size.width) ||
-                (feature.bounds.left <= 0 &&
-                    feature.bounds.right >= size.width &&
-                    feature.bounds.top > 0 &&
-                    feature.bounds.bottom < size.height)))
-        .toList()
-      ..sort((a, b) {
-        final priority = (a.type == DisplayFeatureType.hinge ? 0 : 1)
-            .compareTo(b.type == DisplayFeatureType.hinge ? 0 : 1);
-        if (priority != 0) return priority;
-        for (final comparison in [
-          a.bounds.top.compareTo(b.bounds.top),
-          a.bounds.left.compareTo(b.bounds.left),
-          a.bounds.bottom.compareTo(b.bounds.bottom),
-          a.bounds.right.compareTo(b.bounds.right),
-        ]) {
-          if (comparison != 0) return comparison;
-        }
-        return 0;
-      });
-    return features.firstOrNull?.bounds;
-  }
+  static Rect? hingeOf(BuildContext context) => resolveLayoutHinge(context);
 
   /// Whether [feature] splits the view into two logical screens.
   static bool isSeparating(DisplayFeature feature) {
@@ -95,6 +68,45 @@ abstract final class DuoScreen {
       _ => false,
     };
   }
+}
+
+/// Selects a separator after excluding folds that the layout can span.
+///
+/// Internal to this package; not exported. Filtering precedes selection so an
+/// ignored fold cannot hide another feature that physically occludes pixels.
+Rect? resolveLayoutHinge(BuildContext context,
+    {bool includeNonOccludingFolds = true}) {
+  final Size size = MediaQuery.sizeOf(context);
+  final features = MediaQuery.displayFeaturesOf(context)
+      .where((feature) =>
+          (includeNonOccludingFolds ||
+              feature.type != DisplayFeatureType.fold ||
+              !feature.bounds.isEmpty) &&
+          DuoScreen.isSeparating(feature) &&
+          ((feature.bounds.top <= 0 &&
+                  feature.bounds.bottom >= size.height &&
+                  feature.bounds.left > 0 &&
+                  feature.bounds.right < size.width) ||
+              (feature.bounds.left <= 0 &&
+                  feature.bounds.right >= size.width &&
+                  feature.bounds.top > 0 &&
+                  feature.bounds.bottom < size.height)))
+      .toList()
+    ..sort((a, b) {
+      final priority = (a.type == DisplayFeatureType.hinge ? 0 : 1)
+          .compareTo(b.type == DisplayFeatureType.hinge ? 0 : 1);
+      if (priority != 0) return priority;
+      for (final comparison in [
+        a.bounds.top.compareTo(b.bounds.top),
+        a.bounds.left.compareTo(b.bounds.left),
+        a.bounds.bottom.compareTo(b.bounds.bottom),
+        a.bounds.right.compareTo(b.bounds.right),
+      ]) {
+        if (comparison != 0) return comparison;
+      }
+      return 0;
+    });
+  return features.firstOrNull?.bounds;
 }
 
 /// Which duo-screen arrangement an adaptive layout uses.

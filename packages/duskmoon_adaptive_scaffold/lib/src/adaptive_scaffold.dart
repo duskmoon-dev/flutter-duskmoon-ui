@@ -685,7 +685,10 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
                     Breakpoints.standard: SlotLayout.from(
                       key: const Key('sBody'),
                       outAnimation: DmAdaptiveScaffold.stayOnScreen,
-                      builder: widget.secondaryBody,
+                      builder: widget.secondaryBody !=
+                              DmAdaptiveScaffold.emptyBuilder
+                          ? widget.secondaryBody
+                          : null,
                     ),
                     if (widget.smallSecondaryBody != null)
                       widget.smallBreakpoint: (widget.smallSecondaryBody !=

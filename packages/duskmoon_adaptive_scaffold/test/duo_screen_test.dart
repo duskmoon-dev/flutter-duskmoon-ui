@@ -48,6 +48,143 @@ SlotLayout _slot(Key key, {WidgetBuilder? builder}) => SlotLayout(config: {
     });
 
 void main() {
+  for (final horizontal in [false, true]) {
+    final fold = _feature(
+      horizontal
+          ? const Rect.fromLTRB(0, 350, 841, 350)
+          : const Rect.fromLTRB(420, 0, 420, 700),
+      type: DisplayFeatureType.fold,
+      state: DisplayFeatureState.postureHalfOpened,
+    );
+    final orientation = horizontal ? 'horizontal' : 'vertical';
+
+    for (final secondary in ['absent', 'empty', 'inactive', 'overridden']) {
+      testWidgets('$orientation fold spans body with $secondary secondary pane',
+          (tester) async {
+        await _pump(
+          tester,
+          DmAdaptiveScaffold(
+            destinations: _destinations,
+            navigationVisible: false,
+            useDrawer: false,
+            internalAnimations: false,
+            body: (_) => const SizedBox.expand(key: _body),
+            secondaryBody: switch (secondary) {
+              'empty' => DmAdaptiveScaffold.emptyBuilder,
+              'overridden' => (_) => const SizedBox.expand(key: _secondary),
+              _ => null,
+            },
+            smallSecondaryBody: secondary == 'inactive'
+                ? DmAdaptiveScaffold.emptyBuilder
+                : null,
+            mediumLargeSecondaryBody: secondary == 'overridden'
+                ? DmAdaptiveScaffold.emptyBuilder
+                : null,
+            largeSecondaryBody: secondary == 'inactive'
+                ? (_) => const SizedBox.expand(key: _secondary)
+                : null,
+          ),
+          size: const Size(841, 700),
+          features: [fold],
+        );
+        expect(tester.getRect(find.byKey(_body)),
+            const Rect.fromLTWH(0, 0, 841, 700));
+        expect(find.byKey(_secondary), findsNothing);
+        expect(tester.takeException(), isNull);
+      });
+    }
+
+    testWidgets('$orientation fold still splits an active secondary pane',
+        (tester) async {
+      await _pump(
+        tester,
+        DmAdaptiveScaffold(
+          destinations: _destinations,
+          navigationVisible: false,
+          useDrawer: false,
+          internalAnimations: false,
+          body: (_) => const SizedBox.expand(key: _body),
+          mediumLargeSecondaryBody: (_) =>
+              const SizedBox.expand(key: _secondary),
+        ),
+        size: const Size(841, 700),
+        features: [fold],
+      );
+      expect(
+          tester.getRect(find.byKey(_body)),
+          horizontal
+              ? const Rect.fromLTRB(0, 0, 841, 350)
+              : const Rect.fromLTRB(0, 0, 420, 700));
+      expect(
+          tester.getRect(find.byKey(_secondary)),
+          horizontal
+              ? const Rect.fromLTRB(0, 350, 841, 700)
+              : const Rect.fromLTRB(420, 0, 841, 700));
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('$orientation fold retains navigationOnSecondary arrangement',
+        (tester) async {
+      await _pump(
+        tester,
+        AdaptiveLayout(
+          internalAnimations: false,
+          duoScreenPolicy: DuoScreenPolicy.navigationOnSecondary,
+          body: _slot(_body),
+          primaryNavigation: _slot(const Key('companion-navigation')),
+        ),
+        size: const Size(841, 700),
+        features: [fold],
+      );
+      expect(
+          tester.getRect(find.byKey(_body)),
+          horizontal
+              ? const Rect.fromLTRB(0, 0, 841, 350)
+              : const Rect.fromLTRB(0, 0, 420, 700));
+      final navigation =
+          tester.getRect(find.byKey(const Key('companion-navigation')));
+      expect(horizontal ? navigation.top : navigation.left,
+          horizontal ? 350 : 420);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  for (final feature in [
+    _feature(const Rect.fromLTRB(420, 0, 420, 700)),
+    _feature(const Rect.fromLTRB(410, 0, 430, 700)),
+    _feature(const Rect.fromLTRB(410, 0, 430, 700),
+        type: DisplayFeatureType.fold,
+        state: DisplayFeatureState.postureHalfOpened),
+  ]) {
+    testWidgets('${feature.type} ${feature.bounds} keeps single body in a pane',
+        (tester) async {
+      await _pump(
+          tester, AdaptiveLayout(internalAnimations: false, body: _slot(_body)),
+          size: const Size(841, 700), features: [feature]);
+      expect(tester.getRect(find.byKey(_body)),
+          Rect.fromLTRB(0, 0, feature.bounds.left, 700));
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('spanning an empty fold still avoids a later occluding fold',
+      (tester) async {
+    await _pump(
+        tester, AdaptiveLayout(internalAnimations: false, body: _slot(_body)),
+        size: const Size(841, 700),
+        features: [
+          _feature(const Rect.fromLTRB(280, 0, 280, 700),
+              type: DisplayFeatureType.fold,
+              state: DisplayFeatureState.postureHalfOpened),
+          _feature(const Rect.fromLTRB(560, 0, 580, 700),
+              type: DisplayFeatureType.fold,
+              state: DisplayFeatureState.postureHalfOpened),
+        ]);
+    expect(
+        tester.getRect(find.byKey(_body)), const Rect.fromLTRB(0, 0, 560, 700));
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('single screen navigationOnSecondary retains mobile navigation',
       (tester) async {
     await _pump(
