@@ -1,4 +1,4 @@
-## Unreleased
+## 2.2.0
 
 - Add a compact, centered navigation rail with one tick per user message in
   `DmChatView`, enabled by default and optional with `showMessageNavigation`.

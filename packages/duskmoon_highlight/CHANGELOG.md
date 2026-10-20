@@ -1,3 +1,7 @@
+## 2.2.0
+
+- Release 2.2.0 (2026-10-20)
+
 ## 2.1.1
 
 - Compress bundled parser C sources in hosted archives to fit Pub's 256 MiB
