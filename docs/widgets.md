@@ -500,7 +500,9 @@ The chat module provides LLM-style message models, markdown-rendered bubbles, at
 
 ### DmChatView
 
-`DmChatView` renders a reverse chat list with pinned-to-bottom auto-scroll, an optional jump-to-bottom button, and a `DmChatInput` composer.
+`DmChatView` renders a chat list with pinned-to-bottom auto-scroll, user-message navigation, an optional jump-to-bottom button, and a `DmChatInput` composer. Pass messages in chronological order with either `reverse` setting.
+
+The leading navigation rail shows one tick per **user** message, oldest first, and highlights the current turn as you scroll. Its compact spacing adapts to the message count and available height, keeping the overview vertically centered within 256 pixels or 60% of the message viewport, whichever is smaller. Click a tick or focus it and press Enter/Space to jump to that message, including messages outside the currently rendered viewport. Hover or focus previews the prompt and its first available assistant text; attachment-only prompts show filenames. Previews use static message content and never subscribe to streams. Very long histories can scroll the rail independently. The composer stays full width. Set `showMessageNavigation: false` to hide it.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
@@ -520,8 +522,9 @@ The chat module provides LLM-style message models, markdown-rendered bubbles, at
 | `emptyBuilder` | `WidgetBuilder?` | `null` | Empty-state builder |
 | `avatarBuilder` / `headerBuilder` | callback | `null` | Per-message avatar/header slots |
 | `showJumpToBottom` | `bool` | `true` | Show jump button when unpinned |
+| `showMessageNavigation` | `bool` | `true` | Show user-message ticks with previews and click/keyboard navigation |
 | `autoScroll` | `bool` | `true` | Auto-scroll when pinned |
-| `reverse` | `bool` | `true` | Reverse list behavior |
+| `reverse` | `bool` | `true` | Anchor the chronological list at the bottom; `false` starts at the oldest message |
 | `padding` | `EdgeInsets?` | `null` | Message list padding |
 | `theme` | `DmChatTheme?` | `null` | Chat theme override |
 | `pendingAttachments` | `List<DmChatAttachment>` | `const []` | Composer attachment chips |

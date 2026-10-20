@@ -1,12 +1,13 @@
 import 'package:flutter/widgets.dart';
 
-/// Tracks whether a `reverse: true` scrollable is pinned near offset 0
-/// (= visual bottom). Exposes a notifier so a Jump-to-Bottom button can
+/// Tracks whether a scrollable is pinned near its visual bottom.
+/// Exposes a notifier so a Jump-to-Bottom button can
 /// show/hide with unread counts.
 class ChatScrollTracker extends ChangeNotifier {
-  ChatScrollTracker({this.pinnedThreshold = 48});
+  ChatScrollTracker({this.pinnedThreshold = 48, this.reverse = true});
 
   final double pinnedThreshold;
+  bool reverse;
   final ScrollController controller = ScrollController();
   bool _pinned = true;
   int _unread = 0;
@@ -18,6 +19,9 @@ class ChatScrollTracker extends ChangeNotifier {
     controller.addListener(_onScroll);
   }
 
+  /// Refresh after content or viewport dimensions change without scrolling.
+  void refresh() => _onScroll();
+
   @override
   void dispose() {
     controller.removeListener(_onScroll);
@@ -27,7 +31,11 @@ class ChatScrollTracker extends ChangeNotifier {
 
   void _onScroll() {
     if (!controller.hasClients) return;
-    final nowPinned = controller.offset <= pinnedThreshold;
+    final position = controller.position;
+    final distance = reverse
+        ? position.pixels - position.minScrollExtent
+        : position.maxScrollExtent - position.pixels;
+    final nowPinned = distance <= pinnedThreshold;
     if (nowPinned != _pinned) {
       _pinned = nowPinned;
       if (_pinned) _unread = 0;
@@ -46,10 +54,13 @@ class ChatScrollTracker extends ChangeNotifier {
   Future<void> scrollToBottom() async {
     if (!controller.hasClients) return;
     await controller.animateTo(
-      0,
+      reverse
+          ? controller.position.minScrollExtent
+          : controller.position.maxScrollExtent,
       duration: const Duration(milliseconds: 220),
       curve: Curves.easeOut,
     );
+    if (!controller.hasClients) return;
     _unread = 0;
     _pinned = true;
     notifyListeners();

@@ -34,6 +34,13 @@ DmChatView(
 );
 ```
 
+`DmChatView` includes a leading rail with one tick per user message. Click a
+tick to jump to that turn, or hover/focus it to preview the prompt and reply.
+The rail stays vertically centered with compact spacing that adapts to the
+message count and available height. Very long conversations can scroll the
+rail independently. Keyboard activation is supported. Set
+`showMessageNavigation: false` to hide it.
+
 ### Platform Resolution
 
 Three-tier resolution order:

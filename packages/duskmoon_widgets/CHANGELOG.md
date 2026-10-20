@@ -1,3 +1,12 @@
+## Unreleased
+
+- Add a compact, centered navigation rail with one tick per user message in
+  `DmChatView`, enabled by default and optional with `showMessageNavigation`.
+- Jump to lazy, offscreen messages by click or keyboard and preview static
+  prompt/reply text on hover or focus. Adapt tick spacing to long conversations.
+- Preserve chronological order and pinned/unread behavior with both scroll
+  directions and in-place message appends.
+
 ## 2.1.1
 
 - Release 2.1.1 (2026-10-19)

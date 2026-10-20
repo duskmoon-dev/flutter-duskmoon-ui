@@ -271,10 +271,12 @@ class _ChatScreenState extends State<ChatScreen> {
         inputPlaceholder: 'Model not ready',
         inputMinLines: 10,
         inputMaxLines: 10,
-        inputLeading: _DemoSelector(
-          value: _demo,
-          enabled: !_isStreaming,
-          onChanged: _onDemoChanged,
+        inputLeading: Flexible(
+          child: _DemoSelector(
+            value: _demo,
+            enabled: !_isStreaming,
+            onChanged: _onDemoChanged,
+          ),
         ),
         avatarBuilder: _avatarBuilder,
         headerBuilder: _headerBuilder,

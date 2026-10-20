@@ -1,3 +1,8 @@
+## Unreleased
+
+- Include compact user-message navigation, turn previews, and click/keyboard
+  jumps in the exported `DmChatView`.
+
 ## 2.1.1
 
 - Release 2.1.1 (2026-10-19)
