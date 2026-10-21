@@ -1,4 +1,4 @@
-## Unreleased
+## 2.2.3
 
 - Show an abbreviated prompt/reply popover while a touch navigation candidate
   is active, updating it during dragging and overflow scrolling.

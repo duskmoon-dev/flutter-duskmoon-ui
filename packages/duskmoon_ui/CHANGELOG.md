@@ -1,4 +1,4 @@
-## Unreleased
+## 2.2.3
 
 - Include touch-candidate message previews and prevent visible overshoot during
   distant message navigation in the exported `DmChatView`.
