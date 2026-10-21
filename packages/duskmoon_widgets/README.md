@@ -38,11 +38,16 @@ DmChatView(
 tick to jump to that turn, or hover/focus it to preview the prompt and reply.
 The rail stays vertically centered with compact spacing that adapts to the
 message count and available height. On touchscreens, press anywhere in its
-48-pixel-wide hit area and slide to highlight a turn; release to jump once.
+48-pixel-wide hit area and slide to highlight a turn and preview its abbreviated
+prompt and reply in a popover; release to jump once and dismiss the preview.
 Holding near either edge reveals more markers in long histories. Lifting a
 finger commits the candidate; a cancelled touch does not jump. Mouse wheel
 scrolling and keyboard activation remain supported. Set
 `showMessageNavigation: false` to hide it.
+
+Distant turns appear directly once their position is resolved; nearby rendered
+turns scroll into view. The current conversation remains visible during a
+distant lookup.
 
 Set `showInput: false` to omit the built-in composer when the application
 provides its own input or displays the conversation on a companion screen.

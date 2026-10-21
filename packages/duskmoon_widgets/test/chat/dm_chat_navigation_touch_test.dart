@@ -9,6 +9,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 Finder _marker(String id) => find.byKey(ValueKey('chat-navigation-$id'));
 
+Finder _preview(String id) =>
+    find.byKey(ValueKey('chat-navigation-preview-$id'));
+
 Finder get _rail => find.descendant(
       of: find.byType(ChatMessageNavigation),
       matching: find.byType(ListView),
@@ -207,10 +210,14 @@ void main() {
       expect(controller.offset, controller.position.maxScrollExtent);
       expect(_marker('u99').hitTestable(), findsOneWidget);
       expect(_tickWidth(tester, 'u99'), 20);
+      await tester.pump();
+      expect(_preview('u99'), findsOneWidget);
+      expect(_preview('u35'), findsNothing);
       expect(selected, isEmpty, reason: 'Autoscroll must never commit.');
       await touch.up();
       await tester.pumpAndSettle();
       expect(selected, ['u99']);
+      expect(_preview('u99'), findsNothing);
 
       await _pumpRail(tester, _users(100), selected, active: 'u99');
       expect(controller.offset, controller.position.maxScrollExtent);
@@ -223,10 +230,14 @@ void main() {
       expect(controller.offset, 0);
       expect(_marker('u0').hitTestable(), findsOneWidget);
       expect(_tickWidth(tester, 'u0'), 20);
+      await tester.pump();
+      expect(_preview('u0'), findsOneWidget);
+      expect(_preview('u99'), findsNothing);
       expect(selected, ['u99']);
       await back.up();
       await tester.pumpAndSettle();
       expect(selected, ['u99', 'u0']);
+      expect(_preview('u0'), findsNothing);
       expect(tester.takeException(), isNull);
     });
 
@@ -292,43 +303,108 @@ void main() {
 
     for (final focused in [false, true]) {
       testWidgets(
-          'touch safely hides an open '
-          '${focused ? 'focus' : 'hover'} preview', (tester) async {
-        final selected = <String>[];
-        await _pumpRail(tester, _users(8), selected);
-        if (focused) {
-          final gesture = find.descendant(
-            of: _marker('u2'),
-            matching: find.byType(GestureDetector),
+        'touch replaces an open ${focused ? 'focus' : 'hover'} preview '
+        'with current candidate',
+        (tester) async {
+          final selected = <String>[];
+          await _pumpRail(tester, _users(8), selected);
+          if (focused) {
+            final gesture = find.descendant(
+              of: _marker('u2'),
+              matching: find.byType(GestureDetector),
+            );
+            Focus.of(tester.element(gesture)).requestFocus();
+          } else {
+            final mouse = await tester.createGesture(
+              kind: PointerDeviceKind.mouse,
+            );
+            addTearDown(mouse.removePointer);
+            await mouse.addPointer(location: Offset.zero);
+            await mouse.moveTo(tester.getCenter(_marker('u2')));
+            await tester.pump(const Duration(milliseconds: 300));
+          }
+          await tester.pumpAndSettle();
+          expect(_preview('u2'), findsOneWidget);
+          final touch = await tester.startGesture(
+            tester.getCenter(_marker('u3')),
           );
-          Focus.of(tester.element(gesture)).requestFocus();
-        } else {
-          final mouse =
-              await tester.createGesture(kind: PointerDeviceKind.mouse);
-          addTearDown(mouse.removePointer);
-          await mouse.addPointer(location: Offset.zero);
-          await mouse.moveTo(tester.getCenter(_marker('u2')));
-          await tester.pump(const Duration(milliseconds: 300));
-        }
-        await tester.pumpAndSettle();
-        final preview = find.byKey(
-          const ValueKey('chat-navigation-preview-u2'),
+          await tester.pump();
+          expect(tester.takeException(), isNull);
+          await tester.pumpAndSettle();
+          expect(_preview('u2'), findsNothing);
+          expect(_preview('u3'), findsOneWidget);
+          expect(_tickWidth(tester, 'u3'), 20);
+          expect(selected, isEmpty);
+          await touch.moveTo(tester.getCenter(_marker('u5')));
+          await tester.pumpAndSettle();
+          expect(_preview('u3'), findsNothing);
+          expect(_preview('u5'), findsOneWidget);
+          expect(selected, isEmpty);
+          await touch.cancel();
+          await tester.pumpAndSettle();
+          expect(_preview('u5'), findsNothing);
+          expect(selected, isEmpty);
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
+
+    testWidgets('touch preview abbreviates the prompt and first response', (
+      tester,
+    ) async {
+      final semantics = tester.ensureSemantics();
+      try {
+        final selected = <String>[];
+        final prompt = List.filled(30, 'Long question').join(' ');
+        final response = List.filled(40, 'Long answer').join(' ');
+        await _pumpRail(
+          tester,
+          [
+            DmChatMessage(
+              id: 'u0',
+              role: DmChatRole.user,
+              blocks: [DmChatTextBlock(text: prompt)],
+            ),
+            DmChatMessage(
+              id: 'a0',
+              role: DmChatRole.assistant,
+              blocks: [DmChatTextBlock(text: response)],
+            ),
+          ],
+          selected,
+          active: 'u0',
         );
-        expect(preview, findsOneWidget);
         final touch =
-            await tester.startGesture(tester.getCenter(_marker('u3')));
-        await tester.pump();
-        expect(tester.takeException(), isNull);
+            await tester.startGesture(tester.getCenter(_marker('u0')));
+        await tester.pumpAndSettle();
+        final preview = _preview('u0');
+        expect(preview, findsOneWidget);
+        final promptText = tester.widget<Text>(
+          find.descendant(of: preview, matching: find.text(prompt)),
+        );
+        final responseText = tester.widget<Text>(
+          find.descendant(of: preview, matching: find.text(response)),
+        );
+        expect(promptText.maxLines, 2);
+        expect(promptText.overflow, TextOverflow.ellipsis);
+        expect(responseText.maxLines, 3);
+        expect(responseText.overflow, TextOverflow.ellipsis);
+        expect(find.bySemanticsLabel(prompt), findsNothing);
+        expect(find.bySemanticsLabel(response), findsNothing);
+        expect(
+          find.bySemanticsLabel('Jump to user message 1: $prompt'),
+          findsOneWidget,
+        );
+        expect(selected, isEmpty);
+        await touch.up();
         await tester.pumpAndSettle();
         expect(preview, findsNothing);
-        expect(_tickWidth(tester, 'u3'), 20);
-        expect(selected, isEmpty);
-        await touch.cancel();
-        await tester.pumpAndSettle();
-        expect(selected, isEmpty);
+        expect(selected, ['u0']);
         expect(tester.takeException(), isNull);
-      });
-    }
+      } finally {
+        semantics.dispose();
+      }
+    });
 
     testWidgets('cancelling an overflow gesture stops its autoscroll timer',
         (tester) async {
@@ -351,13 +427,15 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('a removed candidate cannot commit a different message',
-        (tester) async {
+    testWidgets('a removed candidate cannot commit a different message', (
+      tester,
+    ) async {
       final selected = <String>[];
       final messages = _users(8);
       await _pumpRail(tester, messages, selected);
       final touch = await tester.startGesture(tester.getCenter(_marker('u2')));
-      await tester.pump();
+      await tester.pumpAndSettle();
+      expect(_preview('u2'), findsOneWidget);
       await _pumpRail(
         tester,
         messages.where((message) => message.id != 'u2').toList(),
@@ -366,11 +444,13 @@ void main() {
       await touch.up();
       await tester.pumpAndSettle();
       expect(selected, isEmpty);
+      expect(_preview('u2'), findsNothing);
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('disposing a selecting rail clears its autoscroll timer',
-        (tester) async {
+    testWidgets('disposing a selecting rail clears its autoscroll timer', (
+      tester,
+    ) async {
       final selected = <String>[];
       await _pumpRail(tester, _users(100), selected, active: 'u0');
       final bounds = tester.getRect(_rail);
@@ -378,10 +458,13 @@ void main() {
         bounds.bottomCenter - const Offset(0, 1),
       );
       await tester.pump(const Duration(milliseconds: 50));
+      await tester.pump();
+      expect(_preview('u40'), findsOneWidget);
       await tester.pumpWidget(const SizedBox.shrink());
       await touch.up();
       await tester.pump(const Duration(seconds: 1));
       expect(selected, isEmpty);
+      expect(_preview('u40'), findsNothing);
       expect(tester.takeException(), isNull);
     });
 

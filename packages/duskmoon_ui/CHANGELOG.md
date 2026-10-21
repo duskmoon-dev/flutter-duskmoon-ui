@@ -1,3 +1,8 @@
+## Unreleased
+
+- Include touch-candidate message previews and prevent visible overshoot during
+  distant message navigation in the exported `DmChatView`.
+
 ## 2.2.2
 
 - Include touch drag selection and release-only jumps in the exported

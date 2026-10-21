@@ -1,3 +1,6 @@
+import 'dart:ui' as ui;
+
+import 'package:flutter/foundation.dart' show precisionErrorTolerance;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -75,6 +78,9 @@ class DmChatView extends StatefulWidget {
 
   /// Shows a leading navigation rail with one marker per user message.
   /// Hover or focus a marker to preview the turn; activate it to jump there.
+  /// On touch, press and drag to preview turns, then release to jump.
+  /// Distant unbuilt turns are revealed directly once their position is known;
+  /// nearby built turns animate into view.
   final bool showMessageNavigation;
   final bool autoScroll;
   final bool reverse;
@@ -93,12 +99,14 @@ class _DmChatViewState extends State<DmChatView> {
         ..attach()
         ..controller.addListener(_scheduleNavigationUpdate);
   final _listKey = GlobalKey();
+  final _listPaintKey = GlobalKey();
   final _messageKeys = <String, GlobalKey>{};
   final _activeMessageId = ValueNotifier<String?>(null);
   late int _messageCount;
   bool _navigationUpdateScheduled = false;
   int _navigationGeneration = 0;
   String? _navigatingTo;
+  ui.Image? _navigationImage;
 
   @override
   void initState() {
@@ -135,12 +143,21 @@ class _DmChatViewState extends State<DmChatView> {
     _tracker.controller.removeListener(_scheduleNavigationUpdate);
     _tracker.dispose();
     _activeMessageId.dispose();
+    _navigationImage?.dispose();
     super.dispose();
   }
 
   void _cancelNavigation() {
     _navigationGeneration++;
     _navigatingTo = null;
+    _clearNavigationImage();
+  }
+
+  void _clearNavigationImage() {
+    final image = _navigationImage;
+    if (image == null) return;
+    setState(() => _navigationImage = null);
+    WidgetsBinding.instance.addPostFrameCallback((_) => image.dispose());
   }
 
   void _scheduleNavigationUpdate() {
@@ -162,8 +179,8 @@ class _DmChatViewState extends State<DmChatView> {
             ?.findRenderObject();
         if (box is! RenderBox || !box.attached || !box.hasSize) continue;
         final top = box.localToGlobal(Offset.zero, ancestor: viewport).dy;
-        if (top + box.size.height > 0 &&
-            top < viewport.size.height &&
+        if (top + box.size.height > precisionErrorTolerance &&
+            top < viewport.size.height - precisionErrorTolerance &&
             top < firstTop) {
           visibleIndex = i;
           firstTop = top;
@@ -205,11 +222,15 @@ class _DmChatViewState extends State<DmChatView> {
         await position.ensureVisible(
           targetBox,
           alignment: widget.reverse ? 1 : 0,
-          duration: MediaQuery.disableAnimationsOf(context)
+          duration: _navigationImage != null ||
+                  MediaQuery.disableAnimationsOf(context)
               ? Duration.zero
               : const Duration(milliseconds: 220),
           curve: Curves.easeOut,
         );
+        if (_navigationImage != null) {
+          await WidgetsBinding.instance.endOfFrame;
+        }
         break;
       }
 
@@ -244,10 +265,19 @@ class _DmChatViewState extends State<DmChatView> {
       }
       next = next.clamp(position.minScrollExtent, position.maxScrollExtent);
       if ((next - position.pixels).abs() < 0.5) break;
+      if (_navigationImage == null) {
+        final boundary = _listPaintKey.currentContext!.findRenderObject()
+            as RenderRepaintBoundary;
+        final image = boundary.toImageSync(
+          pixelRatio: MediaQuery.devicePixelRatioOf(context),
+        );
+        setState(() => _navigationImage = image);
+      }
       _tracker.controller.jumpTo(next);
     }
     if (mounted && generation == _navigationGeneration) {
       _navigatingTo = null;
+      _clearNavigationImage();
       _scheduleNavigationUpdate();
     }
   }
@@ -323,15 +353,33 @@ class _DmChatViewState extends State<DmChatView> {
                       }
                       return false;
                     },
-                    child: _buildList(),
+                    child: Opacity(
+                      opacity: _navigationImage == null ? 1 : 0,
+                      child: RepaintBoundary(
+                        key: _listPaintKey,
+                        child: _buildList(),
+                      ),
+                    ),
                   ),
                 ),
               ),
+              if (_navigationImage != null)
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: RawImage(
+                      key: const ValueKey('chat-navigation-seek-cover'),
+                      image: _navigationImage,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
               if (widget.showJumpToBottom)
                 AnimatedBuilder(
                   animation: _tracker,
                   builder: (_, _) {
-                    if (_tracker.pinned) return const SizedBox.shrink();
+                    if (_tracker.pinned || _navigationImage != null) {
+                      return const SizedBox.shrink();
+                    }
                     return Positioned(
                       right: 16,
                       bottom: 16,

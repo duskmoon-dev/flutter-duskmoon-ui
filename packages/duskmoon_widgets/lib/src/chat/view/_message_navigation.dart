@@ -339,14 +339,30 @@ class _NavigationMarkerState extends State<_NavigationMarker> {
   bool _focused = false;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.touchHighlighted == true) _scheduleTouchPreview();
+  }
+
+  @override
   void didUpdateWidget(_NavigationMarker oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.touchHighlighted == null && widget.touchHighlighted != null) {
+    if (oldWidget.touchHighlighted != widget.touchHighlighted) {
       _hoverTimer?.cancel();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && widget.touchHighlighted != null) _hidePreview();
-      });
+      _scheduleTouchPreview();
     }
+  }
+
+  void _scheduleTouchPreview() {
+    // Portal visibility cannot change during a marker's build/layout update.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (widget.touchHighlighted == true) {
+        _previewController.show();
+      } else {
+        _hidePreview();
+      }
+    });
   }
 
   @override
@@ -354,9 +370,17 @@ class _NavigationMarkerState extends State<_NavigationMarker> {
     super.didChangeDependencies();
     final position = Scrollable.maybeOf(context)?.position;
     if (position != _scrollPosition) {
-      _scrollPosition?.removeListener(_hidePreview);
+      _scrollPosition?.removeListener(_onScroll);
       _scrollPosition = position;
-      _scrollPosition?.addListener(_hidePreview);
+      _scrollPosition?.addListener(_onScroll);
+    }
+  }
+
+  void _onScroll() {
+    if (widget.touchHighlighted == true) {
+      _scheduleTouchPreview();
+    } else {
+      _hidePreview();
     }
   }
 
@@ -368,7 +392,8 @@ class _NavigationMarkerState extends State<_NavigationMarker> {
   void _onHover(bool hovered) {
     setState(() => _hovered = hovered);
     _hoverTimer?.cancel();
-    if (hovered && widget.touchHighlighted == null) {
+    if (widget.touchHighlighted != null) return;
+    if (hovered) {
       _hoverTimer = Timer(const Duration(milliseconds: 250), () {
         if (mounted && _hovered) _previewController.show();
       });
@@ -380,7 +405,7 @@ class _NavigationMarkerState extends State<_NavigationMarker> {
   @override
   void dispose() {
     _hoverTimer?.cancel();
-    _scrollPosition?.removeListener(_hidePreview);
+    _scrollPosition?.removeListener(_onScroll);
     super.dispose();
   }
 
@@ -499,7 +524,8 @@ class _NavigationMarkerState extends State<_NavigationMarker> {
             },
             onFocusChange: (value) {
               setState(() => _focused = value);
-              if (value && widget.touchHighlighted == null) {
+              if (widget.touchHighlighted != null) return;
+              if (value) {
                 _hoverTimer?.cancel();
                 _previewController.show();
               } else {

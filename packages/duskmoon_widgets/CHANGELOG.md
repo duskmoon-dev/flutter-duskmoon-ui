@@ -1,3 +1,12 @@
+## Unreleased
+
+- Show an abbreviated prompt/reply popover while a touch navigation candidate
+  is active, updating it during dragging and overflow scrolling.
+- Keep the current chat visible while resolving distant turns, then reveal the
+  exact destination without visible overshoot or reversed scrolling.
+- Keep the reached turn selected when rounding leaves an invisible preceding
+  row at the viewport edge.
+
 ## 2.2.2
 
 - Support touch drag selection in the chat navigation rail: highlight on press

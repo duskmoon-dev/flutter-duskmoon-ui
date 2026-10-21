@@ -3,6 +3,7 @@ import 'dart:ui' show PointerDeviceKind, Tristate;
 import 'package:duskmoon_theme/duskmoon_theme.dart';
 import 'package:duskmoon_widgets/duskmoon_widgets.dart';
 import 'package:duskmoon_widgets/src/chat/view/_message_navigation.dart';
+import 'package:flutter/foundation.dart' show precisionErrorTolerance;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -62,7 +63,12 @@ DmChatMessage _text(String id, DmChatRole role, String text) => DmChatMessage(
       blocks: [DmChatTextBlock(text: text)],
     );
 
-List<DmChatMessage> _turns(int count, {bool tallReply = false}) => [
+List<DmChatMessage> _turns(
+  int count, {
+  bool tallReply = false,
+  bool variableReplies = false,
+}) =>
+    [
       for (var i = 0; i < count; i++) ...[
         _text('u$i', DmChatRole.user, 'Question $i'),
         DmChatMessage(
@@ -71,7 +77,11 @@ List<DmChatMessage> _turns(int count, {bool tallReply = false}) => [
           blocks: [
             DmChatCustomBlock(
               kind: 'height',
-              data: tallReply && i == count ~/ 2 ? 4000.0 : 180.0,
+              data: variableReplies
+                  ? [40.0, 1200.0, 180.0, 4000.0, 80.0, 700.0][i % 6]
+                  : tallReply && i == count ~/ 2
+                      ? 4000.0
+                      : 180.0,
             ),
           ],
         ),
@@ -384,6 +394,160 @@ void main() {
             _expectVisible(tester, id, nearTop: id != 'u14');
             expect(tester.takeException(), isNull);
           }
+        },
+      );
+
+      testWidgets(
+        'reverse=$reverse directly reveals distant variable-height turns '
+        'without painting seek bounces',
+        (tester) async {
+          final messages = _turns(120, variableReplies: true);
+          await _pumpChat(tester, messages, reverse: reverse, showInput: false);
+          for (final id in ['u60', 'u15', 'u105', 'u30', 'u90']) {
+            expect(find.byKey(ValueKey(id)), findsNothing);
+            final viewport = tester.getRect(_chatList);
+            tester
+                .widget<ChatMessageNavigation>(
+                    find.byType(ChatMessageNavigation))
+                .onSelected(id);
+            await tester.pump();
+            RawImage? retained;
+            var coveredFrames = 0;
+            final cover = find.byKey(
+              const ValueKey('chat-navigation-seek-cover'),
+            );
+            for (var frame = 0; frame < 60; frame++) {
+              await tester.pump(const Duration(milliseconds: 16));
+              if (cover.evaluate().isEmpty) {
+                if (coveredFrames > 0) break;
+                continue;
+              }
+              final current = tester.widget<RawImage>(cover);
+              retained ??= current;
+              expect(current.image, same(retained.image));
+              expect(tester.getRect(cover), viewport);
+              expect(find.semantics.byLabel(RegExp(r'^Question \d+$')),
+                  findsNothing);
+              coveredFrames++;
+            }
+            expect(coveredFrames, greaterThan(0));
+            await tester.pumpAndSettle();
+            expect(cover, findsNothing);
+            _expectVisible(tester, id, nearTop: true);
+            expect(find.byType(DmChatBubble).evaluate().length,
+                lessThan(messages.length));
+            expect(tester.takeException(), isNull);
+          }
+        },
+      );
+
+      testWidgets(
+        'reverse=$reverse keeps the reached turn selected at fractional viewport boundaries',
+        (tester) async {
+          tester.view.devicePixelRatio = 2.625;
+          tester.view.physicalSize = const Size(2208, 1840);
+          addTearDown(tester.view.resetDevicePixelRatio);
+          addTearDown(tester.view.resetPhysicalSize);
+          await _pumpChat(tester, _turns(32, variableReplies: true),
+              reverse: reverse, showInput: false);
+          final controller = tester.widget<ListView>(_chatList).controller!;
+          for (final id in ['u0', 'u24', 'u8', 'u30', 'u2']) {
+            tester
+                .widget<ChatMessageNavigation>(
+                    find.byType(ChatMessageNavigation))
+                .onSelected(id);
+            await tester.pumpAndSettle();
+            _expectVisible(tester, id, nearTop: true);
+            // Rounding at an aligned edge must not make an effectively
+            // invisible preceding row determine the selected user turn.
+            controller.jumpTo(
+              (controller.offset +
+                      (reverse ? 1 : -1) * precisionErrorTolerance / 2)
+                  .clamp(controller.position.minScrollExtent,
+                      controller.position.maxScrollExtent),
+            );
+            await tester.pumpAndSettle();
+            expect(
+              tester
+                  .widget<ChatMessageNavigation>(
+                      find.byType(ChatMessageNavigation))
+                  .activeMessageId,
+              id,
+            );
+          }
+          expect(tester.takeException(), isNull);
+        },
+      );
+
+      testWidgets(
+        'reverse=$reverse keeps nearby navigation animated in both directions',
+        (tester) async {
+          await _pumpChat(tester, _turns(12),
+              reverse: reverse, showInput: false);
+          final controller = tester.widget<ListView>(_chatList).controller!;
+          if (reverse) {
+            controller.jumpTo(200);
+            await tester.pumpAndSettle();
+          }
+          final navigation = tester.widget<ChatMessageNavigation>(
+            find.byType(ChatMessageNavigation),
+          );
+          final target = reverse ? 'u9' : 'u1';
+          expect(find.byKey(ValueKey(target)), findsOneWidget);
+          navigation.onSelected(target);
+          await tester.pump();
+          await tester.pump();
+          await tester.pump(const Duration(milliseconds: 50));
+          expect(controller.position.isScrollingNotifier.value, isTrue);
+          expect(controller.offset, greaterThan(0));
+          expect(find.byType(RawImage), findsNothing);
+          await tester.pumpAndSettle();
+          _expectVisible(tester, target, nearTop: true);
+
+          final beforeReturn = controller.offset;
+          navigation.onSelected(reverse ? 'u11' : 'u0');
+          await tester.pump();
+          await tester.pump();
+          await tester.pump(const Duration(milliseconds: 50));
+          expect(controller.position.isScrollingNotifier.value, isTrue);
+          expect(controller.offset, lessThan(beforeReturn));
+          expect(find.byType(RawImage), findsNothing);
+          await tester.pumpAndSettle();
+          expect(tester.takeException(), isNull);
+        },
+      );
+
+      testWidgets(
+        'reverse=$reverse drops its retained viewport on manual scroll and dispose',
+        (tester) async {
+          await _pumpChat(tester, _turns(120, variableReplies: true),
+              reverse: reverse, showInput: false);
+          final navigation = tester.widget<ChatMessageNavigation>(
+            find.byType(ChatMessageNavigation),
+          );
+          final cover = find.byKey(
+            const ValueKey('chat-navigation-seek-cover'),
+          );
+          final viewport = tester.getRect(_chatList);
+          navigation.onSelected('u60');
+          await tester.pump();
+          await tester.pump();
+          expect(cover, findsOneWidget);
+          await tester.dragFrom(viewport.center, const Offset(0, 100));
+          await tester.pumpAndSettle();
+          expect(cover, findsNothing);
+          expect(tester.takeException(), isNull);
+
+          final next = ['u0', 'u119', 'u15', 'u105'].firstWhere(
+            (id) => find.byKey(ValueKey(id)).evaluate().isEmpty,
+          );
+          navigation.onSelected(next);
+          await tester.pump();
+          await tester.pump();
+          expect(cover, findsOneWidget);
+          await tester.pumpWidget(const SizedBox.shrink());
+          await tester.pumpAndSettle();
+          expect(tester.takeException(), isNull);
         },
       );
     }
