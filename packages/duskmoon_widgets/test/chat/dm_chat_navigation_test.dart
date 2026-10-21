@@ -3,11 +3,32 @@ import 'dart:ui' show PointerDeviceKind, Tristate;
 import 'package:duskmoon_theme/duskmoon_theme.dart';
 import 'package:duskmoon_widgets/duskmoon_widgets.dart';
 import 'package:duskmoon_widgets/src/chat/view/_message_navigation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Finder _marker(String id) => find.byKey(ValueKey('chat-navigation-$id'));
+
+Future<void> _wheelToMarker(
+  WidgetTester tester,
+  String id,
+  double delta,
+) async {
+  final rail = find.descendant(
+    of: find.byType(ChatMessageNavigation),
+    matching: find.byType(ListView),
+  );
+  for (var i = 0; i < 30 && _marker(id).hitTestable().evaluate().isEmpty; i++) {
+    await tester.sendEventToBinding(PointerScrollEvent(
+      position: tester.getCenter(rail),
+      scrollDelta: Offset(0, delta),
+      kind: PointerDeviceKind.mouse,
+    ));
+    await tester.pump();
+  }
+  expect(_marker(id).hitTestable(), findsOneWidget);
+}
 
 Finder get _chatList => find.ancestor(
       of: find.byType(DmChatBubble).first,
@@ -464,15 +485,8 @@ void main() {
       );
       final controller = tester.widget<ListView>(rail).controller!;
       expect(controller.position.maxScrollExtent, greaterThan(0));
-      final railScrollable = find.byWidgetPredicate(
-        (widget) => widget is Scrollable && widget.controller == controller,
-      );
       for (final id in ['u100', 'u0']) {
-        await tester.scrollUntilVisible(
-          _marker(id),
-          -100,
-          scrollable: railScrollable,
-        );
+        await _wheelToMarker(tester, id, -100);
         await tester.tap(_marker(id));
         await tester.pumpAndSettle();
         _expectVisible(tester, id, nearTop: true);
@@ -496,12 +510,6 @@ void main() {
       await _pumpChat(tester, _turns(50));
       final initialPitch = tester.getCenter(_marker('u49')).dy -
           tester.getCenter(_marker('u48')).dy;
-      final rail = find.ancestor(
-        of: _marker('u49'),
-        matching: find.byType(ListView),
-      );
-      final controller = tester.widget<ListView>(rail).controller!;
-
       await tester.binding.setSurfaceSize(const Size(320, 300));
       await tester.pumpAndSettle();
       expect(_marker('u49').hitTestable(), findsOneWidget);
@@ -517,11 +525,7 @@ void main() {
               .isSelected,
           Tristate.isTrue);
 
-      final railScrollable = find.byWidgetPredicate(
-        (widget) => widget is Scrollable && widget.controller == controller,
-      );
-      await tester.scrollUntilVisible(_marker('u20'), -40,
-          scrollable: railScrollable);
+      await _wheelToMarker(tester, 'u20', -40);
       await tester.tap(_marker('u20'));
       await tester.pumpAndSettle();
       _expectVisible(tester, 'u20', nearTop: true);

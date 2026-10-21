@@ -502,7 +502,9 @@ The chat module provides LLM-style message models, markdown-rendered bubbles, at
 
 `DmChatView` renders a chat list with pinned-to-bottom auto-scroll, user-message navigation, an optional jump-to-bottom button, and a `DmChatInput` composer. Pass messages in chronological order with either `reverse` setting.
 
-The leading navigation rail shows one tick per **user** message, oldest first, and highlights the current turn as you scroll. Its compact spacing adapts to the message count and available height, keeping the overview vertically centered within 256 pixels or 60% of the message viewport, whichever is smaller. Click a tick or focus it and press Enter/Space to jump to that message, including messages outside the currently rendered viewport. Hover or focus previews the prompt and its first available assistant text; attachment-only prompts show filenames. Previews use static message content and never subscribe to streams. Very long histories can scroll the rail independently. The composer stays full width. Set `showMessageNavigation: false` to hide it.
+The leading navigation rail shows one tick per **user** message, oldest first, and highlights the current turn as you scroll. Its compact spacing adapts to the message count and available height, keeping the overview vertically centered within 256 pixels or 60% of the message viewport, whichever is smaller. Click a tick or focus it and press Enter/Space to jump to that message, including messages outside the currently rendered viewport. Hover or focus previews the prompt and its first available assistant text; attachment-only prompts show filenames. Previews use static message content and never subscribe to streams. Mouse wheel scrolling moves the rail independently. The composer stays full width. Set `showMessageNavigation: false` to hide it.
+
+On touchscreens, press in the rail's 48-pixel-wide hit area to highlight the nearest marker, then slide to change the candidate. The conversation stays still until finger release, which jumps once to that turn. Pausing does not commit, and cancellation clears the candidate without jumping. For overflowed histories, holding near the top or bottom edge scrolls the markers to keep every turn reachable; it does not jump the conversation.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
@@ -522,7 +524,7 @@ The leading navigation rail shows one tick per **user** message, oldest first, a
 | `emptyBuilder` | `WidgetBuilder?` | `null` | Empty-state builder |
 | `avatarBuilder` / `headerBuilder` | callback | `null` | Per-message avatar/header slots |
 | `showJumpToBottom` | `bool` | `true` | Show jump button when unpinned |
-| `showMessageNavigation` | `bool` | `true` | Show user-message ticks with previews and click/keyboard navigation |
+| `showMessageNavigation` | `bool` | `true` | Show user-message ticks with previews and touch/click/keyboard navigation |
 | `autoScroll` | `bool` | `true` | Auto-scroll when pinned |
 | `reverse` | `bool` | `true` | Anchor the chronological list at the bottom; `false` starts at the oldest message |
 | `padding` | `EdgeInsets?` | `null` | Message list padding |

@@ -1,3 +1,8 @@
+## Unreleased
+
+- Include touch drag selection and release-only jumps in the exported
+  `DmChatView` navigation rail, with edge scrolling for long conversations.
+
 ## 2.2.1
 
 - Release 2.2.1 (2026-10-20)

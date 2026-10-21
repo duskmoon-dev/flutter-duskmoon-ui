@@ -1,3 +1,10 @@
+## Unreleased
+
+- Support touch drag selection in the chat navigation rail: highlight on press
+  and move, then jump once on release, with cancellation and a larger hit area.
+- Reveal overflowed markers while holding near an edge, preserving mouse,
+  keyboard, accessibility and existing selected-turn behavior.
+
 ## 2.2.1
 
 - Allow `DmChatView(showInput: false)` to omit its built-in composer while

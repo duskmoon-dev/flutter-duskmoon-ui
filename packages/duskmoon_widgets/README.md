@@ -37,8 +37,11 @@ DmChatView(
 `DmChatView` includes a leading rail with one tick per user message. Click a
 tick to jump to that turn, or hover/focus it to preview the prompt and reply.
 The rail stays vertically centered with compact spacing that adapts to the
-message count and available height. Very long conversations can scroll the
-rail independently. Keyboard activation is supported. Set
+message count and available height. On touchscreens, press anywhere in its
+48-pixel-wide hit area and slide to highlight a turn; release to jump once.
+Holding near either edge reveals more markers in long histories. Lifting a
+finger commits the candidate; a cancelled touch does not jump. Mouse wheel
+scrolling and keyboard activation remain supported. Set
 `showMessageNavigation: false` to hide it.
 
 Set `showInput: false` to omit the built-in composer when the application

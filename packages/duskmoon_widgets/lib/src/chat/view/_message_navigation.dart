@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:duskmoon_theme/duskmoon_theme.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -30,6 +31,12 @@ class _ChatMessageNavigationState extends State<ChatMessageNavigation> {
   double _railHeight = 0;
   int _activeIndex = -1;
   final _scrollController = ScrollController();
+  List<_NavigationEntry> _entries = const [];
+  double _touchRegionHeight = 0;
+  int? _touchPointer;
+  String? _touchCandidateId;
+  Offset _touchPosition = Offset.zero;
+  Timer? _touchScrollTimer;
 
   @override
   void initState() {
@@ -40,6 +47,12 @@ class _ChatMessageNavigationState extends State<ChatMessageNavigation> {
   @override
   void didUpdateWidget(ChatMessageNavigation oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (_touchCandidateId != null &&
+        !widget.messages.any((message) =>
+            message.role == DmChatRole.user &&
+            message.id == _touchCandidateId)) {
+      _resetTouch();
+    }
     if (widget.activeMessageId != oldWidget.activeMessageId ||
         widget.messages.length != oldWidget.messages.length) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _revealActive());
@@ -47,7 +60,9 @@ class _ChatMessageNavigationState extends State<ChatMessageNavigation> {
   }
 
   void _revealActive() {
-    if (!mounted || !_scrollController.hasClients) return;
+    if (!mounted || _touchPointer != null || !_scrollController.hasClients) {
+      return;
+    }
     final index = widget.messages
         .where((message) => message.role == DmChatRole.user)
         .toList()
@@ -66,8 +81,93 @@ class _ChatMessageNavigationState extends State<ChatMessageNavigation> {
     }
   }
 
+  double get _touchRailY =>
+      _touchPosition.dy - (_touchRegionHeight - _railHeight) / 2;
+
+  void _updateTouchCandidate() {
+    if (!_scrollController.hasClients || _entries.isEmpty || _railHeight <= 0) {
+      return;
+    }
+    final offset = _scrollController.offset;
+    final first = ((offset - _markerHeight / 2) / _markerHeight)
+        .ceil()
+        .clamp(0, _entries.length - 1);
+    final last = ((offset + _railHeight - _markerHeight / 2) / _markerHeight)
+        .floor()
+        .clamp(first, _entries.length - 1);
+    final index =
+        ((_touchRailY + offset) / _markerHeight).floor().clamp(first, last);
+    final id = _entries[index].id;
+    if (_touchCandidateId != id) setState(() => _touchCandidateId = id);
+  }
+
+  void _scrollTouchEdge(Timer _) {
+    if (_touchPointer == null ||
+        !_scrollController.hasClients ||
+        _railHeight <= 0) {
+      return;
+    }
+    // Holding an edge reveals overflowed markers without scrolling the chat.
+    final edge = math.min(24.0, _railHeight / 4);
+    final delta = _touchRailY < edge
+        ? -20.0
+        : _touchRailY > _railHeight - edge
+            ? 20.0
+            : 0.0;
+    final position = _scrollController.position;
+    final next = (position.pixels + delta)
+        .clamp(position.minScrollExtent, position.maxScrollExtent);
+    if (next != position.pixels) {
+      _scrollController.jumpTo(next);
+      _updateTouchCandidate();
+    }
+  }
+
+  void _startTouch(PointerDownEvent event) {
+    if (event.kind != PointerDeviceKind.touch || _touchPointer != null) return;
+    _touchPointer = event.pointer;
+    _touchPosition = event.localPosition;
+    if (_scrollController.hasClients) {
+      final position = _scrollController.position;
+      _scrollController.jumpTo(position.pixels
+          .clamp(position.minScrollExtent, position.maxScrollExtent));
+    }
+    _updateTouchCandidate();
+    _touchScrollTimer =
+        Timer.periodic(const Duration(milliseconds: 50), _scrollTouchEdge);
+  }
+
+  void _moveTouch(PointerMoveEvent event) {
+    if (event.pointer != _touchPointer) return;
+    _touchPosition = event.localPosition;
+    _updateTouchCandidate();
+  }
+
+  void _endTouch(PointerUpEvent event) {
+    if (event.pointer != _touchPointer) return;
+    final id = _touchCandidateId;
+    setState(_resetTouch);
+    if (id != null &&
+        widget.messages.any(
+            (message) => message.role == DmChatRole.user && message.id == id)) {
+      widget.onSelected(id);
+    }
+  }
+
+  void _cancelTouch(PointerCancelEvent event) {
+    if (event.pointer == _touchPointer) setState(_resetTouch);
+  }
+
+  void _resetTouch() {
+    _touchScrollTimer?.cancel();
+    _touchScrollTimer = null;
+    _touchPointer = null;
+    _touchCandidateId = null;
+  }
+
   @override
   void dispose() {
+    _resetTouch();
     _scrollController.dispose();
     super.dispose();
   }
@@ -106,6 +206,7 @@ class _ChatMessageNavigationState extends State<ChatMessageNavigation> {
         }
       }
     }
+    _entries = entries;
     if (entries.isEmpty) return const SizedBox.shrink();
 
     return LayoutBuilder(
@@ -113,6 +214,8 @@ class _ChatMessageNavigationState extends State<ChatMessageNavigation> {
         final maxHeight = math.min(256.0, constraints.maxHeight * 0.6);
         final markerHeight = (maxHeight / entries.length).clamp(4.0, 10.0);
         final railHeight = math.min(maxHeight, entries.length * markerHeight);
+        _touchRegionHeight =
+            math.min(constraints.maxHeight, math.max(48.0, railHeight));
         final activeIndex =
             entries.indexWhere((entry) => entry.id == widget.activeMessageId);
         if (_markerHeight != markerHeight ||
@@ -126,25 +229,59 @@ class _ChatMessageNavigationState extends State<ChatMessageNavigation> {
 
         return Center(
           child: SizedBox(
-            height: railHeight,
-            child: Scrollbar(
-              controller: _scrollController,
-              child: ListView.builder(
-                controller: _scrollController,
-                primary: false,
-                padding: EdgeInsets.zero,
-                itemExtent: markerHeight,
-                itemCount: entries.length,
-                itemBuilder: (context, index) {
-                  final entry = entries[index];
-                  return _NavigationMarker(
-                    key: ValueKey('chat-navigation-${entry.id}'),
-                    entry: entry,
-                    index: index,
-                    selected: entry.id == widget.activeMessageId,
-                    onSelected: () => widget.onSelected(entry.id),
-                  );
-                },
+            key: const ValueKey('chat-navigation-touch-region'),
+            width: 48,
+            height: _touchRegionHeight,
+            child: RawGestureDetector(
+              behavior: HitTestBehavior.opaque,
+              excludeFromSemantics: true,
+              gestures: {
+                EagerGestureRecognizer: GestureRecognizerFactoryWithHandlers<
+                    EagerGestureRecognizer>(
+                  () => EagerGestureRecognizer(
+                    supportedDevices: const {PointerDeviceKind.touch},
+                  ),
+                  (_) {},
+                ),
+              },
+              child: Listener(
+                behavior: HitTestBehavior.opaque,
+                onPointerDown: _startTouch,
+                onPointerMove: _moveTouch,
+                onPointerUp: _endTouch,
+                onPointerCancel: _cancelTouch,
+                child: Center(
+                  child: SizedBox(
+                    height: railHeight,
+                    child: Scrollbar(
+                      controller: _scrollController,
+                      child: ListView.builder(
+                        controller: _scrollController,
+                        primary: false,
+                        padding: EdgeInsets.zero,
+                        itemExtent: markerHeight,
+                        itemCount: entries.length,
+                        itemBuilder: (context, index) {
+                          final entry = entries[index];
+                          return _NavigationMarker(
+                            key: ValueKey('chat-navigation-${entry.id}'),
+                            entry: entry,
+                            index: index,
+                            selected: entry.id == widget.activeMessageId,
+                            touchHighlighted: _touchPointer == null
+                                ? null
+                                : entry.id == _touchCandidateId,
+                            onSelected: () {
+                              if (_touchPointer == null) {
+                                widget.onSelected(entry.id);
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -179,12 +316,14 @@ class _NavigationMarker extends StatefulWidget {
     required this.entry,
     required this.index,
     required this.selected,
+    this.touchHighlighted,
     required this.onSelected,
   });
 
   final _NavigationEntry entry;
   final int index;
   final bool selected;
+  final bool? touchHighlighted;
   final VoidCallback onSelected;
 
   @override
@@ -198,6 +337,17 @@ class _NavigationMarkerState extends State<_NavigationMarker> {
   ScrollPosition? _scrollPosition;
   bool _hovered = false;
   bool _focused = false;
+
+  @override
+  void didUpdateWidget(_NavigationMarker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.touchHighlighted == null && widget.touchHighlighted != null) {
+      _hoverTimer?.cancel();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && widget.touchHighlighted != null) _hidePreview();
+      });
+    }
+  }
 
   @override
   void didChangeDependencies() {
@@ -218,7 +368,7 @@ class _NavigationMarkerState extends State<_NavigationMarker> {
   void _onHover(bool hovered) {
     setState(() => _hovered = hovered);
     _hoverTimer?.cancel();
-    if (hovered) {
+    if (hovered && widget.touchHighlighted == null) {
       _hoverTimer = Timer(const Duration(milliseconds: 250), () {
         if (mounted && _hovered) _previewController.show();
       });
@@ -311,7 +461,8 @@ class _NavigationMarkerState extends State<_NavigationMarker> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final emphasized = widget.selected || _hovered || _focused;
+    final emphasized =
+        widget.touchHighlighted ?? (widget.selected || _hovered || _focused);
 
     return OverlayPortal(
       controller: _previewController,
@@ -348,7 +499,7 @@ class _NavigationMarkerState extends State<_NavigationMarker> {
             },
             onFocusChange: (value) {
               setState(() => _focused = value);
-              if (value) {
+              if (value && widget.touchHighlighted == null) {
                 _hoverTimer?.cancel();
                 _previewController.show();
               } else {
@@ -369,7 +520,8 @@ class _NavigationMarkerState extends State<_NavigationMarker> {
                 ),
                 child: Center(
                   child: AnimatedContainer(
-                    duration: MediaQuery.disableAnimationsOf(context)
+                    duration: widget.touchHighlighted != null ||
+                            MediaQuery.disableAnimationsOf(context)
                         ? Duration.zero
                         : const Duration(milliseconds: 120),
                     width: emphasized ? 20 : 8,

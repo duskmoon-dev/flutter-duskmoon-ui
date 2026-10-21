@@ -368,7 +368,7 @@ class _DmChatViewState extends State<DmChatView> {
                 if (widget.showMessageNavigation &&
                     widget.messages.any((m) => m.role == DmChatRole.user))
                   SizedBox(
-                    width: 40,
+                    width: 48,
                     child: ValueListenableBuilder<String?>(
                       valueListenable: _activeMessageId,
                       builder: (_, active, _) => ChatMessageNavigation(
