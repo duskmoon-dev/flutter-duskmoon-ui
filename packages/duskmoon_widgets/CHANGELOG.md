@@ -1,4 +1,4 @@
-## Unreleased
+## 2.2.2
 
 - Support touch drag selection in the chat navigation rail: highlight on press
   and move, then jump once on release, with cancellation and a larger hit area.

@@ -1,3 +1,7 @@
+## 2.2.2
+
+- Release 2.2.2 (2026-10-21)
+
 ## 2.2.1
 
 - Let single-body layouts span non-occluding folds when no secondary body is
