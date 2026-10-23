@@ -1,4 +1,4 @@
-## Unreleased
+## 2.2.4
 
 - Disconnect focused IME input immediately when `readOnly` becomes true and
   reconnect the current document when editing resumes. Reject queued updates

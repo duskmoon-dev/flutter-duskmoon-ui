@@ -1,4 +1,4 @@
-## Unreleased
+## 2.2.4
 
 - Make `DmCodeEditor` enforce dynamic read-only changes for IME input without
   removing focus, and resume editing with the current controller snapshot.

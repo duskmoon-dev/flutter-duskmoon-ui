@@ -1,4 +1,4 @@
-## Unreleased
+## 2.2.4
 
 - Keep generated native C files out of build-hook dependencies so unchanged
   checkout and hosted builds can reuse the compiled grammar bundle. Manifest,
