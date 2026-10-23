@@ -61,6 +61,16 @@ published packages because hosted consumers compile it through the build hook.
 Generated parser C files are stored as deterministic gzip files in hosted
 packages and unpacked into the build output before compilation. Raw sources
 remain in this repository; no network access is needed to unpack them.
+The hook tracks the manifest and original parser, scanner, runtime and bridge
+inputs. Generated parser and language-dispatch C files stay build outputs, so
+unchanged subsequent builds can reuse the native bundle.
+
+From the workspace root, check both checkout and hosted-archive dependency
+contracts with a small C/C++ fixture without compiling all 95 grammars:
+
+```sh
+dart --packages=.dart_tool/package_config.json packages/duskmoon_highlight/tool/check_build_hook.dart
+```
 
 With Python 3, Dart, Tree-sitter CLI 0.26.8 and WASI SDK 29.0 installed:
 

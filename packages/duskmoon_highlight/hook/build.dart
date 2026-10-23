@@ -15,6 +15,8 @@ void main(List<String> args) async {
     final manifest = jsonDecode(await manifestFile.readAsString()) as Map;
     final grammars = manifest['grammars'] as List;
     final bridge = File.fromUri(input.outputDirectory.resolve('languages.c'));
+    final generatedSources = <Uri>{bridge.uri};
+    final nativeOutput = BuildOutputBuilder();
     await bridge.parent.create(recursive: true);
     final dispatch = StringBuffer(
       '#include <string.h>\n#include <tree_sitter/api.h>\n',
@@ -57,6 +59,7 @@ void main(List<String> args) async {
       final decoded = File.fromUri(
         input.outputDirectory.resolve('sources/$source'),
       );
+      generatedSources.add(decoded.uri);
       await decoded.parent.create(recursive: true);
       await compressed
           .openRead()
@@ -105,7 +108,7 @@ void main(List<String> args) async {
         linkModePreference: LinkModePreference.static,
         std: target == OS.windows ? 'c11' : null,
         defines: {'_DEFAULT_SOURCE': null},
-      ).run(input: input, output: output, routing: []);
+      ).run(input: input, output: nativeOutput, routing: []);
       grammarLibraries.add(name);
       if (cpp.isNotEmpty) {
         hasCpp = true;
@@ -118,7 +121,7 @@ void main(List<String> args) async {
           language: Language.cpp,
           std: 'c++17',
           linkModePreference: LinkModePreference.static,
-        ).run(input: input, output: output, routing: []);
+        ).run(input: input, output: nativeOutput, routing: []);
         scannerLibraries.add(scanners);
       }
     }
@@ -155,6 +158,14 @@ void main(List<String> args) async {
           '-Wl,-Bdynamic',
         ],
       ],
-    ).run(input: input, output: output);
+    ).run(input: input, output: nativeOutput);
+    final nativeBuild = nativeOutput.build();
+    // CBuilder also reports generated C as dependencies. Only stable package
+    // inputs may invalidate this hook: languages.c comes from grammars.json,
+    // and decoded parsers come from the compressed sources tracked above.
+    output.dependencies.addAll(
+      nativeBuild.dependencies.where((uri) => !generatedSources.contains(uri)),
+    );
+    output.assets.code.addAll(nativeBuild.assets.code);
   });
 }

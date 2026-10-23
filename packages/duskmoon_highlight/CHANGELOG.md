@@ -1,3 +1,9 @@
+## Unreleased
+
+- Keep generated native C files out of build-hook dependencies so unchanged
+  checkout and hosted builds can reuse the compiled grammar bundle. Manifest,
+  parser archives, scanner/runtime headers and native sources remain tracked.
+
 ## 2.2.3
 
 - Release 2.2.3 (2026-10-21)
