@@ -65,7 +65,10 @@ class DmCodeEditor extends StatefulWidget {
   /// the ambient DuskMoon theme via [DmCodeEditorTheme.fromContext].
   final EditorTheme? theme;
 
-  /// Whether the editor is read-only.
+  /// Whether the editor rejects user input, including pending IME updates.
+  ///
+  /// Changing this while focused preserves focus. Read-only taps do not open
+  /// the software keyboard; programmatic controller changes remain available.
   final bool readOnly;
 
   /// Whether to show line numbers in the gutter.

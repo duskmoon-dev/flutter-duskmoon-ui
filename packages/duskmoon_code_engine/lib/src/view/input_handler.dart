@@ -23,25 +23,33 @@ class InputHandler with TextInputClient {
 
   final EditorView _view;
   TextInputConnection? _connection;
+  bool _acceptsInput = true;
 
   // ---------------------------------------------------------------------------
   // Lifecycle
   // ---------------------------------------------------------------------------
 
-  /// Connects to the platform IME.
+  /// Connects to the platform IME and shows the software keyboard.
+  ///
+  /// Reuses an active connection, including after keyboard dismissal.
   void attach() {
-    _connection = TextInput.attach(
-      this,
-      const TextInputConfiguration(
-        inputType: TextInputType.multiline,
-        inputAction: TextInputAction.newline,
-      ),
-    );
+    _acceptsInput = true;
+    if (_connection?.attached != true) {
+      _connection = TextInput.attach(
+        this,
+        const TextInputConfiguration(
+          inputType: TextInputType.multiline,
+          inputAction: TextInputAction.newline,
+        ),
+      );
+    }
     syncState();
+    _connection!.show();
   }
 
   /// Disconnects from the platform IME.
   void detach() {
+    _acceptsInput = false;
     _connection?.close();
     _connection = null;
   }
@@ -71,6 +79,7 @@ class InputHandler with TextInputClient {
 
   @override
   void updateEditingValue(TextEditingValue value) {
+    if (!_acceptsInput) return;
     final oldValue = currentTextEditingValue;
     if (oldValue == null) return;
 
@@ -110,6 +119,7 @@ class InputHandler with TextInputClient {
 
   @override
   void connectionClosed() {
+    _acceptsInput = false;
     _connection = null;
   }
 

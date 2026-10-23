@@ -1,3 +1,12 @@
+## Unreleased
+
+- Disconnect focused IME input immediately when `readOnly` becomes true and
+  reconnect the current document when editing resumes. Reject queued updates
+  after an input handler is detached or closed.
+- Show the mobile software keyboard for editable focus and touch, including
+  retapping after keyboard dismissal, while preserving read-only focus.
+- Reconcile input connections when the controller or focus node changes.
+
 ## 2.2.3
 
 - Release 2.2.3 (2026-10-21)

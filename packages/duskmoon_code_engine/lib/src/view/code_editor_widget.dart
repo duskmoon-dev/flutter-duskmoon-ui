@@ -145,10 +145,16 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
   void didUpdateWidget(CodeEditorWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    // Handle controller swap.
-    if (widget.controller != oldWidget.controller) {
+    final inputChanged = widget.controller != oldWidget.controller ||
+        widget.focusNode != oldWidget.focusNode ||
+        widget.readOnly != oldWidget.readOnly;
+    if (inputChanged) {
       _inputHandler?.detach();
       _inputHandler = null;
+    }
+
+    // Handle controller swap.
+    if (widget.controller != oldWidget.controller) {
       _controller.view.removeListener(_onViewChanged);
       if (_ownsController) {
         _controller.dispose();
@@ -167,9 +173,6 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
         _ownsController = true;
       }
       _controller.view.addListener(_onViewChanged);
-      if (_focusNode.hasFocus && !widget.readOnly) {
-        _inputHandler = InputHandler(_controller.view)..attach();
-      }
     }
 
     if (widget.language != oldWidget.language &&
@@ -187,6 +190,10 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
         _focusNode = FocusNode();
         _ownsFocusNode = true;
       }
+    }
+
+    if (inputChanged && _focusNode.hasFocus && !widget.readOnly) {
+      _inputHandler = InputHandler(_controller.view)..attach();
     }
   }
 
@@ -216,7 +223,7 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
     if (focused) {
       _cursorBlink.start();
       if (!widget.readOnly) {
-        _inputHandler = InputHandler(_controller.view);
+        _inputHandler ??= InputHandler(_controller.view);
         _inputHandler!.attach();
       }
     } else {
@@ -300,6 +307,10 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
     // if gaining focus for the first time, _handleFocusChange will call start().
     if (alreadyFocused) {
       _cursorBlink.restart();
+      if (!widget.readOnly) {
+        _inputHandler ??= InputHandler(_controller.view);
+        _inputHandler!.attach();
+      }
     }
   }
 

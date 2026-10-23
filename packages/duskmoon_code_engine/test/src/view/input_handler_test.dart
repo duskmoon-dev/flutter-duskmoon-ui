@@ -159,6 +159,60 @@ void main() {
       });
     });
 
+    test('detached handlers reject queued text and selection updates', () {
+      final view = EditorView(state: EditorState.create(docString: 'snapshot'));
+      addTearDown(view.dispose);
+      final handler = InputHandler(view);
+      handler.detach();
+      handler.updateEditingValue(const TextEditingValue(
+        text: 'queued',
+        selection: TextSelection.collapsed(offset: 6),
+      ));
+      expect(view.state.doc.toString(), 'snapshot');
+      handler.updateEditingValue(const TextEditingValue(
+        text: 'snapshot',
+        selection: TextSelection.collapsed(offset: 5),
+      ));
+      expect(view.state.doc.toString(), 'snapshot');
+      expect(view.state.selection.main.head, 0);
+    });
+
+    test('closed handlers reject queued edits', () {
+      final view = EditorView(state: EditorState.create(docString: 'snapshot'));
+      addTearDown(view.dispose);
+      final handler = InputHandler(view);
+      handler.connectionClosed();
+      handler.updateEditingValue(const TextEditingValue(text: 'queued'));
+      expect(view.state.doc.toString(), 'snapshot');
+    });
+
+    testWidgets('attach reuses the connection and can resume after detach',
+        (tester) async {
+      final view = EditorView(state: EditorState.create(docString: 'snapshot'));
+      final handler = InputHandler(view);
+      addTearDown(() {
+        handler.detach();
+        view.dispose();
+      });
+      handler.attach();
+      await tester.pump();
+      expect(tester.testTextInput.isVisible, isTrue);
+      tester.testTextInput.hide();
+      handler.attach();
+      await tester.pump();
+      expect(tester.testTextInput.isVisible, isTrue);
+      expect(
+          tester.testTextInput.log
+              .where((call) => call.method == 'TextInput.setClient'),
+          hasLength(1));
+      handler.detach();
+      await tester.pump();
+      handler.attach();
+      tester.testTextInput.enterText('resumed');
+      await tester.pump();
+      expect(view.state.doc.toString(), 'resumed');
+    });
+
     test('connectionClosed does not throw', () {
       final state = EditorState.create(docString: 'hello');
       final view = EditorView(state: state);

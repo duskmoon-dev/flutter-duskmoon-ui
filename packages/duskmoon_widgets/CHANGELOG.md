@@ -1,3 +1,10 @@
+## Unreleased
+
+- Make `DmCodeEditor` enforce dynamic read-only changes for IME input without
+  removing focus, and resume editing with the current controller snapshot.
+- Show the mobile software keyboard on editable editor taps and retaps after
+  dismissal; read-only editor taps keep the keyboard closed.
+
 ## 2.2.3
 
 - Show an abbreviated prompt/reply popover while a touch navigation candidate

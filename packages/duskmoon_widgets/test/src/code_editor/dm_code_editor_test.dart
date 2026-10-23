@@ -17,6 +17,97 @@ Widget _wrap(Widget child, {ThemeData? theme}) {
 
 void main() {
   group('DmCodeEditor', () {
+    testWidgets('focused readOnly transition blocks IME and resumes editing',
+        (tester) async {
+      final controller = EditorViewController(text: 'original');
+      final focus = FocusNode();
+      addTearDown(() async {
+        await tester.pumpWidget(const SizedBox.shrink());
+        focus.dispose();
+        controller.dispose();
+      });
+      Future<void> show(bool readOnly) async {
+        await tester.pumpWidget(_wrap(DmCodeEditor(
+          controller: controller,
+          focusNode: focus,
+          readOnly: readOnly,
+        )));
+        await tester.pump();
+      }
+
+      await show(false);
+      focus.requestFocus();
+      await tester.pump();
+      expect(tester.testTextInput.hasAnyClients, isTrue);
+      await show(true);
+      tester.testTextInput.updateEditingValue(const TextEditingValue(
+        text: 'injected',
+        selection: TextSelection.collapsed(offset: 8),
+        composing: TextRange(start: 0, end: 8),
+      ));
+      await tester.pump();
+      expect(controller.text, 'original');
+      expect(focus.hasFocus, isTrue);
+      expect(tester.testTextInput.hasAnyClients, isFalse);
+      controller.text = 'save snapshot';
+      await show(false);
+      expect(tester.testTextInput.editingState!['text'], 'save snapshot');
+      tester.testTextInput.enterText('save snapshot\nmobile edit');
+      await tester.pump();
+      expect(controller.text, 'save snapshot\nmobile edit');
+    });
+
+    testWidgets('editable touch and focused retap show the soft keyboard',
+        (tester) async {
+      final controller = EditorViewController(text: 'hello\n');
+      final focus = FocusNode();
+      addTearDown(() async {
+        await tester.pumpWidget(const SizedBox.shrink());
+        focus.dispose();
+        controller.dispose();
+      });
+      await tester.pumpWidget(_wrap(DmCodeEditor(
+        controller: controller,
+        focusNode: focus,
+      )));
+      final point = tester.getTopLeft(find.byType(CodeEditorWidget)) +
+          const Offset(120, 10);
+      await tester.tapAt(point);
+      await tester.pump();
+      expect(tester.testTextInput.isVisible, isTrue);
+      tester.testTextInput.hide();
+      expect(focus.hasFocus, isTrue);
+      await tester.tapAt(point);
+      await tester.pump();
+      expect(tester.testTextInput.isVisible, isTrue);
+      tester.testTextInput.enterText('hello\nmobile');
+      await tester.pump();
+      expect(controller.text, 'hello\nmobile');
+    }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
+    testWidgets('readOnly touch never opens a software keyboard',
+        (tester) async {
+      final controller = EditorViewController(text: 'original');
+      final focus = FocusNode();
+      addTearDown(() async {
+        await tester.pumpWidget(const SizedBox.shrink());
+        focus.dispose();
+        controller.dispose();
+      });
+      await tester.pumpWidget(_wrap(DmCodeEditor(
+        controller: controller,
+        focusNode: focus,
+        readOnly: true,
+      )));
+      await tester.tapAt(tester.getTopLeft(find.byType(CodeEditorWidget)) +
+          const Offset(120, 10));
+      await tester.pump();
+      expect(focus.hasFocus, isTrue);
+      expect(tester.testTextInput.hasAnyClients, isFalse);
+      expect(tester.testTextInput.isVisible, isFalse);
+      expect(controller.text, 'original');
+    }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
     testWidgets('renders without controller', (tester) async {
       await tester.pumpWidget(_wrap(
         const DmCodeEditor(initialDoc: 'hello'),
