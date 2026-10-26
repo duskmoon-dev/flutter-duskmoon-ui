@@ -1,3 +1,7 @@
+## 2.2.5
+
+- Release 2.2.5 (2026-10-26)
+
 ## 2.2.4
 
 - Disconnect focused IME input immediately when `readOnly` becomes true and

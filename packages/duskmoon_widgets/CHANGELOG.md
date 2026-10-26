@@ -1,3 +1,7 @@
+## 2.2.5
+
+- Release 2.2.5 (2026-10-26)
+
 ## 2.2.4
 
 - Make `DmCodeEditor` enforce dynamic read-only changes for IME input without
