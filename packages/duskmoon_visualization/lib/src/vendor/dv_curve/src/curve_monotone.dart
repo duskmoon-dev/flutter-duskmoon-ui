@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:duskmoon_visualization/src/vendor/dv_point/dv_point.dart';
 
 import 'curve.dart';
@@ -77,7 +79,7 @@ class CurveMonotoneX implements Curve {
         final b = tangents[i + 1] / s;
         final mag = a * a + b * b;
         if (mag > 9) {
-          final scale = 3 / (mag.sqrt());
+          final scale = 3 / math.sqrt(mag);
           tangents[i] = s * a * scale;
           tangents[i + 1] = s * b * scale;
         }
@@ -129,7 +131,3 @@ class CurveMonotoneY implements Curve {
 
 /// Creates a monotone Y curve.
 Curve curveMonotoneY() => CurveMonotoneY();
-
-extension on double {
-  double sqrt() => this < 0 ? 0 : this.sqrt();
-}

@@ -121,6 +121,54 @@ void main() {
       final result = curve.generate(testPoints);
       expect(result.length, greaterThan(testPoints.length));
     });
+
+    final unevenSlopes = {
+      'rising': [Point(0, 0), Point(1, 1), Point(2, 100)],
+      'falling': [Point(0, 100), Point(1, 99), Point(2, 0)],
+    };
+
+    for (final entry in unevenSlopes.entries) {
+      test('monotoneX handles uneven ${entry.key} slopes', () {
+        final points = entry.value;
+        final result = curveMonotoneX().generate(points);
+
+        expect(result.length, greaterThan(points.length));
+        expect(result.first, equals(points.first));
+        expect(result.last, equals(points.last));
+        for (final point in result) {
+          expect(point.x.isFinite, isTrue);
+          expect(point.y.isFinite, isTrue);
+        }
+        expect(
+          result.map((point) => point.y),
+          orderedEquals(
+            entry.key == 'rising'
+                ? (result.map((point) => point.y).toList()..sort())
+                : (result.map((point) => point.y).toList()
+                  ..sort((a, b) => b.compareTo(a))),
+          ),
+        );
+      });
+
+      test('monotoneY handles uneven ${entry.key} slopes', () {
+        final points = entry.value.map((p) => Point(p.y, p.x)).toList();
+        final result = curveMonotoneY().generate(points);
+
+        expect(result.length, greaterThan(points.length));
+        expect(result.first, equals(points.first));
+        expect(result.last, equals(points.last));
+        for (final point in result) {
+          expect(point.x.isFinite, isTrue);
+          expect(point.y.isFinite, isTrue);
+        }
+        expect(
+          result,
+          orderedEquals(
+            curveMonotoneX().generate(entry.value).map((p) => Point(p.y, p.x)),
+          ),
+        );
+      });
+    }
   });
 
   group('CurveNatural', () {

@@ -1,3 +1,7 @@
+## Unreleased
+
+- Fix a stack overflow in monotone X and Y curves with uneven slopes ([#29](https://github.com/duskmoon-dev/flutter-duskmoon-ui/issues/29)).
+
 ## 2.2.4
 
 - Release 2.2.4 (2026-10-23)
