@@ -1,4 +1,4 @@
-## Unreleased
+## 2.2.7
 
 - Add `DmControllerView`, `DmXboxControllerView`, `DmPs5ControllerView`, and
   `DmSwitchProControllerView` with continuous stick input, external hardware

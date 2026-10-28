@@ -1,3 +1,7 @@
+## 2.2.7
+
+- Release 2.2.7 (2026-10-28)
+
 ## 2.2.6
 
 - Support Markdown form fields in scrolling forms without a fixed-height wrapper.

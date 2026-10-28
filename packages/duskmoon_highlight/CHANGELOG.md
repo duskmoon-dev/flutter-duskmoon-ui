@@ -1,3 +1,7 @@
+## 2.2.7
+
+- Release 2.2.7 (2026-10-28)
+
 ## 2.2.6
 
 - Support both native asset hook API generations so applications can use
