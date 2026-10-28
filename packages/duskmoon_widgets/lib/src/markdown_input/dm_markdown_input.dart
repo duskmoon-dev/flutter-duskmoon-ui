@@ -1,7 +1,6 @@
 // @dart = 3.8
 
 import 'package:flutter/material.dart';
-import 'package:markdown/markdown.dart' as md;
 
 import '../markdown/dm_markdown_config.dart';
 import '_editor_pane.dart';
@@ -15,6 +14,10 @@ import 'dm_markdown_tab.dart';
 /// and keyboard shortcuts.
 ///
 /// Mirrors `<el-dm-markdown-input>` from the DuskMoon web elements library.
+///
+/// Fills bounded height and supports swiping between tabs. In a vertically
+/// scrolling parent, the editor sizes itself using [minLines] and [maxLines],
+/// and the selected preview sizes itself to its content.
 ///
 /// ```dart
 /// DmMarkdownInput(
@@ -115,7 +118,6 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
   late TabController _tabController;
   late FocusNode _focusNode;
   bool _ownsController = false;
-  List<md.Node> _previewNodes = [];
   bool _previewReady = false;
 
   @override
@@ -141,7 +143,6 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
     _focusNode = FocusNode();
 
     _controller.addListener(_onTextChanged);
-    _previewNodes = _controller.cachedNodes;
 
     // If starting on preview tab (e.g., readOnly), show content immediately.
     if (_tabController.index == 1) {
@@ -180,7 +181,9 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
   void _onTextChanged() {
     widget.onChanged?.call(_controller.text);
     if (_tabController.index == 1) {
-      setState(() => _previewNodes = _controller.cachedNodes);
+      // The controller finishes parsing after its text listeners run. Read the
+      // current nodes during the next build instead of snapshotting the old AST.
+      setState(() {});
     }
   }
 
@@ -194,11 +197,12 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
       // Show shimmer immediately, then render after the frame.
       setState(() {
         _previewReady = false;
-        _previewNodes = _controller.cachedNodes;
       });
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) setState(() => _previewReady = true);
       });
+    } else {
+      setState(() {});
     }
   }
 
@@ -229,6 +233,13 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) =>
+          _buildInput(context, bounded: constraints.hasBoundedHeight),
+    );
+  }
+
+  Widget _buildInput(BuildContext context, {required bool bounded}) {
     final colorScheme = Theme.of(context).colorScheme;
 
     if (!widget.showPreview) {
@@ -255,8 +266,9 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
         ),
         child: _hasBottomBar
             ? Column(
+                mainAxisSize: bounded ? MainAxisSize.max : MainAxisSize.min,
                 children: [
-                  Expanded(child: editor),
+                  if (bounded) Expanded(child: editor) else editor,
                   _buildBottomBar(colorScheme),
                 ],
               )
@@ -264,7 +276,54 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
       );
     }
 
+    final panes = [
+      KeyboardShortcutHandler(
+        controller: _controller,
+        focusNode: _focusNode,
+        enabled: widget.enabled && !widget.readOnly,
+        child: EditorPane(
+          controller: _controller,
+          focusNode: _focusNode,
+          showLineNumbers: widget.showLineNumbers,
+          maxLines: widget.maxLines,
+          minLines: widget.minLines,
+          readOnly: widget.readOnly || !widget.enabled,
+          decoration: widget.decoration,
+        ),
+      ),
+      AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        layoutBuilder: (currentChild, previousChildren) {
+          return Stack(
+            alignment: Alignment.topLeft,
+            children: [...previousChildren, ?currentChild],
+          );
+        },
+        child: _previewReady
+            ? SingleChildScrollView(
+                key: const ValueKey('preview'),
+                child: PreviewPane(
+                  nodes: _controller.cachedNodes,
+                  config: widget.config,
+                  onLinkTap: widget.onLinkTap,
+                ),
+              )
+            : const ShimmerPlaceholder(key: ValueKey('shimmer')),
+      ),
+    ];
+    final content = Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        border: Border.all(color: colorScheme.outlineVariant, width: 1),
+        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(8)),
+      ),
+      child: bounded
+          ? TabBarView(controller: _tabController, children: panes)
+          : panes[_tabController.index],
+    );
+
     return Column(
+      mainAxisSize: bounded ? MainAxisSize.max : MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Tab bar.
@@ -316,57 +375,7 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
           ),
         ),
         // Content.
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: colorScheme.surface,
-              border: Border.all(color: colorScheme.outlineVariant, width: 1),
-              borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(8),
-              ),
-            ),
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                // Write tab.
-                KeyboardShortcutHandler(
-                  controller: _controller,
-                  focusNode: _focusNode,
-                  enabled: widget.enabled && !widget.readOnly,
-                  child: EditorPane(
-                    controller: _controller,
-                    focusNode: _focusNode,
-                    showLineNumbers: widget.showLineNumbers,
-                    maxLines: widget.maxLines,
-                    minLines: widget.minLines,
-                    readOnly: widget.readOnly || !widget.enabled,
-                    decoration: widget.decoration,
-                  ),
-                ),
-                // Preview tab.
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  layoutBuilder: (currentChild, previousChildren) {
-                    return Stack(
-                      alignment: Alignment.topLeft,
-                      children: [...previousChildren, ?currentChild],
-                    );
-                  },
-                  child: _previewReady
-                      ? SingleChildScrollView(
-                          key: const ValueKey('preview'),
-                          child: PreviewPane(
-                            nodes: _previewNodes,
-                            config: widget.config,
-                            onLinkTap: widget.onLinkTap,
-                          ),
-                        )
-                      : const ShimmerPlaceholder(key: ValueKey('shimmer')),
-                ),
-              ],
-            ),
-          ),
-        ),
+        if (bounded) Expanded(child: content) else content,
         if (_hasBottomBar) _buildBottomBar(colorScheme),
       ],
     );

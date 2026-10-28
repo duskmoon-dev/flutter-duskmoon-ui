@@ -68,6 +68,92 @@ void main() {
       );
     });
 
+    for (final scrolling in [false, true]) {
+      testWidgets(
+          '${scrolling ? 'scrolling' : 'bounded'} decorated field retains edits through both tabs',
+          (tester) async {
+        final bloc = MarkdownFieldBloc(initialValue: '# Initial bio');
+        addTearDown(bloc.close);
+        final field = DmMarkdownFieldBlocBuilder(
+          markdownFieldBloc: bloc,
+          minLines: 8,
+          animateWhenCanShow: false,
+          decoration: const InputDecoration(labelText: 'Bio'),
+        );
+        await tester.pumpWidget(
+          _wrap(scrolling ? SingleChildScrollView(child: field) : field),
+        );
+        await tester.pump(const Duration(milliseconds: 20));
+        expect(tester.takeException(), isNull);
+
+        const edited = '# Biography\n\nUpdated bio.';
+        await tester.enterText(find.byType(EditableText), edited);
+        await tester.pump();
+        expect(bloc.state.value, edited);
+
+        await tester.tap(find.text('Preview'));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+        expect(bloc.state.tab, DmMarkdownTab.preview);
+        expect(bloc.state.value, edited);
+        expect(find.text('Biography', findRichText: true), findsOneWidget);
+
+        await tester.tap(find.text('Write'));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+        expect(bloc.state.tab, DmMarkdownTab.write);
+        expect(bloc.state.value, edited);
+        expect(
+          tester
+              .widget<EditableText>(find.byType(EditableText))
+              .controller
+              .text,
+          edited,
+        );
+        final height = tester.getSize(find.byType(DmMarkdownInput)).height;
+        expect(height.isFinite, isTrue);
+        expect(height, greaterThan(0));
+      });
+    }
+
+    testWidgets('scrolling field applies external tab and value updates',
+        (tester) async {
+      final bloc = MarkdownFieldBloc(initialValue: '# Initial bio');
+      addTearDown(bloc.close);
+      await tester.pumpWidget(
+        _wrap(SingleChildScrollView(
+          child: DmMarkdownFieldBlocBuilder(
+            markdownFieldBloc: bloc,
+            minLines: 8,
+            animateWhenCanShow: false,
+            decoration: const InputDecoration(labelText: 'Bio'),
+          ),
+        )),
+      );
+      await tester.pump(const Duration(milliseconds: 20));
+      expect(tester.takeException(), isNull);
+
+      bloc.updateTab(DmMarkdownTab.preview);
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.text('Initial bio', findRichText: true), findsOneWidget);
+
+      bloc.changeValue('# External bio');
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.text('External bio', findRichText: true), findsOneWidget);
+      expect(find.text('Initial bio', findRichText: true), findsNothing);
+
+      bloc.updateTab(DmMarkdownTab.write);
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(bloc.state.value, '# External bio');
+      expect(
+        tester.widget<EditableText>(find.byType(EditableText)).controller.text,
+        '# External bio',
+      );
+    });
+
     testWidgets('isEnabled = false sets DmMarkdownInput.enabled = false',
         (tester) async {
       final bloc = MarkdownFieldBloc();

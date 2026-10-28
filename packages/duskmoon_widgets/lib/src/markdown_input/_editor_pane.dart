@@ -196,24 +196,31 @@ class _EditorPaneState extends State<EditorPane> {
           contentWidth,
         );
 
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        return Stack(
+          fit: expandToFit ? StackFit.expand : StackFit.loose,
           children: [
-            LineNumberGutter(
-              lineMetrics: paragraphMetrics.lineMetrics,
-              singleLineHeight: paragraphMetrics.lineHeight,
-              scrollController: _scrollController,
-              topPadding: _editorPadding.top,
-              gutterWidth: gutterWidth,
-              textStyle: baseStyle,
-              strutStyle: strutStyle,
-              textScaler: textScaler,
-            ),
-            Expanded(
+            Padding(
+              padding: EdgeInsetsDirectional.only(start: gutterWidth),
               child: _buildTextField(
                 baseStyle,
                 strutStyle,
                 expandToFit: expandToFit,
+              ),
+            ),
+            PositionedDirectional(
+              start: 0,
+              top: 0,
+              bottom: 0,
+              width: gutterWidth,
+              child: LineNumberGutter(
+                lineMetrics: paragraphMetrics.lineMetrics,
+                singleLineHeight: paragraphMetrics.lineHeight,
+                scrollController: _scrollController,
+                topPadding: _editorPadding.top,
+                gutterWidth: gutterWidth,
+                textStyle: baseStyle,
+                strutStyle: strutStyle,
+                textScaler: textScaler,
               ),
             ),
           ],

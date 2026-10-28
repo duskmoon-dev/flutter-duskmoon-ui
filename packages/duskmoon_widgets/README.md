@@ -54,6 +54,12 @@ provides its own input or displays the conversation on a companion screen.
 Messages, navigation and scrolling remain available; `showInput` defaults to
 `true` and can change at runtime.
 
+`DmMarkdownInput` can be placed directly in a `SingleChildScrollView` or a
+scrolling form. Its editor grows from `minLines` up to `maxLines`, and the preview
+uses its content height. When the parent provides bounded height, the editor
+fills that space and supports swiping between Write and Preview. Optional bottom
+bars and line numbers work in either layout.
+
 ### Platform Resolution
 
 Three-tier resolution order:

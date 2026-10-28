@@ -1,3 +1,10 @@
+## Unreleased
+
+- Let Markdown inputs render in scrolling parents using `minLines`/`maxLines`,
+  including preview tabs, line numbers and optional bottom bars. Preserve
+  bounded-height filling and tab swiping.
+- Correct package repository and issue tracker links.
+
 ## 2.2.5
 
 - Release 2.2.5 (2026-10-26)
