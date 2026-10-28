@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:duskmoon_widgets/duskmoon_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -41,7 +43,10 @@ void main() {
       ]),
     )));
     await tester.pumpAndSettle();
+    // Text and vector edge rasterization differs between macOS and Linux.
+    // Keep exact comparisons against a reviewed baseline for each host.
+    final suffix = Platform.isMacOS ? '_macos' : '';
     await expectLater(find.byKey(boundary),
-        matchesGoldenFile('goldens/controller_views.png'));
+        matchesGoldenFile('goldens/controller_views$suffix.png'));
   });
 }
