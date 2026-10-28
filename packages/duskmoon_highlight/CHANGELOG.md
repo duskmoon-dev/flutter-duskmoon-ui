@@ -1,3 +1,8 @@
+## Unreleased
+
+- Support both native asset hook API generations so applications can use
+  `sqlite_vector` 1.1.2 alongside DuskMoon without dependency overrides.
+
 ## 2.2.5
 
 - Release 2.2.5 (2026-10-26)

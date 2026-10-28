@@ -11,6 +11,11 @@ building native apps. No grammar downloads, CDN configuration or `index.html`
 changes are required by consumers. JavaScript and Flutter Wasm builds use the
 same grammar assets.
 
+The native build hook supports both the `hooks` 1.x and 2.x dependency families.
+Applications using `sqlite_vector` 1.1.2 can resolve its `hooks` 1.x and
+`code_assets` 1.0 requirements without dependency overrides. Other applications
+can continue using the newer native toolchain; Pub selects compatible versions.
+
 ```dart
 import 'package:duskmoon_highlight/tree_sitter.dart';
 

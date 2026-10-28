@@ -46,3 +46,67 @@ jobs:
             (cd $pkg && dart analyze --fatal-infos)
             echo "::endgroup::"
           done
+
+  native_hook_compatibility:
+    name: Native hook (${{ matrix.name }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - name: minimum-v1
+            hooks: "1.0.0"
+            code_assets: "1.0.0"
+            native_toolchain_c: "0.18.0"
+            sqlite_vector: "1.1.2"
+          - name: sqlite-vector
+            hooks: "^1.0.0"
+            code_assets: "^1.0.0"
+            native_toolchain_c: ">=0.18.0 <0.20.0"
+            sqlite_vector: "1.1.2"
+          - name: minimum-v2
+            hooks: "2.0.0"
+            code_assets: "1.1.0"
+            native_toolchain_c: "0.19.0"
+            sqlite_vector: ""
+          - name: current-v2
+            hooks: "^2.2.0"
+            code_assets: "^2.1.0"
+            native_toolchain_c: "^0.19.5"
+            sqlite_vector: ""
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Resolve dependencies and check the native hook
+        shell: bash
+        env:
+          HOOKS: ${{ matrix.hooks }}
+          CODE_ASSETS: ${{ matrix.code_assets }}
+          NATIVE_TOOLCHAIN_C: ${{ matrix.native_toolchain_c }}
+          SQLITE_VECTOR: ${{ matrix.sqlite_vector }}
+        run: |
+          check_dir=$(mktemp -d)
+          trap 'rm -rf "$check_dir"' EXIT
+          cat > "$check_dir/pubspec.yaml" <<EOF
+          name: native_hook_compatibility
+          publish_to: none
+          environment:
+            sdk: ">=3.10.0 <4.0.0"
+          dependencies:
+            flutter:
+              sdk: flutter
+            duskmoon_highlight:
+              path: $GITHUB_WORKSPACE/packages/duskmoon_highlight
+            hooks: '$HOOKS'
+            code_assets: '$CODE_ASSETS'
+            native_toolchain_c: '$NATIVE_TOOLCHAIN_C'
+          EOF
+          if [ -n "$SQLITE_VECTOR" ]; then
+            printf '  sqlite_vector: %s\n' "$SQLITE_VECTOR" >> "$check_dir/pubspec.yaml"
+          fi
+          (cd "$check_dir" && flutter pub get)
+          dart --packages="$check_dir/.dart_tool/package_config.json" packages/duskmoon_highlight/tool/check_build_hook.dart

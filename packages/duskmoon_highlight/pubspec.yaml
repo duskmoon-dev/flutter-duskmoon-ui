@@ -12,9 +12,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  hooks: ^2.2.0
-  code_assets: ^2.1.0
-  native_toolchain_c: ^0.19.5
+  hooks: ">=1.0.0 <3.0.0"
+  code_assets: ">=1.0.0 <3.0.0"
+  native_toolchain_c: ">=0.18.0 <0.20.0"
 
 dev_dependencies:
   flutter_test:

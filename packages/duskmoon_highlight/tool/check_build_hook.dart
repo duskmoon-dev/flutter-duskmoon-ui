@@ -4,6 +4,7 @@
 // full 95-grammar native hook build.
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:code_assets/code_assets.dart';
 import 'package:hooks/hooks.dart';
@@ -13,11 +14,13 @@ void check(bool condition, String message) {
 }
 
 Future<void> main() async {
+  final packageConfig = await Isolate.packageConfig;
+  check(packageConfig != null, 'Run with an explicit package configuration');
   final temporary = await Directory.systemTemp.createTemp('highlight-hook-');
   try {
     for (final hosted in [true, false]) {
       await checkBuild(temporary.uri.resolve(hosted ? 'hosted/' : 'checkout/'),
-          hosted: hosted);
+          hosted: hosted, packageConfig: packageConfig!);
     }
     stdout.writeln('PASS: checkout and hosted native dependency contracts');
   } finally {
@@ -25,7 +28,8 @@ Future<void> main() async {
   }
 }
 
-Future<void> checkBuild(Uri root, {required bool hosted}) async {
+Future<void> checkBuild(Uri root,
+    {required bool hosted, required Uri packageConfig}) async {
   Future<void> write(String path, String content) async {
     final file = File.fromUri(root.resolve(path));
     await file.parent.create(recursive: true);
@@ -86,7 +90,7 @@ const TSLanguage *tree_sitter_fixture(void) { return 0; }
 
   Future<BuildOutput> build() async {
     final result = await Process.run(Platform.resolvedExecutable, [
-      '--packages=${Platform.script.resolve('../../../.dart_tool/package_config.json').toFilePath()}',
+      '--packages=${packageConfig.toFilePath()}',
       Platform.script.resolve('../hook/build.dart').toFilePath(),
       '--config=${configFile.path}',
     ]);
