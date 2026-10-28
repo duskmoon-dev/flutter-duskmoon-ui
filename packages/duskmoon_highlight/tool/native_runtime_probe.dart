@@ -48,12 +48,38 @@ Future<void> main() async {
     } finally {
       parser.dispose();
     }
+    final smlParser = TreeSitterSession(language: 'sml');
+    final sml = <String>[];
+    try {
+      const cases = [
+        (
+          name: 'nested Unicode comment',
+          source: '(* outer (* nested 😀 *) still outer *)\nval answer = 42;\n',
+          hasError: false,
+        ),
+        (
+          name: 'unterminated nested comment',
+          source: '(* outer (* nested *)\nval answer = 42;\n',
+          hasError: true,
+        ),
+      ];
+      for (final fixture in cases) {
+        final snapshot = smlParser.parse(fixture.source);
+        if (snapshot.rootNode.hasError != fixture.hasError) {
+          throw StateError('Unexpected SML result for ${fixture.name}');
+        }
+        sml.add(fixture.name);
+      }
+    } finally {
+      smlParser.dispose();
+    }
     report = {
       'passed': true,
       'platform': Platform.operatingSystem,
       'grammars': initialized,
       'grammarCount': initialized.length,
       'crystalFixtures': crystal,
+      'smlFixtures': sml,
     };
   } catch (error, stack) {
     resultCode = 1;

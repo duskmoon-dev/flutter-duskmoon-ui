@@ -221,4 +221,42 @@ void main() {
     expect(actual.rootNode.hasError, isFalse);
     expect(describe(actual.rootNode), describe(fresh.parse(edited).rootNode));
   });
+
+  test('SML scanner preserves nested comments and Unicode', () async {
+    await TreeSitterRuntime.ensureInitialized(languages: {'sml'});
+    final parser = TreeSitterSession(language: 'sml');
+    addTearDown(parser.dispose);
+    const comment = '(* outer (* nested 😀 *) still outer *)';
+    const source = '$comment\nval answer = 42;\n';
+    final snapshot = parser.parse(source);
+    expect(snapshot.rootNode.hasError, isFalse);
+    final comments = descendants(snapshot.rootNode)
+        .where((node) => node.type == 'block_comment')
+        .toList();
+    expect(comments, hasLength(1));
+    expect(source.substring(comments.single.from, comments.single.to), comment);
+  });
+
+  test('SML scanner rejects unterminated nested comments', () async {
+    await TreeSitterRuntime.ensureInitialized(languages: {'sml'});
+    final parser = TreeSitterSession(language: 'sml');
+    addTearDown(parser.dispose);
+    const source = '(* outer (* nested *)\nval answer = 42;\n';
+    expect(parser.parse(source).rootNode.hasError, isTrue);
+  });
+
+  test('SML nested comment edits equal a fresh Unicode parse', () async {
+    await TreeSitterRuntime.ensureInitialized(languages: {'sml'});
+    final parser = TreeSitterSession(language: 'sml');
+    final fresh = TreeSitterSession(language: 'sml');
+    addTearDown(parser.dispose);
+    addTearDown(fresh.dispose);
+    expect(parser.parse('(* before *)\nval answer = 42;\n').rootNode.hasError,
+        isFalse);
+    const edited = '(* outer (* inserted 😀 *) after *)\nval answer = 420;\n';
+    final actual = parser.parse(edited);
+    expect(actual.incremental, isTrue);
+    expect(actual.rootNode.hasError, isFalse);
+    expect(describe(actual.rootNode), describe(fresh.parse(edited).rootNode));
+  });
 }

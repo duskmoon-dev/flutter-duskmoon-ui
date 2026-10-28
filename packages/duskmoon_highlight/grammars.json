@@ -3707,6 +3707,9 @@
         "vendor/grammars/sml/LICENSE"
       ],
       "highlights": "queries/sml.scm",
+      "patches": [
+        "patches/sml-msvc-unused-parameters.patch"
+      ],
       "query_provenance": {
         "grammar_revision": "fd4b4955bb998262840ab8119885b3edf20ea75a",
         "node_types": "vendor/grammars/sml/src/node-types.json",
@@ -4617,6 +4620,7 @@
     "assets/tree-sitter/web-tree-sitter.js": "7c49e3c1d87e24e0bb4c2def909d17154dfde281f5f8280225450090bb4b8110",
     "assets/tree-sitter/web-tree-sitter.wasm": "beca80e44cccbf2299ed4d1e3fa6462a9a6fe818aeebf847547a392227ce4acc",
     "patches/crystal-msvc-heredoc-buffer.patch": "31bf39ef35f5986c3fe6dfd774c0496d3c76b98fefbac26bd329179c03ab552a",
+    "patches/sml-msvc-unused-parameters.patch": "812f8364a75376be998ef9f61c57839fc010ed07d5ddadfe7dbc267df0258424",
     "patches/swift-wasm-oom.patch": "83a83b7e7f57ccb8466ab8ae6b7fb99a2079ae2bacbe86622470e6e9c87c5297",
     "queries/abnf.scm": "356b63b174666d9b927210a1bd124f1accb1e1f6a97a36db640b5a4eb854fc03",
     "queries/actionscript.scm": "500971ddbb9b9fce794563c0ad1f9591ba3ea0c791cafcce9c7c2b77d8c6f21e",
@@ -5984,7 +5988,7 @@
     "vendor/grammars/sml/src/node-types.json": "86ab5b597494582cce7c28b08a8f30c3729d3049dacf50b1d9c4712e46002475",
     "vendor/grammars/sml/src/parser.c": "303199534db6b4f422182b84fdcdededb5162e1fa7a582f1a664fac55f7c0e08",
     "vendor/grammars/sml/src/parser.c.gz": "de7aa329ac365d5c68adb84eb91a5dc4021e37cdb0f0c851e5f093124215cdc0",
-    "vendor/grammars/sml/src/scanner.c": "5b438c492bdac3a9bfe41412c7441558795d8b9038adb09bd3adad0cf42609ec",
+    "vendor/grammars/sml/src/scanner.c": "93168df12291ebec6410bc68c10f7c61f384da16f38ca0b2a9fec6c932088ddc",
     "vendor/grammars/sml/src/tree_sitter/alloc.h": "b29c1c9fb7cc82f58c84b376df1297d6e2737a1d655fd356db0859e3c29c2fea",
     "vendor/grammars/sml/src/tree_sitter/array.h": "5bdf6ed1a78e3409fd443e085ca967a64c188a5d082aaf7f819bccd53a471c94",
     "vendor/grammars/sml/src/tree_sitter/parser.h": "180b893c8734778fd32f372dfbc27bd6ad1cd2221f26150b31256ff6716320d2",

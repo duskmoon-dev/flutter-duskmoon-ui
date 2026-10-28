@@ -1,7 +1,8 @@
 ## Unreleased
 
-- Fix Crystal heredoc scanner compilation with MSVC while preserving identifier
-  limits and Unicode scanning. Add Windows coverage for all bundled grammars.
+- Fix Crystal and SML scanner compilation with MSVC while preserving heredoc
+  identifier limits, Unicode scanning and nested comments. Add Windows coverage
+  for all bundled grammars.
 
 ## 2.2.7
 

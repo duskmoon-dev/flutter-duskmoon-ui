@@ -70,6 +70,10 @@ line-ending normalization from changing their bytes when committed.
 
 ## Explicit compatibility adaptations
 
+- `patches/sml-msvc-unused-parameters.patch`: the SML external scanner marks
+  unused callback parameters with standard C `(void)` expressions instead of
+  GNU-only parameter attributes unsupported by MSVC. Callback signatures,
+  stateless serialization and comment scanning behavior are unchanged.
 - `patches/crystal-msvc-heredoc-buffer.patch`: the Crystal external scanner uses
   a fixed buffer for the maximum supported heredoc identifier plus UTF-8
   lookahead, instead of a C variable-length array unsupported by MSVC. Existing

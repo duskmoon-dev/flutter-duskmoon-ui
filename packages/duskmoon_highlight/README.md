@@ -79,8 +79,9 @@ dart --packages=.dart_tool/package_config.json packages/duskmoon_highlight/tool/
 
 Windows CI also runs the native runtime tests with MSVC, then builds and runs a
 minimal Windows Release consumer. Its report requires all 95 bundled grammars
-and Crystal heredoc boundary/Unicode fixtures to succeed. Compiler identification,
-test/build logs and the runtime report are retained as CI artifacts.
+and Crystal heredoc boundary/Unicode and SML comment fixtures to succeed.
+Compiler identification, test/build logs and the runtime report are retained as
+CI artifacts.
 
 With Python 3, Dart, Tree-sitter CLI 0.26.8 and WASI SDK 29.0 installed:
 

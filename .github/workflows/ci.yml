@@ -169,8 +169,8 @@ jobs:
               $process.Dispose()
             }
             $report = Get-Content $env:DUSKMOON_NATIVE_REPORT -Raw | ConvertFrom-Json
-            if (!$report.passed -or $report.platform -ne 'windows' -or $report.grammarCount -ne 95 -or $report.crystalFixtures.Count -ne 4) {
-              throw 'Windows Release consumer did not verify every grammar and Crystal fixture'
+            if (!$report.passed -or $report.platform -ne 'windows' -or $report.grammarCount -ne 95 -or $report.crystalFixtures.Count -ne 4 -or $report.smlFixtures.Count -ne 2) {
+              throw 'Windows Release consumer did not verify every grammar and Crystal/SML fixture'
             }
             Get-Content $env:DUSKMOON_NATIVE_REPORT
           } finally {
