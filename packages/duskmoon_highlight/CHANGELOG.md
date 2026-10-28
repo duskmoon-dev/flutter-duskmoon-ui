@@ -1,4 +1,4 @@
-## Unreleased
+## 2.2.8
 
 - Fix Crystal and SML scanner compilation with MSVC while preserving heredoc
   identifier limits, Unicode scanning and nested comments. Add Windows coverage
