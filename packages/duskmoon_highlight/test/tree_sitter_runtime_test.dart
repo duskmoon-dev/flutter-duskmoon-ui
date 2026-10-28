@@ -12,6 +12,13 @@ Map<String, Object?> describe(SyntaxNode node) => {
       'children': node.children.map(describe).toList(),
     };
 
+Iterable<SyntaxNode> descendants(SyntaxNode node) sync* {
+  yield node;
+  for (final child in node.children) {
+    yield* descendants(child);
+  }
+}
+
 void main() {
   setUpAll(() => TreeSitterRuntime.ensureInitialized(languages: {'json'}));
 
@@ -140,5 +147,78 @@ void main() {
     javascript.dispose();
     expect(() => TreeSitterSession(language: 'not-a-bundled-language'),
         throwsArgumentError);
+  });
+
+  final heredocs = <({String name, String marker, bool quoted, bool valid})>[
+    (name: 'plain identifier', marker: 'EOF', quoted: false, valid: true),
+    (
+      name: 'quoted Unicode identifier',
+      marker: 'α 𐐀',
+      quoted: true,
+      valid: true,
+    ),
+    (
+      name: '255-byte ASCII identifier',
+      marker: List.filled(255, 'A').join(),
+      quoted: false,
+      valid: true,
+    ),
+    (
+      name: '255-byte Unicode identifier',
+      marker: 'A${List.filled(84, '界').join()}ab',
+      quoted: false,
+      valid: true,
+    ),
+    (
+      name: 'oversized ASCII identifier',
+      marker: List.filled(256, 'A').join(),
+      quoted: false,
+      valid: false,
+    ),
+    (
+      name: 'oversized Unicode identifier',
+      marker: 'A${List.filled(85, '界').join()}',
+      quoted: false,
+      valid: false,
+    ),
+    (
+      name: 'four-byte codepoint crossing the identifier limit',
+      marker: '${List.filled(254, 'A').join()}𐐀',
+      quoted: false,
+      valid: false,
+    ),
+  ];
+  for (final heredoc in heredocs) {
+    test('Crystal heredoc preserves ${heredoc.name}', () async {
+      await TreeSitterRuntime.ensureInitialized(languages: {'crystal'});
+      final parser = TreeSitterSession(language: 'crystal');
+      addTearDown(parser.dispose);
+      final delimiter = heredoc.quoted ? "'${heredoc.marker}'" : heredoc.marker;
+      final source = 'value = <<-$delimiter\nhello\n${heredoc.marker}\n';
+      final snapshot = parser.parse(source);
+      expect(snapshot.rootNode.hasError, !heredoc.valid);
+      expect(snapshot.rootNode.to, source.length);
+      expect(
+        descendants(snapshot.rootNode)
+            .any((node) => node.type == 'heredoc_end'),
+        heredoc.valid,
+      );
+    });
+  }
+
+  test('Crystal heredoc identifier edits equal a fresh Unicode parse',
+      () async {
+    await TreeSitterRuntime.ensureInitialized(languages: {'crystal'});
+    final parser = TreeSitterSession(language: 'crystal');
+    final fresh = TreeSitterSession(language: 'crystal');
+    addTearDown(parser.dispose);
+    addTearDown(fresh.dispose);
+    expect(parser.parse('value = <<-EOF\nhello\nEOF\n').rootNode.hasError,
+        isFalse);
+    const edited = "value = <<-'α 𐐀'\nhello 😀\nα 𐐀\n";
+    final actual = parser.parse(edited);
+    expect(actual.incremental, isTrue);
+    expect(actual.rootNode.hasError, isFalse);
+    expect(describe(actual.rootNode), describe(fresh.parse(edited).rootNode));
   });
 }

@@ -1304,7 +1304,9 @@ static bool inner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols)
                             max_word_size = MAX_HEREDOC_WORD_SIZE;
                         }
 
-                        uint8_t word[max_word_size + 4];
+                        // Keep the buffer constant-sized for MSVC. The dynamic
+                        // limit above still bounds the identifier stored in state.
+                        uint8_t word[MAX_HEREDOC_WORD_SIZE + 4];
                         size_t word_length = 0;
 
                         // First character must be valid in an identifier, even for a quoted heredoc

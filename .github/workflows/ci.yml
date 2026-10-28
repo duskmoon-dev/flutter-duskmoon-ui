@@ -110,3 +110,79 @@ jobs:
           fi
           (cd "$check_dir" && flutter pub get)
           dart --packages="$check_dir/.dart_tool/package_config.json" packages/duskmoon_highlight/tool/check_build_hook.dart
+
+  native_windows:
+    name: Native Windows (MSVC)
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Identify MSVC
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $installation = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          $compiler = Get-ChildItem "$installation\VC\Tools\MSVC\*\bin\Hostx64\x64\cl.exe" | Sort-Object FullName -Descending | Select-Object -First 1
+          if (!$compiler) { throw 'MSVC cl.exe was not found' }
+          "$($compiler.FullName)`nMSVC $($compiler.VersionInfo.FileVersion)" | Tee-Object "$env:RUNNER_TEMP\duskmoon-msvc.txt"
+      - name: Test all bundled native grammars and Crystal heredocs
+        shell: pwsh
+        run: |
+          dart pub get
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          flutter test --no-pub --verbose packages/duskmoon_highlight/test/tree_sitter_runtime_test.dart *> "$env:RUNNER_TEMP\duskmoon-windows-test.log"
+          $testExit = $LASTEXITCODE
+          Get-Content "$env:RUNNER_TEMP\duskmoon-windows-test.log" -Tail 60
+          if ($testExit -ne 0) { exit $testExit }
+      - name: Build and run a Windows Release consumer
+        shell: pwsh
+        run: |
+          $consumer = Join-Path $env:RUNNER_TEMP 'duskmoon_native_windows'
+          flutter create --platforms=windows --project-name=duskmoon_native_windows $consumer
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Copy-Item packages/duskmoon_highlight/tool/native_runtime_probe.dart "$consumer\lib\main.dart"
+          Push-Location $consumer
+          try {
+            $highlight = (Join-Path $env:GITHUB_WORKSPACE 'packages/duskmoon_highlight').Replace('\', '/')
+            flutter pub add "duskmoon_highlight:{path: '$highlight'}"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            flutter build windows --release --no-pub --verbose *> "$env:RUNNER_TEMP\duskmoon-windows-release.log"
+            $buildExit = $LASTEXITCODE
+            Get-Content "$env:RUNNER_TEMP\duskmoon-windows-release.log" -Tail 60
+            if ($buildExit -ne 0) { exit $buildExit }
+            $env:DUSKMOON_NATIVE_REPORT = Join-Path $env:RUNNER_TEMP 'duskmoon-windows-native-report.json'
+            if (Test-Path $env:DUSKMOON_NATIVE_REPORT) { Remove-Item $env:DUSKMOON_NATIVE_REPORT }
+            $executable = Join-Path $consumer 'build/windows/x64/runner/Release/duskmoon_native_windows.exe'
+            $process = Start-Process -FilePath $executable -PassThru
+            try {
+              if (!$process.WaitForExit(120000)) {
+                throw 'Windows Release consumer did not exit within 120 seconds'
+              }
+              if ($process.ExitCode -ne 0) { throw "Windows Release consumer exited $($process.ExitCode)" }
+            } finally {
+              if (!$process.HasExited) { $process.Kill($true) }
+              $process.Dispose()
+            }
+            $report = Get-Content $env:DUSKMOON_NATIVE_REPORT -Raw | ConvertFrom-Json
+            if (!$report.passed -or $report.platform -ne 'windows' -or $report.grammarCount -ne 95 -or $report.crystalFixtures.Count -ne 4) {
+              throw 'Windows Release consumer did not verify every grammar and Crystal fixture'
+            }
+            Get-Content $env:DUSKMOON_NATIVE_REPORT
+          } finally {
+            Pop-Location
+          }
+      - name: Upload Windows native evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-native-evidence
+          path: |
+            ${{ runner.temp }}/duskmoon-msvc.txt
+            ${{ runner.temp }}/duskmoon-windows-test.log
+            ${{ runner.temp }}/duskmoon-windows-release.log
+            ${{ runner.temp }}/duskmoon-windows-native-report.json
+          if-no-files-found: warn

@@ -70,6 +70,11 @@ line-ending normalization from changing their bytes when committed.
 
 ## Explicit compatibility adaptations
 
+- `patches/crystal-msvc-heredoc-buffer.patch`: the Crystal external scanner uses
+  a fixed buffer for the maximum supported heredoc identifier plus UTF-8
+  lookahead, instead of a C variable-length array unsupported by MSVC. Existing
+  per-identifier and remaining serialized-state limits still determine whether
+  an identifier is accepted; native and Wasm assets use the same patched source.
 - `patches/swift-wasm-oom.patch`: the Swift external scanner's allocation-failure
   path calls `__builtin_trap()` on Wasm, because the official runtime does not
   import stdio or process-exit symbols. Native behavior and successful scanning

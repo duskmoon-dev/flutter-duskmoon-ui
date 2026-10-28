@@ -1686,6 +1686,9 @@
         "vendor/grammars/crystal/LICENSE"
       ],
       "highlights": "queries/crystal.scm",
+      "patches": [
+        "patches/crystal-msvc-heredoc-buffer.patch"
+      ],
       "query_provenance": {
         "grammar_revision": "51ad1411de9414b4600227553bb70953c352a627",
         "node_types": "vendor/grammars/crystal/src/node-types.json",
@@ -4529,7 +4532,7 @@
     "assets/grammars/cmake.wasm": "85699ca68ba909dff85136d20bc48b57d9495782821399570e905f905e12d747",
     "assets/grammars/commonlisp.wasm": "c5dce5f55c5acf903594b53b648481b890770eadbdbd77d9bb2293e35b28e65b",
     "assets/grammars/cpp.wasm": "a747f0b6cb99d717b8e10f51327ee15e1861bea4aa1c69f34d9c6e07280438de",
-    "assets/grammars/crystal.wasm": "bdf367e3086fa09444bf5c2ce7f7a432e76ef130fbef69c218613b9c9b6a1a14",
+    "assets/grammars/crystal.wasm": "cb04431aa7daeefdbded1753fdb2bda8b73f692c2498819d018323f48da3cc86",
     "assets/grammars/csharp.wasm": "4db3048c1a8fd9472652a7c25c9804497f73a07aeeaa48825db8b9544c023045",
     "assets/grammars/css.wasm": "4bf8816c81317b8e74fec17cddcbf797ffd23f33a0c96d9d429c3ce8ad811437",
     "assets/grammars/d.wasm": "d57ad7f2022b52e7d54e0a7578aa9b4a249e5c23989d9052ab135aae6ddd70ed",
@@ -4613,6 +4616,7 @@
     "assets/tree-sitter/duskmoon-tree-sitter.js": "5bb69208a533318924ed168a6d42cbe8150d9765fb7767fcaf49d9a3ded8884f",
     "assets/tree-sitter/web-tree-sitter.js": "7c49e3c1d87e24e0bb4c2def909d17154dfde281f5f8280225450090bb4b8110",
     "assets/tree-sitter/web-tree-sitter.wasm": "beca80e44cccbf2299ed4d1e3fa6462a9a6fe818aeebf847547a392227ce4acc",
+    "patches/crystal-msvc-heredoc-buffer.patch": "31bf39ef35f5986c3fe6dfd774c0496d3c76b98fefbac26bd329179c03ab552a",
     "patches/swift-wasm-oom.patch": "83a83b7e7f57ccb8466ab8ae6b7fb99a2079ae2bacbe86622470e6e9c87c5297",
     "queries/abnf.scm": "356b63b174666d9b927210a1bd124f1accb1e1f6a97a36db640b5a4eb854fc03",
     "queries/actionscript.scm": "500971ddbb9b9fce794563c0ad1f9591ba3ea0c791cafcce9c7c2b77d8c6f21e",
@@ -4936,7 +4940,7 @@
     "vendor/grammars/crystal/src/node-types.json": "37e8bf7affe509a3d90aa0324564385c536d59b1887170a09ee5a967ecc05df8",
     "vendor/grammars/crystal/src/parser.c": "15b2b72f53084b2f9e1f4a3a144402038993b856e73b9906e047cf2b1c3830ca",
     "vendor/grammars/crystal/src/parser.c.gz": "d3bd63d742909c5af2ebb3db272069fc0a4e07afdaa6d9d5c3e02e79a1f9d66e",
-    "vendor/grammars/crystal/src/scanner.c": "94957acd83eee22ec06233e9103d23c9f5f2a241f1780dc1204dab4e06f15205",
+    "vendor/grammars/crystal/src/scanner.c": "c8404989f3f457a66fc7c8469955e27a8bb5df3097a978c421b53869db59164e",
     "vendor/grammars/crystal/src/tree_sitter/alloc.h": "b29c1c9fb7cc82f58c84b376df1297d6e2737a1d655fd356db0859e3c29c2fea",
     "vendor/grammars/crystal/src/tree_sitter/array.h": "4ff743903dc46f5db6aa54f31c6b4d160a8a9779e5b2ab1ee59ae7ebcd850ea1",
     "vendor/grammars/crystal/src/tree_sitter/parser.h": "a1f6ef161fbaf48a0e10fca90ef5290a062462b307b3898aa562993853b9f80a",
