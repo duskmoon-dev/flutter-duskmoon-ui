@@ -103,6 +103,37 @@ void main() {
     parser.dispose();
   });
 
+  test(
+    'AppleScript Unicode operators retain node names and query captures',
+    () async {
+      await TreeSitterRuntime.ensureInitialized(languages: {'applescript'});
+      final parser = TreeSitterSession(language: 'applescript');
+      try {
+        for (final operator in ['≠', '≥', '≤', '÷']) {
+          final source = 'return 1 $operator 2\n';
+          final snapshot = parser.parse(source);
+          expect(snapshot.rootNode.hasError, isFalse, reason: operator);
+          expect(
+            descendants(snapshot.rootNode).any((node) => node.type == operator),
+            isTrue,
+            reason: operator,
+          );
+          expect(
+            snapshot.captures.any(
+              (capture) =>
+                  capture.name == 'operator' &&
+                  source.substring(capture.from, capture.to) == operator,
+            ),
+            isTrue,
+            reason: operator,
+          );
+        }
+      } finally {
+        parser.dispose();
+      }
+    },
+  );
+
   test('incremental edits equal fresh parses across multiple lines and Unicode',
       () async {
     await TreeSitterRuntime.ensureInitialized(languages: {'javascript'});

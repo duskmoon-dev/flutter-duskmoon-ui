@@ -47,6 +47,9 @@ void main(List<String> args) async {
       }
     }
     final target = input.config.code.targetOS;
+    // Queries use UTF-8 symbol names. MSVC's default execution charset can
+    // corrupt even ASCII-only C sources containing Unicode escapes (\u2260).
+    final encodingFlags = [if (target == OS.windows) '/utf-8'];
     Future<String> buildSource(String source) async {
       final original = File.fromUri(input.packageRoot.resolve(source));
       if (await original.exists() || !source.endsWith('/parser.c')) {
@@ -107,6 +110,7 @@ void main(List<String> args) async {
         includes: includes,
         linkModePreference: LinkModePreference.static,
         std: target == OS.windows ? 'c11' : null,
+        flags: encodingFlags,
         defines: {'_DEFAULT_SOURCE': null},
       ).run(input: input, output: nativeOutput, routing: []);
       grammarLibraries.add(name);
@@ -120,6 +124,7 @@ void main(List<String> args) async {
           includes: includes,
           language: Language.cpp,
           std: 'c++17',
+          flags: encodingFlags,
           linkModePreference: LinkModePreference.static,
         ).run(input: input, output: nativeOutput, routing: []);
         scannerLibraries.add(scanners);
@@ -149,6 +154,7 @@ void main(List<String> args) async {
         if (hasCpp && (target == OS.macOS || target == OS.iOS)) 'c++',
       ],
       flags: [
+        ...encodingFlags,
         if (target == OS.linux || target == OS.android) '-Wl,--no-undefined',
         // The NDK libc++.a linker script includes libc++abi as well. Bundle
         // the static runtime so Android consumers need no extra shared asset.

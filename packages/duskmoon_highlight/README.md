@@ -69,6 +69,8 @@ remain in this repository; no network access is needed to unpack them.
 The hook tracks the manifest and original parser, scanner, runtime and bridge
 inputs. Generated parser and language-dispatch C files stay build outputs, so
 unchanged subsequent builds can reuse the native bundle.
+Windows C and C++ builds use UTF-8 source and execution character sets so
+Unicode grammar symbol names match the bundled highlight queries.
 
 From the workspace root, check both checkout and hosted-archive dependency
 contracts with a small C/C++ fixture without compiling all 95 grammars:

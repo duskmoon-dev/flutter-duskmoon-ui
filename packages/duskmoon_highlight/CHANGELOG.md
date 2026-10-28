@@ -3,6 +3,8 @@
 - Fix Crystal and SML scanner compilation with MSVC while preserving heredoc
   identifier limits, Unicode scanning and nested comments. Add Windows coverage
   for all bundled grammars.
+- Compile Windows native sources with UTF-8 character sets so Unicode grammar
+  symbols match their highlight queries, including AppleScript operators.
 
 ## 2.2.7
 
