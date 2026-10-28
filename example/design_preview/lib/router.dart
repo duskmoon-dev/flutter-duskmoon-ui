@@ -6,6 +6,7 @@ import 'screens/chat/chat_screen.dart';
 import 'screens/code_editor/code_editor_screen.dart';
 import 'screens/feedback/feedback_screen.dart';
 import 'screens/form/form_screen.dart';
+import 'screens/gamepad/gamepad_screen.dart';
 import 'screens/markdown/markdown_screen.dart';
 import 'screens/markdown/mermaid_screen.dart';
 import 'screens/scaffold/scaffold_screen.dart';
@@ -97,6 +98,14 @@ class AppRouter {
           pageBuilder: (context, state) => MaterialPage<void>(
             key: state.pageKey,
             child: const CodeEditorScreen(),
+          ),
+        ),
+        GoRoute(
+          name: GamepadScreen.name,
+          path: GamepadScreen.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const GamepadScreen(),
           ),
         ),
         GoRoute(

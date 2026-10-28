@@ -103,3 +103,42 @@ license and KaTeX MIT notices, including bundled fonts. See
 [THIRD_PARTY_LICENSES](THIRD_PARTY_LICENSES),
 [Markdown provenance](lib/src/vendor/markdown/SOURCE.md) and
 [math renderer provenance](lib/src/vendor/flutter_math/SOURCE.md).
+
+## Gamepad controller views
+
+Each model has its own implementation file under `lib/src/gamepad/`:
+`dm_xbox_controller_view.dart`, `dm_ps5_controller_view.dart`, and
+`dm_switch_pro_controller_view.dart`. Shared rendering and input handling live
+in `dm_controller_view.dart`. Import the public `duskmoon_widgets.dart` library
+(or `duskmoon_ui`) to use any model.
+
+```dart
+DmXboxControllerView(
+  showTriggerIndicators: true,
+  onLeftStickChanged: (position) {}, // Offset: +X right, +Y down
+  onLeftTriggerChanged: (value) {}, // 0–1
+  onPressedChanged: (button, pressed) {},
+);
+```
+
+Use `DmControllerView(style: DmControllerStyle.dualSense)` for a configurable
+view, or `DmXboxControllerView`, `DmPs5ControllerView`, and
+`DmSwitchProControllerView`. These are also exported by `duskmoon_ui`.
+
+Stick vectors are clamped to a unit circle. Drag in any direction; release or
+cancel returns to center. Xbox/PS5 triggers increase while held and decrease
+on release/cancel at one unit per second (one second for full travel). Pressing
+again reverses from the current value. Switch Pro touch triggers are digital.
+Left/right controls support simultaneous independent pointers. Existing digital
+button contact callbacks remain separate from continuous values.
+
+Pass `leftStick`, `rightStick`, `leftTrigger`, `rightTrigger`, and
+`pressedButtons` to display hardware state; device mapping belongs in the app.
+Local touch and trigger decay take visual precedence until finished, then the
+external state is displayed. Controlled views should feed callback values back
+into these properties. External values are clamped; non-finite values display
+neutral. Wrap the view in `IgnorePointer` for read-only hardware monitoring.
+
+Xbox/PS5 display vertical trigger meters with percentages at both sides.
+Set `showTriggerIndicators: false` to hide them without changing the view's
+size or input behavior. Switch Pro does not display analog trigger meters.

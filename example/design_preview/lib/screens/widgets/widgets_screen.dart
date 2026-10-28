@@ -8,6 +8,7 @@ import '../button/button_screen.dart';
 import '../chat/chat_screen.dart';
 import '../code_editor/code_editor_screen.dart';
 import '../feedback/feedback_screen.dart';
+import '../gamepad/gamepad_screen.dart';
 import '../markdown/markdown_screen.dart';
 import '../scaffold/scaffold_screen.dart';
 
@@ -36,6 +37,12 @@ class _WidgetsBody extends StatelessWidget {
   const _WidgetsBody();
 
   static const _items = [
+    _WidgetMenuItem(
+      routeName: GamepadScreen.name,
+      title: 'Gamepads',
+      subtitle: 'Xbox, PS5, Switch Pro sticks, triggers, and button feedback',
+      icon: Icons.sports_esports,
+    ),
     _WidgetMenuItem(
       routeName: ButtonScreen.name,
       title: 'Buttons & Inputs',
@@ -76,17 +83,20 @@ class _WidgetsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      padding: const EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 320,
-        mainAxisExtent: 140,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-      ),
-      itemCount: _items.length,
-      itemBuilder: (context, i) => _items[i].build(context),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      final columns = (constraints.maxWidth / 320).floor();
+      return GridView.builder(
+        padding: const EdgeInsets.all(16),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: columns < 1 ? 1 : columns,
+          mainAxisExtent: 140,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+        ),
+        itemCount: _items.length,
+        itemBuilder: (context, i) => _items[i].build(context),
+      );
+    });
   }
 }
 

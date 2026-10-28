@@ -66,3 +66,9 @@ export 'package:duskmoon_code_engine/duskmoon_code_engine.dart'
 
 // Chat
 export 'src/chat/chat.dart';
+
+// Gamepad
+export 'src/gamepad/dm_controller_view.dart';
+export 'src/gamepad/dm_xbox_controller_view.dart';
+export 'src/gamepad/dm_ps5_controller_view.dart';
+export 'src/gamepad/dm_switch_pro_controller_view.dart';

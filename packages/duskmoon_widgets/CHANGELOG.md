@@ -1,3 +1,12 @@
+## Unreleased
+
+- Add `DmControllerView`, `DmXboxControllerView`, `DmPs5ControllerView`, and
+  `DmSwitchProControllerView` with continuous stick input, external hardware
+  state, optional trigger meters, and independent multi-touch controls.
+  Xbox/PS5 trigger touch ramps up/down at one unit per second; Switch Pro
+  trigger touch remains digital.
+- Add an interactive Gamepads page to the design preview showcase.
+
 ## 2.2.6
 
 - Let Markdown inputs render in scrolling parents using `minLines`/`maxLines`,
