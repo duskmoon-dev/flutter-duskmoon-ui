@@ -131,10 +131,11 @@ jobs:
           "$($compiler.FullName)`nMSVC $($compiler.VersionInfo.FileVersion)" | Tee-Object "$env:RUNNER_TEMP\duskmoon-msvc.txt"
       - name: Test all bundled native grammars and Crystal heredocs
         shell: pwsh
+        working-directory: packages/duskmoon_highlight
         run: |
           dart pub get
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          flutter test --no-pub --verbose packages/duskmoon_highlight/test/tree_sitter_runtime_test.dart *> "$env:RUNNER_TEMP\duskmoon-windows-test.log"
+          flutter test --no-pub --verbose test/tree_sitter_runtime_test.dart *> "$env:RUNNER_TEMP\duskmoon-windows-test.log"
           $testExit = $LASTEXITCODE
           Get-Content "$env:RUNNER_TEMP\duskmoon-windows-test.log" -Tail 60
           if ($testExit -ne 0) { exit $testExit }
