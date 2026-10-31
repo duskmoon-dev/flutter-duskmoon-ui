@@ -1,6 +1,7 @@
 import 'package:duskmoon_code_engine/duskmoon_code_engine.dart';
 import 'package:duskmoon_ui/duskmoon_ui.dart' hide DmCodeEditor;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../destination.dart';
 import '../../showcase_scaffold.dart';
@@ -152,10 +153,7 @@ class _LanguageToolbar extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         child: Row(
           children: [
-            Text(
-              'Language:',
-              style: TextStyle(fontSize: 13, color: fgColor),
-            ),
+            Text('Language:', style: TextStyle(fontSize: 13, color: fgColor)),
             const SizedBox(width: 8),
             DropdownButton<String>(
               value: selectedLanguage,
@@ -201,9 +199,11 @@ class _LanguageToolbar extends StatelessWidget {
               icon: Icon(Icons.copy, size: 18, color: fgColor),
               tooltip: 'Copy',
               onPressed: () {
-                final text =
-                    ClipboardCommands.getSelectedText(controller.state);
+                final text = ClipboardCommands.getSelectedText(
+                  controller.state,
+                );
                 if (text.isNotEmpty) {
+                  Clipboard.setData(ClipboardData(text: text));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Copied to clipboard'),

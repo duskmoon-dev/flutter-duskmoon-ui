@@ -160,8 +160,10 @@ class _DmCodeEditorState extends State<DmCodeEditor> {
           language: _getLanguage(widget.language),
         );
       } else {
-        // External controller: push current language and theme
-        _controller.language = _getLanguage(widget.language);
+        // External controller: push current language only if specified
+        if (widget.language != null) {
+          _controller.language = _getLanguage(widget.language);
+        }
       }
       _controller.theme =
           widget.theme ?? DmCodeEditorTheme.fromContext(context);
@@ -171,14 +173,10 @@ class _DmCodeEditorState extends State<DmCodeEditor> {
     if (widget.language != oldWidget.language) {
       _controller.language = _getLanguage(widget.language);
     }
-    // Always refresh theme: covers explicit override changes AND ambient theme
-    // changes that arrive via didUpdateWidget (e.g. MaterialApp theme prop swap).
-    _controller.theme = widget.theme ?? DmCodeEditorTheme.fromContext(context);
-  }
-
-  void _handleStateChanged(EditorState state) {
-    widget.onChanged?.call(state.doc.toString());
-    widget.onStateChanged?.call(state);
+    if (widget.theme != oldWidget.theme) {
+      _controller.theme =
+          widget.theme ?? DmCodeEditorTheme.fromContext(context);
+    }
   }
 
   @override
@@ -200,7 +198,8 @@ class _DmCodeEditorState extends State<DmCodeEditor> {
       maxHeight: widget.maxHeight,
       padding: widget.padding,
       scrollPhysics: widget.scrollPhysics,
-      onStateChanged: _handleStateChanged,
+      onChanged: widget.onChanged,
+      onStateChanged: widget.onStateChanged,
     );
   }
 }
