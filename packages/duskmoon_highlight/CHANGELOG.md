@@ -1,3 +1,7 @@
+## 2.2.9
+
+- Release 2.2.9 (2026-10-31)
+
 ## 2.2.8
 
 - Fix Crystal and SML scanner compilation with MSVC while preserving heredoc
