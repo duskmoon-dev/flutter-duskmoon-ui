@@ -68,18 +68,40 @@ void main() {
       );
     });
 
-    testWidgets('external changeValue syncs controller text', (tester) async {
-      final bloc = CodeEditorFieldBloc(initialValue: 'hello');
-      addTearDown(bloc.close);
+    testWidgets(
+        'external changeValue syncs controller text and supports bloc swap',
+        (tester) async {
+      final bloc1 = CodeEditorFieldBloc(initialValue: 'hello');
+      final bloc2 = CodeEditorFieldBloc(initialValue: 'from bloc 2');
+      addTearDown(() {
+        bloc1.close();
+        bloc2.close();
+      });
       await tester.pumpWidget(
-        _wrap(DmCodeEditorFieldBlocBuilder(codeEditorFieldBloc: bloc)),
+        _wrap(DmCodeEditorFieldBlocBuilder(codeEditorFieldBloc: bloc1)),
       );
       await tester.pump(const Duration(milliseconds: 20));
-      expect(bloc.state.value, 'hello');
+      expect(
+        tester.widget<DmCodeEditor>(find.byType(DmCodeEditor)).controller!.text,
+        'hello',
+      );
 
-      bloc.changeValue('world');
+      bloc1.changeValue('world');
       await tester.pump();
-      expect(bloc.state.value, 'world');
+      expect(
+        tester.widget<DmCodeEditor>(find.byType(DmCodeEditor)).controller!.text,
+        'world',
+      );
+
+      // Swap codeEditorFieldBloc instance
+      await tester.pumpWidget(
+        _wrap(DmCodeEditorFieldBlocBuilder(codeEditorFieldBloc: bloc2)),
+      );
+      await tester.pump();
+      expect(
+        tester.widget<DmCodeEditor>(find.byType(DmCodeEditor)).controller!.text,
+        'from bloc 2',
+      );
     });
 
     testWidgets('isEnabled = false sets DmCodeEditor.readOnly = true',

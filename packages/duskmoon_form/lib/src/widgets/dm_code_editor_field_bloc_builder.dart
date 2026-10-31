@@ -69,6 +69,17 @@ class _DmCodeEditorFieldBlocBuilderState
   }
 
   @override
+  void didUpdateWidget(DmCodeEditorFieldBlocBuilder oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.codeEditorFieldBloc != oldWidget.codeEditorFieldBloc) {
+      final nextValue = widget.codeEditorFieldBloc.state.value;
+      if (_controller.text != nextValue) {
+        _controller.text = nextValue;
+      }
+    }
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -83,8 +94,13 @@ class _DmCodeEditorFieldBlocBuilderState
       singleFieldBloc: widget.codeEditorFieldBloc,
       animateWhenCanShow: widget.animateWhenCanShow,
       builder: (context, _) {
-        return BlocBuilder<CodeEditorFieldBloc, CodeEditorFieldBlocState>(
+        return BlocConsumer<CodeEditorFieldBloc, CodeEditorFieldBlocState>(
           bloc: widget.codeEditorFieldBloc,
+          listener: (context, state) {
+            if (_controller.text != state.value) {
+              _controller.text = state.value;
+            }
+          },
           builder: (context, state) {
             final isEnabled = fieldBlocIsEnabled(
               isEnabled: widget.isEnabled,
@@ -92,11 +108,6 @@ class _DmCodeEditorFieldBlocBuilderState
                   widget.enableOnlyWhenFormBlocCanSubmit,
               fieldBlocState: state,
             );
-
-            // Sync controller when value is changed externally.
-            if (_controller.text != state.value) {
-              _controller.text = state.value;
-            }
 
             return DefaultFieldBlocBuilderPadding(
               padding: widget.padding,
