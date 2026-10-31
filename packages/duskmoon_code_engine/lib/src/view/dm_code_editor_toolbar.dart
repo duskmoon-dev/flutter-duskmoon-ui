@@ -30,58 +30,67 @@ class DmCodeEditorToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = controller.theme;
-    final colorScheme = Theme.of(context).colorScheme;
+    return ListenableBuilder(
+      listenable: controller,
+      builder: (context, _) {
+        final theme = controller.theme;
+        final colorScheme = Theme.of(context).colorScheme;
 
-    final bgColor = theme?.gutterBackground ?? colorScheme.surfaceContainerLow;
-    final fgColor = theme?.gutterForeground ?? colorScheme.onSurfaceVariant;
-    final titleColor = theme?.foreground ?? colorScheme.onSurface;
-    final borderColor = theme != null
-        ? Color.lerp(theme.gutterBackground, theme.foreground, 0.15)!
-        : colorScheme.outlineVariant;
+        final bgColor =
+            theme?.gutterBackground ?? colorScheme.surfaceContainerLow;
+        final fgColor = theme?.gutterForeground ?? colorScheme.onSurfaceVariant;
+        final titleColor = theme?.foreground ?? colorScheme.onSurface;
+        final borderColor = theme != null
+            ? Color.lerp(theme.gutterBackground, theme.foreground, 0.15)!
+            : colorScheme.outlineVariant;
 
-    final effectiveDecoration = decoration ??
-        BoxDecoration(
-          color: bgColor,
-          border: Border(bottom: BorderSide(color: borderColor)),
-        );
+        final effectiveDecoration = decoration ??
+            BoxDecoration(
+              color: bgColor,
+              border: Border(bottom: BorderSide(color: borderColor)),
+            );
 
-    return DecoratedBox(
-      decoration: effectiveDecoration,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        child: Row(
-          children: [
-            if (title != null)
-              Expanded(
-                child: Text(
-                  title!,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
-                    color: titleColor,
+        return DecoratedBox(
+          decoration: effectiveDecoration,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            child: Row(
+              children: [
+                if (title != null)
+                  Expanded(
+                    child: Text(
+                      title!,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                        color: titleColor,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                else
+                  const Spacer(),
+                for (final action in actions)
+                  IconButton(
+                    icon: Icon(action.icon, size: 18),
+                    tooltip: action.tooltip,
+                    onPressed: (action.isEnabled?.call() ?? true)
+                        ? action.onPressed
+                        : null,
+                    color: fgColor,
+                    disabledColor: fgColor.withValues(alpha: 0.38),
+                    padding: const EdgeInsets.all(4),
+                    constraints: const BoxConstraints(
+                      minWidth: 28,
+                      minHeight: 28,
+                    ),
+                    splashRadius: 16,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              )
-            else
-              const Spacer(),
-            for (final action in actions)
-              IconButton(
-                icon: Icon(action.icon, size: 18),
-                tooltip: action.tooltip,
-                onPressed: action.onPressed,
-                color: fgColor,
-                padding: const EdgeInsets.all(4),
-                constraints: const BoxConstraints(
-                  minWidth: 28,
-                  minHeight: 28,
-                ),
-                splashRadius: 16,
-              ),
-          ],
-        ),
-      ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

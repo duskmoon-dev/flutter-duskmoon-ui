@@ -21,7 +21,9 @@ final syntaxStateField = StateField<SyntaxState>(
   create: (state) {
     final editor = state as EditorState;
     return SyntaxState.create(
-        editor.facet(syntaxLanguage), editor.doc.toString());
+      editor.facet(syntaxLanguage),
+      editor.doc.toString(),
+    );
   },
   update: (transaction, value) {
     final tr = transaction as Transaction;
@@ -32,15 +34,13 @@ final syntaxStateField = StateField<SyntaxState>(
         next._session?.dispose();
         next = SyntaxState.create(
           effect.value as Language? ?? tr.startState.facet(syntaxLanguage),
-          tr.startState.doc.toString(),
+          tr.newDoc.toString(),
         );
       }
       if (effect.type == refreshSyntax) refresh = true;
     }
     if (!tr.docChanged && !refresh) return next;
-    final source = tr.docChanged
-        ? tr.startState.doc.replace(tr.changes!).toString()
-        : tr.startState.doc.toString();
+    final source = tr.newDoc.toString();
     return next.parse(source);
   },
 );

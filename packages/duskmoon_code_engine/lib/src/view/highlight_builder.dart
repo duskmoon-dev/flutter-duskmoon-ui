@@ -5,13 +5,29 @@ import '../highlight/highlight.dart';
 import '../highlight/tags.dart';
 
 class InlineSpan {
-  const InlineSpan(
-      {required this.from, required this.to, required this.text, this.style});
+  const InlineSpan({
+    required this.from,
+    required this.to,
+    required this.text,
+    this.style,
+  });
   final int from;
   final int to;
   final String text;
   final TextStyle? style;
   int get length => to - from;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InlineSpan &&
+          from == other.from &&
+          to == other.to &&
+          text == other.text &&
+          style == other.style;
+
+  @override
+  int get hashCode => Object.hash(from, to, text, style);
 }
 
 /// Resolves query captures into non-overlapping spans covering the exact slice.
@@ -20,19 +36,35 @@ class HighlightBuilder {
 
   static List<InlineSpan> buildSpans({
     required SyntaxSnapshot? tree,
-    required String source,
+    String source = '',
+    String? lineText,
     required HighlightStyle highlightStyle,
     required int lineFrom,
     required int lineTo,
     TextStyle? defaultStyle,
   }) {
-    if (lineFrom >= lineTo || source.isEmpty) return const [];
+    if (lineFrom >= lineTo ||
+        (source.isEmpty && (lineText == null || lineText.isEmpty))) {
+      return const [];
+    }
+    String slice(int from, int to) {
+      if (lineText != null) {
+        return lineText.substring(
+          (from - lineFrom).clamp(0, lineText.length),
+          (to - lineFrom).clamp(0, lineText.length),
+        );
+      }
+      return source.substring(from, to);
+    }
+
     final captures = tree?.captures
-            .where((c) =>
-                c.from < lineTo &&
-                c.to > lineFrom &&
-                (c.name == 'none' ||
-                    highlightStyle.style(Tag.capture(c.name)) != null))
+            .where(
+              (c) =>
+                  c.from < lineTo &&
+                  c.to > lineFrom &&
+                  (c.name == 'none' ||
+                      highlightStyle.style(Tag.capture(c.name)) != null),
+            )
             .toList() ??
         [];
     final boundaries = <int>{lineFrom, lineTo};
@@ -58,17 +90,18 @@ class HighlightBuilder {
           : highlightStyle.style(Tag.capture(winner.name)) ?? defaultStyle;
       if (spans.isNotEmpty && spans.last.style == style) {
         final last = spans.removeLast();
-        spans.add(InlineSpan(
+        spans.add(
+          InlineSpan(
             from: last.from,
             to: to,
-            text: source.substring(last.from, to),
-            style: style));
+            text: slice(last.from, to),
+            style: style,
+          ),
+        );
       } else {
-        spans.add(InlineSpan(
-            from: from,
-            to: to,
-            text: source.substring(from, to),
-            style: style));
+        spans.add(
+          InlineSpan(from: from, to: to, text: slice(from, to), style: style),
+        );
       }
     }
     return spans;

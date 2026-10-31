@@ -26,6 +26,7 @@ class DmCodeEditor extends StatefulWidget {
     this.readOnly = false,
     this.lineNumbers = true,
     this.highlightActiveLine = true,
+    this.onChanged,
     this.onStateChanged,
     this.controller,
     this.focusNode,
@@ -60,6 +61,7 @@ class DmCodeEditor extends StatefulWidget {
   final bool readOnly;
   final bool lineNumbers;
   final bool highlightActiveLine;
+  final ValueChanged<String>? onChanged;
   final void Function(EditorState state)? onStateChanged;
   final EditorViewController? controller;
   final FocusNode? focusNode;
@@ -89,6 +91,13 @@ class _DmCodeEditorState extends State<DmCodeEditor> {
     if (widget.controller != oldWidget.controller) {
       if (_ownsController) _controller.dispose();
       _initController();
+      return;
+    }
+    if (widget.language != oldWidget.language) {
+      _controller.language = widget.language;
+    }
+    if (widget.theme != oldWidget.theme) {
+      _controller.theme = widget.theme;
     }
   }
 
@@ -132,7 +141,7 @@ class _DmCodeEditorState extends State<DmCodeEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    Widget column = Column(
       children: [
         _buildTopBar(),
         Expanded(
@@ -144,6 +153,7 @@ class _DmCodeEditorState extends State<DmCodeEditor> {
             readOnly: widget.readOnly,
             lineNumbers: widget.lineNumbers,
             highlightActiveLine: widget.highlightActiveLine,
+            onChanged: widget.onChanged,
             onStateChanged: widget.onStateChanged,
             focusNode: widget.focusNode,
             autofocus: widget.autofocus,
@@ -154,5 +164,15 @@ class _DmCodeEditorState extends State<DmCodeEditor> {
         _buildBottomBar(),
       ],
     );
+    if (widget.minHeight != null || widget.maxHeight != null) {
+      column = ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: widget.minHeight ?? 0.0,
+          maxHeight: widget.maxHeight ?? double.infinity,
+        ),
+        child: column,
+      );
+    }
+    return column;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../commands/commands.dart';
+import '../commands/history.dart';
 import '../document/change.dart';
 import '../document/document.dart';
 import '../language/language.dart';
@@ -12,15 +13,21 @@ import '../theme/editor_theme.dart';
 import 'editor_view.dart';
 
 /// Consumer-facing controller that wraps [EditorView] with convenience methods.
-class EditorViewController {
+class EditorViewController implements Listenable {
   EditorViewController({
     String? text,
     LanguageSupport? language,
     EditorTheme? theme,
     List<Extension> extensions = const [],
+    bool enableHistory = true,
   }) {
-    final allExtensions = <Extension>[
+    final hasHistory = extensions.any((e) => e == historyField);
+    final effectiveExtensions = <Extension>[
       ...extensions,
+      if (enableHistory && !hasHistory) historyExtension(),
+    ];
+    final allExtensions = <Extension>[
+      ...effectiveExtensions,
       if (language != null) language.extension else syntaxStateField,
     ];
     _view = EditorView(
@@ -29,12 +36,14 @@ class EditorViewController {
         extensions: allExtensions,
       ),
     );
-    _extensions = extensions;
+    _language = language;
+    _extensions = effectiveExtensions;
     _theme = theme;
     _initializeLanguage();
   }
 
   late EditorView _view;
+  LanguageSupport? _language;
   EditorTheme? _theme;
   late final List<Extension> _extensions;
   bool _disposed = false;
@@ -57,16 +66,21 @@ class EditorViewController {
     });
     // The public ready future retains errors for callers that await it, while
     // automatic widget initialization also reports them through Flutter.
-    _ready.then<void>((_) {}, onError: (Object error, StackTrace stack) {
-      if (!_disposed && generation == _languageGeneration) {
-        FlutterError.reportError(FlutterErrorDetails(
-          exception: error,
-          stack: stack,
-          library: 'duskmoon_code_engine',
-          context: ErrorDescription('initializing a Tree-sitter language'),
-        ));
-      }
-    });
+    _ready.then<void>(
+      (_) {},
+      onError: (Object error, StackTrace stack) {
+        if (!_disposed && generation == _languageGeneration) {
+          FlutterError.reportError(
+            FlutterErrorDetails(
+              exception: error,
+              stack: stack,
+              library: 'duskmoon_code_engine',
+              context: ErrorDescription('initializing a Tree-sitter language'),
+            ),
+          );
+        }
+      },
+    );
   }
 
   /// The underlying [EditorView].
@@ -78,6 +92,15 @@ class EditorViewController {
   /// The current [Document].
   Document get document => _view.document;
 
+  /// The current [EditorSelection].
+  EditorSelection get selection => state.selection;
+
+  /// Whether there are edits that can be undone.
+  bool get canUndo => EditorCommands.canUndo(state);
+
+  /// Whether there are undone edits that can be redone.
+  bool get canRedo => EditorCommands.canRedo(state);
+
   /// The full text of the current document.
   String get text => document.toString();
 
@@ -85,10 +108,9 @@ class EditorViewController {
   set text(String value) {
     dispatch(
       TransactionSpec(
-        changes: ChangeSet.of(
-          document.length,
-          [ChangeSpec(from: 0, to: document.length, insert: value)],
-        ),
+        changes: ChangeSet.of(document.length, [
+          ChangeSpec(from: 0, to: document.length, insert: value),
+        ]),
         selection: EditorSelection.cursor(value.length),
       ),
     );
@@ -103,9 +125,14 @@ class EditorViewController {
     _view.invalidate();
   }
 
+  /// The active [LanguageSupport], or null if plain text.
+  LanguageSupport? get language => _language;
+
   /// Switch syntax without replacing the view, document, selection or history.
   set language(LanguageSupport? lang) {
     if (_disposed) return;
+    if (_language == lang) return;
+    _language = lang;
     _view.dispatch(
       TransactionSpec(effects: [setSyntaxLanguage.of(lang?.language)]),
       extensions: [
@@ -131,14 +158,40 @@ class EditorViewController {
 
   /// Replace the text in [[from], [to]) with [replacement].
   void replaceRange(int from, int to, String replacement) {
+    final len = document.length;
+    final clampedFrom = from.clamp(0, len);
+    final clampedTo = to.clamp(clampedFrom, len);
     dispatch(
       TransactionSpec(
-        changes: ChangeSet.of(
-          document.length,
-          [ChangeSpec(from: from, to: to, insert: replacement)],
-        ),
+        changes: ChangeSet.of(len, [
+          ChangeSpec(from: clampedFrom, to: clampedTo, insert: replacement),
+        ]),
       ),
     );
+  }
+
+  /// Whether the last dispatched transaction modified the document content.
+  bool get lastDocChanged => _view.lastDocChanged;
+
+  @override
+  void addListener(VoidCallback listener) => _view.addListener(listener);
+
+  @override
+  void removeListener(VoidCallback listener) => _view.removeListener(listener);
+
+  /// Opens a new document, resetting selection, history, and active syntax generation.
+  void openDocument(String text, {LanguageSupport? language}) {
+    if (_disposed) return;
+    _languageGeneration++;
+    final effectiveLang = language ?? _language;
+    _language = effectiveLang;
+    final newDoc = Document.fromString(text);
+    final allExtensions = <Extension>[
+      ..._extensions,
+      if (effectiveLang != null) effectiveLang.extension else syntaxStateField,
+    ];
+    _view.openDocument(newDoc, extensions: allExtensions);
+    _initializeLanguage();
   }
 
   /// Dispose the underlying [EditorView].

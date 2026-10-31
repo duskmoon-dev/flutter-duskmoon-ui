@@ -14,5 +14,6 @@ class Annotation<T> {
 abstract final class Annotations {
   static const userEvent = AnnotationType<String>();
   static const addToHistory = AnnotationType<bool>();
+  static const coalesceHistory = AnnotationType<bool>();
   static const remote = AnnotationType<bool>();
 }

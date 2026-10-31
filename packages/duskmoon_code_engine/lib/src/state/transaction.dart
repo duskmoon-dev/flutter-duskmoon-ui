@@ -51,6 +51,14 @@ class Transaction {
   final bool scrollIntoView;
 
   EditorState? _state;
+  Document? _newDoc;
+
+  /// The document after applying [changes] (or [startState.doc] if unchanged).
+  ///
+  /// Computed at most once and shared across state fields and the resulting
+  /// [EditorState].
+  Document get newDoc => _newDoc ??=
+      changes != null ? startState.doc.replace(changes!) : startState.doc;
 
   /// The new editor state after applying this transaction.
   EditorState get state => _state ??= startState._applyTransaction(this);

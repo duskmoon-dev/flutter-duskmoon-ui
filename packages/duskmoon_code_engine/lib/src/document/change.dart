@@ -142,20 +142,29 @@ class ChangeSet {
 
   /// Applies this changeset to [rope], returning a new [Rope].
   Rope apply(Rope rope) {
-    final buf = StringBuffer();
+    if (_changes.isEmpty) return rope;
+
+    // Convert changes to (from, to, insert) coordinates in old doc
     var pos = 0;
     var ci = 0;
+    final changeRanges = <(int, int, String)>[];
     for (final p in _retains) {
       if (p > 0) {
-        buf.write(rope.sliceString(pos, pos + p));
         pos += p;
       } else {
         final c = _changes[ci++];
-        buf.write(c.insert);
+        changeRanges.add((pos, pos + c.deleteLen, c.insert));
         pos += c.deleteLen;
       }
     }
-    return Rope.fromString(buf.toString());
+
+    // Apply changes in reverse order using structural sharing splice!
+    var result = rope;
+    for (var i = changeRanges.length - 1; i >= 0; i--) {
+      final (from, to, insert) = changeRanges[i];
+      result = result.splice(from, to, insert);
+    }
+    return result;
   }
 
   // -------------------------------------------------------------------------
@@ -214,6 +223,29 @@ class ChangeSet {
     }
 
     return newPos + (pos - oldPos);
+  }
+
+  /// Returns `true` if any change in this changeset overlaps or touches
+  /// the old-document range `[from, to]`.
+  bool touchesRange(int from, int to) {
+    var oldPos = 0;
+    var ci = 0;
+    for (final p in _retains) {
+      if (p > 0) {
+        oldPos += p;
+      } else {
+        final c = _changes[ci++];
+        final changeFrom = oldPos;
+        final changeTo = oldPos + c.deleteLen;
+        if (from == to) {
+          if (changeFrom <= from && from <= changeTo) return true;
+        } else {
+          if (changeFrom <= to && changeTo >= from) return true;
+        }
+        oldPos = changeTo;
+      }
+    }
+    return false;
   }
 
   // -------------------------------------------------------------------------

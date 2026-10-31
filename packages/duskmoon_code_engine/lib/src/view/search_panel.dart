@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart' hide SearchBar;
+import 'package:flutter/services.dart';
 
 import '../commands/search.dart';
+import '../document/document.dart';
 import '../state/editor_state.dart';
 import '../state/selection.dart';
 import 'editor_view.dart';
@@ -15,6 +17,7 @@ class SearchPanel extends StatefulWidget {
     required this.view,
     required this.onClose,
     this.showReplace = false,
+    this.readOnly = false,
   });
 
   /// The editor view to search within and dispatch transactions to.
@@ -25,6 +28,9 @@ class SearchPanel extends StatefulWidget {
 
   /// Whether to show the replace row initially.
   final bool showReplace;
+
+  /// When true, replace controls are disabled.
+  final bool readOnly;
 
   @override
   State<SearchPanel> createState() => _SearchPanelState();
@@ -39,11 +45,16 @@ class _SearchPanelState extends State<SearchPanel> {
   int _currentIndex = -1;
   bool _caseSensitive = false;
   bool _showReplace = false;
+  Document? _lastDoc;
+
+  bool get _isReadOnly => widget.readOnly || widget.view.readOnly;
 
   @override
   void initState() {
     super.initState();
     _showReplace = widget.showReplace;
+    _lastDoc = widget.view.document;
+    widget.view.addListener(_onViewChanged);
     // Auto-focus the search field on open.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _searchFocus.requestFocus();
@@ -51,11 +62,56 @@ class _SearchPanelState extends State<SearchPanel> {
   }
 
   @override
+  void didUpdateWidget(SearchPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.showReplace != oldWidget.showReplace) {
+      _showReplace = widget.showReplace;
+    }
+    if (widget.view != oldWidget.view) {
+      oldWidget.view.removeListener(_onViewChanged);
+      _lastDoc = widget.view.document;
+      widget.view.addListener(_onViewChanged);
+      if (_searchController.text.isNotEmpty) {
+        final matches = SearchState.findMatches(
+          widget.view.document,
+          _searchController.text,
+          caseSensitive: _caseSensitive,
+        );
+        _matches = matches;
+        _currentIndex = matches.isEmpty ? -1 : 0;
+      } else {
+        _matches = const [];
+        _currentIndex = -1;
+      }
+    }
+  }
+
+  @override
   void dispose() {
+    widget.view.removeListener(_onViewChanged);
     _searchController.dispose();
     _replaceController.dispose();
     _searchFocus.dispose();
     super.dispose();
+  }
+
+  void _onViewChanged() {
+    if (!identical(widget.view.document, _lastDoc)) {
+      _lastDoc = widget.view.document;
+      if (_searchController.text.isNotEmpty) {
+        final matches = SearchState.findMatches(
+          widget.view.document,
+          _searchController.text,
+          caseSensitive: _caseSensitive,
+        );
+        setState(() {
+          _matches = matches;
+          if (_currentIndex >= matches.length) {
+            _currentIndex = matches.isEmpty ? -1 : matches.length - 1;
+          }
+        });
+      }
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -64,6 +120,7 @@ class _SearchPanelState extends State<SearchPanel> {
 
   void _runSearch() {
     final query = _searchController.text;
+    _lastDoc = widget.view.document;
     final matches = SearchState.findMatches(
       widget.view.document,
       query,
@@ -103,8 +160,25 @@ class _SearchPanelState extends State<SearchPanel> {
   }
 
   void _replaceOne() {
-    if (_matches.isEmpty || _currentIndex < 0) return;
-    final m = _matches[_currentIndex];
+    if (_isReadOnly) return;
+    final query = _searchController.text;
+    if (query.isEmpty) return;
+    final currentMatches = SearchState.findMatches(
+      widget.view.document,
+      query,
+      caseSensitive: _caseSensitive,
+    );
+    if (currentMatches.isEmpty) {
+      setState(() {
+        _matches = const [];
+        _currentIndex = -1;
+      });
+      return;
+    }
+    final idx = (_currentIndex >= 0 && _currentIndex < currentMatches.length)
+        ? _currentIndex
+        : 0;
+    final m = currentMatches[idx];
     final replacement = _replaceController.text;
     widget.view.dispatch(
       SearchCommands.replaceOne(widget.view.state, m.from, m.to, replacement),
@@ -113,10 +187,18 @@ class _SearchPanelState extends State<SearchPanel> {
   }
 
   void _replaceAll() {
-    if (_matches.isEmpty) return;
+    if (_isReadOnly) return;
+    final query = _searchController.text;
+    if (query.isEmpty) return;
+    final freshMatches = SearchState.findMatches(
+      widget.view.document,
+      query,
+      caseSensitive: _caseSensitive,
+    );
+    if (freshMatches.isEmpty) return;
     final replacement = _replaceController.text;
     widget.view.dispatch(
-      SearchCommands.replaceAll(widget.view.state, _matches, replacement),
+      SearchCommands.replaceAll(widget.view.state, freshMatches, replacement),
     );
     _runSearch();
   }
@@ -202,7 +284,9 @@ class _SearchPanelState extends State<SearchPanel> {
             color: _showReplace ? colorScheme.primary : null,
           ),
           tooltip: 'Toggle replace',
-          onPressed: () => setState(() => _showReplace = !_showReplace),
+          onPressed: _isReadOnly
+              ? null
+              : () => setState(() => _showReplace = !_showReplace),
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
         ),
@@ -223,6 +307,7 @@ class _SearchPanelState extends State<SearchPanel> {
         Expanded(
           child: TextField(
             controller: _replaceController,
+            enabled: !_isReadOnly,
             style: const TextStyle(fontSize: 13),
             decoration: const InputDecoration(
               hintText: 'Replace',
@@ -236,7 +321,7 @@ class _SearchPanelState extends State<SearchPanel> {
         const SizedBox(width: 4),
         // Replace one
         TextButton(
-          onPressed: _matches.isEmpty ? null : _replaceOne,
+          onPressed: (_isReadOnly || _matches.isEmpty) ? null : _replaceOne,
           style: TextButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             minimumSize: Size.zero,
@@ -247,7 +332,7 @@ class _SearchPanelState extends State<SearchPanel> {
         const SizedBox(width: 4),
         // Replace all
         TextButton(
-          onPressed: _matches.isEmpty ? null : _replaceAll,
+          onPressed: (_isReadOnly || _matches.isEmpty) ? null : _replaceAll,
           style: TextButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             minimumSize: Size.zero,
@@ -258,20 +343,32 @@ class _SearchPanelState extends State<SearchPanel> {
       ],
     );
 
-    return Material(
-      elevation: 2,
-      color: colorScheme.surface,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            searchRow,
-            if (_showReplace) ...[
-              const SizedBox(height: 4),
-              replaceRow,
+    return Focus(
+      onKeyEvent: (node, event) {
+        if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
+          return KeyEventResult.ignored;
+        }
+        final ctrl = HardwareKeyboard.instance.isControlPressed ||
+            HardwareKeyboard.instance.isMetaPressed;
+        if (event.logicalKey == LogicalKeyboardKey.escape ||
+            (ctrl && event.logicalKey == LogicalKeyboardKey.keyF)) {
+          widget.onClose();
+          return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+      },
+      child: Material(
+        elevation: 2,
+        color: colorScheme.surface,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              searchRow,
+              if (_showReplace) ...[const SizedBox(height: 4), replaceRow],
             ],
-          ],
+          ),
         ),
       ),
     );

@@ -132,8 +132,8 @@ class KeyBinding {
   ///
   /// When the binding key includes "Shift", [shift] in the binding descriptor
   /// is matched against the provided [shiftHeld]. When the binding does NOT
-  /// include Shift, the shift parameter is not used for matching (either shift
-  /// state can match the base binding; the caller selects [run] vs [shift]).
+  /// include Shift, Shift being held will only match if this binding defines
+  /// an alternate [shift] command callback.
   bool matches(
     LogicalKeyboardKey logicalKey,
     bool ctrl,
@@ -146,9 +146,15 @@ class KeyBinding {
     if (parsed.logicalKey != logicalKey) return false;
     if (parsed.ctrl != ctrl) return false;
     if (parsed.alt != alt) return false;
+
     // Shift: if the binding descriptor includes Shift, it must match exactly.
-    // If not, allow matching regardless of shift (shift selects run vs this.shift).
-    if (parsed.shift && !shiftHeld) return false;
+    // If not, allow matching with shift held ONLY if the binding provides a
+    // separate [shift] callback.
+    if (parsed.shift != shiftHeld) {
+      if (!shiftHeld || shift == null) {
+        return false;
+      }
+    }
 
     return true;
   }

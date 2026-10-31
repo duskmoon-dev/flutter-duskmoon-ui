@@ -26,8 +26,14 @@ class EditorState {
   /// The current document.
   final Document doc;
 
+  /// Monotonically increasing revision of the current document.
+  int get docVersion => doc.version;
+
   /// The current selection.
   final EditorSelection selection;
+
+  /// The installed extensions.
+  List<Extension> get extensions => _extensions;
 
   final FacetStore _facets;
   final Map<StateField<dynamic>, dynamic> _fieldValues;
@@ -134,8 +140,7 @@ class EditorState {
 
   /// Compute the new state from a transaction.
   EditorState _applyTransaction(Transaction tr) {
-    final changes = tr.changes;
-    final newDoc = changes != null ? doc.replace(changes) : doc;
+    final newDoc = tr.newDoc;
 
     // Update field values.
     final newFieldValues = <StateField<dynamic>, dynamic>{};

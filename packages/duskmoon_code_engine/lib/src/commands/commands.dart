@@ -1,3 +1,5 @@
+import 'package:characters/characters.dart';
+
 import '../document/change.dart';
 import '../state/annotation.dart';
 import '../state/editor_state.dart';
@@ -11,23 +13,126 @@ import 'history.dart';
 /// executed in the current state (e.g. cursor already at document start).
 abstract final class EditorCommands {
   // ---------------------------------------------------------------------------
+  // Unicode Grapheme Helpers
+  // ---------------------------------------------------------------------------
+
+  static bool _isLowSurrogate(String str) {
+    if (str.isEmpty) return false;
+    final code = str.codeUnitAt(0);
+    return code >= 0xDC00 && code <= 0xDFFF;
+  }
+
+  static int _prevGraphemeLength(EditorState state, int offset) {
+    if (offset <= 0) return 0;
+    final start = (offset - 64).clamp(0, offset);
+    final adjStart =
+        (start > 0 && _isLowSurrogate(state.doc.sliceString(start, start + 1)))
+            ? start - 1
+            : start;
+    final slice = state.doc.sliceString(adjStart, offset);
+    return slice.characters.last.length;
+  }
+
+  static int _nextGraphemeLength(EditorState state, int offset) {
+    if (offset >= state.doc.length) return 0;
+    final end = (offset + 64).clamp(offset, state.doc.length);
+    final slice = state.doc.sliceString(offset, end);
+    return slice.characters.first.length;
+  }
+
+  static int _clampToGraphemeBoundary(
+    EditorState state,
+    int offset,
+    int minOffset,
+  ) {
+    if (offset > minOffset &&
+        offset < state.doc.length &&
+        _isLowSurrogate(state.doc.sliceString(offset, offset + 1))) {
+      return offset - 1;
+    }
+    return offset;
+  }
+
+  /// Returns the `(from, to)` character offsets of the word at [offset]
+  /// within the same line, or `(offset, offset)` if none.
+  static (int, int) wordRangeAt(EditorState state, int offset) {
+    final clamped = offset.clamp(0, state.doc.length);
+    final line = state.doc.lineAtOffset(clamped);
+    final lineText = line.text;
+    if (lineText.isEmpty) return (line.from, line.from);
+    var col = (clamped - line.from).clamp(0, lineText.length);
+    if (col == lineText.length && col > 0) col--;
+    col =
+        _clampToGraphemeBoundary(state, line.from + col, line.from) - line.from;
+
+    final isWord = _isWordChar(lineText[col]);
+    var start = col;
+    var end = col;
+    if (isWord) {
+      while (start > 0 && _isWordChar(lineText[start - 1])) {
+        start--;
+      }
+      while (end < lineText.length && _isWordChar(lineText[end])) {
+        end++;
+      }
+    } else if (lineText[col].trim().isEmpty) {
+      while (start > 0 && lineText[start - 1].trim().isEmpty) {
+        start--;
+      }
+      while (end < lineText.length && lineText[end].trim().isEmpty) {
+        end++;
+      }
+    } else {
+      end = (col + _nextGraphemeLength(state, line.from + col)).clamp(
+        0,
+        lineText.length,
+      );
+    }
+    return (line.from + start, line.from + end);
+  }
+
+  // ---------------------------------------------------------------------------
   // Cursor movement
   // ---------------------------------------------------------------------------
 
   /// Move the cursor one character to the right.
+  /// If a non-empty selection is active, collapses the cursor to its end.
   /// Returns null if the cursor is already at the end of the document.
   static TransactionSpec? cursorCharRight(EditorState state) {
-    final head = state.selection.main.head;
+    final main = state.selection.main;
+    if (!main.isEmpty) {
+      return TransactionSpec(
+        selection: EditorSelection.cursor(main.to),
+        scrollIntoView: true,
+      );
+    }
+    final head = main.head;
     if (head >= state.doc.length) return null;
-    return TransactionSpec(selection: EditorSelection.cursor(head + 1));
+    final len = _nextGraphemeLength(state, head);
+    return TransactionSpec(
+      selection: EditorSelection.cursor(head + len),
+      scrollIntoView: true,
+    );
   }
 
   /// Move the cursor one character to the left.
+  /// If a non-empty selection is active, collapses the cursor to its start.
   /// Returns null if the cursor is already at the start of the document.
   static TransactionSpec? cursorCharLeft(EditorState state) {
-    final head = state.selection.main.head;
+    final main = state.selection.main;
+    if (!main.isEmpty) {
+      return TransactionSpec(
+        selection: EditorSelection.cursor(main.from),
+        scrollIntoView: true,
+      );
+    }
+    final head = main.head;
     if (head <= 0) return null;
-    return TransactionSpec(selection: EditorSelection.cursor(head - 1));
+    final len = _prevGraphemeLength(state, head);
+    return TransactionSpec(
+      selection: EditorSelection.cursor(head - len),
+      scrollIntoView: true,
+    );
   }
 
   /// Move the cursor down one line, preserving column as much as possible.
@@ -38,8 +143,12 @@ abstract final class EditorCommands {
     if (line.number >= state.doc.lineCount) return null;
     final col = head - line.from;
     final nextLine = state.doc.lineAt(line.number + 1);
-    final newHead = nextLine.from + col.clamp(0, nextLine.length);
-    return TransactionSpec(selection: EditorSelection.cursor(newHead));
+    final rawHead = nextLine.from + col.clamp(0, nextLine.length);
+    final newHead = _clampToGraphemeBoundary(state, rawHead, nextLine.from);
+    return TransactionSpec(
+      selection: EditorSelection.cursor(newHead),
+      scrollIntoView: true,
+    );
   }
 
   /// Move the cursor up one line, preserving column as much as possible.
@@ -50,33 +159,47 @@ abstract final class EditorCommands {
     if (line.number <= 1) return null;
     final col = head - line.from;
     final prevLine = state.doc.lineAt(line.number - 1);
-    final newHead = prevLine.from + col.clamp(0, prevLine.length);
-    return TransactionSpec(selection: EditorSelection.cursor(newHead));
+    final rawHead = prevLine.from + col.clamp(0, prevLine.length);
+    final newHead = _clampToGraphemeBoundary(state, rawHead, prevLine.from);
+    return TransactionSpec(
+      selection: EditorSelection.cursor(newHead),
+      scrollIntoView: true,
+    );
   }
 
   /// Move the cursor to the start of the current line.
   static TransactionSpec cursorLineStart(EditorState state) {
     final head = state.selection.main.head;
     final line = state.doc.lineAtOffset(head);
-    return TransactionSpec(selection: EditorSelection.cursor(line.from));
+    return TransactionSpec(
+      selection: EditorSelection.cursor(line.from),
+      scrollIntoView: true,
+    );
   }
 
   /// Move the cursor to the end of the current line.
   static TransactionSpec cursorLineEnd(EditorState state) {
     final head = state.selection.main.head;
     final line = state.doc.lineAtOffset(head);
-    return TransactionSpec(selection: EditorSelection.cursor(line.to));
+    return TransactionSpec(
+      selection: EditorSelection.cursor(line.to),
+      scrollIntoView: true,
+    );
   }
 
   /// Move the cursor to the start of the document.
   static TransactionSpec cursorDocStart(EditorState state) {
-    return TransactionSpec(selection: EditorSelection.cursor(0));
+    return TransactionSpec(
+      selection: EditorSelection.cursor(0),
+      scrollIntoView: true,
+    );
   }
 
   /// Move the cursor to the end of the document.
   static TransactionSpec cursorDocEnd(EditorState state) {
     return TransactionSpec(
       selection: EditorSelection.cursor(state.doc.length),
+      scrollIntoView: true,
     );
   }
 
@@ -89,11 +212,13 @@ abstract final class EditorCommands {
   static TransactionSpec? selectCharRight(EditorState state) {
     final main = state.selection.main;
     if (main.head >= state.doc.length) return null;
+    final len = _nextGraphemeLength(state, main.head);
     return TransactionSpec(
       selection: EditorSelection.single(
         anchor: main.anchor,
-        head: main.head + 1,
+        head: main.head + len,
       ),
+      scrollIntoView: true,
     );
   }
 
@@ -102,11 +227,99 @@ abstract final class EditorCommands {
   static TransactionSpec? selectCharLeft(EditorState state) {
     final main = state.selection.main;
     if (main.head <= 0) return null;
+    final len = _prevGraphemeLength(state, main.head);
     return TransactionSpec(
       selection: EditorSelection.single(
         anchor: main.anchor,
-        head: main.head - 1,
+        head: main.head - len,
       ),
+      scrollIntoView: true,
+    );
+  }
+
+  /// Extend the selection down one line.
+  static TransactionSpec? selectLineDown(EditorState state) {
+    final main = state.selection.main;
+    final line = state.doc.lineAtOffset(main.head);
+    if (line.number >= state.doc.lineCount) {
+      if (main.head >= state.doc.length) return null;
+      return TransactionSpec(
+        selection: EditorSelection.single(
+          anchor: main.anchor,
+          head: state.doc.length,
+        ),
+        scrollIntoView: true,
+      );
+    }
+    final col = main.head - line.from;
+    final nextLine = state.doc.lineAt(line.number + 1);
+    final rawHead = nextLine.from + col.clamp(0, nextLine.length);
+    final newHead = _clampToGraphemeBoundary(state, rawHead, nextLine.from);
+    return TransactionSpec(
+      selection: EditorSelection.single(anchor: main.anchor, head: newHead),
+      scrollIntoView: true,
+    );
+  }
+
+  /// Extend the selection up one line.
+  static TransactionSpec? selectLineUp(EditorState state) {
+    final main = state.selection.main;
+    final line = state.doc.lineAtOffset(main.head);
+    if (line.number <= 1) {
+      if (main.head <= 0) return null;
+      return TransactionSpec(
+        selection: EditorSelection.single(anchor: main.anchor, head: 0),
+        scrollIntoView: true,
+      );
+    }
+    final col = main.head - line.from;
+    final prevLine = state.doc.lineAt(line.number - 1);
+    final rawHead = prevLine.from + col.clamp(0, prevLine.length);
+    final newHead = _clampToGraphemeBoundary(state, rawHead, prevLine.from);
+    return TransactionSpec(
+      selection: EditorSelection.single(anchor: main.anchor, head: newHead),
+      scrollIntoView: true,
+    );
+  }
+
+  /// Extend the selection to the start of the current line.
+  static TransactionSpec selectLineStart(EditorState state) {
+    final main = state.selection.main;
+    final line = state.doc.lineAtOffset(main.head);
+    return TransactionSpec(
+      selection: EditorSelection.single(anchor: main.anchor, head: line.from),
+      scrollIntoView: true,
+    );
+  }
+
+  /// Extend the selection to the end of the current line.
+  static TransactionSpec selectLineEnd(EditorState state) {
+    final main = state.selection.main;
+    final line = state.doc.lineAtOffset(main.head);
+    return TransactionSpec(
+      selection: EditorSelection.single(anchor: main.anchor, head: line.to),
+      scrollIntoView: true,
+    );
+  }
+
+  /// Extend the selection to the start of the document.
+  static TransactionSpec selectDocStart(EditorState state) {
+    final main = state.selection.main;
+    return TransactionSpec(
+      selection: EditorSelection.single(anchor: main.anchor, head: 0),
+      scrollIntoView: true,
+    );
+  }
+
+  /// Extend the selection to the end of the document.
+  static TransactionSpec selectDocEnd(EditorState state) {
+    final main = state.selection.main;
+    return TransactionSpec(
+      selection: EditorSelection.single(
+        anchor: main.anchor,
+        head: state.doc.length,
+      ),
+      scrollIntoView: true,
     );
   }
 
@@ -133,6 +346,7 @@ abstract final class EditorCommands {
     return TransactionSpec(
       changes: changes,
       selection: EditorSelection.cursor(from + text.length),
+      scrollIntoView: true,
     );
   }
 
@@ -144,6 +358,33 @@ abstract final class EditorCommands {
   static TransactionSpec insertTab(EditorState state) =>
       insertText(state, '  ');
 
+  /// Outdent the selected lines (or current line) by up to two leading spaces
+  /// or one leading tab character.
+  static TransactionSpec? indentLess(EditorState state) {
+    final main = state.selection.main;
+    final startLine = state.doc.lineAtOffset(main.from).number;
+    final endLine = state.doc.lineAtOffset(main.to).number;
+    final specs = <ChangeSpec>[];
+
+    for (var n = startLine; n <= endLine; n++) {
+      final line = state.doc.lineAt(n);
+      final text = line.text;
+      if (text.startsWith('  ')) {
+        specs.add(ChangeSpec(from: line.from, to: line.from + 2));
+      } else if (text.startsWith(' ') || text.startsWith('\t')) {
+        specs.add(ChangeSpec(from: line.from, to: line.from + 1));
+      }
+    }
+
+    if (specs.isEmpty) return null;
+    final changes = ChangeSet.of(state.doc.length, specs);
+    return TransactionSpec(
+      changes: changes,
+      selection: state.selection.map(changes),
+      scrollIntoView: true,
+    );
+  }
+
   /// Delete the character before the cursor, or the selection if non-empty.
   /// Returns null if the cursor is at the start of the document with no
   /// selection.
@@ -152,12 +393,13 @@ abstract final class EditorCommands {
     if (!main.isEmpty) return deleteSelection(state);
     final head = main.head;
     if (head <= 0) return null;
+    final len = _prevGraphemeLength(state, head);
     final changes = ChangeSet.of(state.doc.length, [
-      ChangeSpec(from: head - 1, to: head),
+      ChangeSpec(from: head - len, to: head),
     ]);
     return TransactionSpec(
       changes: changes,
-      selection: EditorSelection.cursor(head - 1),
+      selection: EditorSelection.cursor(head - len),
     );
   }
 
@@ -169,8 +411,9 @@ abstract final class EditorCommands {
     if (!main.isEmpty) return deleteSelection(state);
     final head = main.head;
     if (head >= state.doc.length) return null;
+    final len = _nextGraphemeLength(state, head);
     final changes = ChangeSet.of(state.doc.length, [
-      ChangeSpec(from: head, to: head + 1),
+      ChangeSpec(from: head, to: head + len),
     ]);
     return TransactionSpec(
       changes: changes,
@@ -202,8 +445,11 @@ abstract final class EditorCommands {
   static TransactionSpec? cursorWordRight(EditorState state) {
     final head = state.selection.main.head;
     if (head >= state.doc.length) return null;
-    final (window, posInWindow, windowStart) =
-        _wordWindow(state, head, rightward: true);
+    final (window, posInWindow, windowStart) = _wordWindow(
+      state,
+      head,
+      rightward: true,
+    );
     final newPosInWindow = _findWordBoundaryRight(window, posInWindow);
     final newPos = windowStart + newPosInWindow;
     if (newPos == head) return null;
@@ -216,8 +462,11 @@ abstract final class EditorCommands {
   static TransactionSpec? cursorWordLeft(EditorState state) {
     final head = state.selection.main.head;
     if (head <= 0) return null;
-    final (window, posInWindow, windowStart) =
-        _wordWindow(state, head, rightward: false);
+    final (window, posInWindow, windowStart) = _wordWindow(
+      state,
+      head,
+      rightward: false,
+    );
     final newPosInWindow = _findWordBoundaryLeft(window, posInWindow);
     final newPos = windowStart + newPosInWindow;
     if (newPos == head) return null;
@@ -229,8 +478,11 @@ abstract final class EditorCommands {
   static TransactionSpec? selectWordRight(EditorState state) {
     final main = state.selection.main;
     if (main.head >= state.doc.length) return null;
-    final (window, posInWindow, windowStart) =
-        _wordWindow(state, main.head, rightward: true);
+    final (window, posInWindow, windowStart) = _wordWindow(
+      state,
+      main.head,
+      rightward: true,
+    );
     final newHeadInWindow = _findWordBoundaryRight(window, posInWindow);
     final newHead = windowStart + newHeadInWindow;
     if (newHead == main.head) return null;
@@ -244,8 +496,11 @@ abstract final class EditorCommands {
   static TransactionSpec? selectWordLeft(EditorState state) {
     final main = state.selection.main;
     if (main.head <= 0) return null;
-    final (window, posInWindow, windowStart) =
-        _wordWindow(state, main.head, rightward: false);
+    final (window, posInWindow, windowStart) = _wordWindow(
+      state,
+      main.head,
+      rightward: false,
+    );
     final newHeadInWindow = _findWordBoundaryLeft(window, posInWindow);
     final newHead = windowStart + newHeadInWindow;
     if (newHead == main.head) return null;
@@ -261,8 +516,11 @@ abstract final class EditorCommands {
     if (!main.isEmpty) return deleteSelection(state);
     final head = main.head;
     if (head <= 0) return null;
-    final (window, posInWindow, windowStart) =
-        _wordWindow(state, head, rightward: false);
+    final (window, posInWindow, windowStart) = _wordWindow(
+      state,
+      head,
+      rightward: false,
+    );
     final boundaryInWindow = _findWordBoundaryLeft(window, posInWindow);
     final boundary = windowStart + boundaryInWindow;
     if (boundary == head) return null;
@@ -282,8 +540,11 @@ abstract final class EditorCommands {
     if (!main.isEmpty) return deleteSelection(state);
     final head = main.head;
     if (head >= state.doc.length) return null;
-    final (window, posInWindow, windowStart) =
-        _wordWindow(state, head, rightward: true);
+    final (window, posInWindow, windowStart) = _wordWindow(
+      state,
+      head,
+      rightward: true,
+    );
     final boundaryInWindow = _findWordBoundaryRight(window, posInWindow);
     final boundary = windowStart + boundaryInWindow;
     if (boundary == head) return null;
@@ -493,5 +754,23 @@ abstract final class EditorCommands {
       effects: [redoEffect.of(true)],
       annotations: [const Annotation(Annotations.addToHistory, false)],
     );
+  }
+
+  /// Whether there are edits that can be undone.
+  static bool canUndo(EditorState state) {
+    try {
+      return state.field(historyField).undoStack.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Whether there are undone edits that can be redone.
+  static bool canRedo(EditorState state) {
+    try {
+      return state.field(historyField).redoStack.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
   }
 }

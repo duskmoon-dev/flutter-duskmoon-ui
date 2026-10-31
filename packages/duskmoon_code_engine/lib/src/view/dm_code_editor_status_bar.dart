@@ -26,24 +26,25 @@ class DmCodeEditorStatusBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = controller.theme;
     final colorScheme = Theme.of(context).colorScheme;
-
-    final bgColor = theme?.gutterBackground ?? colorScheme.surfaceContainerLow;
-    final fgColor = theme?.gutterForeground ?? colorScheme.onSurfaceVariant;
-    final borderColor = theme != null
-        ? Color.lerp(theme.gutterBackground, theme.foreground, 0.15)!
-        : colorScheme.outlineVariant;
-
-    final effectiveDecoration = decoration ??
-        BoxDecoration(
-          color: bgColor,
-          border: Border(top: BorderSide(color: borderColor)),
-        );
 
     return ListenableBuilder(
       listenable: controller.view,
       builder: (context, _) {
+        final theme = controller.theme;
+        final bgColor =
+            theme?.gutterBackground ?? colorScheme.surfaceContainerLow;
+        final fgColor = theme?.gutterForeground ?? colorScheme.onSurfaceVariant;
+        final borderColor = theme != null
+            ? Color.lerp(theme.gutterBackground, theme.foreground, 0.15)!
+            : colorScheme.outlineVariant;
+
+        final effectiveDecoration = decoration ??
+            BoxDecoration(
+              color: bgColor,
+              border: Border(top: BorderSide(color: borderColor)),
+            );
+
         final state = controller.state;
         final doc = state.doc;
         final selection = state.selection.main;

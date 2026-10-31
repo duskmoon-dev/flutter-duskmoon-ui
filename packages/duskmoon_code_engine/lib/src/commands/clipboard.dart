@@ -22,10 +22,9 @@ abstract final class ClipboardCommands {
     final sel = state.selection.main;
     if (sel.isEmpty) return null;
     return TransactionSpec(
-      changes: ChangeSet.of(
-        state.doc.length,
-        [ChangeSpec(from: sel.from, to: sel.to)],
-      ),
+      changes: ChangeSet.of(state.doc.length, [
+        ChangeSpec(from: sel.from, to: sel.to),
+      ]),
       selection: EditorSelection.cursor(sel.from),
     );
   }
@@ -56,28 +55,61 @@ abstract final class ClipboardCommands {
   /// A [Command] that cuts the selected text to the clipboard, removing it
   /// from the document.
   ///
-  /// Returns `false` (not handled) when nothing is selected.
+  /// Returns `false` (not handled) when nothing is selected or when read-only.
   static Command cutCommand() => (dynamic view) {
         final ev = view as EditorView;
+        if (ev.isDisposed || ev.readOnly) return false;
         final text = getSelectedText(ev.state);
         if (text.isEmpty) return false;
-        Clipboard.setData(ClipboardData(text: text));
         final spec = cutSpec(ev.state);
-        if (spec != null) ev.dispatch(spec);
+        if (spec == null) return false;
+        Clipboard.setData(ClipboardData(text: text));
+        ev.dispatch(spec);
         return true;
       };
 
   /// A [Command] that pastes plain text from the clipboard at the current
   /// selection, replacing any selected text.
   ///
-  /// Always returns `true` because the intent to paste is unambiguously handled
-  /// even if the clipboard is empty.
+  /// Returns `false` when disposed or in read-only mode.
   static Command pasteCommand() => (dynamic view) {
         final ev = view as EditorView;
+        if (ev.isDisposed || ev.readOnly) return false;
+        final initialSessionId = ev.sessionId;
+        final initialDoc = ev.state.doc;
+        final initialSel = ev.state.selection;
         Clipboard.getData(Clipboard.kTextPlain).then((data) {
-          if (data?.text != null && data!.text!.isNotEmpty) {
-            ev.dispatch(pasteSpec(ev.state, data.text!));
+          if (ev.isDisposed || ev.readOnly) return;
+          if (ev.sessionId != initialSessionId) return;
+          final text = data?.text;
+          if (text == null || text.isEmpty) return;
+
+          final EditorSelection targetSel;
+          if (identical(ev.state.doc, initialDoc)) {
+            targetSel = initialSel;
+          } else {
+            final since = ev.changesSince(initialDoc);
+            if (since == null ||
+                since.touchesRange(initialSel.main.from, initialSel.main.to)) {
+              return;
+            }
+            targetSel = initialSel.map(since);
           }
+          if (targetSel.main.to > ev.state.doc.length) return;
+
+          final spec = TransactionSpec(
+            changes: ChangeSet.of(ev.state.doc.length, [
+              ChangeSpec(
+                from: targetSel.main.from,
+                to: targetSel.main.to,
+                insert: text,
+              ),
+            ]),
+            selection:
+                EditorSelection.cursor(targetSel.main.from + text.length),
+            scrollIntoView: true,
+          );
+          ev.dispatch(spec);
         });
         return true;
       };

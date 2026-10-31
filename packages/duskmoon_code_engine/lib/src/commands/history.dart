@@ -1,5 +1,4 @@
 import '../document/change.dart';
-import '../document/rope.dart';
 import '../state/annotation.dart';
 import '../state/editor_state.dart';
 import '../state/extension.dart';
@@ -69,9 +68,7 @@ StateField<HistoryState> get historyField {
         // Compute the inverse of the undo changeset (to put on the redo stack).
         // The undo was applied to the "post-edit" doc; its inverse needs the
         // pre-undo doc, which is transaction.startState.doc.
-        final originalRope = Rope.fromString(
-          transaction.startState.doc.toString(),
-        );
+        final originalRope = transaction.startState.doc.rope;
         final inverseOfUndo = entry.changes.invert(originalRope);
 
         final newUndo = value.undoStack.sublist(0, value.undoStack.length - 1);
@@ -88,9 +85,7 @@ StateField<HistoryState> get historyField {
         final entry = value.redoStack.last;
         if (transaction.changes == null) return value;
 
-        final originalRope = Rope.fromString(
-          transaction.startState.doc.toString(),
-        );
+        final originalRope = transaction.startState.doc.rope;
         final inverseOfRedo = entry.changes.invert(originalRope);
 
         final newRedo = value.redoStack.sublist(0, value.redoStack.length - 1);
@@ -110,10 +105,21 @@ StateField<HistoryState> get historyField {
       if (!transaction.docChanged) return value;
 
       final changes = transaction.changes!;
-      final originalRope = Rope.fromString(
-        transaction.startState.doc.toString(),
-      );
-      final inverse = changes.invert(originalRope);
+      final inverse = changes.invert(transaction.startState.doc.rope);
+
+      final coalesce =
+          transaction.annotation(Annotations.coalesceHistory) == true;
+      if (coalesce && value.undoStack.isNotEmpty) {
+        final prev = value.undoStack.last;
+        if (inverse.newLength == prev.changes.oldLength) {
+          final mergedInverse = inverse.compose(prev.changes);
+          final newUndo = [
+            ...value.undoStack.sublist(0, value.undoStack.length - 1),
+            HistoryEntry(mergedInverse, prev.selection),
+          ];
+          return HistoryState(undoStack: newUndo);
+        }
+      }
 
       final newUndo = [
         ...value.undoStack,

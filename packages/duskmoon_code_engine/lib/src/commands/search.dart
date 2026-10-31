@@ -132,10 +132,15 @@ abstract final class SearchCommands {
     String replacement,
   ) {
     if (matches.isEmpty) return const TransactionSpec();
-    // ChangeSet.of requires specs sorted by from position.
-    final specs = matches
-        .map((m) => ChangeSpec(from: m.from, to: m.to, insert: replacement))
-        .toList();
+    // ChangeSet.of requires specs sorted by from position and non-overlapping.
+    final specs = <ChangeSpec>[];
+    var lastTo = 0;
+    for (final m in matches) {
+      if (m.from < lastTo) continue;
+      specs.add(ChangeSpec(from: m.from, to: m.to, insert: replacement));
+      lastTo = m.to;
+    }
+    if (specs.isEmpty) return const TransactionSpec();
     return TransactionSpec(
       changes: ChangeSet.of(state.doc.length, specs),
     );
