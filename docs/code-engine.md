@@ -62,6 +62,7 @@ const CodeEditorWidget({
   bool readOnly = false,
   bool lineNumbers = true,
   bool highlightActiveLine = true,
+  ValueChanged<String>? onChanged,
   void Function(EditorState state)? onStateChanged,
   EditorViewController? controller,
   FocusNode? focusNode,
@@ -84,6 +85,7 @@ const CodeEditorWidget({
 | `readOnly` | `bool` | `false` | Disable user input |
 | `lineNumbers` | `bool` | `true` | Show line number gutter |
 | `highlightActiveLine` | `bool` | `true` | Highlight the cursor line |
+| `onChanged` | `ValueChanged<String>?` | `null` | Called when the document text changes |
 | `onStateChanged` | `Function?` | `null` | Called on every state change |
 | `controller` | `EditorViewController?` | `null` | External controller for programmatic access |
 | `focusNode` | `FocusNode?` | `null` | External focus node |
@@ -98,8 +100,9 @@ const CodeEditorWidget({
 - **Ctrl+F** -- Toggle search panel
 - **Escape** -- Close search panel
 - Arrow keys, Home/End, Ctrl+Home/End -- Cursor navigation
-- Shift+arrows -- Selection
-- Ctrl+Z / Ctrl+Y -- Undo/redo (when `historyExtension()` is active)
+- Shift+arrows, Shift+Home/End, Ctrl+Shift+Home/End -- Selection
+- Tab / Shift+Tab -- Indent / outdent
+- Ctrl+Z / Ctrl+Shift+Z -- Undo/redo (`enableHistory: true` by default on `EditorViewController`)
 
 ## DmCodeEditor And Bars
 
@@ -122,7 +125,7 @@ DmCodeEditor(
 )
 ```
 
-Constructor parameters include `topBar`, `bottomBar`, `title`, `actions`, `languageName`, and the `CodeEditorWidget` passthrough parameters: `initialDoc`, `language`, `extensions`, `theme`, `readOnly`, `lineNumbers`, `highlightActiveLine`, `onStateChanged`, `controller`, `focusNode`, `autofocus`, `minHeight`, `maxHeight`, `padding`, and `scrollPhysics`.
+Constructor parameters include `topBar`, `bottomBar`, `title`, `actions`, `languageName`, and the `CodeEditorWidget` passthrough parameters: `initialDoc`, `language`, `extensions`, `theme`, `readOnly`, `lineNumbers`, `highlightActiveLine`, `onChanged`, `onStateChanged`, `controller`, `focusNode`, `autofocus`, `minHeight`, `maxHeight`, `padding`, and `scrollPhysics`.
 
 ### DmCodeEditorToolbar
 
@@ -158,6 +161,8 @@ DmEditorAction.undo(controller);
 DmEditorAction.redo(controller);
 DmEditorAction.search(controller);
 DmEditorAction.copy(controller);
+DmEditorAction.cut(controller);
+DmEditorAction.paste(controller);
 ```
 
 ### Other View Exports
@@ -166,14 +171,14 @@ The package also exports lower-level view primitives for advanced integrations: 
 
 ## EditorViewController
 
-Programmatic controller that wraps `EditorView` with convenience methods. Use it when you need to read or modify editor state from outside the widget.
+Programmatic controller that wraps `EditorView` with convenience methods. Use it when you need to read or modify editor state from outside the widget. Undo/redo history (`historyExtension()`) is enabled by default via `enableHistory: true`.
 
 ```dart
 final controller = EditorViewController(
   text: 'Hello, world!',
   language: dartLanguageSupport(),
   theme: EditorTheme.dark(),
-  extensions: [historyExtension()],
+  enableHistory: true,
 );
 ```
 
@@ -183,14 +188,20 @@ final controller = EditorViewController(
 controller.state;       // EditorState -- current immutable state
 controller.document;    // Document -- current document
 controller.text;        // String -- full document text
+controller.selection;   // EditorSelection -- current selection
+controller.canUndo;     // bool -- whether undo is available
+controller.canRedo;     // bool -- whether redo is available
 controller.theme;       // EditorTheme? -- current theme
 ```
 
 ### Modifying Content
 
 ```dart
-// Replace entire document
+// Replace entire document within current session
 controller.text = 'new content';
+
+// Open a new document session (resets undo/redo history and cursor)
+controller.openDocument('fresh file content', language: dartLanguageSupport());
 
 // Insert at cursor (replaces selection if any)
 controller.insertText('inserted text');
