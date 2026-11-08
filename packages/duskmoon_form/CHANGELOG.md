@@ -1,3 +1,7 @@
+## Unreleased
+
+- Preserve labels, hints, helper text, errors, borders, and theme colors in Cupertino text fields.
+
 ## 2.2.9
 
 - Release 2.2.9 (2026-10-31)

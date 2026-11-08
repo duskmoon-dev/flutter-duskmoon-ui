@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart' show CupertinoThemeData;
 import 'package:flutter/material.dart';
 
 import 'color_scheme.dart';
@@ -84,6 +85,9 @@ abstract final class DmThemeData {
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
+      cupertinoOverrideTheme: CupertinoThemeData(
+        brightness: colorScheme.brightness,
+      ),
       textTheme: textTheme,
       extensions: [colorExtension],
       scaffoldBackgroundColor: colorScheme.surface,

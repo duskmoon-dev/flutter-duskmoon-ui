@@ -890,42 +890,63 @@ class _TypeAheadFieldState<T> extends State<TypeAheadField<T>>
     );
   }
 
-  Widget _buildCupertinoTextField() {
+  Widget _buildCupertinoTextField(BuildContext context) {
     final config = widget.textFieldConfiguration;
-    return CupertinoTextField(
-      focusNode: this._effectiveFocusNode,
-      controller: this._effectiveController,
-      placeholder: config.decoration.hintText,
-      style: config.style,
-      textAlign: config.textAlign,
-      enabled: config.enabled,
-      keyboardType: config.keyboardType,
-      autofocus: config.autofocus,
-      inputFormatters: config.inputFormatters,
-      autocorrect: config.autocorrect,
-      minLines: config.minLines,
-      maxLines: config.maxLines,
-      maxLength: config.maxLength,
-      obscureText: config.obscureText!,
-      onChanged: _onChanged,
-      onSubmitted: config.onSubmitted,
-      onEditingComplete: config.onEditingComplete,
-      scrollPadding: config.scrollPadding,
-      textInputAction: config.textInputAction,
-      textCapitalization: config.textCapitalization,
-      keyboardAppearance: config.keyboardAppearance,
-      cursorWidth: config.cursorWidth,
-      cursorRadius: config.cursorRadius ?? const Radius.circular(2.0),
-      cursorColor: config.cursorColor,
-      textDirection: config.textDirection,
-      readOnly: config.readOnly!,
-      scrollController: config.scrollController,
-      scrollPhysics: config.scrollPhysics,
-      showCursor: config.showCursor,
-      strutStyle: config.strutStyle,
-      textAlignVertical: config.textAlignVertical,
-      prefix: _wrapIconWithPadding(config.decoration.prefixIcon),
-      suffix: _wrapIconWithPadding(config.decoration.suffixIcon),
+    final theme = Theme.of(context);
+    final style = theme.textTheme.titleMedium!.merge(config.style);
+    return AnimatedBuilder(
+      animation: Listenable.merge([
+        this._effectiveFocusNode!,
+        this._effectiveController!,
+      ]),
+      builder: (context, child) => InputDecorator(
+        decoration: config.decoration
+            .applyDefaults(theme.inputDecorationTheme)
+            .copyWith(enabled: config.enabled),
+        baseStyle: style,
+        textAlign: config.textAlign,
+        textAlignVertical: config.textAlignVertical,
+        isFocused: this._effectiveFocusNode!.hasFocus,
+        isEmpty: this._effectiveController!.text.isEmpty,
+        expands: config.expands ?? false,
+        child: child,
+      ),
+      child: CupertinoTextField(
+        focusNode: this._effectiveFocusNode,
+        controller: this._effectiveController,
+        // InputDecorator owns the surface, border, hint, and field metadata.
+        decoration: null,
+        padding: EdgeInsets.zero,
+        style: style,
+        textAlign: config.textAlign,
+        enabled: config.enabled,
+        keyboardType: config.keyboardType,
+        autofocus: config.autofocus,
+        inputFormatters: config.inputFormatters,
+        autocorrect: config.autocorrect,
+        minLines: config.minLines,
+        maxLines: config.maxLines,
+        maxLength: config.maxLength,
+        obscureText: config.obscureText!,
+        onChanged: _onChanged,
+        onSubmitted: config.onSubmitted,
+        onEditingComplete: config.onEditingComplete,
+        scrollPadding: config.scrollPadding,
+        textInputAction: config.textInputAction,
+        textCapitalization: config.textCapitalization,
+        keyboardAppearance: config.keyboardAppearance ?? theme.brightness,
+        cursorWidth: config.cursorWidth,
+        cursorRadius: config.cursorRadius ?? const Radius.circular(2.0),
+        cursorColor: config.cursorColor,
+        textDirection: config.textDirection,
+        readOnly: config.readOnly!,
+        scrollController: config.scrollController,
+        scrollPhysics: config.scrollPhysics,
+        showCursor: config.showCursor,
+        strutStyle: config.strutStyle,
+        textAlignVertical: config.textAlignVertical,
+        expands: config.expands ?? false,
+      ),
     );
   }
 
@@ -987,7 +1008,7 @@ class _TypeAheadFieldState<T> extends State<TypeAheadField<T>>
   Widget build(BuildContext context) {
     final child = switch (resolvePlatformStyle(context)) {
       DmPlatformStyle.material => _buildMaterialTextField(),
-      DmPlatformStyle.cupertino => _buildCupertinoTextField(),
+      DmPlatformStyle.cupertino => _buildCupertinoTextField(context),
       DmPlatformStyle.fluent => _buildFluentTextField(context),
     };
 

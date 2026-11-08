@@ -3,6 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  group('Cupertino theme brightness', () {
+    for (final theme in DmTheme.all) {
+      test('${theme.name} explicitly matches the Material brightness', () {
+        final data = DmThemeData.fromDmTheme(theme);
+        expect(data.cupertinoOverrideTheme?.brightness, data.brightness);
+      });
+    }
+  });
+
   group('DmColors', () {
     test('sunshine() has colorScheme matching DmColorScheme.sunshine()', () {
       final colors = DmColors.sunshine();

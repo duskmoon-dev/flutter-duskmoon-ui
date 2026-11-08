@@ -1,3 +1,7 @@
+## Unreleased
+
+- Keep Cupertino theme brightness aligned with the selected DuskMoon color scheme.
+
 ## 2.2.9
 
 - Release 2.2.9 (2026-10-31)
