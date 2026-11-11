@@ -1,3 +1,7 @@
+## Unreleased
+
+- Reserve the start-side safe-area inset in collapsed, extended, and animated navigation rail widths so landscape notches do not squeeze destination icons. Keep the collapse control within the same safe region in LTR and RTL layouts.
+
 ## 2.2.10
 
 - Release 2.2.10 (2026-11-08)

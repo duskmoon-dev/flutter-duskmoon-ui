@@ -40,6 +40,14 @@ typedef NavigationRailDestinationBuilder = NavigationRailDestination Function(
   NavigationDestination destination,
 );
 
+// NavigationRail consumes the start-side SafeArea inside its own width.
+double _navigationRailStartInset(BuildContext context) {
+  final padding = MediaQuery.paddingOf(context);
+  return Directionality.of(context) == TextDirection.ltr
+      ? padding.left
+      : padding.right;
+}
+
 /// Implements the basic visual layout structure for
 /// [Material Design 3](https://m3.material.io/foundations/adaptive-design/overview)
 /// that adapts to a variety of screens.
@@ -213,7 +221,7 @@ class DmAdaptiveScaffold extends StatefulWidget {
         return Padding(
           padding: padding,
           child: SizedBox(
-            width: width,
+            width: width + _navigationRailStartInset(context),
             height: MediaQuery.sizeOf(context).height,
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
@@ -395,6 +403,7 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
         : widget.navigationRailWidth;
     final padding =
         widget.navigationRailPadding.resolve(Directionality.of(context));
+    final startInset = _navigationRailStartInset(context);
     final theme = NavigationRailTheme.of(context);
     final rail = DmAdaptiveScaffold.standardNavigationRail(
       width: widget.showCollapseToggle ? double.infinity : width,
@@ -426,8 +435,10 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
 
     return _AnimatedNavigationRailWidth(
       extended: isExtended,
-      collapsedWidth: widget.navigationRailWidth + padding.horizontal,
-      extendedWidth: widget.extendedNavigationRailWidth + padding.horizontal,
+      collapsedWidth:
+          widget.navigationRailWidth + padding.horizontal + startInset,
+      extendedWidth:
+          widget.extendedNavigationRailWidth + padding.horizontal + startInset,
       child: Column(
         children: [
           Expanded(
@@ -450,11 +461,14 @@ class _DmAdaptiveScaffoldState extends State<DmAdaptiveScaffold> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Divider(height: 1),
-                    Align(
-                      alignment: isExtended
-                          ? AlignmentDirectional.centerEnd
-                          : Alignment.center,
-                      child: _buildToggleButton(isExtended),
+                    Padding(
+                      padding: EdgeInsetsDirectional.only(start: startInset),
+                      child: Align(
+                        alignment: isExtended
+                            ? AlignmentDirectional.centerEnd
+                            : Alignment.center,
+                        child: _buildToggleButton(isExtended),
+                      ),
                     ),
                   ],
                 ),
