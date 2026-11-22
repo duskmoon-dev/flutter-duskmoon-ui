@@ -13,12 +13,14 @@ class DmChatAttachmentBlockView extends StatelessWidget {
     this.onTap,
     this.onRetry,
     this.onCancel,
+    this.onRemove,
   });
 
   final DmChatAttachmentBlock block;
   final ValueChanged<DmChatAttachment>? onTap;
   final ValueChanged<DmChatAttachment>? onRetry;
   final ValueChanged<DmChatAttachment>? onCancel;
+  final ValueChanged<DmChatAttachment>? onRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class DmChatAttachmentBlockView extends StatelessWidget {
             onTap: onTap,
             onRetry: onRetry,
             onCancel: onCancel,
+            onRemove: onRemove,
           ),
       ],
     );
@@ -48,6 +51,7 @@ class _AttachmentTile extends StatelessWidget {
     this.onTap,
     this.onRetry,
     this.onCancel,
+    this.onRemove,
   });
 
   final DmChatAttachment attachment;
@@ -55,6 +59,7 @@ class _AttachmentTile extends StatelessWidget {
   final ValueChanged<DmChatAttachment>? onTap;
   final ValueChanged<DmChatAttachment>? onRetry;
   final ValueChanged<DmChatAttachment>? onCancel;
+  final ValueChanged<DmChatAttachment>? onRemove;
 
   bool get _isImage =>
       attachment.mimeType != null && attachment.mimeType!.startsWith('image/');
@@ -68,7 +73,7 @@ class _AttachmentTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final content = _isImage && attachment.bytes != null
-        ? _imageThumb()
+        ? _imageThumb(context)
         : _fileChip(context);
 
     return InkWell(
@@ -78,12 +83,16 @@ class _AttachmentTile extends StatelessWidget {
     );
   }
 
-  Widget _imageThumb() {
+  Widget _imageThumb(BuildContext context) {
     final size = theme.attachmentImageThumbSize;
+    final removeHandler =
+        attachment.status == DmChatAttachmentStatus.uploading
+            ? (onCancel ?? onRemove)
+            : onRemove;
     return Stack(
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(10),
           child: Image.memory(
             attachment.bytes!,
             width: size,
@@ -105,6 +114,28 @@ class _AttachmentTile extends StatelessWidget {
           Positioned.fill(
             child: _errorOverlay(),
           ),
+        if (removeHandler != null)
+          Positioned(
+            top: 4,
+            right: 4,
+            child: Tooltip(
+              message: 'Remove',
+              child: Material(
+                color: Colors.black.withValues(alpha: 0.62),
+                shape: const CircleBorder(),
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  onTap: () => removeHandler(attachment),
+                  customBorder: const CircleBorder(),
+                  child: const SizedBox(
+                    width: 22,
+                    height: 22,
+                    child: Icon(Icons.close, size: 14, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -115,7 +146,7 @@ class _AttachmentTile extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: theme.attachmentChipColor,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,23 +163,46 @@ class _AttachmentTile extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if (attachment.status == DmChatAttachmentStatus.error)
+              if (attachment.status == DmChatAttachmentStatus.error &&
+                  onRetry != null)
                 IconButton(
                   tooltip: 'Retry',
                   iconSize: 18,
                   visualDensity: VisualDensity.compact,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(
+                    minWidth: 28,
+                    minHeight: 28,
+                  ),
                   icon: const Icon(Icons.refresh),
-                  onPressed:
-                      onRetry == null ? null : () => onRetry!(attachment),
+                  onPressed: () => onRetry!(attachment),
                 ),
-              if (attachment.status == DmChatAttachmentStatus.uploading)
+              if (attachment.status == DmChatAttachmentStatus.uploading &&
+                  onCancel != null)
                 IconButton(
                   tooltip: 'Cancel',
                   iconSize: 18,
                   visualDensity: VisualDensity.compact,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(
+                    minWidth: 28,
+                    minHeight: 28,
+                  ),
                   icon: const Icon(Icons.close),
-                  onPressed:
-                      onCancel == null ? null : () => onCancel!(attachment),
+                  onPressed: () => onCancel!(attachment),
+                )
+              else if (onRemove != null)
+                IconButton(
+                  tooltip: 'Remove',
+                  iconSize: 16,
+                  visualDensity: VisualDensity.compact,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(
+                    minWidth: 28,
+                    minHeight: 28,
+                  ),
+                  icon: const Icon(Icons.close),
+                  onPressed: () => onRemove!(attachment),
                 ),
             ],
           ),

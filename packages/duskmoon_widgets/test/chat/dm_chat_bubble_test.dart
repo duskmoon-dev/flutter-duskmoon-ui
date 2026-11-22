@@ -92,6 +92,47 @@ void main() {
       expect(find.byKey(const ValueKey('user-header')), findsOneWidget);
     });
 
+    testWidgets('renders user footer outside and below the filled bubble',
+        (tester) async {
+      await pumpThemed(
+        tester,
+        const DmChatBubble(
+          message: DmChatMessage(
+            id: 'u1',
+            role: DmChatRole.user,
+            blocks: [DmChatTextBlock(text: 'short prompt')],
+          ),
+          footer: Row(
+            key: ValueKey('user-footer'),
+            mainAxisSize: MainAxisSize.min,
+            children: [Icon(Icons.copy, size: 16)],
+          ),
+        ),
+      );
+
+      final footerFinder = find.byKey(const ValueKey('user-footer'));
+      expect(footerFinder, findsOneWidget);
+
+      final bubbleContainerFinder = find.ancestor(
+        of: find.text('short prompt'),
+        matching: find.byWidgetPredicate(
+          (w) => w is Container && w.decoration is BoxDecoration,
+        ),
+      );
+      expect(bubbleContainerFinder, findsOneWidget);
+
+      // Footer must NOT be a descendant of the bubble Container.
+      expect(
+        find.descendant(of: bubbleContainerFinder, matching: footerFinder),
+        findsNothing,
+      );
+
+      // Footer must sit vertically below the bubble.
+      final bubbleRect = tester.getRect(bubbleContainerFinder);
+      final footerRect = tester.getRect(footerFinder);
+      expect(footerRect.top, greaterThanOrEqualTo(bubbleRect.bottom));
+    });
+
     testWidgets('does not notify stream scope during a parent rebuild',
         (tester) async {
       DmChatMessage message(String text) => DmChatMessage(

@@ -11,12 +11,14 @@ class BubbleFrame extends StatelessWidget {
     required this.child,
     this.avatar,
     this.header,
+    this.footer,
   });
 
   final DmChatRole role;
   final Widget child;
   final Widget? avatar;
   final Widget? header;
+  final Widget? footer;
 
   @override
   Widget build(BuildContext context) {
@@ -39,32 +41,34 @@ class BubbleFrame extends StatelessWidget {
                 child: child,
               ),
             );
+            final column = Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (header != null) ...[
+                  header!,
+                  const SizedBox(height: 4),
+                ],
+                bubble,
+                if (footer != null) ...[
+                  const SizedBox(height: 4),
+                  footer!,
+                ],
+              ],
+            );
             return Align(
               alignment: Alignment.centerRight,
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: maxWidth),
-                child: avatar == null && header == null
-                    ? bubble
+                child: avatar == null
+                    ? (header == null && footer == null ? bubble : column)
                     : Row(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                if (header != null) ...[
-                                  header!,
-                                  const SizedBox(height: 4),
-                                ],
-                                bubble,
-                              ],
-                            ),
-                          ),
-                          if (avatar != null) ...[
-                            const SizedBox(width: 10),
-                            avatar!,
-                          ],
+                          Flexible(child: column),
+                          const SizedBox(width: 10),
+                          avatar!,
                         ],
                       ),
               ),
@@ -88,26 +92,40 @@ class BubbleFrame extends StatelessWidget {
                     const SizedBox(height: 4),
                   ],
                   child,
+                  if (footer != null) ...[
+                    const SizedBox(height: 4),
+                    footer!,
+                  ],
                 ],
               ),
             ),
           ],
         );
       case DmChatRole.system:
+        final banner = Container(
+          padding: theme.bubblePadding,
+          decoration: BoxDecoration(
+            color: theme.systemSurface,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: DefaultTextStyle.merge(
+            style: theme.thinkingTextStyle,
+            textAlign: TextAlign.center,
+            child: child,
+          ),
+        );
         return Align(
           alignment: Alignment.center,
-          child: Container(
-            padding: theme.bubblePadding,
-            decoration: BoxDecoration(
-              color: theme.systemSurface,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: DefaultTextStyle.merge(
-              style: theme.thinkingTextStyle,
-              textAlign: TextAlign.center,
-              child: child,
-            ),
-          ),
+          child: footer == null
+              ? banner
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    banner,
+                    const SizedBox(height: 4),
+                    footer!,
+                  ],
+                ),
         );
     }
   }

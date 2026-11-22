@@ -1,3 +1,11 @@
+## Unreleased
+
+- Add message footers to chat bubbles and per-message footer builders to
+  `DmChatView`.
+- Extend `DmChatInput` with shared focus, Escape cancellation, custom paste
+  handling, attachment removal, and an optional idle action.
+- Let `DmMarkdownInput` share a focus node and render without its own border.
+
 ## 2.2.11
 
 - Release 2.2.11 (2026-11-11)

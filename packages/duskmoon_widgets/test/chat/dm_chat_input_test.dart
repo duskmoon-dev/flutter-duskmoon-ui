@@ -136,5 +136,57 @@ void main() {
       await tester.pump();
       expect(sent, isFalse);
     });
+
+    testWidgets('shows remove button for completed pending attachments', (
+      tester,
+    ) async {
+      DmChatAttachment? removed;
+      const att = DmChatAttachment(
+        id: 'doc1',
+        name: 'report.pdf',
+        sizeBytes: 2048,
+        mimeType: 'application/pdf',
+        status: DmChatAttachmentStatus.done,
+      );
+
+      await pumpThemed(
+        tester,
+        DmChatInput(
+          onSend: (_, _) {},
+          pendingAttachments: const [att],
+          onRemoveAttachment: (value) => removed = value,
+        ),
+      );
+
+      expect(find.text('report.pdf'), findsOneWidget);
+      await tester.tap(find.byTooltip('Remove'));
+      await tester.pump();
+      expect(removed?.id, 'doc1');
+    });
+
+    testWidgets('renders header and invokes onCancel on Escape', (
+      tester,
+    ) async {
+      var cancelled = false;
+      final focusNode = FocusNode();
+      addTearDown(focusNode.dispose);
+
+      await pumpThemed(
+        tester,
+        DmChatInput(
+          focusNode: focusNode,
+          header: const Text('Editing message'),
+          onCancel: () => cancelled = true,
+          onSend: (_, _) {},
+        ),
+      );
+
+      expect(find.text('Editing message'), findsOneWidget);
+      focusNode.requestFocus();
+      await tester.pump();
+      await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+      await tester.pump();
+      expect(cancelled, isTrue);
+    });
   });
 }

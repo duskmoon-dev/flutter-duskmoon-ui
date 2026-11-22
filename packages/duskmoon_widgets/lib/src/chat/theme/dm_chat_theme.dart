@@ -44,6 +44,7 @@ class DmChatTheme extends ThemeExtension<DmChatTheme> {
     required this.inputSurface,
     required this.inputElevation,
     required this.inputRadius,
+    this.inputBorderColor,
     this.customBuilders = const {},
     this.defaultAvatarBuilder,
   });
@@ -123,6 +124,9 @@ class DmChatTheme extends ThemeExtension<DmChatTheme> {
   /// Corner radius for the composer surface.
   final BorderRadius inputRadius;
 
+  /// Optional hairline border color for the unified composer surface.
+  final Color? inputBorderColor;
+
   // Extension points
   /// Map from [DmChatCustomBlock.kind] to a renderer.
   final Map<String, DmChatCustomBlockBuilder> customBuilders;
@@ -191,10 +195,11 @@ class DmChatTheme extends ThemeExtension<DmChatTheme> {
       ),
       attachmentChipColor: attachment,
       attachmentImageThumbSize: 96,
-      inputPadding: const EdgeInsets.all(8),
-      inputSurface: cs.surface,
-      inputElevation: 1,
-      inputRadius: BorderRadius.circular(12),
+      inputPadding: const EdgeInsets.fromLTRB(12, 4, 12, 10),
+      inputSurface: cs.surfaceContainerHigh,
+      inputElevation: 0,
+      inputRadius: BorderRadius.circular(24),
+      inputBorderColor: cs.outlineVariant.withValues(alpha: 0.45),
     );
   }
 
@@ -223,6 +228,7 @@ class DmChatTheme extends ThemeExtension<DmChatTheme> {
     Color? inputSurface,
     double? inputElevation,
     BorderRadius? inputRadius,
+    Color? inputBorderColor,
     Map<String, DmChatCustomBlockBuilder>? customBuilders,
     DmChatAvatarBuilder? defaultAvatarBuilder,
   }) =>
@@ -256,6 +262,7 @@ class DmChatTheme extends ThemeExtension<DmChatTheme> {
         inputSurface: inputSurface ?? this.inputSurface,
         inputElevation: inputElevation ?? this.inputElevation,
         inputRadius: inputRadius ?? this.inputRadius,
+        inputBorderColor: inputBorderColor ?? this.inputBorderColor,
         customBuilders: customBuilders ?? this.customBuilders,
         defaultAvatarBuilder: defaultAvatarBuilder ?? this.defaultAvatarBuilder,
       );
@@ -328,6 +335,8 @@ class DmChatTheme extends ThemeExtension<DmChatTheme> {
       inputElevation: _lerpDouble(inputElevation, other.inputElevation, t),
       inputRadius:
           BorderRadius.lerp(inputRadius, other.inputRadius, t) ?? inputRadius,
+      inputBorderColor:
+          Color.lerp(inputBorderColor, other.inputBorderColor, t),
       customBuilders: t < 0.5 ? customBuilders : other.customBuilders,
       defaultAvatarBuilder:
           t < 0.5 ? defaultAvatarBuilder : other.defaultAvatarBuilder,

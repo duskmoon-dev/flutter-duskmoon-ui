@@ -20,6 +20,7 @@ class DmChatBubble extends StatefulWidget {
     required this.message,
     this.avatar,
     this.header,
+    this.footer,
     this.markdownConfig = const DmMarkdownConfig(),
     this.theme,
   });
@@ -27,6 +28,7 @@ class DmChatBubble extends StatefulWidget {
   final DmChatMessage message;
   final Widget? avatar;
   final Widget? header;
+  final Widget? footer;
   final DmMarkdownConfig markdownConfig;
   final DmChatTheme? theme;
 
@@ -79,13 +81,17 @@ class _DmChatBubbleState extends State<DmChatBubble> {
   @override
   Widget build(BuildContext context) {
     final body = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: widget.message.role == DmChatRole.user
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.stretch,
       children: _buildBlocks(),
     );
     final frame = BubbleFrame(
       role: widget.message.role,
       avatar: widget.avatar,
       header: widget.header,
+      footer: widget.footer,
       child: body,
     );
     final wrapped = BubbleStreamScope(

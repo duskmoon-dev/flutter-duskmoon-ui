@@ -42,6 +42,7 @@ class DmChatView extends StatefulWidget {
     this.emptyBuilder,
     this.avatarBuilder,
     this.headerBuilder,
+    this.footerBuilder,
     this.showJumpToBottom = true,
     this.showMessageNavigation = true,
     this.autoScroll = true,
@@ -74,6 +75,7 @@ class DmChatView extends StatefulWidget {
   final WidgetBuilder? emptyBuilder;
   final Widget? Function(BuildContext, DmChatMessage)? avatarBuilder;
   final Widget? Function(BuildContext, DmChatMessage)? headerBuilder;
+  final Widget? Function(BuildContext, DmChatMessage)? footerBuilder;
   final bool showJumpToBottom;
 
   /// Shows a leading navigation rail with one marker per user message.
@@ -318,6 +320,7 @@ class _DmChatViewState extends State<DmChatView> {
               message: msg,
               avatar: widget.avatarBuilder?.call(ctx, msg),
               header: widget.headerBuilder?.call(ctx, msg),
+              footer: widget.footerBuilder?.call(ctx, msg),
               markdownConfig: widget.markdownConfig,
               theme: widget.theme,
             ),

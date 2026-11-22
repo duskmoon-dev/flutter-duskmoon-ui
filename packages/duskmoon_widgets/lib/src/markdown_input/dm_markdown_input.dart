@@ -30,6 +30,7 @@ class DmMarkdownInput extends StatefulWidget {
   const DmMarkdownInput({
     super.key,
     this.controller,
+    this.focusNode,
     this.initialValue,
     this.config = const DmMarkdownConfig(),
     this.initialTab = DmMarkdownTab.write,
@@ -43,6 +44,7 @@ class DmMarkdownInput extends StatefulWidget {
     this.tabLabelWrite = 'Write',
     this.tabLabelPreview = 'Preview',
     this.showPreview = true,
+    this.borderless = false,
     this.onLinkTap,
     this.decoration,
     this.bottom,
@@ -52,6 +54,9 @@ class DmMarkdownInput extends StatefulWidget {
 
   /// External controller. If null, creates an internal one.
   final DmMarkdownInputController? controller;
+
+  /// External focus node for the editor field. If null, creates an internal one.
+  final FocusNode? focusNode;
 
   /// Initial text value (used only when [controller] is null).
   final String? initialValue;
@@ -92,6 +97,10 @@ class DmMarkdownInput extends StatefulWidget {
   /// Whether to show the preview tab. When false, only the editor is shown.
   final bool showPreview;
 
+  /// When true (and [showPreview] is false), omits the outer frame container
+  /// and border so the editor can sit seamlessly inside a composite surface.
+  final bool borderless;
+
   /// Link tap callback in preview mode.
   final void Function(String url, String? title)? onLinkTap;
 
@@ -118,6 +127,7 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
   late TabController _tabController;
   late FocusNode _focusNode;
   bool _ownsController = false;
+  bool _ownsFocusNode = false;
   bool _previewReady = false;
 
   @override
@@ -140,7 +150,12 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
       initialIndex: widget.readOnly ? 1 : widget.initialTab.index,
     );
     _tabController.addListener(_onTabChanged);
-    _focusNode = FocusNode();
+    if (widget.focusNode != null) {
+      _focusNode = widget.focusNode!;
+    } else {
+      _focusNode = FocusNode();
+      _ownsFocusNode = true;
+    }
 
     _controller.addListener(_onTextChanged);
 
@@ -163,6 +178,18 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
       _controller = widget.controller!;
       _controller.addListener(_onTextChanged);
     }
+    if (widget.focusNode != oldWidget.focusNode) {
+      if (_ownsFocusNode) {
+        _focusNode.dispose();
+        _ownsFocusNode = false;
+      }
+      if (widget.focusNode != null) {
+        _focusNode = widget.focusNode!;
+      } else {
+        _focusNode = FocusNode();
+        _ownsFocusNode = true;
+      }
+    }
     if (widget.readOnly && !oldWidget.readOnly) {
       _tabController.animateTo(1);
     }
@@ -174,7 +201,7 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
     _tabController.dispose();
     _controller.removeListener(_onTextChanged);
     if (_ownsController) _controller.dispose();
-    _focusNode.dispose();
+    if (_ownsFocusNode) _focusNode.dispose();
     super.dispose();
   }
 
@@ -258,21 +285,27 @@ class _DmMarkdownInputState extends State<DmMarkdownInput>
         ),
       );
 
+      final body = _hasBottomBar
+          ? Column(
+              mainAxisSize: bounded ? MainAxisSize.max : MainAxisSize.min,
+              children: [
+                if (bounded) Expanded(child: editor) else editor,
+                _buildBottomBar(colorScheme),
+              ],
+            )
+          : editor;
+
+      if (widget.borderless) {
+        return body;
+      }
+
       return Container(
         decoration: BoxDecoration(
           color: colorScheme.surface,
           border: Border.all(color: colorScheme.outlineVariant, width: 1),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: _hasBottomBar
-            ? Column(
-                mainAxisSize: bounded ? MainAxisSize.max : MainAxisSize.min,
-                children: [
-                  if (bounded) Expanded(child: editor) else editor,
-                  _buildBottomBar(colorScheme),
-                ],
-              )
-            : editor,
+        child: body,
       );
     }
 

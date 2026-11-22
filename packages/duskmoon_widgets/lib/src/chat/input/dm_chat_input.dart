@@ -28,12 +28,19 @@ class DmChatInput extends StatefulWidget {
     this.onAttach,
     this.uploadAdapter,
     this.controller,
+    this.focusNode,
     this.isStreaming = false,
     this.pendingAttachments = const [],
     this.onRemoveAttachment,
+    this.onPaste,
+    this.onCancel,
+    this.header,
     this.placeholder,
     this.leading,
     this.trailing,
+    this.idleActionIcon,
+    this.idleActionTooltip,
+    this.onIdleAction,
     this.minLines = 1,
     this.maxLines = 8,
     this.submitShortcut = DmChatSubmitShortcut.cmdEnter,
@@ -44,12 +51,28 @@ class DmChatInput extends StatefulWidget {
   final ValueChanged<List<DmChatAttachment>>? onAttach;
   final DmChatUploadAdapter? uploadAdapter;
   final DmMarkdownInputController? controller;
+  final FocusNode? focusNode;
   final bool isStreaming;
   final List<DmChatAttachment> pendingAttachments;
   final ValueChanged<DmChatAttachment>? onRemoveAttachment;
+
+  /// Optional async handler for paste shortcuts (Cmd+V / Ctrl+V).
+  /// Return `true` if clipboard media/files were consumed; return `false` to
+  /// fall back to standard plain-text paste into the composer.
+  final Future<bool> Function()? onPaste;
+
+  /// Optional handler invoked when Escape is pressed inside the composer.
+  final VoidCallback? onCancel;
+
+  /// Optional banner rendered at the top of the composer card (e.g. an
+  /// editing-message indicator).
+  final Widget? header;
   final String? placeholder;
   final Widget? leading;
   final Widget? trailing;
+  final IconData? idleActionIcon;
+  final String? idleActionTooltip;
+  final VoidCallback? onIdleAction;
   final int minLines;
   final int maxLines;
   final DmChatSubmitShortcut submitShortcut;
@@ -117,9 +140,55 @@ class _DmChatInputState extends State<DmChatInput> {
     }
   }
 
+  bool _isPasteShortcut(KeyEvent event) {
+    if (event is! KeyDownEvent) return false;
+    if (event.logicalKey != LogicalKeyboardKey.keyV) return false;
+    final isApple = defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.iOS;
+    final primaryModifier = isApple
+        ? HardwareKeyboard.instance.isMetaPressed &&
+            !HardwareKeyboard.instance.isControlPressed
+        : HardwareKeyboard.instance.isControlPressed &&
+            !HardwareKeyboard.instance.isMetaPressed;
+    return primaryModifier && !HardwareKeyboard.instance.isAltPressed;
+  }
+
+  Future<void> _handlePasteShortcut() async {
+    final handler = widget.onPaste;
+    if (handler != null) {
+      final handled = await handler();
+      if (handled || !mounted) return;
+    }
+    final data = await Clipboard.getData(Clipboard.kTextPlain);
+    final pasted = data?.text;
+    if (pasted == null || pasted.isEmpty || !mounted) return;
+    final value = _controller.value;
+    final text = value.text;
+    final selection = value.selection;
+    final start =
+        selection.isValid ? selection.start.clamp(0, text.length) : text.length;
+    final end =
+        selection.isValid ? selection.end.clamp(0, text.length) : text.length;
+    final nextText = text.replaceRange(start, end, pasted);
+    _controller.value = TextEditingValue(
+      text: nextText,
+      selection: TextSelection.collapsed(offset: start + pasted.length),
+    );
+  }
+
   KeyEventResult _onKey(FocusNode node, KeyEvent event) {
+    if (widget.onCancel != null &&
+        event is KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.escape) {
+      widget.onCancel!();
+      return KeyEventResult.handled;
+    }
     if (_isSubmitShortcut(event)) {
       _submit();
+      return KeyEventResult.handled;
+    }
+    if (widget.onPaste != null && _isPasteShortcut(event)) {
+      _handlePasteShortcut();
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
@@ -134,85 +203,99 @@ class _DmChatInputState extends State<DmChatInput> {
       animation: _controller,
       builder: (context, _) {
         final colorScheme = Theme.of(context).colorScheme;
+        final borderColor = theme.inputBorderColor ??
+            colorScheme.outlineVariant.withValues(alpha: 0.45);
 
         return Padding(
           padding: theme.inputPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (widget.pendingAttachments.isNotEmpty) ...[
-                DmChatAttachmentBlockView(
-                  block: DmChatAttachmentBlock(
-                    attachments: widget.pendingAttachments,
-                  ),
-                  onCancel: widget.onRemoveAttachment,
-                  onRetry: widget.onRemoveAttachment,
-                ),
-                const SizedBox(height: 8),
-              ],
-              Focus(
-                onKeyEvent: _onKey,
-                child: DmMarkdownInput(
-                  controller: _controller,
-                  showPreview: false,
-                  minLines: widget.minLines,
-                  maxLines: widget.maxLines,
-                  decoration: InputDecoration(
-                    hintText: widget.placeholder,
-                    border: InputBorder.none,
-                    isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 24,
+          child: Material(
+            color: theme.inputSurface,
+            elevation: theme.inputElevation,
+            shadowColor: colorScheme.shadow.withValues(alpha: 0.14),
+            shape: RoundedRectangleBorder(
+              borderRadius: theme.inputRadius,
+              side: BorderSide(color: borderColor, width: 1),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (widget.header != null) widget.header!,
+                if (widget.pendingAttachments.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(14, 12, 14, 0),
+                    child: DmChatAttachmentBlockView(
+                      block: DmChatAttachmentBlock(
+                        attachments: widget.pendingAttachments,
+                      ),
+                      onCancel: widget.onRemoveAttachment,
+                      onRetry: widget.onRemoveAttachment,
+                      onRemove: widget.onRemoveAttachment,
                     ),
-                    hintStyle:
-                        Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: colorScheme.onSurfaceVariant
-                                  .withValues(alpha: 0.58),
-                              fontWeight: FontWeight.w600,
+                  ),
+                Focus(
+                  onKeyEvent: _onKey,
+                  child: DmMarkdownInput(
+                    controller: _controller,
+                    focusNode: widget.focusNode,
+                    showPreview: false,
+                    borderless: true,
+                    minLines: widget.minLines,
+                    maxLines: widget.maxLines,
+                    decoration: InputDecoration(
+                      hintText: widget.placeholder,
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      filled: false,
+                      isDense: true,
+                      contentPadding: const EdgeInsets.fromLTRB(18, 16, 18, 8),
+                      hintStyle:
+                          Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: colorScheme.onSurfaceVariant
+                                    .withValues(alpha: 0.52),
+                                fontWeight: FontWeight.w400,
+                              ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 4, 10, 10),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 38),
+                    child: Row(
+                      children: [
+                        if (widget.leading != null) widget.leading!,
+                        if (widget.onAttach != null)
+                          AttachButton(
+                            onPicked: widget.onAttach!,
+                            enabled: !widget.isStreaming,
+                          ),
+                        const Spacer(),
+                        if (widget.trailing != null)
+                          Flexible(
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: widget.trailing!,
                             ),
-                  ),
-                ),
-              ),
-              Container(
-                constraints: const BoxConstraints(minHeight: 56),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainer,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: theme.inputRadius.bottomLeft,
-                    bottomRight: theme.inputRadius.bottomRight,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    if (widget.leading != null) widget.leading!,
-                    if (widget.onAttach != null)
-                      AttachButton(
-                        onPicked: widget.onAttach!,
-                        enabled: !widget.isStreaming,
-                      ),
-                    const Spacer(),
-                    if (widget.trailing != null)
-                      Flexible(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: widget.trailing!,
+                          ),
+                        const SizedBox(width: 8),
+                        SendButton(
+                          isStreaming: widget.isStreaming,
+                          onSend: _submit,
+                          onStop: widget.onStop ?? () {},
+                          enabled: _canSend,
+                          idleIcon: widget.idleActionIcon,
+                          idleTooltip: widget.idleActionTooltip,
+                          onIdlePressed: widget.onIdleAction,
                         ),
-                      ),
-                    SendButton(
-                      isStreaming: widget.isStreaming,
-                      onSend: _submit,
-                      onStop: widget.onStop ?? () {},
-                      enabled: _canSend,
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
