@@ -1,4 +1,4 @@
-## Unreleased
+## 2.3.0
 
 - Add message footers to chat bubbles and per-message footer builders to
   `DmChatView`.
