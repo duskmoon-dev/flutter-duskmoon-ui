@@ -68,8 +68,7 @@ class SendButton extends StatelessWidget {
         shape: const CircleBorder(),
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
-        disabledBackgroundColor:
-            colorScheme.onSurface.withValues(alpha: 0.1),
+        disabledBackgroundColor: colorScheme.onSurface.withValues(alpha: 0.1),
         disabledForegroundColor:
             colorScheme.onSurfaceVariant.withValues(alpha: 0.45),
       ),

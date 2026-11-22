@@ -335,8 +335,7 @@ class DmChatTheme extends ThemeExtension<DmChatTheme> {
       inputElevation: _lerpDouble(inputElevation, other.inputElevation, t),
       inputRadius:
           BorderRadius.lerp(inputRadius, other.inputRadius, t) ?? inputRadius,
-      inputBorderColor:
-          Color.lerp(inputBorderColor, other.inputBorderColor, t),
+      inputBorderColor: Color.lerp(inputBorderColor, other.inputBorderColor, t),
       customBuilders: t < 0.5 ? customBuilders : other.customBuilders,
       defaultAvatarBuilder:
           t < 0.5 ? defaultAvatarBuilder : other.defaultAvatarBuilder,

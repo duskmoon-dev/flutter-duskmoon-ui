@@ -85,10 +85,9 @@ class _AttachmentTile extends StatelessWidget {
 
   Widget _imageThumb(BuildContext context) {
     final size = theme.attachmentImageThumbSize;
-    final removeHandler =
-        attachment.status == DmChatAttachmentStatus.uploading
-            ? (onCancel ?? onRemove)
-            : onRemove;
+    final removeHandler = attachment.status == DmChatAttachmentStatus.uploading
+        ? (onCancel ?? onRemove)
+        : onRemove;
     return Stack(
       children: [
         ClipRRect(
