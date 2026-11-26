@@ -30,7 +30,7 @@ jobs:
 
       - name: Build web
         working-directory: example/design_preview
-        run: flutter build web --release --base-href "/flutter-duskmoon-ui/"
+        run: flutter build web --release --base-href "/duskmoon-flutter/"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
