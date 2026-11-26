@@ -26,13 +26,7 @@ jobs:
           cache: true
 
       - name: Install dependencies
-        run: |
-          # fluent_ui 4.18 removed the TabView.currentIndex API used by DmTabBar.
-          cat > pubspec_overrides.yaml <<'YAML'
-          dependency_overrides:
-            fluent_ui: 4.17.0
-          YAML
-          dart pub get
+        run: dart pub get
 
       - name: Build web
         working-directory: example/design_preview

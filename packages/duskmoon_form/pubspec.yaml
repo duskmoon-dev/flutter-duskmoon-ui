@@ -22,9 +22,9 @@ dependencies:
     sdk: flutter
   duskmoon_theme: ^2.3.0
   duskmoon_widgets: ^2.3.0
-  fluent_ui: ^4.16.1
-  bloc: ^9.2.1
-  flutter_bloc: ^9.1.1
+  fluent_ui: ^4.18.1
+  bloc: ^9.2.2
+  flutter_bloc: ^9.1.2
   rxdart: ^0.28.0
   equatable: ^3.0.0
   collection: ^1.19.1

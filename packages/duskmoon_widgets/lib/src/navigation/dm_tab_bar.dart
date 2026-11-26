@@ -52,29 +52,76 @@ class DmTabBar extends StatelessWidget with AdaptiveWidget {
               ),
           },
         ),
-      DmPlatformStyle.fluent => _buildFluent(context),
+      DmPlatformStyle.fluent => wrapWithFluentTheme(
+          context,
+          _FluentTabBar(
+              tabs: tabs, selectedIndex: selectedIndex, onChanged: onChanged),
+        ),
     };
   }
+}
 
-  Widget _buildFluent(BuildContext context) {
-    return wrapWithFluentTheme(
-      context,
-      SizedBox(
-        height: 40,
-        child: fluent.TabView(
-          currentIndex: selectedIndex,
-          onChanged: onChanged ?? (_) {},
-          tabWidthBehavior: fluent.TabWidthBehavior.sizeToContent,
-          closeButtonVisibility: fluent.CloseButtonVisibilityMode.never,
-          showScrollButtons: false,
-          tabs: tabs
-              .map((t) => fluent.Tab(
-                    text: Text(t.label),
-                    icon: t.icon,
-                    body: const SizedBox.shrink(),
-                  ))
-              .toList(),
-        ),
+class _FluentTabBar extends StatefulWidget {
+  const _FluentTabBar({
+    required this.tabs,
+    required this.selectedIndex,
+    required this.onChanged,
+  });
+
+  final List<DmTab> tabs;
+  final int selectedIndex;
+  final ValueChanged<int>? onChanged;
+
+  @override
+  State<_FluentTabBar> createState() => _FluentTabBarState();
+}
+
+class _FluentTabBarState extends State<_FluentTabBar> {
+  late final _controller = fluent.TabViewController(
+    initialTabs: _buildTabs(),
+    initialIndex: widget.tabs.isEmpty ? 0 : widget.selectedIndex,
+  );
+
+  List<fluent.Tab> _buildTabs() => [
+        for (final tab in widget.tabs)
+          fluent.Tab(
+            text: Text(tab.label),
+            icon: tab.icon,
+            body: const SizedBox.shrink(),
+          ),
+      ];
+
+  @override
+  void didUpdateWidget(covariant _FluentTabBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.tabs != oldWidget.tabs) {
+      _controller.replaceTabs(_buildTabs());
+    }
+    if (widget.tabs.isNotEmpty) _controller.select(widget.selectedIndex);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40,
+      child: fluent.TabView(
+        controller: _controller,
+        onChanged: (index) {
+          // TabView updates the controller before notifying its caller.
+          _controller.select(widget.selectedIndex);
+          widget.onChanged?.call(index);
+        },
+        // TabView 4.18 reorders its controller before invoking this callback.
+        onReorder: (oldIndex, newIndex) => _controller.move(newIndex, oldIndex),
+        tabWidthBehavior: fluent.TabWidthBehavior.sizeToContent,
+        closeButtonVisibility: fluent.CloseButtonVisibilityMode.never,
+        showScrollButtons: false,
       ),
     );
   }

@@ -268,20 +268,40 @@ void main() {
       expect(changedIndex, 1);
     });
 
-    testWidgets('renders fluent.TabView on Fluent platform', (tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
+    testWidgets('Fluent tabs follow the caller selection and report taps',
+        (tester) async {
+      final changes = <int>[];
+
+      Future<void> pumpTabBar(int selectedIndex, List<DmTab> visibleTabs) {
+        return tester.pumpWidget(MaterialApp(
           home: Scaffold(
             body: DmTabBar(
-              tabs: tabs,
+              tabs: visibleTabs,
+              selectedIndex: selectedIndex,
+              onChanged: changes.add,
               platformOverride: DmPlatformStyle.fluent,
             ),
           ),
-        ),
-      );
+        ));
+      }
 
-      expect(find.byType(fluent.TabView), findsOneWidget);
+      await pumpTabBar(1, tabs);
+      final tabView = find.byType(fluent.TabView);
+      final controller = tester.widget<fluent.TabView>(tabView).controller;
       expect(find.byType(TabBar), findsNothing);
+      expect(controller.selectedIndex, 1);
+
+      await tester.tap(find.text('Tab 1'));
+      await tester.pumpAndSettle();
+      expect(changes, [0]);
+      expect(controller.selectedIndex, 1);
+
+      await pumpTabBar(0, const [DmTab(label: 'Replacement')]);
+      expect(
+          tester.widget<fluent.TabView>(tabView).controller, same(controller));
+      expect(controller.selectedIndex, 0);
+      expect(find.text('Replacement'), findsOneWidget);
+      expect(changes, [0]);
     });
   });
 
