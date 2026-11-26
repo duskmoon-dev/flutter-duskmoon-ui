@@ -14,6 +14,7 @@ import 'package:example/screens/markdown/markdown_screen.dart';
 import 'package:example/screens/markdown/mermaid_screen.dart';
 import 'package:example/screens/scaffold/scaffold_screen.dart';
 import 'package:example/screens/visualization/chart_gallery_page.dart';
+import 'package:example/screens/visualization/contract_gallery_page.dart';
 import 'package:example/screens/visualization/geo_map_page.dart';
 import 'package:example/screens/visualization/interactive_chart_page.dart';
 import 'package:example/screens/visualization/visualization_screen.dart';
@@ -215,10 +216,11 @@ void main() {
       await tester.pumpWidget(DuskmoonShowcaseApp(prefs: prefs));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Visualization'));
+      await tester.tap(find.byIcon(Icons.show_chart).hitTestable());
       await tester.pumpAndSettle();
 
-      expect(find.text('DmViz Charts'), findsOneWidget);
+      expect(find.byType(VisualizationScreen), findsOneWidget);
+      expect(find.text(ContractGalleryPage.name), findsOneWidget);
 
       final listScrollable = find.byType(Scrollable).last;
       await tester.scrollUntilVisible(
@@ -246,7 +248,8 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('DmViz Charts'), findsOneWidget);
+      expect(find.text(ContractGalleryPage.name), findsOneWidget);
+      expect(find.text('Legacy DmViz Examples'), findsOneWidget);
 
       final listScrollable = find.byType(Scrollable).last;
       await tester.scrollUntilVisible(
@@ -274,7 +277,17 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Open module').first);
+      final legacyCard = find.ancestor(
+        of: find.text('Legacy DmViz Examples'),
+        matching: find.byType(DmCard),
+      );
+      final open = find.descendant(
+        of: legacyCard,
+        matching: find.widgetWithText(FilledButton, 'Open module'),
+      );
+      await tester.ensureVisible(open);
+      await tester.pumpAndSettle();
+      await tester.tap(open);
       await tester.pumpAndSettle();
 
       expect(find.widgetWithText(AppBar, 'Curated Charts'), findsOneWidget);
