@@ -1,4 +1,4 @@
-## Unreleased
+## 2.4.0
 
 - Add shared-contract constructors for six chart types with stable IDs, typed
   events, keyboard and touch interactions, and an accessible raw-data outlet.

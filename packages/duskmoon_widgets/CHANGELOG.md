@@ -1,3 +1,7 @@
+## 2.4.0
+
+- Release 2.4.0 (2026-11-26)
+
 ## 2.3.0
 
 - Add message footers to chat bubbles and per-message footer builders to
