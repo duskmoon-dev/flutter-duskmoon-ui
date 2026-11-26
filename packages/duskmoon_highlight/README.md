@@ -6,7 +6,7 @@ build hooks compile the official Tree-sitter 0.27.1 C runtime; browser builds us
 the official web-tree-sitter 0.27.1 module and WebAssembly assets. Browser assets
 are loaded from the application's own package asset bundle.
 
-Requires Dart 3.10 / Flutter 3.38 or newer and a native C/C++ toolchain when
+Requires Dart 3.14 / Flutter 3.50 or newer and a native C/C++ toolchain when
 building native apps. No grammar downloads, CDN configuration or `index.html`
 changes are required by consumers. JavaScript and Flutter Wasm builds use the
 same grammar assets.

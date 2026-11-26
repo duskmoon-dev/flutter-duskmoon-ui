@@ -12,8 +12,7 @@ syntax snapshots and per-editor incremental sessions shared by Markdown and
 the editor. See the [runtime migration guide](../packages/duskmoon_highlight/README.md)
 and [editor migration guide](../packages/duskmoon_code_engine/README.md).
 
-The SDK requirements raised in 2.0 still apply, with newer floors for the
-Tree-sitter runtime and editor; check the per-package matrix below before upgrading.
+Check the current SDK requirements below before upgrading.
 
 The legacy `DmThemeBloc(prefs: ...)` constructor and hosted Markdown AST types
 remain compatible. Modern preference stores are opt-in and require an
@@ -21,23 +20,9 @@ application-controlled migration of existing stored values.
 
 ## SDK support
 
-These declared floors reflect the minimum requirements of each package's direct
-dependency constraints and its workspace dependencies. The review was tested on
-Flutter 3.47.0 / Dart 3.13.0; the individual floors have not all been exercised
-on separate SDK installations.
-
-| Packages | Dart | Flutter |
-| --- | --- | --- |
-| theme, adaptive_scaffold, feedback, mermaid_renderer | 3.6 | 3.24 |
-| code_engine, highlight | 3.10 | 3.38 |
-| visualization | 3.10 | 3.38 |
-| theme_bloc, widgets, form | 3.11 | 3.41 |
-| settings, ui | 3.12 | 3.44 |
-| design_preview, duo_screen examples | 3.12 | 3.44 |
-
-Package names in the table use the `duskmoon_` prefix. Developing the complete
-workspace requires Dart 3.12 or newer. Melos bootstrap must not impose a single
-environment floor on all published packages.
+The root workspace, all published packages, and both examples require Flutter
+3.50.0 or newer and Dart 3.14.0 or newer. Flutter 3.50 bundles Dart 3.14.0.
+The CI analysis and release jobs use Flutter 3.50.1.
 
 ## Source ownership and refresh procedure
 

@@ -1,6 +1,6 @@
 # Code Editor Engine
 
-The `duskmoon_code_engine` package provides a Flutter code editor with an immutable document/state model, incremental Tree-sitter parsing, query-based syntax highlighting, and an interactive widget. It shares the bundled native/WebAssembly runtime in `duskmoon_highlight`. Requires Dart 3.10 / Flutter 3.38 and a native C/C++ build toolchain for native apps.
+The `duskmoon_code_engine` package provides a Flutter code editor with an immutable document/state model, incremental Tree-sitter parsing, query-based syntax highlighting, and an interactive widget. It shares the bundled native/WebAssembly runtime in `duskmoon_highlight`. Requires Dart 3.14 / Flutter 3.50 and a native C/C++ build toolchain for native apps.
 
 ## Table of Contents
 

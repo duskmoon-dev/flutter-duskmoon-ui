@@ -23,8 +23,8 @@ flutter pub add duskmoon_widgets
 flutter pub add duskmoon_mermaid_renderer
 ```
 
-The umbrella package requires Dart >=3.12.0 and Flutter >=3.44.0. Individual
-packages have lower requirements; see the [SDK support matrix](docs/dependency-maintenance.md#sdk-support).
+The DuskMoon packages require Dart >=3.14.0 and Flutter >=3.50.0. See
+[SDK support](docs/dependency-maintenance.md#sdk-support).
 
 ## Quick Start
 

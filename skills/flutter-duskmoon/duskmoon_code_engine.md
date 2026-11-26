@@ -1,6 +1,6 @@
 # duskmoon_code_engine
 
-Flutter code editor with an immutable document/state model and official Tree-sitter incremental parsing through `duskmoon_highlight`. Native builds require a C/C++ toolchain; web uses bundled ESM/Wasm assets. Requires Dart 3.10 / Flutter 3.38.
+Flutter code editor with an immutable document/state model and official Tree-sitter incremental parsing through `duskmoon_highlight`. Native builds require a C/C++ toolchain; web uses bundled ESM/Wasm assets. Requires Dart 3.14 / Flutter 3.50.
 
 ## Installation
 

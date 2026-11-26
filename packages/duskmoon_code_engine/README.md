@@ -42,7 +42,7 @@ Controllers and widgets dispose their sessions automatically.
 
 ## Migration
 
-Requires Dart 3.10 / Flutter 3.38 and a native C/C++ build toolchain. Browser
+Requires Dart 3.14 / Flutter 3.50 and a native C/C++ build toolchain. Browser
 builds use bundled same-origin WebAssembly assets, with no CDN/index.html setup.
 The Lezer/regex parser APIs (`GrammarData`, `LRParser`, `Tree`, `TreeCursor`,
 `NodeType`, `NodeProp`, `StreamLanguage`, `TokenRule`) and generator are removed.

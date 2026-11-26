@@ -34,7 +34,7 @@ dependencies:
   duskmoon_ui: ^1.6.0
 ```
 
-> **Requirements:** Dart >= 3.10.0, Flutter >= 3.38.0
+> **Requirements:** Dart >= 3.14.0, Flutter >= 3.50.0
 
 The package depends on `duskmoon_theme`, `archive`, and `vector_math`.
 

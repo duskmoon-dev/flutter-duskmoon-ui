@@ -39,9 +39,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          # Flutter 3.50 reports legacy material.dart imports as fatal infos.
-          # Keep the release gate on the last passing SDK until public APIs migrate.
-          flutter-version: 3.47.9
+          flutter-version: 3.50.1
           cache: true
 
       - name: Install dependencies
