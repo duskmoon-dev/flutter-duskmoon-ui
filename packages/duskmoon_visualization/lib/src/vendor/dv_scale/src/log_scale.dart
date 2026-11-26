@@ -15,12 +15,10 @@ class LogScale implements ContinuousScale<double, double> {
   LogScale({
     List<double>? domain,
     List<double>? range,
-    bool clamp = false,
-    double base = 10,
+    this._clamp = false,
+    this._base = 10,
   })  : _domain = domain ?? [1, 10],
-        _range = range ?? [0, 1],
-        _clamp = clamp,
-        _base = base;
+        _range = range ?? [0, 1];
 
   /// The base of the logarithm.
   double get base => _base;

@@ -26,16 +26,12 @@ import 'mermaid_painter.dart';
 
 class RenderDmMermaid extends RenderBox {
   RenderDmMermaid({
-    required String source,
-    required MermaidRenderOptions options,
-    required TextDirection textDirection,
-    required TextScaler textScaler,
-    ValueChanged<MermaidError>? onError,
-  })  : _source = source,
-        _options = options,
-        _textDirection = textDirection,
-        _textScaler = textScaler,
-        _onError = onError;
+    required this._source,
+    required this._options,
+    required this._textDirection,
+    required this._textScaler,
+    this._onError,
+  });
 
   final MermaidPainter _painter = const MermaidPainter();
   MermaidScene? _scene;

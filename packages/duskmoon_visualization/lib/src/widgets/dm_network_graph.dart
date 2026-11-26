@@ -42,10 +42,10 @@ class DmVizNetworkGraph extends StatelessWidget {
     this.palette,
     this.onNodeTap,
     this.onLinkTap,
-  }) : _fixedLayout = false,
-       options = const DmVizOptions(),
-       interaction = const DmVizInteraction(),
-       height = 300;
+  })  : _fixedLayout = false,
+        options = const DmVizOptions(),
+        interaction = const DmVizInteraction(),
+        height = 300;
 
   /// Draws caller-provided positions and stable node and edge IDs.
   const DmVizNetworkGraph.fixed({
@@ -56,18 +56,18 @@ class DmVizNetworkGraph extends StatelessWidget {
     this.options = const DmVizOptions(),
     this.interaction = const DmVizInteraction(),
     this.height = 300,
-  }) : _fixedLayout = true,
-       links = edges,
-       enableSimulation = false,
-       showNodeLabels = true,
-       showLinkLabels = false,
-       enableZoomPan = true,
-       draggableNodes = true,
-       nodeShape = DmVizNetworkNodeShape.circle,
-       linkStyle = DmVizNetworkLinkStyle.straight,
-       groupColors = null,
-       onNodeTap = null,
-       onLinkTap = null;
+  })  : _fixedLayout = true,
+        links = edges,
+        enableSimulation = false,
+        showNodeLabels = true,
+        showLinkLabels = false,
+        enableZoomPan = true,
+        draggableNodes = true,
+        nodeShape = DmVizNetworkNodeShape.circle,
+        linkStyle = DmVizNetworkLinkStyle.straight,
+        groupColors = null,
+        onNodeTap = null,
+        onLinkTap = null;
 
   @override
   Widget build(BuildContext context) {

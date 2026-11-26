@@ -12,10 +12,9 @@ class TimeScale {
   TimeScale({
     List<DateTime>? domain,
     List<double>? range,
-    bool clamp = false,
+    this._clamp = false,
   })  : _domain = domain ?? [DateTime(2000), DateTime(2001)],
-        _range = range ?? [0, 1],
-        _clamp = clamp;
+        _range = range ?? [0, 1];
 
   /// The input domain of DateTime values.
   List<DateTime> get domain => List.unmodifiable(_domain);

@@ -101,12 +101,10 @@ VizChartStyle resolveVizChartStyle(
     selectionColor: palette?.selection ?? scheme.primary,
     tooltipBackground: palette?.tooltipBackground ?? scheme.inverseSurface,
     tooltipText: palette?.tooltipText ?? scheme.onInverseSurface,
-    missing:
-        options.missingColor ??
+    missing: options.missingColor ??
         palette?.missing ??
         scheme.surfaceContainerHighest,
-    series:
-        options.seriesColors ??
+    series: options.seriesColors ??
         [
           palette?.primary ?? scheme.primary,
           palette?.secondary ?? scheme.secondary,
@@ -115,8 +113,7 @@ VizChartStyle resolveVizChartStyle(
           scheme.secondaryContainer,
           scheme.tertiaryContainer,
         ],
-    heatmap:
-        options.heatmapColors ??
+    heatmap: options.heatmapColors ??
         [scheme.surfaceContainerHighest, scheme.primary],
   );
 }

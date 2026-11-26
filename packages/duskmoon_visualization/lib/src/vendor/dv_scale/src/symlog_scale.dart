@@ -17,12 +17,10 @@ class SymlogScale implements ContinuousScale<double, double> {
   SymlogScale({
     List<double>? domain,
     List<double>? range,
-    bool clamp = false,
-    double constant = 1,
+    this._clamp = false,
+    this._constant = 1,
   })  : _domain = domain ?? [-1, 1],
-        _range = range ?? [0, 1],
-        _clamp = clamp,
-        _constant = constant;
+        _range = range ?? [0, 1];
 
   /// The constant used in the symlog transform.
   double get constant => _constant;

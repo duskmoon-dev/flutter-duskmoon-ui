@@ -89,8 +89,8 @@ class DmVizAxis {
     this.unit,
     this.format,
     this.nice = false,
-  }) : type = DmVizAxisType.time,
-       includeZero = false;
+  })  : type = DmVizAxisType.time,
+        includeZero = false;
 
   const DmVizAxis.category({
     List<String>? this.domain,
@@ -98,9 +98,9 @@ class DmVizAxis {
     this.label,
     this.unit,
     this.format,
-  }) : type = DmVizAxisType.category,
-       includeZero = false,
-       nice = false;
+  })  : type = DmVizAxisType.category,
+        includeZero = false,
+        nice = false;
 }
 
 class DmVizMarker {

@@ -14,3 +14,5 @@ linter:
     prefer_const_constructors: true
     prefer_const_declarations: true
     avoid_print: true
+    # The workspace formatter currently parses Dart 3.6 syntax.
+    use_null_aware_elements: false

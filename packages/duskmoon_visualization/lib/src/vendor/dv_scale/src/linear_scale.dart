@@ -14,10 +14,9 @@ class LinearScale implements ContinuousScale<double, double> {
   LinearScale({
     List<double>? domain,
     List<double>? range,
-    bool clamp = false,
+    this._clamp = false,
   })  : _domain = domain ?? [0, 1],
-        _range = range ?? [0, 1],
-        _clamp = clamp;
+        _range = range ?? [0, 1];
 
   @override
   List<double> get domain => List.unmodifiable(_domain);

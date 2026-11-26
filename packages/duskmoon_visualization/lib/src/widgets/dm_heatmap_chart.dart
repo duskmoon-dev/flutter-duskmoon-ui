@@ -33,13 +33,13 @@ class DmVizHeatmap extends StatelessWidget {
     this.columnLabels,
     this.showValues = true,
     this.palette,
-  }) : _rowCategories = const [],
-       _columnCategories = const [],
-       _cells = null,
-       valueDomain = null,
-       options = const DmVizOptions(),
-       interaction = const DmVizInteraction(),
-       height = 300;
+  })  : _rowCategories = const [],
+        _columnCategories = const [],
+        _cells = null,
+        valueDomain = null,
+        options = const DmVizOptions(),
+        interaction = const DmVizInteraction(),
+        height = 300;
 
   /// Creates a heatmap with stable row, column and cell IDs.
   const DmVizHeatmap.cells({
@@ -53,14 +53,14 @@ class DmVizHeatmap extends StatelessWidget {
     this.height = 300,
     this.showValues = false,
     this.palette,
-  }) : _rowCategories = rows,
-       _columnCategories = columns,
-       _cells = data,
-       rows = 0,
-       columns = 0,
-       rowLabels = null,
-       columnLabels = null,
-       data = const [];
+  })  : _rowCategories = rows,
+        _columnCategories = columns,
+        _cells = data,
+        rows = 0,
+        columns = 0,
+        rowLabels = null,
+        columnLabels = null,
+        data = const [];
 
   @override
   Widget build(BuildContext context) {
@@ -83,13 +83,13 @@ class DmVizHeatmap extends StatelessWidget {
     final minValue = data.isEmpty
         ? 0.0
         : data
-              .map((point) => point.value)
-              .reduce((left, right) => left < right ? left : right);
+            .map((point) => point.value)
+            .reduce((left, right) => left < right ? left : right);
     final maxValue = data.isEmpty
         ? 1.0
         : data
-              .map((point) => point.value)
-              .reduce((left, right) => left > right ? left : right);
+            .map((point) => point.value)
+            .reduce((left, right) => left > right ? left : right);
 
     return Heatmap(
       data: data.map((point) => point.toRaw()).toList(growable: false),
@@ -105,9 +105,9 @@ class DmVizHeatmap extends StatelessWidget {
       cellRadius: 8,
       showValues: showValues,
       valueStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
-        color: Theme.of(context).colorScheme.onSurface,
-        fontWeight: FontWeight.w600,
-      ),
+            color: Theme.of(context).colorScheme.onSurface,
+            fontWeight: FontWeight.w600,
+          ),
       borderColor: resolvedPalette.heatmapBorder,
       borderWidth: 1,
     );

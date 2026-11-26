@@ -11,16 +11,12 @@ class BandScale<T> {
   BandScale({
     List<T>? domain,
     List<double>? range,
-    double paddingInner = 0,
-    double paddingOuter = 0,
-    double align = 0.5,
-    bool round = false,
+    this._paddingInner = 0,
+    this._paddingOuter = 0,
+    this._align = 0.5,
+    this._round = false,
   })  : _domain = domain ?? [],
-        _range = range ?? [0, 1],
-        _paddingInner = paddingInner,
-        _paddingOuter = paddingOuter,
-        _align = align,
-        _round = round;
+        _range = range ?? [0, 1];
 
   /// The discrete domain values.
   List<T> get domain => List.unmodifiable(_domain);

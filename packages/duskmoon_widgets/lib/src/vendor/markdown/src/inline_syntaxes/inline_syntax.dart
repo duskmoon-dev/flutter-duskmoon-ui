@@ -15,15 +15,15 @@ abstract class InlineSyntax {
 
   /// Create a new [InlineSyntax] which matches text on [pattern].
   ///
-  /// If [startCharacter] is passed, it is used as a pre-matching check which
+  /// If [_startCharacter] is passed, it is used as a pre-matching check which
   /// is faster than matching against [pattern].
   ///
   /// If [caseSensitive] is disabled, then case is ignored when matching
   /// the [pattern].
-  InlineSyntax(String pattern, {int? startCharacter, bool caseSensitive = true})
+  InlineSyntax(String pattern,
+      {this._startCharacter, bool caseSensitive = true})
       : pattern =
-            RegExp(pattern, multiLine: true, caseSensitive: caseSensitive),
-        _startCharacter = startCharacter;
+            RegExp(pattern, multiLine: true, caseSensitive: caseSensitive);
 
   /// Tries to match at the parser's current position.
   ///

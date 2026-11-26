@@ -54,7 +54,8 @@ class _VisualizationBody extends StatelessWidget {
         const _VisualizationModuleCard(
           icon: Icons.show_chart_outlined,
           title: 'Shared Chart Fixtures',
-          description: 'The six chart families using the same fixture IDs as the Web gallery.',
+          description:
+              'The six chart families using the same fixture IDs as the Web gallery.',
           tags: ['Line', 'Bar', 'Scatter', 'Heatmap', 'Network', 'Map'],
           routeName: ContractGalleryPage.name,
         ),
@@ -62,7 +63,8 @@ class _VisualizationBody extends StatelessWidget {
         const _VisualizationModuleCard(
           icon: Icons.show_chart_outlined,
           title: 'Legacy DmViz Examples',
-          description: 'DuskMoon-native curated chart wrappers (line, bar, scatter, heatmap, network).',
+          description:
+              'DuskMoon-native curated chart wrappers (line, bar, scatter, heatmap, network).',
           tags: ['DmViz', 'Theme-aware', '5 types'],
           routeName: ChartGalleryPage.name,
         ),

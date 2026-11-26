@@ -12,11 +12,9 @@ class DivergingScale<R> {
   /// Domain should have 3 values: [min, mid, max]
   DivergingScale({
     List<double>? domain,
-    required Interpolator<R> interpolator,
-    bool clamp = false,
-  })  : _domain = domain ?? [0, 0.5, 1],
-        _interpolator = interpolator,
-        _clamp = clamp {
+    required this._interpolator,
+    this._clamp = false,
+  }) : _domain = domain ?? [0, 0.5, 1] {
     assert(_domain.length == 3,
         'Diverging scale requires exactly 3 domain values');
   }
@@ -89,13 +87,10 @@ class DivergingLogScale<R> {
 
   DivergingLogScale({
     List<double>? domain,
-    required Interpolator<R> interpolator,
-    bool clamp = false,
-    double base = 10,
-  })  : _domain = domain ?? [0.1, 1, 10],
-        _interpolator = interpolator,
-        _clamp = clamp,
-        _base = base {
+    required this._interpolator,
+    this._clamp = false,
+    this._base = 10,
+  }) : _domain = domain ?? [0.1, 1, 10] {
     assert(_domain.length == 3,
         'Diverging scale requires exactly 3 domain values');
   }
@@ -157,13 +152,10 @@ class DivergingPowScale<R> {
 
   DivergingPowScale({
     List<double>? domain,
-    required Interpolator<R> interpolator,
-    bool clamp = false,
-    double exponent = 1,
-  })  : _domain = domain ?? [-1, 0, 1],
-        _interpolator = interpolator,
-        _clamp = clamp,
-        _exponent = exponent {
+    required this._interpolator,
+    this._clamp = false,
+    this._exponent = 1,
+  }) : _domain = domain ?? [-1, 0, 1] {
     assert(_domain.length == 3,
         'Diverging scale requires exactly 3 domain values');
   }

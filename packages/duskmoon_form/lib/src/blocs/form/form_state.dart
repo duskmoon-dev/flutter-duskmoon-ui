@@ -246,12 +246,11 @@ abstract class FormBlocState<SuccessResponse, FailureResponse>
   }
 
   FormBlocState({
-    required Map<int, bool> isValidByStep,
+    required this._isValidByStep,
     required this.isEditing,
-    required Map<int, Map<String, FieldBloc>> fieldBlocs,
+    required this._fieldBlocs,
     required this.currentStep,
-  })  : _isValidByStep = isValidByStep,
-        _fieldBlocs = fieldBlocs;
+  });
 
   /// Returns a [FormBlocLoading]
   /// {@template form_bloc.copy_to_form_bloc_state}

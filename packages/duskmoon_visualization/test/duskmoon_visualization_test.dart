@@ -61,27 +61,28 @@ void main() {
       List<DmVizDatum> data = const [a, b],
       double width = 400,
       bool hidden = false,
-    }) => tester.pumpWidget(
-      WidgetsApp(
-        color: theme.colorScheme.surface,
-        builder: (_, _) => Theme(
-          data: theme,
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Offstage(
-              offstage: hidden,
-              child: SizedBox(
-                width: width,
-                child: DmVizScatterChart.series(
-                  series: [DmVizSeries(id: 'a', name: 'A', data: data)],
-                  interaction: DmVizInteraction(onEvent: events.add),
+    }) =>
+        tester.pumpWidget(
+          WidgetsApp(
+            color: theme.colorScheme.surface,
+            builder: (_, _) => Theme(
+              data: theme,
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Offstage(
+                  offstage: hidden,
+                  child: SizedBox(
+                    width: width,
+                    child: DmVizScatterChart.series(
+                      series: [DmVizSeries(id: 'a', name: 'A', data: data)],
+                      interaction: DmVizInteraction(onEvent: events.add),
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
-    );
+        );
 
     final light = ThemeData.light();
     final dark = ThemeData.dark();

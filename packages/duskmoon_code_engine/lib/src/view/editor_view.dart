@@ -16,8 +16,7 @@ class _SessionChangeRecord {
 
 /// Non-widget controller that holds state and dispatches transactions.
 class EditorView extends ChangeNotifier {
-  EditorView({required EditorState state, this.readOnly = false})
-      : _state = state;
+  EditorView({required this._state, this.readOnly = false});
 
   EditorState _state;
   bool _lastDocChanged = false;

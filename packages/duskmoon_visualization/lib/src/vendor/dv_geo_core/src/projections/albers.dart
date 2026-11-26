@@ -19,10 +19,9 @@ class AlbersProjection with ProjectionMixin implements Projection {
     (double, double)? center,
     double scale = 1,
     Point? translate,
-    double parallels0 = 29.5,
-    double parallels1 = 45.5,
-  })  : _parallels0 = parallels0,
-        _parallels1 = parallels1 {
+    this._parallels0 = 29.5,
+    this._parallels1 = 45.5,
+  }) {
     if (center != null) this.center = center;
     this.scale = scale;
     if (translate != null) this.translate = translate;

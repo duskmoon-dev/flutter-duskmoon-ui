@@ -16,12 +16,10 @@ class PowerScale implements ContinuousScale<double, double> {
   PowerScale({
     List<double>? domain,
     List<double>? range,
-    bool clamp = false,
-    double exponent = 1,
+    this._clamp = false,
+    this._exponent = 1,
   })  : _domain = domain ?? [0, 1],
-        _range = range ?? [0, 1],
-        _clamp = clamp,
-        _exponent = exponent;
+        _range = range ?? [0, 1];
 
   /// The exponent of the power transform.
   double get exponent => _exponent;

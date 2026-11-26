@@ -16,12 +16,10 @@ class EditorState {
   EditorState._({
     required this.doc,
     required this.selection,
-    required FacetStore facets,
-    required Map<StateField<dynamic>, dynamic> fieldValues,
-    required List<Extension> extensions,
-  })  : _facets = facets,
-        _fieldValues = fieldValues,
-        _extensions = extensions;
+    required this._facets,
+    required this._fieldValues,
+    required this._extensions,
+  });
 
   /// The current document.
   final Document doc;

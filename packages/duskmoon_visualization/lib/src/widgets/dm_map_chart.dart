@@ -67,12 +67,12 @@ class DmVizMapChart extends StatelessWidget {
     this.antiAlias = true,
     this.onFeatureTap,
     this.palette,
-  }) : _mercator = false,
-       options = const DmVizOptions(),
-       interaction = const DmVizInteraction(),
-       center = null,
-       padding = 16,
-       height = 300;
+  })  : _mercator = false,
+        options = const DmVizOptions(),
+        interaction = const DmVizInteraction(),
+        center = null,
+        padding = 16,
+        height = 300;
 
   /// Fits an offline GeoJSON collection using the shared Mercator projection.
   DmVizMapChart.mercator({
@@ -84,13 +84,13 @@ class DmVizMapChart extends StatelessWidget {
     this.options = const DmVizOptions(),
     this.interaction = const DmVizInteraction(),
     this.palette,
-  }) : _mercator = true,
-       projection = MercatorProjection(),
-       fillColor = null,
-       strokeColor = null,
-       strokeWidth = 1.0,
-       antiAlias = true,
-       onFeatureTap = null;
+  })  : _mercator = true,
+        projection = MercatorProjection(),
+        fillColor = null,
+        strokeColor = null,
+        strokeWidth = 1.0,
+        antiAlias = true,
+        onFeatureTap = null;
 
   @override
   Widget build(BuildContext context) {

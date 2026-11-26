@@ -35,13 +35,13 @@ class DmVizScatterChart extends StatelessWidget {
     this.shape = DmVizMarkerShape.circle,
     this.radiusAccessor,
     this.palette,
-  }) : series = null,
-       xAxis = const DmVizAxis.numeric(),
-       yAxis = const DmVizAxis.numeric(),
-       options = const DmVizOptions(),
-       interaction = const DmVizInteraction(),
-       height = 300,
-       marker = const DmVizMarker();
+  })  : series = null,
+        xAxis = const DmVizAxis.numeric(),
+        yAxis = const DmVizAxis.numeric(),
+        options = const DmVizOptions(),
+        interaction = const DmVizInteraction(),
+        height = 300,
+        marker = const DmVizMarker();
 
   /// Creates a chart with the shared Visualization Contract defaults.
   const DmVizScatterChart.series({
@@ -54,11 +54,11 @@ class DmVizScatterChart extends StatelessWidget {
     this.height = 300,
     this.marker = const DmVizMarker(),
     this.palette,
-  }) : data = const [],
-       xAxisLabel = null,
-       yAxisLabel = null,
-       shape = DmVizMarkerShape.circle,
-       radiusAccessor = null;
+  })  : data = const [],
+        xAxisLabel = null,
+        yAxisLabel = null,
+        shape = DmVizMarkerShape.circle,
+        radiusAccessor = null;
 
   @override
   Widget build(BuildContext context) {
@@ -119,10 +119,8 @@ List<double> _numericDomain(
   Iterable<Object?> values, {
   bool includeZero = false,
 }) {
-  final numericValues = values
-      .whereType<num>()
-      .map((value) => value.toDouble())
-      .toList();
+  final numericValues =
+      values.whereType<num>().map((value) => value.toDouble()).toList();
   if (numericValues.isEmpty) {
     return [0, 1];
   }

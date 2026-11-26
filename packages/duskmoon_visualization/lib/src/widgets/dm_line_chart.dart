@@ -40,16 +40,16 @@ class DmVizLineChart extends StatelessWidget {
     this.smooth = true,
     this.showMarkers = true,
     this.palette,
-  }) : series = null,
-       xAxis = const DmVizAxis.numeric(),
-       yAxis = const DmVizAxis.numeric(),
-       options = const DmVizOptions(),
-       interaction = const DmVizInteraction(),
-       height = 300,
-       connectMissing = false,
-       sortX = false,
-       marker = const DmVizMarker(),
-       categories = const [];
+  })  : series = null,
+        xAxis = const DmVizAxis.numeric(),
+        yAxis = const DmVizAxis.numeric(),
+        options = const DmVizOptions(),
+        interaction = const DmVizInteraction(),
+        height = 300,
+        connectMissing = false,
+        sortX = false,
+        marker = const DmVizMarker(),
+        categories = const [];
 
   /// Creates a chart with the shared Visualization Contract defaults.
   const DmVizLineChart.series({
@@ -65,12 +65,12 @@ class DmVizLineChart extends StatelessWidget {
     this.marker = const DmVizMarker(),
     this.categories = const [],
     this.palette,
-  }) : data = const [],
-       xAxisLabel = null,
-       yAxisLabel = null,
-       comparisonData = null,
-       smooth = true,
-       showMarkers = true;
+  })  : data = const [],
+        xAxisLabel = null,
+        yAxisLabel = null,
+        comparisonData = null,
+        smooth = true,
+        showMarkers = true;
 
   @override
   Widget build(BuildContext context) {
@@ -138,10 +138,8 @@ List<double> _numericDomain(
   Iterable<Object?> values, {
   bool includeZero = false,
 }) {
-  final numericValues = values
-      .whereType<num>()
-      .map((value) => value.toDouble())
-      .toList();
+  final numericValues =
+      values.whereType<num>().map((value) => value.toDouble()).toList();
   if (numericValues.isEmpty) {
     return [0, 1];
   }

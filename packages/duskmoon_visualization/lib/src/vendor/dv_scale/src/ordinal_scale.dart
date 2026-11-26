@@ -9,8 +9,8 @@ class OrdinalScale<D, R> {
   OrdinalScale({
     List<D>? domain,
     List<R>? range,
-    R? unknown,
-  }) : _unknown = unknown {
+    this._unknown,
+  }) {
     // Range must be set before domain because domain setter calls _getRange
     if (range != null) this.range = range;
     if (domain != null) this.domain = domain;

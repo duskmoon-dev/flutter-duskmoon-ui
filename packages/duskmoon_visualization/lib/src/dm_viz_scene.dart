@@ -78,9 +78,8 @@ VizNetworkScene vizNetworkScene(
     bounds: bounds,
     nodes: {for (final node in nodes) node.id: node},
     edges: edges,
-    viewport: bounds == null
-        ? null
-        : DmVizViewport.network(_midpoint(bounds), 1),
+    viewport:
+        bounds == null ? null : DmVizViewport.network(_midpoint(bounds), 1),
   );
 }
 
@@ -93,14 +92,14 @@ Offset projectVizMercator(Offset point) {
 }
 
 Offset unprojectVizMercator(Offset point) => Offset(
-  point.dx / _radians,
-  (2 * math.atan(math.exp(-point.dy)) - math.pi / 2) / _radians,
-);
+      point.dx / _radians,
+      (2 * math.atan(math.exp(-point.dy)) - math.pi / 2) / _radians,
+    );
 
 Offset _midpoint(Rect bounds) => Offset(
-  bounds.left / 2 + bounds.right / 2,
-  bounds.top / 2 + bounds.bottom / 2,
-);
+      bounds.left / 2 + bounds.right / 2,
+      bounds.top / 2 + bounds.bottom / 2,
+    );
 
 bool _validPosition(List<double> point) =>
     point.length == 2 &&
@@ -228,11 +227,11 @@ class VizSceneTransform {
   final double scale;
 
   VizSceneTransform(Rect plot, double fit, DmVizViewport viewport)
-    : origin = plot.center,
-      center = viewport.kind == DmVizViewportKind.map
-          ? projectVizMercator(viewport.center!)
-          : viewport.center!,
-      scale = fit * viewport.zoom!;
+      : origin = plot.center,
+        center = viewport.kind == DmVizViewportKind.map
+            ? projectVizMercator(viewport.center!)
+            : viewport.center!,
+        scale = fit * viewport.zoom!;
 
   Offset forward(Offset point) => (point - center) * scale + origin;
   Offset inverse(Offset point) => (point - origin) / scale + center;
@@ -267,16 +266,14 @@ bool _inside(Offset point, List<Offset> ring) {
 VizMapFeature? hitVizMap(VizMapScene scene, Offset point, double pointRadius) {
   for (final feature in scene.features.reversed) {
     if (feature.point case final position?
-        when (position - point).distance <= pointRadius)
-      return feature;
+        when (position - point).distance <= pointRadius) return feature;
   }
   for (final feature in scene.features.reversed) {
     if (feature.polygons.any(
       (ring) =>
           _inside(point, ring.first) &&
           !ring.skip(1).any((hole) => _inside(point, hole)),
-    ))
-      return feature;
+    )) return feature;
   }
   return null;
 }

@@ -9,11 +9,9 @@ class SequentialScale<R> {
   /// Creates a sequential scale with the given parameters.
   SequentialScale({
     List<double>? domain,
-    required Interpolator<R> interpolator,
-    bool clamp = false,
-  })  : _domain = domain ?? [0, 1],
-        _interpolator = interpolator,
-        _clamp = clamp;
+    required this._interpolator,
+    this._clamp = false,
+  }) : _domain = domain ?? [0, 1];
 
   /// The input domain.
   List<double> get domain => List.unmodifiable(_domain);
@@ -76,13 +74,10 @@ class SequentialLogScale<R> {
 
   SequentialLogScale({
     List<double>? domain,
-    required Interpolator<R> interpolator,
-    bool clamp = false,
-    double base = 10,
-  })  : _domain = domain ?? [1, 10],
-        _interpolator = interpolator,
-        _clamp = clamp,
-        _base = base;
+    required this._interpolator,
+    this._clamp = false,
+    this._base = 10,
+  }) : _domain = domain ?? [1, 10];
 
   List<double> get domain => List.unmodifiable(_domain);
   set domain(List<double> value) {
@@ -135,13 +130,10 @@ class SequentialPowScale<R> {
 
   SequentialPowScale({
     List<double>? domain,
-    required Interpolator<R> interpolator,
-    bool clamp = false,
-    double exponent = 1,
-  })  : _domain = domain ?? [0, 1],
-        _interpolator = interpolator,
-        _clamp = clamp,
-        _exponent = exponent;
+    required this._interpolator,
+    this._clamp = false,
+    this._exponent = 1,
+  }) : _domain = domain ?? [0, 1];
 
   List<double> get domain => List.unmodifiable(_domain);
   set domain(List<double> value) => _domain = List.from(value);

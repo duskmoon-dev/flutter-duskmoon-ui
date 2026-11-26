@@ -32,7 +32,7 @@ melos:
 
   scripts:
     analyze:
-      run: melos exec -- dart analyze --fatal-infos
+      run: dart --disable-dart-dev tool/analyze.dart packages example/design_preview example/duo_screen
     test:
       # Flutter native hooks share a workspace build lock.
       run: melos exec --concurrency=1 -- flutter test

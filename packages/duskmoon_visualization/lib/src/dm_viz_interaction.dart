@@ -13,28 +13,28 @@ class DmVizTarget {
   final String? seriesId;
 
   const DmVizTarget.datum(String this.seriesId, this.id)
-    : kind = DmVizTargetKind.datum;
+      : kind = DmVizTargetKind.datum;
   const DmVizTarget.cell(this.id)
-    : kind = DmVizTargetKind.cell,
-      seriesId = null;
+      : kind = DmVizTargetKind.cell,
+        seriesId = null;
   const DmVizTarget.node(this.id)
-    : kind = DmVizTargetKind.node,
-      seriesId = null;
+      : kind = DmVizTargetKind.node,
+        seriesId = null;
   const DmVizTarget.edge(this.id)
-    : kind = DmVizTargetKind.edge,
-      seriesId = null;
+      : kind = DmVizTargetKind.edge,
+        seriesId = null;
   const DmVizTarget.feature(this.id)
-    : kind = DmVizTargetKind.feature,
-      seriesId = null;
+      : kind = DmVizTargetKind.feature,
+        seriesId = null;
 
   Map<String, Object?> toJson() => {
-    'kind': kind.name,
-    if (seriesId case final series?) ...{
-      'seriesId': series,
-      'datumId': id,
-    } else
-      'id': id,
-  };
+        'kind': kind.name,
+        if (seriesId case final series?) ...{
+          'seriesId': series,
+          'datumId': id,
+        } else
+          'id': id,
+      };
 
   @override
   bool operator ==(Object other) =>
@@ -57,34 +57,34 @@ class DmVizViewport {
   final double? zoom;
 
   const DmVizViewport.line(DmVizRange this.x)
-    : kind = DmVizViewportKind.line,
-      y = null,
-      center = null,
-      zoom = null;
+      : kind = DmVizViewportKind.line,
+        y = null,
+        center = null,
+        zoom = null;
   const DmVizViewport.scatter(DmVizRange this.x, DmVizRange this.y)
-    : kind = DmVizViewportKind.scatter,
-      center = null,
-      zoom = null;
+      : kind = DmVizViewportKind.scatter,
+        center = null,
+        zoom = null;
   const DmVizViewport.network(Offset this.center, double this.zoom)
-    : kind = DmVizViewportKind.network,
-      x = null,
-      y = null;
+      : kind = DmVizViewportKind.network,
+        x = null,
+        y = null;
   const DmVizViewport.map(Offset this.center, double this.zoom)
-    : kind = DmVizViewportKind.map,
-      x = null,
-      y = null;
+      : kind = DmVizViewportKind.map,
+        x = null,
+        y = null;
 
   bool get valid => center == null
       ? _validRange(x) && (y == null || _validRange(y))
       : center!.isFinite && zoom!.isFinite && zoom! > 0;
 
   Map<String, Object?> toJson() => {
-    'kind': kind.name,
-    if (x case final value?) 'x': _rangeJson(value),
-    if (y case final value?) 'y': _rangeJson(value),
-    if (center case final value?) 'center': [value.dx, value.dy],
-    'zoom': ?zoom,
-  };
+        'kind': kind.name,
+        if (x case final value?) 'x': _rangeJson(value),
+        if (y case final value?) 'y': _rangeJson(value),
+        if (center case final value?) 'center': [value.dx, value.dy],
+        if (zoom case final value?) 'zoom': value,
+      };
 
   @override
   bool operator ==(Object other) =>
@@ -119,12 +119,12 @@ class DmVizTooltipEvent extends DmVizEvent {
 
   @override
   Map<String, Object?> toJson() => {
-    'type': 'tooltip',
-    'target': target.toJson(),
-    'raw': raw,
-    'display': display,
-    'unit': ?unit,
-  };
+        'type': 'tooltip',
+        'target': target.toJson(),
+        'raw': raw,
+        'display': display,
+        if (unit case final value?) 'unit': value,
+      };
 }
 
 enum DmVizSelectionReason { select, toggle, clear, reset }
@@ -135,10 +135,10 @@ class DmVizSelectionEvent extends DmVizEvent {
   const DmVizSelectionEvent(this.ids, this.reason);
   @override
   Map<String, Object?> toJson() => {
-    'type': 'selection',
-    'ids': ids.map((id) => id.toJson()).toList(),
-    'reason': reason.name,
-  };
+        'type': 'selection',
+        'ids': ids.map((id) => id.toJson()).toList(),
+        'reason': reason.name,
+      };
 }
 
 class DmVizVisibilityEvent extends DmVizEvent {
@@ -148,11 +148,11 @@ class DmVizVisibilityEvent extends DmVizEvent {
   const DmVizVisibilityEvent(this.seriesId, this.visible, {this.reset = false});
   @override
   Map<String, Object?> toJson() => {
-    'type': 'visibility',
-    'seriesId': seriesId,
-    'visible': visible,
-    'reason': reset ? 'reset' : 'toggle',
-  };
+        'type': 'visibility',
+        'seriesId': seriesId,
+        'visible': visible,
+        'reason': reset ? 'reset' : 'toggle',
+      };
 }
 
 enum DmVizViewportReason { zoom, pan, reset }
@@ -163,10 +163,10 @@ class DmVizViewportEvent extends DmVizEvent {
   const DmVizViewportEvent(this.viewport, this.reason);
   @override
   Map<String, Object?> toJson() => {
-    'type': 'viewport',
-    'viewport': viewport.toJson(),
-    'reason': reason.name,
-  };
+        'type': 'viewport',
+        'viewport': viewport.toJson(),
+        'reason': reason.name,
+      };
 }
 
 enum DmVizBrushReason { brush, clear, reset }
@@ -177,10 +177,10 @@ class DmVizBrushEvent extends DmVizEvent {
   const DmVizBrushEvent(this.range, this.reason);
   @override
   Map<String, Object?> toJson() => {
-    'type': 'brush',
-    'range': range == null ? null : _rangeJson(range!),
-    'reason': reason.name,
-  };
+        'type': 'brush',
+        'range': range == null ? null : _rangeJson(range!),
+        'reason': reason.name,
+      };
 }
 
 class DmVizNodeMoveEvent extends DmVizEvent {
@@ -189,10 +189,10 @@ class DmVizNodeMoveEvent extends DmVizEvent {
   const DmVizNodeMoveEvent(this.id, this.position);
   @override
   Map<String, Object?> toJson() => {
-    'type': 'nodeMove',
-    'id': id,
-    'position': [position.dx, position.dy],
-  };
+        'type': 'nodeMove',
+        'id': id,
+        'position': [position.dx, position.dy],
+      };
 }
 
 List<double> _rangeJson(DmVizRange range) => [range.$1, range.$2];
@@ -261,15 +261,16 @@ VizAction vizAction(
   DmVizViewport? viewport,
   DmVizRange? range,
   Offset? position,
-}) => (
-  type: type,
-  target: target,
-  id: id,
-  tooltip: tooltip,
-  viewport: viewport,
-  range: range,
-  position: position,
-);
+}) =>
+    (
+      type: type,
+      target: target,
+      id: id,
+      tooltip: tooltip,
+      viewport: viewport,
+      range: range,
+      position: position,
+    );
 
 VizInteractionState vizInitial({
   List<DmVizTarget> ids = const [],
@@ -394,8 +395,7 @@ VizInteractionState reconcileVizState(
     hidden: hidden.length == state.hidden.length ? state.hidden : hidden,
     viewport: state.viewport,
     brush: state.brush,
-    tooltip:
-        target != null &&
+    tooltip: target != null &&
             targets.contains(target) &&
             !hidden.contains(target.seriesId)
         ? state.tooltip

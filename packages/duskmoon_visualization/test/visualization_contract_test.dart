@@ -57,32 +57,32 @@ DmVizAxis _axis(Json data) {
         );
   return switch (data['type']) {
     'numeric' => DmVizAxis.numeric(
-      domain: (data['domain'] as List?)?.cast<num>(),
-      tickValues: (data['tickValues'] as List?)?.cast<num>(),
-      includeZero: data['includeZero'] == true,
-      nice: data['nice'] == true,
-      format: format,
-    ),
+        domain: (data['domain'] as List?)?.cast<num>(),
+        tickValues: (data['tickValues'] as List?)?.cast<num>(),
+        includeZero: data['includeZero'] == true,
+        nice: data['nice'] == true,
+        format: format,
+      ),
     'category' => DmVizAxis.category(
-      domain: (data['domain'] as List?)?.cast<String>(),
-      tickValues: (data['tickValues'] as List?)?.cast<String>(),
-      format: format,
-    ),
+        domain: (data['domain'] as List?)?.cast<String>(),
+        tickValues: (data['tickValues'] as List?)?.cast<String>(),
+        format: format,
+      ),
     _ => DmVizAxis.time(
-      domain: (data['domain'] as List?)?.cast<Object>(),
-      tickValues: (data['tickValues'] as List?)?.cast<Object>(),
-      nice: data['nice'] == true,
-      format: format,
-    ),
+        domain: (data['domain'] as List?)?.cast<Object>(),
+        tickValues: (data['tickValues'] as List?)?.cast<Object>(),
+        nice: data['nice'] == true,
+        format: format,
+      ),
   };
 }
 
 DmVizDatum _datum(Json data) => DmVizDatum(
-  id: data['id'] as String,
-  x: data['x'],
-  y: (data['y'] as num?)?.toDouble(),
-  color: data['color'] == null ? null : _color(data['color'] as String),
-);
+      id: data['id'] as String,
+      x: data['x'],
+      y: (data['y'] as num?)?.toDouble(),
+      color: data['color'] == null ? null : _color(data['color'] as String),
+    );
 List<DmVizSeries> _series(Json chart) => (chart['series'] as List)
     .cast<Json>()
     .map(
@@ -156,23 +156,21 @@ VizHeatmapLayout _heatmap(Json chart) {
     columns: _categories(chart['columns']),
     data: _cells(chart['cells']),
     missing: _color(theme['missing'] as String),
-    colors: (theme['heatmapColors'] as List)
-        .cast<String>()
-        .map(_color)
-        .toList(),
+    colors:
+        (theme['heatmapColors'] as List).cast<String>().map(_color).toList(),
   );
 }
 
 Object? _domain(Object? domain) =>
     domain is VizDomain ? [domain.$1, domain.$2] : domain;
 List<Json> _issues(List<DmVizIssue> issues) => [
-  for (final issue in issues)
-    {
-      'code': issue.code,
-      'path': issue.path,
-      'severity': issue.warning ? 'warning' : 'error',
-    },
-];
+      for (final issue in issues)
+        {
+          'code': issue.code,
+          'path': issue.path,
+          'severity': issue.warning ? 'warning' : 'error',
+        },
+    ];
 
 void _geometry(
   Map<String, List<double>> actual,
@@ -334,14 +332,16 @@ void main() {
           final axis = _axis(chart['xAxis'] as Json);
           expect(
             _series(chart).single.data.map(
-              (datum) => formatVizValue(normalizeVizTime(datum.x!)!, axis),
-            ),
+                  (datum) => formatVizValue(normalizeVizTime(datum.x!)!, axis),
+                ),
             labels,
           );
         }
         if (expected['normalizedX'] case final List values) {
           expect(
-            _series(chart).single.data
+            _series(chart)
+                .single
+                .data
                 .map((datum) => normalizeVizTime(datum.x!)),
             values,
           );
@@ -422,8 +422,7 @@ void main() {
     final scatter = chart('scatter-missing');
     final heatmap =
         (_read('fixtures', 'heatmap')['ordered-continuous-and-missing']
-                as Json)['chart']
-            as Json;
+            as Json)['chart'] as Json;
     final heatmapTheme = _theme(heatmap);
     final examples = <(Widget, PaintPattern)>[
       (
@@ -582,12 +581,10 @@ void main() {
   testWidgets(
     'line keyboard, brush and cancelled gestures return data-space events',
     (tester) async {
-      final fixture =
-          _read(
-                'fixtures',
-                'interaction',
-              )['line-controlled-selection-and-reset']
-              as Json;
+      final fixture = _read(
+        'fixtures',
+        'interaction',
+      )['line-controlled-selection-and-reset'] as Json;
       final chart = fixture['chart'] as Json;
       final events = <DmVizEvent>[];
       await tester.pumpWidget(
@@ -607,9 +604,8 @@ void main() {
         ),
       );
       final plot = find.byType(VizPlotInput);
-      final focus = find
-          .descendant(of: plot, matching: find.byType(Focus))
-          .first;
+      final focus =
+          find.descendant(of: plot, matching: find.byType(Focus)).first;
       Focus.of(
         tester.element(
           find.descendant(of: focus, matching: find.byType(Semantics)).first,
@@ -681,9 +677,9 @@ void main() {
       for (final action in (fixture['actions'] as List).cast<Json>()) {
         final type = action['type'] as String;
         DmVizTarget target(Json json) => DmVizTarget.datum(
-          json['seriesId'] as String,
-          json['datumId'] as String,
-        );
+              json['seriesId'] as String,
+              json['datumId'] as String,
+            );
         DmVizRange range(List<dynamic> list) =>
             ((list[0] as num).toDouble(), (list[1] as num).toDouble());
         if (type == 'writeSelection') {
@@ -702,11 +698,11 @@ void main() {
         final viewport = viewportData == null
             ? null
             : viewportData['kind'] == 'line'
-            ? DmVizViewport.line(range(viewportData['x'] as List))
-            : DmVizViewport.scatter(
-                range(viewportData['x'] as List),
-                range(viewportData['y'] as List),
-              );
+                ? DmVizViewport.line(range(viewportData['x'] as List))
+                : DmVizViewport.scatter(
+                    range(viewportData['x'] as List),
+                    range(viewportData['y'] as List),
+                  );
         DmVizTooltipEvent? tooltip;
         if (type == 'focus') {
           final datum = series
@@ -717,8 +713,7 @@ void main() {
           tooltip = DmVizTooltipEvent(
             target: selected!,
             raw: {'x': datum.x, 'y': datum.y},
-            display:
-                formatVizValue(datum.y!, yAxis) +
+            display: formatVizValue(datum.y!, yAxis) +
                 (unit == null ? '' : ' $unit'),
             unit: unit,
           );
@@ -731,9 +726,8 @@ void main() {
             id: action['seriesId'] as String?,
             tooltip: tooltip,
             viewport: viewport,
-            range: action['range'] == null
-                ? null
-                : range(action['range'] as List),
+            range:
+                action['range'] == null ? null : range(action['range'] as List),
           ),
           initial: initial,
           series: series.map((entry) => entry.id).toList(),

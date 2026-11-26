@@ -83,8 +83,7 @@ class DmVizSeriesPlot extends StatelessWidget {
       initialViewport: viewportFor(initial),
     );
     final state = controller.state;
-    final zoomed =
-        controller.hasViewport &&
+    final zoomed = controller.hasViewport &&
             state.viewport?.kind == viewportFor(initial)?.kind
         ? state.viewport
         : null;
@@ -179,7 +178,7 @@ class DmVizSeriesPlot extends StatelessWidget {
                     },
                     display:
                         formatVizValue(point.datum.y!, yAxis, labels: labels) +
-                        (yAxis.unit == null ? '' : ' ${yAxis.unit}'),
+                            (yAxis.unit == null ? '' : ' ${yAxis.unit}'),
                     unit: yAxis.unit,
                   ),
                   position: _absolutePosition(point.position, bounds),
@@ -398,10 +397,10 @@ class VizChartFrame extends StatelessWidget {
     final message = options.loading
         ? 'Loading chart…'
         : error
-        ? 'Unable to display chart'
-        : !ready
-        ? 'No data to display'
-        : null;
+            ? 'Unable to display chart'
+            : !ready
+                ? 'No data to display'
+                : null;
     return LayoutBuilder(
       builder: (context, constraints) {
         final plot = SizedBox(
@@ -439,7 +438,7 @@ class VizChartFrame extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: legend,
               ),
-            ?actions,
+            if (actions case final actions?) actions,
             if (data case final data?) _VizDataOutlet(data: data, style: style),
             if (options.summary case final summary?)
               Padding(
@@ -504,9 +503,9 @@ class _VizInteractionHostState extends State<VizInteractionHost> {
 
   @override
   Widget build(BuildContext context) => ListenableBuilder(
-    listenable: _controller,
-    builder: (context, _) => widget.builder(context, _controller),
-  );
+        listenable: _controller,
+        builder: (context, _) => widget.builder(context, _controller),
+      );
 }
 
 class VizChartActions extends StatelessWidget {
@@ -517,28 +516,29 @@ class VizChartActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Wrap(
-    children: [
-      if (zoom case final apply?) ...[
-        VizActionButton('Zoom in', onPressed: () => apply(1 / 1.2)),
-        VizActionButton('Zoom out', onPressed: () => apply(1.2)),
-      ],
-      VizActionButton(
-        'Clear selection',
-        onPressed: () =>
-            controller.dispatch(vizAction(VizActionType.clearSelection)),
-      ),
-      if (controller.state.brush != null)
-        VizActionButton(
-          'Clear range',
-          onPressed: () =>
-              controller.dispatch(vizAction(VizActionType.clearBrush)),
-        ),
-      VizActionButton(
-        'Reset chart',
-        onPressed: () => controller.dispatch(vizAction(VizActionType.reset)),
-      ),
-    ],
-  );
+        children: [
+          if (zoom case final apply?) ...[
+            VizActionButton('Zoom in', onPressed: () => apply(1 / 1.2)),
+            VizActionButton('Zoom out', onPressed: () => apply(1.2)),
+          ],
+          VizActionButton(
+            'Clear selection',
+            onPressed: () =>
+                controller.dispatch(vizAction(VizActionType.clearSelection)),
+          ),
+          if (controller.state.brush != null)
+            VizActionButton(
+              'Clear range',
+              onPressed: () =>
+                  controller.dispatch(vizAction(VizActionType.clearBrush)),
+            ),
+          VizActionButton(
+            'Reset chart',
+            onPressed: () =>
+                controller.dispatch(vizAction(VizActionType.reset)),
+          ),
+        ],
+      );
 }
 
 DmVizAxis _axisRange(DmVizAxis axis, VizDomain? range) {
@@ -584,16 +584,16 @@ Rect _heatmapBounds(Size size) {
 }
 
 Offset _absolutePosition(Offset position, Rect plot) => Offset(
-  plot.left + position.dx * plot.width,
-  plot.top + position.dy * plot.height,
-);
+      plot.left + position.dx * plot.width,
+      plot.top + position.dy * plot.height,
+    );
 
 Rect _absoluteRect(Rect rect, Rect plot) => Rect.fromLTWH(
-  plot.left + rect.left * plot.width,
-  plot.top + rect.top * plot.height,
-  rect.width * plot.width,
-  rect.height * plot.height,
-);
+      plot.left + rect.left * plot.width,
+      plot.top + rect.top * plot.height,
+      rect.width * plot.width,
+      rect.height * plot.height,
+    );
 
 class _XYPainter extends CustomPainter {
   final VizXYLayout layout;
@@ -644,10 +644,9 @@ class _XYPainter extends CustomPainter {
             (index) => range.$1 * (1 - index / 4) + range.$2 * (index / 4),
           );
     return [
-      for (final value
-          in values
-              .map((value) => normalizeVizAxisValue(value, axis))
-              .whereType<double>())
+      for (final value in values
+          .map((value) => normalizeVizAxisValue(value, axis))
+          .whereType<double>())
         if (value >= range.$1 && value <= range.$2)
           (vizPosition(value, range), formatVizValue(value, axis)),
     ];
@@ -667,9 +666,8 @@ class _XYPainter extends CustomPainter {
     final xTicks = _ticks(xAxis, xDomain, layout.xTicks);
     final yTicks = _ticks(yAxis, yDomain, layout.yTicks);
     final bottomTicks = horizontal ? yTicks : xTicks;
-    final leftTicks = horizontal
-        ? xTicks
-        : yTicks.map((tick) => (1 - tick.$1, tick.$2));
+    final leftTicks =
+        horizontal ? xTicks : yTicks.map((tick) => (1 - tick.$1, tick.$2));
     for (final (fraction, text) in leftTicks) {
       final y = plot.top + fraction * plot.height;
       canvas.drawLine(
@@ -745,9 +743,9 @@ class _XYPainter extends CustomPainter {
     }
 
     Offset absolute(Offset offset) => Offset(
-      plot.left + offset.dx * plot.width,
-      plot.top + offset.dy * plot.height,
-    );
+          plot.left + offset.dx * plot.width,
+          plot.top + offset.dy * plot.height,
+        );
     canvas.save();
     canvas.clipRect(plot);
     final outline = Paint()
@@ -836,19 +834,18 @@ void _drawMarker(
       canvas.drawLine(Offset(0, -radius), Offset(0, radius), paint);
       canvas.restore();
     case DmVizMarkerShape.diamond ||
-        DmVizMarkerShape.triangle ||
-        DmVizMarkerShape.star:
+          DmVizMarkerShape.triangle ||
+          DmVizMarkerShape.star:
       final count = marker.shape == DmVizMarkerShape.triangle
           ? 3
           : marker.shape == DmVizMarkerShape.diamond
-          ? 4
-          : 10;
+              ? 4
+              : 10;
       final path = Path();
       for (var index = 0; index < count; index++) {
         final angle = index * 2 * math.pi / count - math.pi / 2;
         final distance = count == 10 && index.isOdd ? radius * .45 : radius;
-        final vertex =
-            point +
+        final vertex = point +
             Offset(math.cos(angle) * distance, math.sin(angle) * distance);
         if (index == 0) {
           path.moveTo(vertex.dx, vertex.dy);
@@ -939,88 +936,88 @@ class _VizDataOutlet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => VizActionButton(
-    'Show chart data',
-    onPressed: () {
-      final rows = data();
-      var page = 0;
-      final last = math.max(0, (rows.length - 1) ~/ 100);
-      showGeneralDialog<void>(
-        context: context,
-        barrierDismissible: true,
-        barrierLabel: 'Close chart data',
-        pageBuilder: (context, _, _) => Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 480, maxHeight: 360),
-            child: ColoredBox(
-              color: style.background,
-              child: DefaultTextStyle(
-                style: style.labelStyle.copyWith(color: style.text),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: StatefulBuilder(
-                    builder: (context, redraw) {
-                      final displayed = rows
-                          .skip(page * 100)
-                          .take(100)
-                          .toList();
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Semantics(
-                            header: true,
-                            child: Text(
-                              'Chart data (${rows.length})',
-                              style: style.titleStyle,
-                            ),
-                          ),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: displayed.length,
-                              itemBuilder: (context, index) {
-                                final row = displayed[index];
-                                final text = row.raw.entries
-                                    .map(
-                                      (entry) =>
-                                          '${entry.key}: ${entry.value ?? "missing"}',
-                                    )
-                                    .join(', ');
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 3,
-                                  ),
-                                  child: Text('${row.name}: $text'),
-                                );
-                              },
-                            ),
-                          ),
-                          Wrap(
+        'Show chart data',
+        onPressed: () {
+          final rows = data();
+          var page = 0;
+          final last = math.max(0, (rows.length - 1) ~/ 100);
+          showGeneralDialog<void>(
+            context: context,
+            barrierDismissible: true,
+            barrierLabel: 'Close chart data',
+            pageBuilder: (context, _, _) => Center(
+              child: ConstrainedBox(
+                constraints:
+                    const BoxConstraints(maxWidth: 480, maxHeight: 360),
+                child: ColoredBox(
+                  color: style.background,
+                  child: DefaultTextStyle(
+                    style: style.labelStyle.copyWith(color: style.text),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: StatefulBuilder(
+                        builder: (context, redraw) {
+                          final displayed =
+                              rows.skip(page * 100).take(100).toList();
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (page > 0)
-                                VizActionButton(
-                                  'Previous data page',
-                                  onPressed: () => redraw(() => page--),
+                              Semantics(
+                                header: true,
+                                child: Text(
+                                  'Chart data (${rows.length})',
+                                  style: style.titleStyle,
                                 ),
-                              if (page < last)
-                                VizActionButton(
-                                  'Next data page',
-                                  onPressed: () => redraw(() => page++),
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: displayed.length,
+                                  itemBuilder: (context, index) {
+                                    final row = displayed[index];
+                                    final text = row.raw.entries
+                                        .map(
+                                          (entry) =>
+                                              '${entry.key}: ${entry.value ?? "missing"}',
+                                        )
+                                        .join(', ');
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 3,
+                                      ),
+                                      child: Text('${row.name}: $text'),
+                                    );
+                                  },
                                 ),
-                              VizActionButton(
-                                'Close',
-                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                              Wrap(
+                                children: [
+                                  if (page > 0)
+                                    VizActionButton(
+                                      'Previous data page',
+                                      onPressed: () => redraw(() => page--),
+                                    ),
+                                  if (page < last)
+                                    VizActionButton(
+                                      'Next data page',
+                                      onPressed: () => redraw(() => page++),
+                                    ),
+                                  VizActionButton(
+                                    'Close',
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                  ),
+                                ],
                               ),
                             ],
-                          ),
-                        ],
-                      );
-                    },
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       );
-    },
-  );
 }

@@ -6,9 +6,8 @@ class QuantizeScale<R> {
   /// Creates a quantize scale with the given parameters.
   QuantizeScale({
     List<double>? domain,
-    required List<R> range,
-  })  : _domain = domain ?? [0, 1],
-        _range = range;
+    required this._range,
+  }) : _domain = domain ?? [0, 1];
 
   /// The continuous input domain.
   List<double> get domain => List.unmodifiable(_domain);

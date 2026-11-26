@@ -19,3 +19,8 @@ analyzer:
     - windows/**
     - macos/**
     - linux/**
+
+linter:
+  rules:
+    # The workspace formatter currently parses Dart 3.6 syntax.
+    use_null_aware_elements: false

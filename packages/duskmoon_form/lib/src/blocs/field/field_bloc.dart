@@ -119,11 +119,10 @@ abstract class SingleFieldBloc<
     Equality<Value> equality = const DefaultEquality<Never>(),
     required List<Validator<Value>>? validators,
     required List<AsyncValidator<Value>>? asyncValidators,
-    required Duration asyncValidatorDebounceTime,
+    required this._asyncValidatorDebounceTime,
     required State initialState,
   })  : _validators = validators ?? [],
         _asyncValidators = asyncValidators ?? [],
-        _asyncValidatorDebounceTime = asyncValidatorDebounceTime,
         super(initialState) {
     _setUpAsyncValidatorsSubscription();
   }

@@ -26,21 +26,21 @@ Json _read(String path) {
 }
 
 List<DmVizNetworkNode> _nodes(Json chart) => [
-  for (final node in (chart['nodes'] as List).cast<Json>())
-    DmVizNetworkNode(
-      id: node['id'] as String,
-      x: (node['x'] as num).toDouble(),
-      y: (node['y'] as num).toDouble(),
-    ),
-];
+      for (final node in (chart['nodes'] as List).cast<Json>())
+        DmVizNetworkNode(
+          id: node['id'] as String,
+          x: (node['x'] as num).toDouble(),
+          y: (node['y'] as num).toDouble(),
+        ),
+    ];
 List<DmVizNetworkEdge> _edges(Json chart) => [
-  for (final edge in (chart['edges'] as List).cast<Json>())
-    DmVizNetworkEdge(
-      id: edge['id'] as String,
-      source: edge['source'] as String,
-      target: edge['target'] as String,
-    ),
-];
+      for (final edge in (chart['edges'] as List).cast<Json>())
+        DmVizNetworkEdge(
+          id: edge['id'] as String,
+          source: edge['source'] as String,
+          target: edge['target'] as String,
+        ),
+    ];
 
 Offset _point(Object? raw) {
   final values = (raw as List).cast<num>();
@@ -92,8 +92,8 @@ void main() {
           _near(screen(edge.target), points[1], tolerance);
         }
       } else {
-        final padding = ((chart['options'] as Json)['padding'] as num)
-            .toDouble();
+        final padding =
+            ((chart['options'] as Json)['padding'] as num).toDouble();
         final scene = vizMapScene(
           GeoJsonFeatureCollection.fromJson(chart['geoJson'] as Json),
           padding: padding,
@@ -113,9 +113,8 @@ void main() {
         );
         for (final MapEntry(key: key, value: value)
             in (geometry['points'] as Json).entries) {
-          final point = scene.features
-              .firstWhere((feature) => feature.id == key)
-              .point!;
+          final point =
+              scene.features.firstWhere((feature) => feature.id == key).point!;
           _near(normalized(view.forward(point)), value, tolerance);
         }
         final ring = scene.features
@@ -123,11 +122,10 @@ void main() {
             .polygons
             .first
             .first;
-        final y =
-            ring
-                .map((position) => normalized(view.forward(position)).dy)
-                .toList()
-              ..sort();
+        final y = ring
+            .map((position) => normalized(view.forward(position)).dy)
+            .toList()
+          ..sort();
         expect(y.first, closeTo(geometry['outerTop'] as num, tolerance));
         expect(y.last, closeTo(geometry['outerBottom'] as num, tolerance));
         expect(
@@ -159,9 +157,8 @@ void main() {
       final keys = (mutation['path'] as String).split('/').skip(1).toList();
       Object item = chart;
       for (final part in keys.take(keys.length - 1)) {
-        item =
-            (item is List ? item[int.parse(part)] : (item as Json)[part])
-                as Object;
+        item = (item is List ? item[int.parse(part)] : (item as Json)[part])
+            as Object;
       }
       if (item is List) {
         item[int.parse(keys.last)] = mutation['value'];
@@ -255,18 +252,18 @@ void main() {
     for (final action in (input['actions'] as List).cast<Json>()) {
       final next = switch (action['type']) {
         'zoom' => vizAction(
-          VizActionType.zoom,
-          viewport: DmVizViewport.map(
-            _point((action['viewport'] as Json)['center']),
-            ((action['viewport'] as Json)['zoom'] as num).toDouble(),
+            VizActionType.zoom,
+            viewport: DmVizViewport.map(
+              _point((action['viewport'] as Json)['center']),
+              ((action['viewport'] as Json)['zoom'] as num).toDouble(),
+            ),
           ),
-        ),
         'activate' => vizAction(
-          VizActionType.activate,
-          target: DmVizTarget.feature(
-            (action['target'] as Json)['id'] as String,
+            VizActionType.activate,
+            target: DmVizTarget.feature(
+              (action['target'] as Json)['id'] as String,
+            ),
           ),
-        ),
         'reset' => vizAction(VizActionType.reset),
         _ => throw StateError('Unexpected map fixture action'),
       };

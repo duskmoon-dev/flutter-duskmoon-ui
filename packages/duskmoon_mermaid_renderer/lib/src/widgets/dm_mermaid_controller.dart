@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class DmMermaidController extends ChangeNotifier {
-  DmMermaidController({String source = ''}) : _source = source;
+  DmMermaidController({this._source = ''});
 
   String get source => _source;
   String _source;

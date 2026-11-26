@@ -40,10 +40,9 @@ abstract class FormBloc<SuccessResponse, FailureResponse>
 
   FormBloc({
     bool isLoading = false,
-    bool autoValidate = true,
+    this._autoValidate = true,
     bool isEditing = false,
-  })  : _autoValidate = autoValidate,
-        super(
+  }) : super(
           isLoading
               ? FormBlocLoading(isEditing: isEditing, progress: 0.0)
               : FormBlocLoaded(isEditing: isEditing),

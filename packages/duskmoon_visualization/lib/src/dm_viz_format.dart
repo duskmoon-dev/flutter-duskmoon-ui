@@ -21,9 +21,8 @@ bool validVizFormat(DmVizAxis axis) {
   final validStyle = switch (axis.type) {
     DmVizAxisType.numeric => format.style == DmVizFormatStyle.decimal,
     DmVizAxisType.category => format.style == DmVizFormatStyle.label,
-    DmVizAxisType.time =>
-      format.style == DmVizFormatStyle.utcIso ||
-          format.style == DmVizFormatStyle.dateTime,
+    DmVizAxisType.time => format.style == DmVizFormatStyle.utcIso ||
+        format.style == DmVizFormatStyle.dateTime,
   };
   final digits = format.fractionDigits;
   if (!validStyle || (digits != null && (digits < 0 || digits > 12)))

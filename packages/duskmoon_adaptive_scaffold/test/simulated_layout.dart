@@ -149,11 +149,10 @@ enum SimulatedLayout {
   );
 
   const SimulatedLayout({
-    required double width,
-    double height = 2000,
+    required this._width,
+    this._height = 2000,
     required this.navSlotKey,
-  })  : _width = width,
-        _height = height;
+  });
 
   final double _width;
   final double _height;

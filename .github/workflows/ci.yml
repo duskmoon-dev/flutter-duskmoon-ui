@@ -40,13 +40,8 @@ jobs:
           cache: true
       - name: Install dependencies
         run: dart pub get
-      - name: Analyze all packages
-        run: |
-          for pkg in packages/duskmoon_theme packages/duskmoon_theme_bloc packages/duskmoon_widgets packages/duskmoon_settings packages/duskmoon_feedback packages/duskmoon_form packages/duskmoon_ui packages/duskmoon_adaptive_scaffold packages/duskmoon_code_engine packages/duskmoon_visualization packages/duskmoon_mermaid_renderer packages/duskmoon_highlight example/design_preview example/duo_screen; do
-            echo "::group::Analyzing $pkg"
-            (cd $pkg && dart analyze --fatal-infos)
-            echo "::endgroup::"
-          done
+      - name: Analyze the workspace
+        run: dart --disable-dart-dev tool/analyze.dart packages example/design_preview example/duo_screen
 
   native_hook_compatibility:
     name: Native hook (${{ matrix.name }})

@@ -77,8 +77,7 @@ int vizSeriesHash(String id) {
   for (final byte in utf8.encode(id)) {
     final mixed = hash ^ byte;
     // Split the product so Flutter Web can compute it exactly in binary64.
-    hash =
-        ((mixed & 65535) * 16777619 +
+    hash = ((mixed & 65535) * 16777619 +
             (((mixed >>> 16) * 16777619) % 65536) * 65536) %
         4294967296;
   }
@@ -102,8 +101,8 @@ VizDomain? _continuousDomain(
     final padding = time
         ? 1000.0
         : low == 0
-        ? 1.0
-        : low.abs() * 0.05;
+            ? 1.0
+            : low.abs() * 0.05;
     low -= padding;
     high += padding;
   }
@@ -384,10 +383,9 @@ VizXYLayout layoutVizXY({
   for (final (index, source) in series.indexed) {
     final visible = !hidden.contains(source.id);
     final slot = visible ? nextSlot++ : 0;
-    final color =
-        source.color ??
-        colors[(source.paletteSlot ?? vizSeriesHash(source.id)) %
-            colors.length];
+    final color = source.color ??
+        colors[
+            (source.paletteSlot ?? vizSeriesHash(source.id)) % colors.length];
 
     VizPoint? project(_Normalized entry) {
       final (:datum, :x, :y) = entry;
@@ -395,8 +393,7 @@ VizXYLayout layoutVizXY({
           x == null ||
           y == null ||
           xDomain == null ||
-          yDomain == null)
-        return null;
+          yDomain == null) return null;
       final category = x is String ? categoryIndex[x] : null;
       if (x is String && category == null) return null;
       final xRatio = category == null
@@ -448,9 +445,8 @@ VizXYLayout layoutVizXY({
       segments: segments,
     ));
   }
-  final baseline = kind == DmVizChartKind.bar
-      ? (horizontal ? zero : 1 - zero)
-      : null;
+  final baseline =
+      kind == DmVizChartKind.bar ? (horizontal ? zero : 1 - zero) : null;
   return (
     issues: issues,
     xDomain: xDomain,
@@ -527,8 +523,7 @@ VizHeatmapLayout layoutVizHeatmap({
       const DmVizIssue('invalidShape', '/options/theme/heatmapColors'),
     );
   if (issues.isNotEmpty) return (issues: issues, domain: null, cells: []);
-  final constant =
-      explicitDomain == null &&
+  final constant = explicitDomain == null &&
       values.isNotEmpty &&
       values.every((value) => value == values.first);
 

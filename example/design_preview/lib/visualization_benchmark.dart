@@ -103,38 +103,38 @@ class _BenchmarkState extends State<_Benchmark> {
   Future<void> _run() async {
     final cases = {
       'line': (int revision) => DmVizLineChart.series(
-        series: _line,
-        height: _height,
-        options: DmVizOptions(title: 'Line $revision'),
-      ),
+            series: _line,
+            height: _height,
+            options: DmVizOptions(title: 'Line $revision'),
+          ),
       'scatter': (int revision) => DmVizScatterChart.series(
-        series: _scatter,
-        height: _height,
-        options: DmVizOptions(title: 'Scatter $revision'),
-      ),
+            series: _scatter,
+            height: _height,
+            options: DmVizOptions(title: 'Scatter $revision'),
+          ),
       'heatmap': (int revision) => DmVizHeatmap.cells(
-        rows: _categories,
-        columns: _categories,
-        data: _cells,
-        height: _height,
-        options: DmVizOptions(title: 'Heatmap $revision'),
-      ),
+            rows: _categories,
+            columns: _categories,
+            data: _cells,
+            height: _height,
+            options: DmVizOptions(title: 'Heatmap $revision'),
+          ),
       'network': (int revision) => DmVizNetworkGraph.fixed(
-        nodes: _nodes,
-        edges: _edges,
-        height: _height,
-        options: DmVizOptions(title: 'Network $revision'),
-      ),
+            nodes: _nodes,
+            edges: _edges,
+            height: _height,
+            options: DmVizOptions(title: 'Network $revision'),
+          ),
       'map': (int revision) => DmVizMapChart.mercator(
-        geoJson: GeoJsonFeatureCollection.fromJson(
-          widget.map['geoJson'] as Map<String, dynamic>,
-        ),
-        padding:
-            ((widget.map['options'] as Map<String, dynamic>)['padding'] as num)
+            geoJson: GeoJsonFeatureCollection.fromJson(
+              widget.map['geoJson'] as Map<String, dynamic>,
+            ),
+            padding: ((widget.map['options'] as Map<String, dynamic>)['padding']
+                    as num)
                 .toDouble(),
-        height: _height,
-        options: DmVizOptions(title: 'Map $revision'),
-      ),
+            height: _height,
+            options: DmVizOptions(title: 'Map $revision'),
+          ),
     };
     final values = <String, List<Map<String, double>>>{};
     for (final MapEntry(key: name, value: render) in cases.entries) {
@@ -153,8 +153,8 @@ class _BenchmarkState extends State<_Benchmark> {
       'mode': kProfileMode
           ? 'profile'
           : kReleaseMode
-          ? 'release'
-          : 'debug',
+              ? 'release'
+              : 'debug',
       'samples': values,
     });
     // The profile runner reads this record from Chromium's console.
@@ -164,7 +164,7 @@ class _BenchmarkState extends State<_Benchmark> {
 
   @override
   Widget build(BuildContext context) => Align(
-    alignment: Alignment.topLeft,
-    child: SizedBox(width: _width, child: _chart ?? Text(_report)),
-  );
+        alignment: Alignment.topLeft,
+        child: SizedBox(width: _width, child: _chart ?? Text(_report)),
+      );
 }

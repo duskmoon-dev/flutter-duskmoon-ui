@@ -11,14 +11,11 @@ class PointScale<T> {
   PointScale({
     List<T>? domain,
     List<double>? range,
-    double padding = 0,
-    double align = 0.5,
-    bool round = false,
+    this._padding = 0,
+    this._align = 0.5,
+    this._round = false,
   })  : _domain = domain ?? [],
-        _range = range ?? [0, 1],
-        _padding = padding,
-        _align = align,
-        _round = round;
+        _range = range ?? [0, 1];
 
   /// The discrete domain values.
   List<T> get domain => List.unmodifiable(_domain);

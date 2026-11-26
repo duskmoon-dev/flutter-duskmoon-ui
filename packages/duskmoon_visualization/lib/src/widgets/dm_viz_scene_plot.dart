@@ -48,9 +48,8 @@ class _DmVizScenePlotState extends State<DmVizScenePlot> {
 
   Widget _build(BuildContext context, VizChartController controller) {
     final map = widget.map;
-    final network = map == null
-        ? vizNetworkScene(widget.nodes, widget.edges)
-        : null;
+    final network =
+        map == null ? vizNetworkScene(widget.nodes, widget.edges) : null;
     final geo = map == null
         ? null
         : vizMapScene(map, center: widget.center, padding: widget.padding);
@@ -74,8 +73,8 @@ class _DmVizScenePlotState extends State<DmVizScenePlot> {
     final supplied = state.viewport;
     final viewport =
         supplied?.kind == initial?.kind && (supplied?.valid ?? false)
-        ? supplied
-        : initial;
+            ? supplied
+            : initial;
     final paintNodes = <String, (DmVizNetworkNode, Offset)>{
       if (network?.bounds != null)
         for (final node in widget.nodes) node.id: (node, _nodePosition(node)),
@@ -100,10 +99,10 @@ class _DmVizScenePlotState extends State<DmVizScenePlot> {
           display: node.label ?? node.id,
         );
     DmVizTooltipEvent edgeTip(DmVizNetworkEdge edge) => DmVizTooltipEvent(
-      target: DmVizTarget.edge(edge.id!),
-      raw: {'source': edge.source, 'target': edge.target},
-      display: edge.label ?? edge.id!,
-    );
+          target: DmVizTarget.edge(edge.id!),
+          raw: {'source': edge.source, 'target': edge.target},
+          display: edge.label ?? edge.id!,
+        );
     DmVizTooltipEvent featureTip(VizMapFeature feature) {
       final value = feature.source.properties['value'];
       final name = feature.source.properties['name'];
@@ -277,7 +276,8 @@ class _DmVizScenePlotState extends State<DmVizScenePlot> {
             name: feature.id,
             raw: {
               'geometry': feature.source.geometry?.type,
-              'value': ?feature.source.properties['value'],
+              if (feature.source.properties['value'] case final value?)
+                'value': value,
             },
           ),
       ],
@@ -347,9 +347,8 @@ class _ScenePainter extends CustomPainter {
         to,
         paint
           ..color = edge.color ?? style.axis
-          ..strokeWidth = selection.contains(DmVizTarget.edge(edge.id!))
-              ? 4
-              : 1.5,
+          ..strokeWidth =
+              selection.contains(DmVizTarget.edge(edge.id!)) ? 4 : 1.5,
       );
     }
     for (final (node, world) in nodes.values) {

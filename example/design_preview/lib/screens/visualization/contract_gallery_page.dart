@@ -27,52 +27,53 @@ class _ContractGalleryPageState extends State<ContractGalleryPage> {
 
   @override
   Widget build(BuildContext context) => ShowcaseScaffold(
-    selectedIndex: Destinations.indexOf(const Key('Visualization')),
-    appBar: const DmAppBar(
-      title: Text(ContractGalleryPage.name),
-      actions: [PlatformSwitchAction()],
-    ),
-    body: (_) => FutureBuilder(
-      future: _fixtures,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const Center(
-            child: Text('Could not load visualization fixtures'),
-          );
-        }
-        final data = snapshot.data;
-        if (data == null) {
-          return const Center(child: Text('Loading chart fixtures…'));
-        }
-        return ListView.separated(
-          padding: const EdgeInsets.all(16),
-          itemCount: data.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 16),
-          itemBuilder: (context, index) {
-            final entry = data.entries.elementAt(index);
-            return Align(
-              alignment: Alignment.center,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 600),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    contractFixtureChart(entry.value as _Json),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        entry.key,
-                        style: DefaultTextStyle.of(context).style
-                            .copyWith(fontSize: 12),
-                      ),
+        selectedIndex: Destinations.indexOf(const Key('Visualization')),
+        appBar: const DmAppBar(
+          title: Text(ContractGalleryPage.name),
+          actions: [PlatformSwitchAction()],
+        ),
+        body: (_) => FutureBuilder(
+          future: _fixtures,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('Could not load visualization fixtures'),
+              );
+            }
+            final data = snapshot.data;
+            if (data == null) {
+              return const Center(child: Text('Loading chart fixtures…'));
+            }
+            return ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: data.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 16),
+              itemBuilder: (context, index) {
+                final entry = data.entries.elementAt(index);
+                return Align(
+                  alignment: Alignment.center,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 600),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        contractFixtureChart(entry.value as _Json),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            entry.key,
+                            style: DefaultTextStyle.of(context)
+                                .style
+                                .copyWith(fontSize: 12),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             );
           },
-        );
-      },
-    ),
-  );
+        ),
+      );
 }

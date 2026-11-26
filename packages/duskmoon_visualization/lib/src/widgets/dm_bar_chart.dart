@@ -34,14 +34,14 @@ class DmVizBarChart extends StatelessWidget {
     this.yAxisLabel,
     this.cornerRadius = 8,
     this.palette,
-  }) : series = null,
-       xAxis = const DmVizAxis.category(),
-       yAxis = const DmVizAxis.numeric(),
-       options = const DmVizOptions(),
-       interaction = const DmVizInteraction(),
-       height = 300,
-       orientation = DmVizBarOrientation.vertical,
-       categories = const [];
+  })  : series = null,
+        xAxis = const DmVizAxis.category(),
+        yAxis = const DmVizAxis.numeric(),
+        options = const DmVizOptions(),
+        interaction = const DmVizInteraction(),
+        height = 300,
+        orientation = DmVizBarOrientation.vertical,
+        categories = const [];
 
   /// Creates a chart with the shared Visualization Contract defaults.
   const DmVizBarChart.series({
@@ -55,10 +55,10 @@ class DmVizBarChart extends StatelessWidget {
     this.orientation = DmVizBarOrientation.vertical,
     this.categories = const [],
     this.palette,
-  }) : data = const [],
-       xAxisLabel = null,
-       yAxisLabel = null,
-       cornerRadius = 8;
+  })  : data = const [],
+        xAxisLabel = null,
+        yAxisLabel = null,
+        cornerRadius = 8;
 
   @override
   Widget build(BuildContext context) {
