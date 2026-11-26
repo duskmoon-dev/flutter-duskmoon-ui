@@ -1,0 +1,84 @@
+{
+  "network-fixed": {
+    "chart": {
+      "kind": "network",
+      "nodes": [
+        {"id": "west", "x": 0, "y": 0},
+        {"id": "east", "x": 10, "y": 10}
+      ],
+      "edges": [
+        {"id": "link", "source": "west", "target": "east"}
+      ]
+    },
+    "plotSize": [200, 200]
+  },
+  "mercator-fit-holes-and-points": {
+    "chart": {
+      "kind": "map",
+      "geoJson": {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "id": "region",
+            "properties": {},
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [-10, -10],
+                  [10, -10],
+                  [10, 10],
+                  [-10, 10],
+                  [-10, -10]
+                ],
+                [
+                  [-2, -2],
+                  [2, -2],
+                  [2, 2],
+                  [-2, 2],
+                  [-2, -2]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "id": "islands",
+            "properties": {},
+            "geometry": {
+              "type": "MultiPolygon",
+              "coordinates": [
+                [
+                  [
+                    [7, 7],
+                    [8, 7],
+                    [8, 8],
+                    [7, 7]
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "id": "marker",
+            "properties": {},
+            "geometry": {
+              "type": "Point",
+              "coordinates": [5, 0]
+            }
+          }
+        ]
+      },
+      "options": {"padding": 0}
+    },
+    "plotSize": [200, 200],
+    "hitLocations": [
+      [0, 0],
+      [-5, 0],
+      [7.75, 7.25],
+      [5, 0]
+    ]
+  }
+}

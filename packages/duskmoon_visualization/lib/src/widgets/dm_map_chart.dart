@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../dm_chart_palette.dart';
+import '../dm_viz_interaction.dart';
+import '../dm_viz_series.dart';
+import 'dm_viz_scene_plot.dart';
 import '../vendor/dv_geo_core/dv_geo_core.dart';
 import '../vendor/dv_map/dv_map.dart';
 import '../vendor/dv_point/dv_point.dart';
@@ -47,6 +50,13 @@ class DmVizMapChart extends StatelessWidget {
   /// Optional chart palette. When null, derived from the ambient [ThemeData].
   final DmChartPalette? palette;
 
+  final bool _mercator;
+  final DmVizOptions options;
+  final DmVizInteraction interaction;
+  final Offset? center;
+  final double padding;
+  final double height;
+
   const DmVizMapChart({
     super.key,
     required this.geoJson,
@@ -57,10 +67,44 @@ class DmVizMapChart extends StatelessWidget {
     this.antiAlias = true,
     this.onFeatureTap,
     this.palette,
-  });
+  }) : _mercator = false,
+       options = const DmVizOptions(),
+       interaction = const DmVizInteraction(),
+       center = null,
+       padding = 16,
+       height = 300;
+
+  /// Fits an offline GeoJSON collection using the shared Mercator projection.
+  DmVizMapChart.mercator({
+    super.key,
+    required this.geoJson,
+    this.center,
+    this.padding = 16,
+    this.height = 300,
+    this.options = const DmVizOptions(),
+    this.interaction = const DmVizInteraction(),
+    this.palette,
+  }) : _mercator = true,
+       projection = MercatorProjection(),
+       fillColor = null,
+       strokeColor = null,
+       strokeWidth = 1.0,
+       antiAlias = true,
+       onFeatureTap = null;
 
   @override
   Widget build(BuildContext context) {
+    if (_mercator) {
+      return DmVizScenePlot(
+        map: geoJson,
+        center: center,
+        padding: padding,
+        options: options,
+        palette: palette,
+        interaction: interaction,
+        height: height,
+      );
+    }
     final resolvedPalette =
         palette ?? DmChartPalette.fromTheme(Theme.of(context));
     final resolvedFillColor =

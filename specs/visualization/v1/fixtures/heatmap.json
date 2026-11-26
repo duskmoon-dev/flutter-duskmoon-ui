@@ -1,0 +1,52 @@
+{
+  "ordered-continuous-and-missing": {
+    "chart": {
+      "kind": "heatmap",
+      "rows": [
+        {"id": "r2", "label": "r2"},
+        {"id": "r1", "label": "r1"}
+      ],
+      "columns": [
+        {"id": "c1", "label": "c1"},
+        {"id": "c2", "label": "c2"},
+        {"id": "c3", "label": "c3"}
+      ],
+      "cells": [
+        {"id": "low", "rowId": "r2", "columnId": "c1", "value": -2},
+        {"id": "zero", "rowId": "r2", "columnId": "c2", "value": 0},
+        {"id": "missing", "rowId": "r2", "columnId": "c3", "value": null},
+        {"id": "half", "rowId": "r1", "columnId": "c1", "value": 1},
+        {"id": "high", "rowId": "r1", "columnId": "c2", "value": 2}
+      ],
+      "options": {
+        "theme": {
+          "missing": "#123456",
+          "heatmapColors": ["#000000", "#FF0000", "#FFFFFF"]
+        }
+      }
+    }
+  },
+  "constant-samples-middle": {
+    "chart": {
+      "kind": "heatmap",
+      "rows": [
+        {"id": "r2", "label": "r2"},
+        {"id": "r1", "label": "r1"}
+      ],
+      "columns": [
+        {"id": "c1", "label": "c1"},
+        {"id": "c2", "label": "c2"},
+        {"id": "c3", "label": "c3"}
+      ],
+      "cells": [
+        {"id": "low", "rowId": "r2", "columnId": "c1", "value": -2}
+      ],
+      "options": {
+        "theme": {
+          "missing": "#123456",
+          "heatmapColors": ["#000000", "#FF0000", "#FFFFFF"]
+        }
+      }
+    }
+  }
+}

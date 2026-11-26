@@ -41,6 +41,7 @@ class DmVizNetworkNode {
 
 /// Public data model for a DuskMoon network edge.
 class DmVizNetworkEdge {
+  final String? id;
   final String source;
   final String target;
   final double weight;
@@ -51,6 +52,7 @@ class DmVizNetworkEdge {
   final Map<String, dynamic>? metadata;
 
   const DmVizNetworkEdge({
+    this.id,
     required this.source,
     required this.target,
     this.weight = 1,

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../destination.dart';
 import '../../showcase_scaffold.dart';
 import 'chart_gallery_page.dart';
+import 'contract_gallery_page.dart';
 import 'geo_gallery_page.dart';
 import 'interactions_page.dart';
 import 'lines_bars_page.dart';
@@ -52,9 +53,16 @@ class _VisualizationBody extends StatelessWidget {
         const SizedBox(height: 16),
         const _VisualizationModuleCard(
           icon: Icons.show_chart_outlined,
-          title: 'DmViz Charts',
-          description:
-              'DuskMoon-native curated chart wrappers (line, bar, scatter, heatmap, network).',
+          title: 'Shared Chart Fixtures',
+          description: 'The six chart families using the same fixture IDs as the Web gallery.',
+          tags: ['Line', 'Bar', 'Scatter', 'Heatmap', 'Network', 'Map'],
+          routeName: ContractGalleryPage.name,
+        ),
+        const SizedBox(height: 12),
+        const _VisualizationModuleCard(
+          icon: Icons.show_chart_outlined,
+          title: 'Legacy DmViz Examples',
+          description: 'DuskMoon-native curated chart wrappers (line, bar, scatter, heatmap, network).',
           tags: ['DmViz', 'Theme-aware', '5 types'],
           routeName: ChartGalleryPage.name,
         ),
@@ -158,10 +166,7 @@ class _VisualizationModuleCard extends StatelessWidget {
               runSpacing: 8,
               children: [
                 for (final tag in tags)
-                  Chip(
-                    label: Text(tag),
-                    visualDensity: VisualDensity.compact,
-                  ),
+                  Chip(label: Text(tag), visualDensity: VisualDensity.compact),
               ],
             ),
             const SizedBox(height: 16),

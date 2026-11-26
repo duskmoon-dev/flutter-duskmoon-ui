@@ -1,0 +1,39 @@
+{
+  "dst-and-month-boundary": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {
+        "type": "time",
+        "format": {"style": "date-time", "locale": "en-US", "timeZone": "America/New_York"}
+      },
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": "2026-11-01T01:30:00-04:00", "y": 1},
+            {"id": "q", "x": "2026-11-01T01:30:00-05:00", "y": 2},
+            {"id": "r", "x": "2026-10-31T23:30:00-04:00", "y": 3}
+          ]
+        }
+      ]
+    }
+  },
+  "constant": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {"type": "time"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": 0, "y": 0}
+          ]
+        }
+      ]
+    }
+  }
+}

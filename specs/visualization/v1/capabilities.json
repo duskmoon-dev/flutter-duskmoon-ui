@@ -1,0 +1,79 @@
+{
+  "version": "1.0.0",
+  "status": {
+    "web": "verified",
+    "flutter": "verified"
+  },
+  "shared": {
+    "required": {
+      "tooltip": "P2",
+      "selectionAndClear": "P2",
+      "controlledState": "P2",
+      "keyboardTouchAndAccessibleData": "P4",
+      "loadingEmptyAndError": "P1"
+    }
+  },
+  "components": {
+    "DmVizLineChart": {
+      "required": {
+        "multiSeries": "P1",
+        "numericTimeCategoryX": "P1",
+        "missingValueGaps": "P1",
+        "axesAndLegend": "P1",
+        "markerOptions": "P1",
+        "legendVisibility": "P2",
+        "numericTimeXZoom": "P2",
+        "numericTimeXBrush": "P2"
+      },
+      "extension": ["categoryXBrush", "area", "advancedCurves", "sampling", "liveFollow"]
+    },
+    "DmVizBarChart": {
+      "required": {
+        "groupedSeries": "P1",
+        "verticalAndHorizontal": "P1",
+        "axesAndLegend": "P1",
+        "negativeValuesAndZeroBaseline": "P1",
+        "legendVisibility": "P2"
+      },
+      "extension": ["stacked", "percentStacked", "waterfall", "viewport", "brush"]
+    },
+    "DmVizScatterChart": {
+      "required": {
+        "numericXY": "P1",
+        "stablePointIdentity": "P1",
+        "seriesColorsAndMarkers": "P1",
+        "xyZoom": "P2"
+      },
+      "extension": ["xyBrush", "density", "sampling"]
+    },
+    "DmVizHeatmap": {
+      "required": {
+        "orderedRowsAndColumns": "P1",
+        "continuousColorAndLegend": "P1",
+        "missingCells": "P1"
+      },
+      "extension": ["viewport", "brush", "clustering", "interpolation", "largeGrid"]
+    },
+    "DmVizNetworkGraph": {
+      "required": {
+        "fixedLayoutAndStableIds": "P3",
+        "tooltip": "P3",
+        "nodeAndEdgeSelection": "P3",
+        "panZoomAndReset": "P3",
+        "nodeDrag": "P3"
+      },
+      "extension": ["forceLayout", "automaticLayout", "largeGraphEditing"]
+    },
+    "DmVizMapChart": {
+      "required": {
+        "offlineGeoJsonWithStableIds": "P3",
+        "mercatorFitAndCenter": "P3",
+        "polygonsWithHolesAndPoints": "P3",
+        "tooltip": "P3",
+        "featureSelection": "P3",
+        "panZoomAndReset": "P3"
+      },
+      "extension": ["otherProjections", "tiles", "geocoding", "antimeridian"]
+    }
+  }
+}

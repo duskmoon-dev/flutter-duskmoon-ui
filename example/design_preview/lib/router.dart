@@ -13,6 +13,7 @@ import 'screens/scaffold/scaffold_screen.dart';
 import 'screens/settings/settings_screen.dart';
 import 'screens/theme/theme_screen.dart';
 import 'screens/visualization/chart_gallery_page.dart';
+import 'screens/visualization/contract_gallery_page.dart';
 import 'screens/visualization/geo_gallery_page.dart';
 import 'screens/visualization/geo_map_page.dart';
 import 'screens/visualization/interactive_chart_page.dart';
@@ -142,6 +143,14 @@ class AppRouter {
         child: const VisualizationScreen(),
       ),
       routes: [
+        GoRoute(
+          name: ContractGalleryPage.name,
+          path: ContractGalleryPage.path,
+          pageBuilder: (context, state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const ContractGalleryPage(),
+          ),
+        ),
         GoRoute(
           name: ChartGalleryPage.name,
           path: ChartGalleryPage.path,

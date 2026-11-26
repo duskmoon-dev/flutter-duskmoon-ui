@@ -1,0 +1,444 @@
+{
+  "nan": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "first", "x": 2, "y": 0},
+            {"id": "gap", "x": 0, "y": null},
+            {"id": "second", "x": 2, "y": 5},
+            {"id": "last", "x": 1, "y": 10}
+          ]
+        }
+      ]
+    },
+    "mutations": [
+      {
+        "path": "/series/0/data/0/y",
+        "value": {"nativeNumber": "NaN"}
+      }
+    ]
+  },
+  "positive-infinity": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "first", "x": 2, "y": 0},
+            {"id": "gap", "x": 0, "y": null},
+            {"id": "second", "x": 2, "y": 5},
+            {"id": "last", "x": 1, "y": 10}
+          ]
+        }
+      ]
+    },
+    "mutations": [
+      {
+        "path": "/series/0/data/0/y",
+        "value": {"nativeNumber": "+Infinity"}
+      }
+    ]
+  },
+  "negative-infinity": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "first", "x": 2, "y": 0},
+            {"id": "gap", "x": 0, "y": null},
+            {"id": "second", "x": 2, "y": 5},
+            {"id": "last", "x": 1, "y": 10}
+          ]
+        }
+      ]
+    },
+    "mutations": [
+      {
+        "path": "/series/0/data/0/y",
+        "value": {"nativeNumber": "-Infinity"}
+      }
+    ]
+  },
+  "no-offset": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {
+        "type": "time",
+        "format": {"style": "date-time", "locale": "en-US", "timeZone": "America/New_York"}
+      },
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": "2026-11-01T01:30:00-04:00", "y": 1},
+            {"id": "q", "x": "2026-11-01T01:30:00-05:00", "y": 2},
+            {"id": "r", "x": "2026-10-31T23:30:00-04:00", "y": 3}
+          ]
+        }
+      ]
+    },
+    "mutations": [
+      {"path": "/series/0/data/0/x", "value": "2026-11-01T01:30:00"}
+    ]
+  },
+  "invalid-day": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {
+        "type": "time",
+        "format": {"style": "date-time", "locale": "en-US", "timeZone": "America/New_York"}
+      },
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": "2026-11-01T01:30:00-04:00", "y": 1},
+            {"id": "q", "x": "2026-11-01T01:30:00-05:00", "y": 2},
+            {"id": "r", "x": "2026-10-31T23:30:00-04:00", "y": 3}
+          ]
+        }
+      ]
+    },
+    "mutations": [
+      {"path": "/series/0/data/0/x", "value": "2026-02-30T01:30:00Z"}
+    ]
+  },
+  "invalid-offset": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {
+        "type": "time",
+        "format": {"style": "date-time", "locale": "en-US", "timeZone": "America/New_York"}
+      },
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": "2026-11-01T01:30:00-04:00", "y": 1},
+            {"id": "q", "x": "2026-11-01T01:30:00-05:00", "y": 2},
+            {"id": "r", "x": "2026-10-31T23:30:00-04:00", "y": 3}
+          ]
+        }
+      ]
+    },
+    "mutations": [
+      {"path": "/series/0/data/0/x", "value": "2026-11-01T01:30:00+24:00"}
+    ]
+  },
+  "duplicate-series": {
+    "chart": {
+      "kind": "bar",
+      "xAxis": {"type": "category"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "a1", "x": "june", "y": 6},
+            {"id": "a2", "x": "may", "y": -2}
+          ]
+        },
+        {
+          "id": "b",
+          "name": "b",
+          "data": [
+            {"id": "b1", "x": "june", "y": 2},
+            {"id": "b2", "x": "may", "y": 0}
+          ]
+        }
+      ],
+      "categories": [
+        {"id": "may", "label": "某个非常长的重复分类标题"},
+        {"id": "june", "label": "某个非常长的重复分类标题"}
+      ]
+    },
+    "mutations": [
+      {"path": "/series/1/id", "value": "a"}
+    ]
+  },
+  "duplicate-datum": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "first", "x": 2, "y": 0},
+            {"id": "gap", "x": 0, "y": null},
+            {"id": "second", "x": 2, "y": 5},
+            {"id": "last", "x": 1, "y": 10}
+          ]
+        }
+      ]
+    },
+    "mutations": [
+      {"path": "/series/0/data/2/id", "value": "first"}
+    ]
+  },
+  "unordered-domain": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "first", "x": 2, "y": 0},
+            {"id": "gap", "x": 0, "y": null},
+            {"id": "second", "x": 2, "y": 5},
+            {"id": "last", "x": 1, "y": 10}
+          ]
+        }
+      ]
+    },
+    "mutations": [
+      {
+        "path": "/yAxis/domain",
+        "value": [10, 0]
+      }
+    ]
+  },
+  "unknown-node": {
+    "chart": {
+      "kind": "network",
+      "nodes": [
+        {"id": "west", "x": 0, "y": 0},
+        {"id": "east", "x": 10, "y": 10}
+      ],
+      "edges": [
+        {"id": "link", "source": "west", "target": "east"}
+      ]
+    },
+    "mutations": [
+      {"path": "/edges/0/target", "value": "missing"}
+    ]
+  },
+  "unknown-row": {
+    "chart": {
+      "kind": "heatmap",
+      "rows": [
+        {"id": "r2", "label": "r2"},
+        {"id": "r1", "label": "r1"}
+      ],
+      "columns": [
+        {"id": "c1", "label": "c1"},
+        {"id": "c2", "label": "c2"},
+        {"id": "c3", "label": "c3"}
+      ],
+      "cells": [
+        {"id": "low", "rowId": "r2", "columnId": "c1", "value": -2},
+        {"id": "zero", "rowId": "r2", "columnId": "c2", "value": 0},
+        {"id": "missing", "rowId": "r2", "columnId": "c3", "value": null},
+        {"id": "half", "rowId": "r1", "columnId": "c1", "value": 1},
+        {"id": "high", "rowId": "r1", "columnId": "c2", "value": 2}
+      ],
+      "options": {
+        "theme": {
+          "missing": "#123456",
+          "heatmapColors": ["#000000", "#FF0000", "#FFFFFF"]
+        }
+      }
+    },
+    "mutations": [
+      {"path": "/cells/0/rowId", "value": "missing"}
+    ]
+  },
+  "duplicate-cell-position": {
+    "chart": {
+      "kind": "heatmap",
+      "rows": [
+        {"id": "r2", "label": "r2"},
+        {"id": "r1", "label": "r1"}
+      ],
+      "columns": [
+        {"id": "c1", "label": "c1"},
+        {"id": "c2", "label": "c2"},
+        {"id": "c3", "label": "c3"}
+      ],
+      "cells": [
+        {"id": "low", "rowId": "r2", "columnId": "c1", "value": -2},
+        {"id": "zero", "rowId": "r2", "columnId": "c2", "value": 0},
+        {"id": "missing", "rowId": "r2", "columnId": "c3", "value": null},
+        {"id": "half", "rowId": "r1", "columnId": "c1", "value": 1},
+        {"id": "high", "rowId": "r1", "columnId": "c2", "value": 2}
+      ],
+      "options": {
+        "theme": {
+          "missing": "#123456",
+          "heatmapColors": ["#000000", "#FF0000", "#FFFFFF"]
+        }
+      }
+    },
+    "mutations": [
+      {"path": "/cells/1/columnId", "value": "c1"}
+    ]
+  },
+  "invalid-latitude": {
+    "chart": {
+      "kind": "map",
+      "geoJson": {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "id": "region",
+            "properties": {},
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [-10, -10],
+                  [10, -10],
+                  [10, 10],
+                  [-10, 10],
+                  [-10, -10]
+                ],
+                [
+                  [-2, -2],
+                  [2, -2],
+                  [2, 2],
+                  [-2, 2],
+                  [-2, -2]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "id": "islands",
+            "properties": {},
+            "geometry": {
+              "type": "MultiPolygon",
+              "coordinates": [
+                [
+                  [
+                    [7, 7],
+                    [8, 7],
+                    [8, 8],
+                    [7, 7]
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "id": "marker",
+            "properties": {},
+            "geometry": {
+              "type": "Point",
+              "coordinates": [5, 0]
+            }
+          }
+        ]
+      },
+      "options": {"padding": 0}
+    },
+    "mutations": [
+      {
+        "path": "/geoJson/features/2/geometry/coordinates",
+        "value": [0, 86]
+      }
+    ]
+  },
+  "date-line-crossing": {
+    "chart": {
+      "kind": "map",
+      "geoJson": {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "id": "region",
+            "properties": {},
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [-10, -10],
+                  [10, -10],
+                  [10, 10],
+                  [-10, 10],
+                  [-10, -10]
+                ],
+                [
+                  [-2, -2],
+                  [2, -2],
+                  [2, 2],
+                  [-2, 2],
+                  [-2, -2]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "id": "islands",
+            "properties": {},
+            "geometry": {
+              "type": "MultiPolygon",
+              "coordinates": [
+                [
+                  [
+                    [7, 7],
+                    [8, 7],
+                    [8, 8],
+                    [7, 7]
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "id": "marker",
+            "properties": {},
+            "geometry": {
+              "type": "Point",
+              "coordinates": [5, 0]
+            }
+          }
+        ]
+      },
+      "options": {"padding": 0}
+    },
+    "mutations": [
+      {
+        "path": "/geoJson/features/0/geometry/coordinates/0",
+        "value": [
+          [170, -10],
+          [-170, -10],
+          [-170, 10],
+          [170, -10]
+        ]
+      }
+    ]
+  }
+}

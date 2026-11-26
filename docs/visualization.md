@@ -6,6 +6,7 @@ The `duskmoon_visualization` package provides six chart widgets that automatical
 
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [Shared Contract](#shared-contract)
 - [Line Chart](#line-chart)
 - [Bar Chart](#bar-chart)
 - [Scatter Chart](#scatter-chart)
@@ -53,6 +54,22 @@ DmVizLineChart(
 ```
 
 Charts automatically pick up colors from `Theme.of(context)` via `DmChartPalette.fromTheme()`.
+
+## Shared Contract
+
+For data shared with the Web React charts, use Line, Bar, and Scatter's
+`.series` constructors, `DmVizHeatmap.cells`, `DmVizNetworkGraph.fixed`, and
+`DmVizMapChart.mercator`. Assign stable IDs and use null for a missing
+measurement. Line can use numerical, categorical, and time axes. Network uses
+caller-supplied coordinates. The offline map accepts Polygon, MultiPolygon,
+and Point features within the contract's Mercator range.
+
+The shared constructors expose hover and tap tooltips, keyboard navigation,
+selection, and a raw-data outlet. Use `DmVizInteraction` to listen for events
+and own selection, visibility, or viewport state. Use the design preview's
+`/visualization/shared-charts` route to inspect the same fixtures used by Web.
+See the [migration guide](visualization-migration.md#migrating-to-the-shared-chart-contract)
+for API mappings and snapshot verification.
 
 ## Line Chart
 

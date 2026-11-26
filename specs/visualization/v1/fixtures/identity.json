@@ -1,0 +1,237 @@
+{
+  "original": {
+    "chart": {
+      "kind": "scatter",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": 0, "y": 0}
+          ]
+        },
+        {
+          "id": "数据",
+          "name": "数据",
+          "data": [
+            {"id": "p", "x": 10, "y": 10}
+          ]
+        },
+        {
+          "id": "slot",
+          "name": "slot",
+          "data": [
+            {"id": "p", "x": 1, "y": 1}
+          ],
+          "paletteSlot": 4
+        },
+        {
+          "id": "explicit",
+          "name": "explicit",
+          "data": [
+            {"id": "p", "x": 2, "y": 2, "color": "#123456"}
+          ],
+          "color": "#ABCDEF",
+          "paletteSlot": 2
+        }
+      ],
+      "options": {
+        "theme": {
+          "seriesColors": ["#112233", "#445566", "#778899"]
+        },
+        "hiddenSeriesIds": [],
+        "domainAfterHide": "all"
+      }
+    }
+  },
+  "hidden-reordered": {
+    "chart": {
+      "kind": "scatter",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "explicit",
+          "name": "explicit",
+          "data": [
+            {"id": "p", "x": 2, "y": 2, "color": "#123456"}
+          ],
+          "color": "#ABCDEF",
+          "paletteSlot": 2
+        },
+        {
+          "id": "slot",
+          "name": "slot",
+          "data": [
+            {"id": "p", "x": 1, "y": 1}
+          ],
+          "paletteSlot": 4
+        },
+        {
+          "id": "数据",
+          "name": "数据",
+          "data": [
+            {"id": "p", "x": 10, "y": 10}
+          ]
+        },
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": 0, "y": 0}
+          ]
+        }
+      ],
+      "options": {
+        "theme": {
+          "seriesColors": ["#112233", "#445566", "#778899"]
+        },
+        "hiddenSeriesIds": ["数据"],
+        "domainAfterHide": "all"
+      }
+    }
+  },
+  "visible-domain": {
+    "chart": {
+      "kind": "scatter",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "explicit",
+          "name": "explicit",
+          "data": [
+            {"id": "p", "x": 2, "y": 2, "color": "#123456"}
+          ],
+          "color": "#ABCDEF",
+          "paletteSlot": 2
+        },
+        {
+          "id": "slot",
+          "name": "slot",
+          "data": [
+            {"id": "p", "x": 1, "y": 1}
+          ],
+          "paletteSlot": 4
+        },
+        {
+          "id": "数据",
+          "name": "数据",
+          "data": [
+            {"id": "p", "x": 10, "y": 10}
+          ]
+        },
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": 0, "y": 0}
+          ]
+        }
+      ],
+      "options": {
+        "theme": {
+          "seriesColors": ["#112233", "#445566", "#778899"]
+        },
+        "hiddenSeriesIds": ["数据"],
+        "domainAfterHide": "visible"
+      }
+    }
+  },
+  "filtered": {
+    "chart": {
+      "kind": "scatter",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "数据",
+          "name": "数据",
+          "data": [
+            {"id": "p", "x": 10, "y": 10}
+          ]
+        },
+        {
+          "id": "slot",
+          "name": "slot",
+          "data": [
+            {"id": "p", "x": 1, "y": 1}
+          ],
+          "paletteSlot": 4
+        },
+        {
+          "id": "explicit",
+          "name": "explicit",
+          "data": [
+            {"id": "p", "x": 2, "y": 2, "color": "#123456"}
+          ],
+          "color": "#ABCDEF",
+          "paletteSlot": 2
+        }
+      ],
+      "options": {
+        "theme": {
+          "seriesColors": ["#112233", "#445566", "#778899"]
+        },
+        "hiddenSeriesIds": [],
+        "domainAfterHide": "all"
+      }
+    }
+  },
+  "restored-inserted": {
+    "chart": {
+      "kind": "scatter",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "new",
+          "name": "new",
+          "data": [
+            {"id": "p", "x": 3, "y": 3}
+          ]
+        },
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": 0, "y": 0}
+          ]
+        },
+        {
+          "id": "数据",
+          "name": "数据",
+          "data": [
+            {"id": "p", "x": 10, "y": 10}
+          ]
+        },
+        {
+          "id": "slot",
+          "name": "slot",
+          "data": [
+            {"id": "p", "x": 1, "y": 1}
+          ],
+          "paletteSlot": 4
+        },
+        {
+          "id": "explicit",
+          "name": "explicit",
+          "data": [
+            {"id": "p", "x": 2, "y": 2, "color": "#123456"}
+          ],
+          "color": "#ABCDEF",
+          "paletteSlot": 2
+        }
+      ],
+      "options": {
+        "theme": {
+          "seriesColors": ["#112233", "#445566", "#778899"]
+        },
+        "hiddenSeriesIds": [],
+        "domainAfterHide": "all"
+      }
+    }
+  }
+}

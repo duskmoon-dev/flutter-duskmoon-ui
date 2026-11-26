@@ -1,0 +1,86 @@
+{
+  "version": "1.0.0",
+  "source": "https://github.com/duskmoon-dev/duskmoon-web",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "22ba72f8aefa159be2b0af4d2ac395b7d73aa7e78dfb6a7299ccb5460d934663"
+    },
+    {
+      "path": "capabilities.json",
+      "sha256": "bc52379cd0081eebc8f62df128ffa231953cdcd74f1efef47bcb3699b1435d3e"
+    },
+    {
+      "path": "contract.md",
+      "sha256": "c66e00ad10435d0c498761a24cf741510744e7329953f856c2189d62ed25e687"
+    },
+    {
+      "path": "expected/heatmap.json",
+      "sha256": "70be985791d52ee8d492e00f7b90aab9b11a5f1034b44b90dbec8eb558f7226a"
+    },
+    {
+      "path": "expected/identity.json",
+      "sha256": "ef349fe84cbec2980ef328f76ffa8ed73bd6957aefb8f79e622217f5296e4f05"
+    },
+    {
+      "path": "expected/interaction.json",
+      "sha256": "84621511a033f2d71349a27fd3be14037bf80b7ea0f55f98b1237e63a9d62c18"
+    },
+    {
+      "path": "expected/scenes.json",
+      "sha256": "0ed27631c4b3fda8d33d665282858645c97aa234ee61b1f76ce0e802665a3713"
+    },
+    {
+      "path": "expected/time.json",
+      "sha256": "93d9cf5b9fca3d524c5f63a75e50350b8a1bb50a18e4464c8b6882df810cbcdc"
+    },
+    {
+      "path": "expected/validation.json",
+      "sha256": "6c7e4c63eb6dd45b80ba504b90264ed1c13c3cdb707d8caf30d79a9a1dc049ee"
+    },
+    {
+      "path": "expected/xy.json",
+      "sha256": "bf32b565ba11813112bf15d8f6b0eec975598031334ef09abeed238265988b38"
+    },
+    {
+      "path": "fixtures/heatmap.json",
+      "sha256": "6a57d1b8d10e4a88954676ee29420684307ca90d3d4d0701415615e499049d25"
+    },
+    {
+      "path": "fixtures/identity.json",
+      "sha256": "f2c21e50910bfef3e43600df1ab97abaf5699aef5e9f6b6848d25d981e0cf09d"
+    },
+    {
+      "path": "fixtures/interaction.json",
+      "sha256": "23c431e73ae624ec718884ecc3b5d7a1f43d4d46a0f0f3562c29d578857ddf41"
+    },
+    {
+      "path": "fixtures/scenes.json",
+      "sha256": "1848932235ad0e6f897f37876a60c1f022ce498e7ee239e34324072d756d2582"
+    },
+    {
+      "path": "fixtures/time.json",
+      "sha256": "1ed3bbb3ed66d454d406a3150ad0309444899c6f9400e369912289a23e8ba330"
+    },
+    {
+      "path": "fixtures/validation.json",
+      "sha256": "29c0b5da84a67ba3cd8f117170e90972151b44368946350711ce3614531f1adc"
+    },
+    {
+      "path": "fixtures/xy.json",
+      "sha256": "076656a4fa99a1bbd9c644854ed79ecca1f13b95a2593b42250c1f39f73b4505"
+    },
+    {
+      "path": "schema/chart.schema.json",
+      "sha256": "9cd8f6b17a91cdd76630bc2f22a5faecbc7376a11f3c35c25e042d0b316d9347"
+    },
+    {
+      "path": "schema/event.schema.json",
+      "sha256": "4f34e981db1213e7d3b1d485c2109f62a3e702d73757ed584cb02aa450049479"
+    },
+    {
+      "path": "verify.mjs",
+      "sha256": "3b62646c92dd646525c9774daf89a92e57b8621f9c066d61901f45da000de9bd"
+    }
+  ]
+}

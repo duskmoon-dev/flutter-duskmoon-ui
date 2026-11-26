@@ -1,0 +1,285 @@
+{
+  "line-input-order-gap-and-repeated-x": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "first", "x": 2, "y": 0},
+            {"id": "gap", "x": 0, "y": null},
+            {"id": "second", "x": 2, "y": 5},
+            {"id": "last", "x": 1, "y": 10}
+          ]
+        }
+      ]
+    }
+  },
+  "line-connect-and-sort": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "first", "x": 2, "y": 0},
+            {"id": "gap", "x": 0, "y": null},
+            {"id": "second", "x": 2, "y": 5},
+            {"id": "last", "x": 1, "y": 10}
+          ]
+        }
+      ],
+      "options": {"connectMissing": true, "sortX": true}
+    }
+  },
+  "empty": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": []
+        }
+      ]
+    }
+  },
+  "all-null": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": 2, "y": null}
+          ]
+        }
+      ]
+    }
+  },
+  "constant-0": {
+    "chart": {
+      "kind": "scatter",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": 0, "y": 0}
+          ]
+        }
+      ]
+    }
+  },
+  "constant--10": {
+    "chart": {
+      "kind": "scatter",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": -10, "y": -10}
+          ]
+        }
+      ]
+    }
+  },
+  "explicit-clip": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {
+        "type": "numeric",
+        "domain": [1.25, 3],
+        "includeZero": true,
+        "nice": true,
+        "tickValues": [3, 0, 2]
+      },
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "first", "x": 2, "y": 0},
+            {"id": "gap", "x": 0, "y": null},
+            {"id": "second", "x": 2, "y": 5},
+            {"id": "last", "x": 1, "y": 10}
+          ]
+        }
+      ]
+    }
+  },
+  "nice-negative-span": {
+    "chart": {
+      "kind": "scatter",
+      "xAxis": {"type": "numeric", "nice": true},
+      "yAxis": {"type": "numeric", "includeZero": true},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": -2.2, "y": 3},
+            {"id": "q", "x": 7.1, "y": 3}
+          ]
+        }
+      ]
+    }
+  },
+  "scatter-missing": {
+    "chart": {
+      "kind": "scatter",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": 1, "y": 2},
+            {"id": "missing-x", "x": null, "y": 300},
+            {"id": "missing-y", "x": 900, "y": null}
+          ]
+        }
+      ]
+    }
+  },
+  "bar-grouped-vertical": {
+    "chart": {
+      "kind": "bar",
+      "xAxis": {"type": "category"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "a1", "x": "june", "y": 6},
+            {"id": "a2", "x": "may", "y": -2}
+          ]
+        },
+        {
+          "id": "b",
+          "name": "b",
+          "data": [
+            {"id": "b1", "x": "june", "y": 2},
+            {"id": "b2", "x": "may", "y": 0}
+          ]
+        }
+      ],
+      "categories": [
+        {"id": "may", "label": "某个非常长的重复分类标题"},
+        {"id": "june", "label": "某个非常长的重复分类标题"}
+      ]
+    }
+  },
+  "bar-grouped-horizontal": {
+    "chart": {
+      "kind": "bar",
+      "xAxis": {
+        "type": "category",
+        "domain": ["may", "june"]
+      },
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "a1", "x": "june", "y": 6},
+            {"id": "a2", "x": "may", "y": -2}
+          ]
+        },
+        {
+          "id": "b",
+          "name": "b",
+          "data": [
+            {"id": "b1", "x": "june", "y": 2},
+            {"id": "b2", "x": "may", "y": 0}
+          ]
+        }
+      ],
+      "categories": [
+        {"id": "may", "label": "某个非常长的重复分类标题"},
+        {"id": "june", "label": "某个非常长的重复分类标题"}
+      ],
+      "options": {"orientation": "horizontal"}
+    }
+  },
+  "bar-single-positive": {
+    "chart": {
+      "kind": "bar",
+      "xAxis": {"type": "category"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": "may", "y": 5}
+          ]
+        }
+      ]
+    }
+  },
+  "bar-missing-slot": {
+    "chart": {
+      "kind": "bar",
+      "xAxis": {"type": "category"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": "may", "y": null}
+          ]
+        },
+        {
+          "id": "b",
+          "name": "b",
+          "data": [
+            {"id": "q", "x": "may", "y": 5}
+          ]
+        }
+      ]
+    }
+  },
+  "category-line-explicit-order": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {
+        "type": "category",
+        "domain": ["b", "a"]
+      },
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "s",
+          "name": "series",
+          "data": [
+            {"id": "A", "x": "a", "y": 1},
+            {"id": "B", "x": "b", "y": 2},
+            {"id": "C", "x": "c", "y": 8}
+          ]
+        }
+      ]
+    }
+  }
+}

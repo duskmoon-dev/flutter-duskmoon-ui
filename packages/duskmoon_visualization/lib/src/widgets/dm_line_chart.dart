@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 
 import '../dm_chart_models.dart';
 import '../dm_chart_palette.dart';
+import '../dm_viz_interaction.dart';
+import '../dm_viz_layout.dart';
+import '../dm_viz_series.dart';
+import 'dm_viz_series_plot.dart';
 import '../vendor/dv_scale/dv_scale.dart';
 import '../vendor/dv_xychart/dv_xychart.dart';
 
@@ -16,6 +20,17 @@ class DmVizLineChart extends StatelessWidget {
   final bool showMarkers;
   final DmChartPalette? palette;
 
+  final List<DmVizSeries>? series;
+  final DmVizAxis xAxis;
+  final DmVizAxis yAxis;
+  final DmVizOptions options;
+  final DmVizInteraction interaction;
+  final double height;
+  final bool connectMissing;
+  final bool sortX;
+  final DmVizMarker marker;
+  final List<DmVizCategory> categories;
+
   const DmVizLineChart({
     super.key,
     required this.data,
@@ -25,10 +40,57 @@ class DmVizLineChart extends StatelessWidget {
     this.smooth = true,
     this.showMarkers = true,
     this.palette,
-  });
+  }) : series = null,
+       xAxis = const DmVizAxis.numeric(),
+       yAxis = const DmVizAxis.numeric(),
+       options = const DmVizOptions(),
+       interaction = const DmVizInteraction(),
+       height = 300,
+       connectMissing = false,
+       sortX = false,
+       marker = const DmVizMarker(),
+       categories = const [];
+
+  /// Creates a chart with the shared Visualization Contract defaults.
+  const DmVizLineChart.series({
+    super.key,
+    required List<DmVizSeries> this.series,
+    this.xAxis = const DmVizAxis.numeric(),
+    this.yAxis = const DmVizAxis.numeric(),
+    this.options = const DmVizOptions(),
+    this.interaction = const DmVizInteraction(),
+    this.height = 300,
+    this.connectMissing = false,
+    this.sortX = false,
+    this.marker = const DmVizMarker(),
+    this.categories = const [],
+    this.palette,
+  }) : data = const [],
+       xAxisLabel = null,
+       yAxisLabel = null,
+       comparisonData = null,
+       smooth = true,
+       showMarkers = true;
 
   @override
   Widget build(BuildContext context) {
+    if (series case final source?) {
+      return DmVizSeriesPlot(
+        kind: DmVizChartKind.line,
+        series: source,
+        palette: palette,
+        xAxis: xAxis,
+        yAxis: yAxis,
+        options: options,
+        interaction: interaction,
+        height: height,
+        connectMissing: connectMissing,
+        sortX: sortX,
+        marker: marker,
+        categories: categories,
+      );
+    }
+
     final resolvedPalette =
         palette ?? DmChartPalette.fromTheme(Theme.of(context));
     final xDomain = _numericDomain([
@@ -72,10 +134,14 @@ class DmVizLineChart extends StatelessWidget {
   }
 }
 
-List<double> _numericDomain(Iterable<Object?> values,
-    {bool includeZero = false}) {
-  final numericValues =
-      values.whereType<num>().map((value) => value.toDouble()).toList();
+List<double> _numericDomain(
+  Iterable<Object?> values, {
+  bool includeZero = false,
+}) {
+  final numericValues = values
+      .whereType<num>()
+      .map((value) => value.toDouble())
+      .toList();
   if (numericValues.isEmpty) {
     return [0, 1];
   }

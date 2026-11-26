@@ -1,0 +1,180 @@
+{
+  "line-controlled-selection-and-reset": {
+    "events": [
+      {
+        "type": "tooltip",
+        "target": {"kind": "datum", "seriesId": "a", "datumId": "first"},
+        "raw": {"x": 2, "y": 0},
+        "display": "0 °C",
+        "unit": "°C"
+      },
+      {
+        "type": "selection",
+        "ids": [
+          {"kind": "datum", "seriesId": "a", "datumId": "first"}
+        ],
+        "reason": "toggle"
+      },
+      {
+        "type": "selection",
+        "ids": [],
+        "reason": "toggle"
+      },
+      {
+        "type": "selection",
+        "ids": [
+          {"kind": "datum", "seriesId": "a", "datumId": "second"}
+        ],
+        "reason": "toggle"
+      },
+      {"type": "visibility", "seriesId": "a", "visible": false, "reason": "toggle"},
+      {
+        "type": "viewport",
+        "viewport": {
+          "kind": "line",
+          "x": [1.5, 2]
+        },
+        "reason": "zoom"
+      },
+      {
+        "type": "brush",
+        "range": [1.6, 1.9],
+        "reason": "brush"
+      },
+      {
+        "type": "selection",
+        "ids": [],
+        "reason": "reset"
+      },
+      {"type": "visibility", "seriesId": "a", "visible": true, "reason": "reset"},
+      {
+        "type": "viewport",
+        "viewport": {
+          "kind": "line",
+          "x": [1, 2]
+        },
+        "reason": "reset"
+      },
+      {"type": "brush", "range": null, "reason": "reset"}
+    ],
+    "finalState": {
+      "ids": [],
+      "hiddenSeriesIds": [],
+      "viewport": {
+        "kind": "line",
+        "x": [1, 2]
+      },
+      "brush": null
+    }
+  },
+  "single-selection-no-op": {
+    "events": [
+      {
+        "type": "selection",
+        "ids": [
+          {"kind": "datum", "seriesId": "a", "datumId": "first"}
+        ],
+        "reason": "select"
+      },
+      {
+        "type": "selection",
+        "ids": [],
+        "reason": "clear"
+      }
+    ],
+    "finalState": {
+      "ids": []
+    }
+  },
+  "network-zoom-drag-and-cancel": {
+    "events": [
+      {
+        "type": "viewport",
+        "viewport": {
+          "kind": "network",
+          "center": [5, 5],
+          "zoom": 2
+        },
+        "reason": "zoom"
+      },
+      {
+        "type": "nodeMove",
+        "id": "west",
+        "position": [2.5, 2.5]
+      }
+    ]
+  },
+  "scatter-zoom-and-reset": {
+    "events": [
+      {
+        "type": "viewport",
+        "viewport": {
+          "kind": "scatter",
+          "x": [2, 8],
+          "y": [3, 7]
+        },
+        "reason": "zoom"
+      },
+      {
+        "type": "viewport",
+        "viewport": {
+          "kind": "scatter",
+          "x": [0, 10],
+          "y": [0, 10]
+        },
+        "reason": "reset"
+      }
+    ]
+  },
+  "time-zoom-and-brush": {
+    "events": [
+      {
+        "type": "viewport",
+        "viewport": {
+          "kind": "line",
+          "x": [1793511000000, 1793514600000]
+        },
+        "reason": "zoom"
+      },
+      {
+        "type": "brush",
+        "range": [1793511000000, 1793512800000],
+        "reason": "brush"
+      }
+    ]
+  },
+  "map-viewport-and-point-selection": {
+    "events": [
+      {
+        "type": "viewport",
+        "viewport": {
+          "kind": "map",
+          "center": [1, 0],
+          "zoom": 2
+        },
+        "reason": "zoom"
+      },
+      {
+        "type": "selection",
+        "ids": [
+          {"kind": "feature", "id": "marker"}
+        ],
+        "reason": "select"
+      },
+      {
+        "type": "selection",
+        "ids": [],
+        "reason": "reset"
+      },
+      {
+        "type": "viewport",
+        "viewport": {
+          "kind": "map",
+          "center": [0, 0],
+          "zoom": 1
+        },
+        "reason": "reset"
+      }
+    ]
+  }
+}

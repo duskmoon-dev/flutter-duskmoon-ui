@@ -1,0 +1,274 @@
+{
+  "line-controlled-selection-and-reset": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric", "unit": "°C"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "first", "x": 2, "y": 0},
+            {"id": "gap", "x": 0, "y": null},
+            {"id": "second", "x": 2, "y": 5},
+            {"id": "last", "x": 1, "y": 10}
+          ]
+        }
+      ],
+      "options": {"selectionMode": "multiple"}
+    },
+    "actions": [
+      {
+        "type": "focus",
+        "target": {"kind": "datum", "seriesId": "a", "datumId": "first"}
+      },
+      {
+        "type": "activate",
+        "target": {"kind": "datum", "seriesId": "a", "datumId": "first"}
+      },
+      {
+        "type": "writeSelection",
+        "ids": [
+          {"kind": "datum", "seriesId": "a", "datumId": "first"}
+        ]
+      },
+      {
+        "type": "activate",
+        "target": {"kind": "datum", "seriesId": "a", "datumId": "first"}
+      },
+      {
+        "type": "writeSelection",
+        "ids": []
+      },
+      {
+        "type": "activate",
+        "target": {"kind": "datum", "seriesId": "a", "datumId": "second"}
+      },
+      {
+        "type": "writeSelection",
+        "ids": [
+          {"kind": "datum", "seriesId": "a", "datumId": "second"}
+        ]
+      },
+      {"type": "toggleSeries", "seriesId": "a"},
+      {
+        "type": "zoom",
+        "viewport": {
+          "kind": "line",
+          "x": [1.5, 2]
+        }
+      },
+      {
+        "type": "brush",
+        "range": [1.6, 1.9]
+      },
+      {"type": "cancel"},
+      {"type": "reset"},
+      {
+        "type": "writeSelection",
+        "ids": []
+      }
+    ],
+    "controlled": ["selection"]
+  },
+  "single-selection-no-op": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "first", "x": 2, "y": 0},
+            {"id": "gap", "x": 0, "y": null},
+            {"id": "second", "x": 2, "y": 5},
+            {"id": "last", "x": 1, "y": 10}
+          ]
+        }
+      ]
+    },
+    "actions": [
+      {
+        "type": "activate",
+        "target": {"kind": "datum", "seriesId": "a", "datumId": "first"}
+      },
+      {
+        "type": "activate",
+        "target": {"kind": "datum", "seriesId": "a", "datumId": "first"}
+      },
+      {"type": "clearSelection"},
+      {"type": "clearSelection"}
+    ]
+  },
+  "network-zoom-drag-and-cancel": {
+    "chart": {
+      "kind": "network",
+      "nodes": [
+        {"id": "west", "x": 0, "y": 0},
+        {"id": "east", "x": 10, "y": 10}
+      ],
+      "edges": [
+        {"id": "link", "source": "west", "target": "east"}
+      ]
+    },
+    "plotSize": [200, 200],
+    "actions": [
+      {
+        "type": "zoom",
+        "viewport": {
+          "kind": "network",
+          "center": [5, 5],
+          "zoom": 2
+        }
+      },
+      {
+        "type": "dragNode",
+        "id": "west",
+        "plotPosition": [0, 0]
+      },
+      {"type": "cancel"}
+    ]
+  },
+  "scatter-zoom-and-reset": {
+    "chart": {
+      "kind": "scatter",
+      "xAxis": {"type": "numeric"},
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "first", "x": 0, "y": 0},
+            {"id": "last", "x": 10, "y": 10}
+          ]
+        }
+      ]
+    },
+    "actions": [
+      {
+        "type": "zoom",
+        "viewport": {
+          "kind": "scatter",
+          "x": [2, 8],
+          "y": [3, 7]
+        }
+      },
+      {"type": "reset"}
+    ]
+  },
+  "time-zoom-and-brush": {
+    "chart": {
+      "kind": "line",
+      "xAxis": {
+        "type": "time",
+        "format": {"style": "date-time", "locale": "en-US", "timeZone": "America/New_York"}
+      },
+      "yAxis": {"type": "numeric"},
+      "series": [
+        {
+          "id": "a",
+          "name": "a",
+          "data": [
+            {"id": "p", "x": "2026-11-01T01:30:00-04:00", "y": 1},
+            {"id": "q", "x": "2026-11-01T01:30:00-05:00", "y": 2},
+            {"id": "r", "x": "2026-10-31T23:30:00-04:00", "y": 3}
+          ]
+        }
+      ]
+    },
+    "actions": [
+      {
+        "type": "zoom",
+        "viewport": {
+          "kind": "line",
+          "x": [1793511000000, 1793514600000]
+        }
+      },
+      {
+        "type": "brush",
+        "range": [1793511000000, 1793512800000]
+      }
+    ]
+  },
+  "map-viewport-and-point-selection": {
+    "chart": {
+      "kind": "map",
+      "geoJson": {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "id": "region",
+            "properties": {},
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [-10, -10],
+                  [10, -10],
+                  [10, 10],
+                  [-10, 10],
+                  [-10, -10]
+                ],
+                [
+                  [-2, -2],
+                  [2, -2],
+                  [2, 2],
+                  [-2, 2],
+                  [-2, -2]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "id": "islands",
+            "properties": {},
+            "geometry": {
+              "type": "MultiPolygon",
+              "coordinates": [
+                [
+                  [
+                    [7, 7],
+                    [8, 7],
+                    [8, 8],
+                    [7, 7]
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "id": "marker",
+            "properties": {},
+            "geometry": {
+              "type": "Point",
+              "coordinates": [5, 0]
+            }
+          }
+        ]
+      },
+      "options": {"padding": 0}
+    },
+    "actions": [
+      {
+        "type": "zoom",
+        "viewport": {
+          "kind": "map",
+          "center": [1, 0],
+          "zoom": 2
+        }
+      },
+      {
+        "type": "activate",
+        "target": {"kind": "feature", "id": "marker"}
+      },
+      {"type": "reset"}
+    ]
+  }
+}

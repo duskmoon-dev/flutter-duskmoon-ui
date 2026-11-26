@@ -1,0 +1,80 @@
+{
+  "nan": {
+    "issues": [
+      {"code": "invalidNumber", "path": "/series/0/data/0/y", "severity": "error"}
+    ]
+  },
+  "positive-infinity": {
+    "issues": [
+      {"code": "invalidNumber", "path": "/series/0/data/0/y", "severity": "error"}
+    ]
+  },
+  "negative-infinity": {
+    "issues": [
+      {"code": "invalidNumber", "path": "/series/0/data/0/y", "severity": "error"}
+    ]
+  },
+  "no-offset": {
+    "issues": [
+      {"code": "invalidTime", "path": "/series/0/data/0/x", "severity": "error"}
+    ]
+  },
+  "invalid-day": {
+    "issues": [
+      {"code": "invalidTime", "path": "/series/0/data/0/x", "severity": "error"}
+    ]
+  },
+  "invalid-offset": {
+    "issues": [
+      {"code": "invalidTime", "path": "/series/0/data/0/x", "severity": "error"}
+    ]
+  },
+  "duplicate-series": {
+    "issues": [
+      {"code": "duplicateId", "path": "/series/1/id", "severity": "error"}
+    ]
+  },
+  "duplicate-datum": {
+    "issues": [
+      {"code": "duplicateId", "path": "/series/0/data/2/id", "severity": "error"}
+    ]
+  },
+  "unordered-domain": {
+    "issues": [
+      {"code": "invalidDomain", "path": "/yAxis/domain", "severity": "error"}
+    ]
+  },
+  "unknown-node": {
+    "issues": [
+      {"code": "unknownReference", "path": "/edges/0/target", "severity": "error"}
+    ]
+  },
+  "unknown-row": {
+    "issues": [
+      {"code": "unknownReference", "path": "/cells/0/rowId", "severity": "error"}
+    ]
+  },
+  "duplicate-cell-position": {
+    "issues": [
+      {"code": "duplicatePosition", "path": "/cells/1/columnId", "severity": "error"}
+    ]
+  },
+  "invalid-latitude": {
+    "issues": [
+      {
+        "code": "unsupportedGeometry",
+        "path": "/geoJson/features/2/geometry/coordinates",
+        "severity": "error"
+      }
+    ]
+  },
+  "date-line-crossing": {
+    "issues": [
+      {
+        "code": "unsupportedGeometry",
+        "path": "/geoJson/features/0/geometry/coordinates/0",
+        "severity": "error"
+      }
+    ]
+  }
+}

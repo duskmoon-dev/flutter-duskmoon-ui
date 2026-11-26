@@ -21,7 +21,58 @@ The default import currently includes:
 - Chart data models: `DmVizPoint`, `DmVizHeatmapCell`, `DmVizMarkerShape`
 - Network data models: `DmVizNetworkNode`, `DmVizNetworkEdge`, `DmVizNetworkNodeShape`, `DmVizNetworkLinkStyle`
 - Theme helpers: `DmChartPalette`
-- Wrappers: `DmVizLineChart`, `DmVizBarChart`, `DmVizScatterChart`, `DmVizHeatmap`, `DmVizNetworkGraph`
+- Wrappers: `DmVizLineChart`, `DmVizBarChart`, `DmVizScatterChart`, `DmVizHeatmap`, `DmVizNetworkGraph`, `DmVizMapChart`
+
+## Shared chart contract
+
+Use the `.series` constructors on Line, Bar and Scatter or `DmVizHeatmap.cells`
+for stable IDs and missing values. These constructors follow the Web and
+Flutter contract bundled under `specs/visualization/v1`.
+
+```dart
+const DmVizLineChart.series(
+  xAxis: DmVizAxis.category(),
+  yAxis: DmVizAxis.numeric(unit: 'ms'),
+  series: [
+    DmVizSeries(
+      id: 'latency',
+      name: 'Latency',
+      data: [
+        DmVizDatum(id: 'mon', x: 'Mon', y: 15),
+        DmVizDatum(id: 'tue', x: 'Tue', y: null),
+        DmVizDatum(id: 'wed', x: 'Wed', y: 17),
+        DmVizDatum(id: 'thu', x: 'Thu', y: 19),
+      ],
+    ),
+  ],
+  options: DmVizOptions(title: 'Request latency'),
+  marker: DmVizMarker(visible: true),
+)
+```
+
+Line uses straight segments and leaves a gap at missing values. Use
+`DmVizAxis.time` for timestamp inputs and `DmVizFormat` to configure an IANA
+time zone for display. Bar groups series on its category axis and starts from a
+shared zero baseline. Heatmap cells use row and column IDs, and their color scale
+is continuous. The original constructors retain their existing data types and
+defaults.
+
+Use `DmVizNetworkGraph.fixed` with stable node and edge IDs and positions in
+layout units. Use `DmVizMapChart.mercator` with offline GeoJSON containing
+identified Polygon, MultiPolygon, and Point features within ±85° latitude and
+without antimeridian crossings. Both support viewport pan and zoom.
+
+Pass `DmVizInteraction(onEvent: ...)` to listen for typed events. Supply
+`selection`, `hiddenSeriesIds`, or `viewport` and write the updated value back
+to control that part of the state. Hover or tap a mark to inspect it. Focus the
+plot and use the arrow keys to inspect marks and Enter or Space to select them.
+Shift with Left/Right brushes a numeric or time line. Shift with arrows pans a
+scene and Alt with arrows moves a network node. Assistive technology has plot
+actions and a separate **Show chart data** control.
+
+The design preview's **Shared chart fixtures** gallery uses the imported
+contract data. See the repository's [migration guide](https://github.com/duskmoon-dev/duskmoon-flutter/blob/main/docs/visualization-migration.md)
+for constructor mappings.
 
 ## Line Chart Example
 

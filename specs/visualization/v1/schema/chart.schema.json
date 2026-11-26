@@ -1,0 +1,702 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {"$ref": "#/$defs/line"},
+    {"$ref": "#/$defs/bar"},
+    {"$ref": "#/$defs/scatter"},
+    {"$ref": "#/$defs/heatmap"},
+    {"$ref": "#/$defs/network"},
+    {"$ref": "#/$defs/map"}
+  ],
+  "$defs": {
+    "time": {
+      "anyOf": [
+        {"type": "integer", "minimum": -8640000000000000, "maximum": 8640000000000000},
+        {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,3})?(Z|[+-][0-9]{2}:[0-9]{2})$"
+        }
+      ]
+    },
+    "format": {
+      "type": "object",
+      "required": ["style"],
+      "properties": {
+        "style": {
+          "enum": ["decimal", "utc-iso", "date-time", "label"]
+        },
+        "locale": {"$ref": "#/$defs/id"},
+        "timeZone": {"$ref": "#/$defs/id"},
+        "fractionDigits": {"type": "integer", "minimum": 0, "maximum": 12}
+      },
+      "additionalProperties": false
+    },
+    "numericAxis": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {"const": "numeric"},
+        "domain": {
+          "type": "array",
+          "items": {"type": "number"},
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "includeZero": {"type": "boolean"},
+        "nice": {"type": "boolean"},
+        "tickValues": {
+          "type": "array",
+          "items": {"type": "number"}
+        },
+        "label": {"type": "string"},
+        "unit": {"type": "string"},
+        "format": {"$ref": "#/$defs/format"}
+      },
+      "additionalProperties": false
+    },
+    "timeAxis": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {"const": "time"},
+        "domain": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/time"},
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "nice": {"type": "boolean"},
+        "tickValues": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/time"}
+        },
+        "label": {"type": "string"},
+        "unit": {"type": "string"},
+        "format": {"$ref": "#/$defs/format"}
+      },
+      "additionalProperties": false
+    },
+    "categoryAxis": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {"const": "category"},
+        "domain": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/id"},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "tickValues": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/id"},
+          "uniqueItems": true
+        },
+        "label": {"type": "string"},
+        "unit": {"type": "string"},
+        "format": {"$ref": "#/$defs/format"}
+      },
+      "additionalProperties": false
+    },
+    "category": {
+      "type": "object",
+      "required": ["id", "label"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "label": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "theme": {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "background": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "plotBackground": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "grid": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "axis": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "text": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "mutedText": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "seriesColors": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+          "minItems": 1
+        },
+        "tooltipBackground": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "tooltipText": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "crosshair": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "selection": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "missing": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+        "heatmapColors": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+          "minItems": 2
+        }
+      },
+      "additionalProperties": false
+    },
+    "options": {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "title": {"type": "string"},
+        "description": {"type": "string"},
+        "summary": {"type": "string"},
+        "revision": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+        "theme": {"$ref": "#/$defs/theme"},
+        "selectionMode": {
+          "enum": ["single", "multiple"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "barSeries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "data"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "name": {"type": "string"},
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "x", "y"],
+              "properties": {
+                "id": {"$ref": "#/$defs/id"},
+                "x": {
+                  "anyOf": [
+                    {"$ref": "#/$defs/id"},
+                    {"type": "null"}
+                  ]
+                },
+                "y": {
+                  "anyOf": [
+                    {"type": "number"},
+                    {"type": "null"}
+                  ]
+                },
+                "metadata": {"type": "object"},
+                "color": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"}
+              },
+              "additionalProperties": false
+            }
+          },
+          "color": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+          "paletteSlot": {"type": "integer", "minimum": 0, "maximum": 9007199254740991}
+        },
+        "additionalProperties": false
+      }
+    },
+    "scatterSeries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "data"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "name": {"type": "string"},
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "x", "y"],
+              "properties": {
+                "id": {"$ref": "#/$defs/id"},
+                "x": {
+                  "anyOf": [
+                    {"type": "number"},
+                    {"type": "null"}
+                  ]
+                },
+                "y": {
+                  "anyOf": [
+                    {"type": "number"},
+                    {"type": "null"}
+                  ]
+                },
+                "metadata": {"type": "object"},
+                "color": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"}
+              },
+              "additionalProperties": false
+            }
+          },
+          "color": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+          "paletteSlot": {"type": "integer", "minimum": 0, "maximum": 9007199254740991}
+        },
+        "additionalProperties": false
+      }
+    },
+    "line": {
+      "type": "object",
+      "required": ["kind", "xAxis", "yAxis", "series"],
+      "properties": {
+        "kind": {"const": "line"},
+        "options": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "title": {"type": "string"},
+            "description": {"type": "string"},
+            "summary": {"type": "string"},
+            "revision": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+            "theme": {"$ref": "#/$defs/theme"},
+            "selectionMode": {
+              "enum": ["single", "multiple"]
+            },
+            "hiddenSeriesIds": {
+              "type": "array",
+              "items": {"$ref": "#/$defs/id"},
+              "uniqueItems": true
+            },
+            "domainAfterHide": {
+              "enum": ["all", "visible"]
+            },
+            "connectMissing": {"type": "boolean"},
+            "sortX": {"type": "boolean"},
+            "marker": {
+              "type": "object",
+              "required": [],
+              "properties": {
+                "visible": {"type": "boolean"},
+                "shape": {
+                  "enum": ["circle", "square", "triangle", "diamond", "cross", "plus", "star"]
+                },
+                "radius": {"type": "number", "exclusiveMinimum": 0}
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "xAxis": {
+          "anyOf": [
+            {"$ref": "#/$defs/numericAxis"},
+            {"$ref": "#/$defs/timeAxis"},
+            {"$ref": "#/$defs/categoryAxis"}
+          ]
+        },
+        "yAxis": {"$ref": "#/$defs/numericAxis"},
+        "categories": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/category"}
+        },
+        "series": {"type": "array"}
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "xAxis": {
+                "type": "object",
+                "properties": {
+                  "type": {"const": "numeric"}
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "series": {"$ref": "#/$defs/scatterSeries"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "xAxis": {
+                "type": "object",
+                "properties": {
+                  "type": {"const": "category"}
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "series": {"$ref": "#/$defs/barSeries"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "xAxis": {
+                "type": "object",
+                "properties": {
+                  "type": {"const": "time"}
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "series": {"$ref": "#/$defs/lineTimeSeries"}
+            }
+          }
+        }
+      ]
+    },
+    "bar": {
+      "type": "object",
+      "required": ["kind", "xAxis", "yAxis", "series"],
+      "properties": {
+        "kind": {"const": "bar"},
+        "options": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "title": {"type": "string"},
+            "description": {"type": "string"},
+            "summary": {"type": "string"},
+            "revision": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+            "theme": {"$ref": "#/$defs/theme"},
+            "selectionMode": {
+              "enum": ["single", "multiple"]
+            },
+            "hiddenSeriesIds": {
+              "type": "array",
+              "items": {"$ref": "#/$defs/id"},
+              "uniqueItems": true
+            },
+            "domainAfterHide": {
+              "enum": ["all", "visible"]
+            },
+            "orientation": {
+              "enum": ["vertical", "horizontal"]
+            }
+          },
+          "additionalProperties": false
+        },
+        "xAxis": {"$ref": "#/$defs/categoryAxis"},
+        "yAxis": {"$ref": "#/$defs/numericAxis"},
+        "series": {"$ref": "#/$defs/barSeries"},
+        "categories": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/category"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "scatter": {
+      "type": "object",
+      "required": ["kind", "xAxis", "yAxis", "series"],
+      "properties": {
+        "kind": {"const": "scatter"},
+        "options": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "title": {"type": "string"},
+            "description": {"type": "string"},
+            "summary": {"type": "string"},
+            "revision": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+            "theme": {"$ref": "#/$defs/theme"},
+            "selectionMode": {
+              "enum": ["single", "multiple"]
+            },
+            "hiddenSeriesIds": {
+              "type": "array",
+              "items": {"$ref": "#/$defs/id"},
+              "uniqueItems": true
+            },
+            "domainAfterHide": {
+              "enum": ["all", "visible"]
+            },
+            "marker": {
+              "type": "object",
+              "required": [],
+              "properties": {
+                "visible": {"type": "boolean"},
+                "shape": {
+                  "enum": ["circle", "square", "triangle", "diamond", "cross", "plus", "star"]
+                },
+                "radius": {"type": "number", "exclusiveMinimum": 0}
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "xAxis": {"$ref": "#/$defs/numericAxis"},
+        "yAxis": {"$ref": "#/$defs/numericAxis"},
+        "series": {"$ref": "#/$defs/scatterSeries"}
+      },
+      "additionalProperties": false
+    },
+    "heatmap": {
+      "type": "object",
+      "required": ["kind", "rows", "columns", "cells"],
+      "properties": {
+        "kind": {"const": "heatmap"},
+        "options": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "title": {"type": "string"},
+            "description": {"type": "string"},
+            "summary": {"type": "string"},
+            "revision": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+            "theme": {"$ref": "#/$defs/theme"},
+            "selectionMode": {
+              "enum": ["single", "multiple"]
+            },
+            "valueDomain": {
+              "type": "array",
+              "items": {"type": "number"},
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "showValues": {"type": "boolean"}
+          },
+          "additionalProperties": false
+        },
+        "rows": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/category"}
+        },
+        "columns": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/category"}
+        },
+        "cells": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "rowId", "columnId", "value"],
+            "properties": {
+              "id": {"$ref": "#/$defs/id"},
+              "rowId": {"$ref": "#/$defs/id"},
+              "columnId": {"$ref": "#/$defs/id"},
+              "value": {
+                "anyOf": [
+                  {"type": "number"},
+                  {"type": "null"}
+                ]
+              },
+              "metadata": {"type": "object"}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "network": {
+      "type": "object",
+      "required": ["kind", "nodes", "edges"],
+      "properties": {
+        "kind": {"const": "network"},
+        "options": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "title": {"type": "string"},
+            "description": {"type": "string"},
+            "summary": {"type": "string"},
+            "revision": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+            "theme": {"$ref": "#/$defs/theme"},
+            "selectionMode": {
+              "enum": ["single", "multiple"]
+            }
+          },
+          "additionalProperties": false
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "x", "y"],
+            "properties": {
+              "id": {"$ref": "#/$defs/id"},
+              "x": {"type": "number"},
+              "y": {"type": "number"},
+              "label": {"type": "string"},
+              "color": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+              "metadata": {"type": "object"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "source", "target"],
+            "properties": {
+              "id": {"$ref": "#/$defs/id"},
+              "source": {"$ref": "#/$defs/id"},
+              "target": {"$ref": "#/$defs/id"},
+              "label": {"type": "string"},
+              "color": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+              "metadata": {"type": "object"}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "position": {
+      "type": "array",
+      "items": {"type": "number"},
+      "prefixItems": [
+        {"minimum": -180, "maximum": 180, "type": "number"},
+        {"minimum": -85, "maximum": 85, "type": "number"}
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "geometry": {
+      "anyOf": [
+        {
+          "type": "object",
+          "required": ["type", "coordinates"],
+          "properties": {
+            "type": {"const": "Point"},
+            "coordinates": {"$ref": "#/$defs/position"}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["type", "coordinates"],
+          "properties": {
+            "type": {"const": "Polygon"},
+            "coordinates": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {"$ref": "#/$defs/position"},
+                "minItems": 4
+              },
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["type", "coordinates"],
+          "properties": {
+            "type": {"const": "MultiPolygon"},
+            "coordinates": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {"$ref": "#/$defs/position"},
+                  "minItems": 4
+                },
+                "minItems": 1
+              },
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "map": {
+      "type": "object",
+      "required": ["kind", "geoJson"],
+      "properties": {
+        "kind": {"const": "map"},
+        "options": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "title": {"type": "string"},
+            "description": {"type": "string"},
+            "summary": {"type": "string"},
+            "revision": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+            "theme": {"$ref": "#/$defs/theme"},
+            "selectionMode": {
+              "enum": ["single", "multiple"]
+            },
+            "projection": {"const": "mercator"},
+            "center": {"$ref": "#/$defs/position"},
+            "padding": {"type": "number", "minimum": 0}
+          },
+          "additionalProperties": false
+        },
+        "geoJson": {
+          "type": "object",
+          "required": ["type", "features"],
+          "properties": {
+            "type": {"const": "FeatureCollection"},
+            "features": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["type", "id", "geometry", "properties"],
+                "properties": {
+                  "type": {"const": "Feature"},
+                  "id": {"$ref": "#/$defs/id"},
+                  "geometry": {"$ref": "#/$defs/geometry"},
+                  "properties": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "value": {"type": "number"}
+                        }
+                      },
+                      {"type": "null"}
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "id": {"type": "string", "minLength": 1},
+    "lineTimeSeries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "data"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "name": {"type": "string"},
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "x", "y"],
+              "properties": {
+                "id": {"$ref": "#/$defs/id"},
+                "x": {
+                  "anyOf": [
+                    {"$ref": "#/$defs/time"},
+                    {"type": "null"}
+                  ]
+                },
+                "y": {
+                  "anyOf": [
+                    {"type": "number"},
+                    {"type": "null"}
+                  ]
+                },
+                "metadata": {"type": "object"},
+                "color": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"}
+              },
+              "additionalProperties": false
+            }
+          },
+          "color": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+          "paletteSlot": {"type": "integer", "minimum": 0, "maximum": 9007199254740991}
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

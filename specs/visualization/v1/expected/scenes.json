@@ -1,0 +1,38 @@
+{
+  "network-fixed": {
+    "geometry": {
+      "tolerance": 1e-09,
+      "nodes": {
+        "west": [0, 0],
+        "east": [1, 1]
+      },
+      "edges": {
+        "link": [
+          [0, 0],
+          [1, 1]
+        ]
+      }
+    },
+    "viewport": {
+      "kind": "network",
+      "center": [5, 5],
+      "zoom": 1
+    }
+  },
+  "mercator-fit-holes-and-points": {
+    "geometry": {
+      "tolerance": 1e-09,
+      "points": {
+        "marker": [0.7487275185556233, 0.5]
+      },
+      "outerTop": 0,
+      "outerBottom": 1
+    },
+    "viewport": {
+      "kind": "map",
+      "center": [0, 0],
+      "zoom": 1
+    },
+    "hitIds": [null, "region", "islands", "marker"]
+  }
+}

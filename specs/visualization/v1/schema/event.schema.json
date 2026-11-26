@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": ["type", "target", "raw", "display"],
+      "properties": {
+        "type": {"const": "tooltip"},
+        "target": {"$ref": "#/$defs/target"},
+        "raw": {"type": "object"},
+        "display": {"type": "string"},
+        "unit": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": ["type", "ids", "reason"],
+      "properties": {
+        "type": {"const": "selection"},
+        "ids": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/target"},
+          "uniqueItems": true
+        },
+        "reason": {
+          "enum": ["select", "toggle", "clear", "reset"]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": ["type", "seriesId", "visible", "reason"],
+      "properties": {
+        "type": {"const": "visibility"},
+        "seriesId": {"$ref": "#/$defs/id"},
+        "visible": {"type": "boolean"},
+        "reason": {
+          "enum": ["toggle", "reset"]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": ["type", "viewport", "reason"],
+      "properties": {
+        "type": {"const": "viewport"},
+        "viewport": {"$ref": "#/$defs/viewport"},
+        "reason": {
+          "enum": ["zoom", "pan", "reset"]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": ["type", "range", "reason"],
+      "properties": {
+        "type": {"const": "brush"},
+        "range": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {"type": "number"},
+              "minItems": 2,
+              "maxItems": 2
+            },
+            {"type": "null"}
+          ]
+        },
+        "reason": {
+          "enum": ["brush", "clear", "reset"]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": ["type", "id", "position"],
+      "properties": {
+        "type": {"const": "nodeMove"},
+        "id": {"$ref": "#/$defs/id"},
+        "position": {
+          "type": "array",
+          "items": {"type": "number"},
+          "minItems": 2,
+          "maxItems": 2
+        }
+      },
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "id": {"type": "string", "minLength": 1},
+    "target": {
+      "anyOf": [
+        {
+          "type": "object",
+          "required": ["kind", "seriesId", "datumId"],
+          "properties": {
+            "kind": {"const": "datum"},
+            "seriesId": {"$ref": "#/$defs/id"},
+            "datumId": {"$ref": "#/$defs/id"}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "id"],
+          "properties": {
+            "kind": {"const": "cell"},
+            "id": {"$ref": "#/$defs/id"}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "id"],
+          "properties": {
+            "kind": {"const": "node"},
+            "id": {"$ref": "#/$defs/id"}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "id"],
+          "properties": {
+            "kind": {"const": "edge"},
+            "id": {"$ref": "#/$defs/id"}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "id"],
+          "properties": {
+            "kind": {"const": "feature"},
+            "id": {"$ref": "#/$defs/id"}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "viewport": {
+      "anyOf": [
+        {
+          "type": "object",
+          "required": ["kind", "x"],
+          "properties": {
+            "kind": {"const": "line"},
+            "x": {
+              "type": "array",
+              "items": {"type": "number"},
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "x", "y"],
+          "properties": {
+            "kind": {"const": "scatter"},
+            "x": {
+              "type": "array",
+              "items": {"type": "number"},
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "y": {
+              "type": "array",
+              "items": {"type": "number"},
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "center", "zoom"],
+          "properties": {
+            "kind": {"const": "network"},
+            "center": {
+              "type": "array",
+              "items": {"type": "number"},
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "zoom": {"type": "number", "exclusiveMinimum": 0}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "center", "zoom"],
+          "properties": {
+            "kind": {"const": "map"},
+            "center": {
+              "type": "array",
+              "items": {"type": "number"},
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "zoom": {"type": "number", "exclusiveMinimum": 0}
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

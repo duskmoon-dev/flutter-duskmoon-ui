@@ -1,6 +1,8 @@
 import 'package:duskmoon_theme/duskmoon_theme.dart';
 import 'package:flutter/material.dart';
 
+import 'dm_viz_series.dart';
+
 /// Theme-derived defaults for DuskMoon visualization wrappers.
 class DmChartPalette {
   final Color background;
@@ -13,6 +15,14 @@ class DmChartPalette {
   final Color warning;
   final Color warningOnColor;
   final Color heatmapBorder;
+  final Color? plotBackground;
+  final Color? text;
+  final Color? mutedText;
+  final Color? tooltipBackground;
+  final Color? tooltipText;
+  final Color? crosshair;
+  final Color? selection;
+  final Color? missing;
 
   const DmChartPalette({
     required this.background,
@@ -25,6 +35,14 @@ class DmChartPalette {
     required this.warning,
     required this.warningOnColor,
     required this.heatmapBorder,
+    this.plotBackground,
+    this.text,
+    this.mutedText,
+    this.tooltipBackground,
+    this.tooltipText,
+    this.crosshair,
+    this.selection,
+    this.missing,
   });
 
   factory DmChartPalette.fromTheme(ThemeData theme) {
@@ -44,4 +62,61 @@ class DmChartPalette {
       heatmapBorder: colorScheme.surface,
     );
   }
+}
+
+typedef VizChartStyle = ({
+  Color background,
+  Color plot,
+  Color grid,
+  Color axis,
+  Color text,
+  TextStyle labelStyle,
+  TextStyle bodyStyle,
+  TextStyle? titleStyle,
+  Color missing,
+  Color selectionColor,
+  Color tooltipBackground,
+  Color tooltipText,
+  List<Color> series,
+  List<Color> heatmap,
+});
+
+VizChartStyle resolveVizChartStyle(
+  BuildContext context,
+  DmChartPalette? palette,
+  DmVizOptions options,
+) {
+  final theme = Theme.of(context);
+  final scheme = theme.colorScheme;
+  return (
+    background: palette?.background ?? scheme.surface,
+    plot: palette?.plotBackground ?? scheme.surfaceContainerLow,
+    grid: palette?.grid ?? scheme.outlineVariant,
+    axis: palette?.axis ?? scheme.outline,
+    text: palette?.text ?? scheme.onSurface,
+    labelStyle: (theme.textTheme.labelSmall ?? const TextStyle(fontSize: 12))
+        .copyWith(color: palette?.mutedText ?? scheme.onSurfaceVariant),
+    titleStyle: theme.textTheme.titleSmall,
+    bodyStyle: theme.textTheme.bodyMedium ?? const TextStyle(fontSize: 14),
+    selectionColor: palette?.selection ?? scheme.primary,
+    tooltipBackground: palette?.tooltipBackground ?? scheme.inverseSurface,
+    tooltipText: palette?.tooltipText ?? scheme.onInverseSurface,
+    missing:
+        options.missingColor ??
+        palette?.missing ??
+        scheme.surfaceContainerHighest,
+    series:
+        options.seriesColors ??
+        [
+          palette?.primary ?? scheme.primary,
+          palette?.secondary ?? scheme.secondary,
+          scheme.tertiary,
+          scheme.primaryContainer,
+          scheme.secondaryContainer,
+          scheme.tertiaryContainer,
+        ],
+    heatmap:
+        options.heatmapColors ??
+        [scheme.surfaceContainerHighest, scheme.primary],
+  );
 }

@@ -1,0 +1,58 @@
+{
+  "original": {
+    "xDomain": [0, 10],
+    "yDomain": [0, 10],
+    "hiddenSeriesIds": [],
+    "hashes": {"a": 3826002220, "数据": 2280214293},
+    "seriesColors": {"a": "#445566", "数据": "#112233", "slot": "#445566", "explicit": "#ABCDEF"},
+    "datumColors": {
+      "explicit": {"p": "#123456"}
+    }
+  },
+  "hidden-reordered": {
+    "xDomain": [0, 10],
+    "yDomain": [0, 10],
+    "hiddenSeriesIds": ["数据"],
+    "hashes": {"数据": 2280214293, "a": 3826002220},
+    "seriesColors": {"explicit": "#ABCDEF", "slot": "#445566", "数据": "#112233", "a": "#445566"},
+    "datumColors": {
+      "explicit": {"p": "#123456"}
+    }
+  },
+  "visible-domain": {
+    "xDomain": [0, 2],
+    "yDomain": [0, 2],
+    "hiddenSeriesIds": ["数据"],
+    "hashes": {"数据": 2280214293, "a": 3826002220},
+    "seriesColors": {"explicit": "#ABCDEF", "slot": "#445566", "数据": "#112233", "a": "#445566"},
+    "datumColors": {
+      "explicit": {"p": "#123456"}
+    }
+  },
+  "filtered": {
+    "xDomain": [1, 10],
+    "yDomain": [1, 10],
+    "hiddenSeriesIds": [],
+    "hashes": {"数据": 2280214293},
+    "seriesColors": {"数据": "#112233", "slot": "#445566", "explicit": "#ABCDEF"},
+    "datumColors": {
+      "explicit": {"p": "#123456"}
+    }
+  },
+  "restored-inserted": {
+    "xDomain": [0, 10],
+    "yDomain": [0, 10],
+    "hiddenSeriesIds": [],
+    "hashes": {"new": 681154065, "a": 3826002220, "数据": 2280214293},
+    "seriesColors": {
+      "new": "#112233",
+      "a": "#445566",
+      "数据": "#112233",
+      "slot": "#445566",
+      "explicit": "#ABCDEF"
+    },
+    "datumColors": {
+      "explicit": {"p": "#123456"}
+    }
+  }
+}

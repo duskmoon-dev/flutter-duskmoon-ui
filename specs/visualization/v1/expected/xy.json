@@ -1,0 +1,125 @@
+{
+  "line-input-order-gap-and-repeated-x": {
+    "xDomain": [1, 2],
+    "yDomain": [0, 10],
+    "segments": {
+      "a": [
+        ["first"],
+        ["second", "last"]
+      ]
+    },
+    "geometry": {
+      "tolerance": 1e-09,
+      "points": {
+        "first": [1, 1],
+        "second": [1, 0.5],
+        "last": [0, 0]
+      }
+    }
+  },
+  "line-connect-and-sort": {
+    "xDomain": [1, 2],
+    "yDomain": [0, 10],
+    "segments": {
+      "a": [
+        ["last", "first", "second"]
+      ]
+    }
+  },
+  "empty": {"xDomain": null, "yDomain": null, "state": "empty"},
+  "all-null": {"xDomain": null, "yDomain": null, "state": "empty"},
+  "constant-0": {
+    "xDomain": [-1, 1],
+    "yDomain": [-1, 1],
+    "geometry": {
+      "tolerance": 1e-09,
+      "points": {
+        "p": [0.5, 0.5]
+      }
+    }
+  },
+  "constant--10": {
+    "xDomain": [-10.5, -9.5],
+    "yDomain": [-10.5, -9.5],
+    "geometry": {
+      "tolerance": 1e-09,
+      "points": {
+        "p": [0.5, 0.5]
+      }
+    }
+  },
+  "explicit-clip": {
+    "xDomain": [1.25, 3],
+    "yDomain": [0, 10],
+    "xTickValues": [3, 2],
+    "clippedDatumIds": ["last"]
+  },
+  "nice-negative-span": {
+    "xDomain": [-4, 8],
+    "yDomain": [0, 3]
+  },
+  "scatter-missing": {
+    "xDomain": [0.95, 1.05],
+    "yDomain": [1.9, 2.1],
+    "drawableDatumIds": ["p"],
+    "issues": [
+      {"code": "missingCoordinate", "path": "/series/0/data/1", "severity": "warning"},
+      {"code": "missingCoordinate", "path": "/series/0/data/2", "severity": "warning"}
+    ]
+  },
+  "bar-grouped-vertical": {
+    "xDomain": ["june", "may"],
+    "yDomain": [-2, 6],
+    "geometry": {
+      "tolerance": 1e-09,
+      "baseline": 0.75,
+      "bars": {
+        "a1": [0, 0, 0.25, 0.75],
+        "b1": [0.25, 0.5, 0.25, 0.25],
+        "a2": [0.5, 0.75, 0.25, 0.25],
+        "b2": [0.75, 0.75, 0.25, 0]
+      }
+    }
+  },
+  "bar-grouped-horizontal": {
+    "xDomain": ["may", "june"],
+    "yDomain": [-2, 6],
+    "geometry": {
+      "tolerance": 1e-09,
+      "baseline": 0.25,
+      "bars": {
+        "a2": [0, 0, 0.25, 0.25],
+        "b2": [0.25, 0.25, 0, 0.25],
+        "a1": [0.25, 0.5, 0.75, 0.25],
+        "b1": [0.25, 0.75, 0.25, 0.25]
+      }
+    }
+  },
+  "bar-single-positive": {
+    "xDomain": ["may"],
+    "yDomain": [0, 5]
+  },
+  "bar-missing-slot": {
+    "xDomain": ["may"],
+    "yDomain": [0, 5],
+    "geometry": {
+      "tolerance": 1e-09,
+      "baseline": 1,
+      "bars": {
+        "q": [0.5, 0, 0.5, 1]
+      }
+    }
+  },
+  "category-line-explicit-order": {
+    "xDomain": ["b", "a"],
+    "yDomain": [1, 8],
+    "clippedDatumIds": ["C"],
+    "geometry": {
+      "tolerance": 1e-09,
+      "points": {
+        "A": [0.75, 1],
+        "B": [0.25, 0.8571428571428571]
+      }
+    }
+  }
+}

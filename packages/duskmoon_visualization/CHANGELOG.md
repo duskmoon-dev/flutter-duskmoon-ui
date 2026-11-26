@@ -1,3 +1,9 @@
+## Unreleased
+
+- Add shared-contract constructors for six chart types with stable IDs, typed
+  events, keyboard and touch interactions, and an accessible raw-data outlet.
+- Add fixture-driven golden and interaction tests and a shared-chart gallery.
+
 ## 2.3.0
 
 - Release 2.3.0 (2026-11-22)

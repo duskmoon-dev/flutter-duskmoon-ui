@@ -41,6 +41,29 @@ Current curated non-chart wrapper: `DmVizNetworkGraph`
 - [x] Add DuskMoon-facing wrappers, defaults, or renamed APIs where justified
 - [x] Integrate DuskMoon theme defaults for chart styling
 
+## Migrating to the shared chart contract
+
+Existing charts can keep their current constructors, const declarations,
+`DmVizPoint.y` as a non-null `double`, and manual `DmChartPalette` values.
+Adopt the new constructors when the chart needs stable series and item IDs or
+nullable data:
+
+| Existing use | Shared contract entry |
+| --- | --- |
+| `DmVizLineChart(data:, comparisonData:)` | `DmVizLineChart.series`. Provide an explicit ID per series and datum. The shared defaults are straight segments, gaps at null values, and hidden markers. |
+| `DmVizBarChart(data:)` | `DmVizBarChart.series`. Use category IDs for x, optional labels via `categories`, and an optional horizontal orientation. |
+| `DmVizScatterChart(data:)` | `DmVizScatterChart.series`. Give each point an explicit ID and use `DmVizMarker` for its shape and size. |
+| `DmVizHeatmap(data:, rows:, columns:)` | `DmVizHeatmap.cells`. Provide ordered row and column models and nullable cell values. Value labels are opt-in. |
+| `DmVizNetworkGraph(nodes:, links:)` | `DmVizNetworkGraph.fixed`. Supply coordinates and stable edge IDs. For draggable nodes, write `DmVizNodeMoveEvent.position` back to the node data. |
+| `DmVizMapChart(geoJson:, projection:)` | `DmVizMapChart.mercator`. Supply identified local GeoJSON features. Listen for `DmVizSelectionEvent` to read the selected feature ID. Keep the original constructor for caller-provided projections. |
+
+The contract constructors take `DmVizOptions` for display and
+`DmVizInteraction` for interaction state. See [Data Visualization](visualization.md#shared-contract)
+and the capability matrix under the imported snapshot for supported features.
+
+Run `node specs/visualization/v1/verify.mjs specs/visualization/v1.lock.json`
+from the repository root to verify the imported fixture snapshot.
+
 ## Examples And Docs
 
 - [x] Add a visualization page to the existing `example/` app
